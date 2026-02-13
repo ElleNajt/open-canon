@@ -1,0 +1,104 @@
+#!/usr/bin/env bash
+# Render a .tidal file to MP3 via SuperCollider
+# Usage: ./render input.tidal [cycles] [output.mp3]
+#
+# Prerequisites:
+#   - SuperCollider running with SuperDirt
+#   - GHCi with Tidal
+#   - ffmpeg
+#
+# This script coordinates SC recording with Tidal playback.
+
+set -e
+
+if [ $# -lt 1 ]; then
+    echo "Usage: ./render input.tidal [cycles] [output.mp3]"
+    echo "  cycles: number of cycles to render (default: 8)"
+    echo ""
+    echo "Prerequisites:"
+    echo "  - SuperCollider running with SuperDirt started"
+    echo "  - ffmpeg installed"
+    exit 1
+fi
+
+INPUT="$(cd "$(dirname "$1")" && pwd)/$(basename "$1")"
+CYCLES="${2:-8}"
+BASENAME=$(basename "$INPUT" .tidal)
+OUTPUT="${3:-$BASENAME.mp3}"
+WAVFILE="/tmp/open-canon-$$.wav"
+TIDAL_FILE="/tmp/open-canon-tidal-$$.hs"
+
+# Parse CPS from the file
+CPS_LINE=$(grep "setcps" "$INPUT" | head -1 || echo "")
+if [ -n "$CPS_LINE" ]; then
+    CPS_EXPR=$(echo "$CPS_LINE" | sed -E 's/.*setcps[[:space:]]*\(?([^)]+)\)?/\1/' | tr -d ' ')
+    CPS=$(echo "scale=4; $CPS_EXPR" | bc -l 2>/dev/null || echo "0.5")
+else
+    CPS="0.5"
+fi
+
+# Duration = cycles/cps + buffer
+DURATION=$(echo "scale=0; $CYCLES / $CPS + 2" | bc)
+
+echo "=== open-canon render ==="
+echo "Input:    $(basename "$INPUT")"
+echo "Cycles:   $CYCLES"
+echo "CPS:      $CPS"
+echo "Duration: ${DURATION}s"
+echo "Output:   $OUTPUT"
+echo ""
+
+# Check SuperCollider is running
+if ! pgrep -x "sclang" > /dev/null && ! pgrep -x "SuperCollider" > /dev/null; then
+    echo "Error: SuperCollider doesn't appear to be running."
+    echo "Start SuperCollider and run: SuperDirt.start"
+    exit 1
+fi
+
+# Build tidal script
+cat > "$TIDAL_FILE" << 'BOOT'
+:script /Users/elle/code/Tidal/BootTidal.hs
+:set prompt ""
+BOOT
+
+cat "$INPUT" >> "$TIDAL_FILE"
+echo "" >> "$TIDAL_FILE"
+
+# Tell user to start recording
+echo "In SuperCollider, run:"
+echo "  s.record(\"$WAVFILE\");"
+echo ""
+read -p "Press Enter when recording has started..."
+
+echo ""
+echo "Playing pattern for ${DURATION}s..."
+
+# Play the pattern
+timeout "${DURATION}s" ghci -v0 < "$TIDAL_FILE" 2>/dev/null &
+TIDAL_PID=$!
+
+sleep "$DURATION"
+kill $TIDAL_PID 2>/dev/null || true
+
+echo ""
+echo "In SuperCollider, run:"
+echo "  s.stopRecording;"
+echo ""
+read -p "Press Enter when recording has stopped..."
+
+# Convert
+if [ -f "$WAVFILE" ]; then
+    echo ""
+    echo "Converting to MP3..."
+    ffmpeg -y -i "$WAVFILE" -codec:a libmp3lame -qscale:a 2 "$OUTPUT" 2>/dev/null
+    rm -f "$WAVFILE"
+    echo ""
+    echo "Done: $OUTPUT"
+else
+    echo ""
+    echo "WAV file not found at $WAVFILE"
+    echo "Check SuperCollider's recording location."
+    exit 1  
+fi
+
+rm -f "$TIDAL_FILE"

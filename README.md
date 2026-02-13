@@ -34,6 +34,18 @@ Open any `.tidal` file and start remixing.
 
 Add more pieces! Find MIDI on [Mutopia Project](https://mutopiaproject.org), convert with the included tool, remix, and PR.
 
+## Rendering to MP3
+
+```bash
+./render bach/bwv1087/remixes/canon9_funky.tidal 8
+```
+
+Requires SuperCollider + SuperDirt running. See script for details.
+
+## Future: Browser Playback
+
+[Strudel](https://strudel.cc) support planned - will enable instant playback in browser, no install needed.
+
 ## License
 
 The music is public domain. Code is MIT.
