@@ -1,0 +1,22 @@
+// Generated from MIDI
+
+setcps(120/60/4)
+
+// Track 1
+$: note("~!40 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!15")
+  .slow(208/8/4)
+  .sound("sawtooth")
+  .gain(0.6)
+  .pan(0.3)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 2
+$: note("~!8 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!15")
+  .slow(208/8/4)
+  .sound("square")
+  .gain(0.6)
+  .pan(0.7)
+  .decay(0.3)
+  .sustain(0.2)
+

@@ -1,0 +1,49 @@
+// Generated from MIDI
+
+setcps(120/60/4)
+
+// Track 1
+$: note("~!44 d6 ~!3 eb6 ~!3 e6 ~!3 f6 ~!3 gb6 ~!3 g6 ~ gb6 ~ g6 ~ a6 ~ b6 ~!11 gb6 ~!3 b5 ~ db6 ~ d6 ~ e6 ~ gb6 ~!11 d6 ~!3 eb6 ~!3 e6 ~!3 f6 ~!3 gb6 ~!3 g6 ~ gb6 ~ g6 ~ a6 ~ b6 ~!11 gb6 ~!3 b5 ~ db6 ~ d6 ~ e6 ~ gb6 ~!11 d6 ~!3 eb6 ~!3 e6 ~!3 f6 ~!3 gb6 ~!3 g6 ~ gb6 ~ g6 ~ a6 ~ b6 ~!11 gb6 ~!3 b5 ~ db6 ~ d6 ~ e6 ~ gb6 ~!11 d6 ~!3 eb6 ~!3 e6 ~!3 f6 ~!3 gb6 ~!3 g6 ~!15")
+  .slow(272/8/4)
+  .sound("sawtooth")
+  .gain(0.6)
+  .pan(0.3)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 2
+$: note("~!12 b5 ~!3 bb5 ~!3 a5 ~!3 ab5 ~!3 g5 ~!3 gb5 ~ g5 ~ gb5 ~ e5 ~ d5 ~!11 g5 ~!3 d6 ~ c6 ~ b5 ~ a5 ~ g5 ~!11 b5 ~!3 bb5 ~!3 a5 ~!3 ab5 ~!3 g5 ~!3 gb5 ~ g5 ~ gb5 ~ e5 ~ d5 ~!11 g5 ~!3 d6 ~ c6 ~ b5 ~ a5 ~ g5 ~!11 b5 ~!3 bb5 ~!3 a5 ~!3 ab5 ~!3 g5 ~!3 gb5 ~ g5 ~ gb5 ~ e5 ~ d5 ~!11 g5 ~!3 d6 ~ c6 ~ b5 ~ a5 ~ g5 ~!11 b5 ~!3 bb5 ~!3 a5 ~!3 ab5 ~!3 g5 ~!3 gb5 ~ g5 ~ gb5 ~ e5 ~ d5 ~!11 g5 ~!3 d6 ~ c6 ~ b5 ~ a5 ~ g5 ~!15")
+  .slow(272/8/4)
+  .sound("square")
+  .gain(0.6)
+  .pan(0.7)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 3
+$: note("~!108 d5 ~!3 c5 ~!3 bb4 ~!3 a4 ~!3 d5 ~ c5 ~ b4 ~!3 e5 ~!3 d5 ~ db5 ~ d5 ~ e5 ~ gb5 ~!11 b5 ~!5 b4 ~!3 db5 ~ d5 ~ e5 ~ d5 ~!3 c5 ~!3 bb4 ~!3 a4 ~!3 d5 ~ c5 ~ b4 ~!3 e5 ~!3 d5 ~ db5 ~ d5 ~ e5 ~ gb5 ~!11 b5 ~!5 b4 ~!3 db5 ~ d5 ~ e5 ~ d5 ~!3 c5 ~!3 bb4 ~!3 a4 ~!3 d5 ~ c5 ~ b4 ~!15")
+  .slow(272/8/4)
+  .sound("triangle")
+  .gain(0.6)
+  .pan(0.4)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 4
+$: note("~!76 b5 ~!3 db6 ~!3 eb6 ~!3 e6 ~!3 b5 ~ c6 ~ d6 ~!3 a5 ~!3 b5 ~ c6 ~ b5 ~ a5 ~ g5 ~!11 d5 ~!5 d6 ~!3 c6 ~ b5 ~ a5 ~ b5 ~!3 db6 ~!3 eb6 ~!3 e6 ~!3 b5 ~ c6 ~ d6 ~!3 a5 ~!3 b5 ~ c6 ~ b5 ~ a5 ~ g5 ~!11 d5 ~!5 d6 ~!3 c6 ~ b5 ~ a5 ~ b5 ~!3 db6 ~!3 eb6 ~!3 e6 ~!3 b5 ~ c6 ~ d6 ~!3 a5 ~!3 b5 ~ c6 ~ b5 ~ a5 ~ g5 ~!11 d5 ~!19")
+  .slow(272/8/4)
+  .sound("sine")
+  .gain(0.6)
+  .pan(0.6)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 5
+$: note("~!8 g4 ~!7 gb4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7 g4 ~!7 gb4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7 g4 ~!7 gb4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7 g4 ~!7 gb4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!15")
+  .slow(272/8/4)
+  .sound("sawtooth")
+  .gain(0.6)
+  .pan(0.5)
+  .decay(0.3)
+  .sustain(0.2)
+

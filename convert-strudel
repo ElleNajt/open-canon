@@ -11,10 +11,11 @@ if [ -z "$1" ]; then
 fi
 
 INPUT="$1"
-OUTPUT="${2:-$(basename "$INPUT" .mid).txt}"
+OUTPUT="${2:-$(basename "$INPUT" .mid).strudel}"
 
 /Library/Developer/CommandLineTools/usr/bin/python3 tools/midi_to_tidalcycles/src/midi_to_tidalcycles.py \
     --strudel --consolidate --legato --hide \
-    "$INPUT" > "$OUTPUT"
+    "$INPUT" >"$OUTPUT"
 
 echo "Created: $OUTPUT"
+echo "Note: You may need to change synth names (e.g., superpiano -> piano, supersaw -> sawtooth)"

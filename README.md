@@ -45,6 +45,15 @@ Bi-directional sync:
 - "remove the drums"
 - "make it creepy"
 
+## Tips for Better Results
+
+Tell the AI to build up step by step:
+- "start with just the melody, no effects"
+- "add one element at a time so I can hear each change"
+- "keep it simple, don't add too much at once"
+
+This helps you understand what's happening and catch problems early. If things get messy, you can always say "start over with the original" or "undo the last change".
+
 ## Starting Material
 
 Includes Bach's 14 Canons on the Goldberg Ground (BWV 1087) in `bach/bwv1087/` - original transcriptions plus funky remixes by Claude Opus 4.5.

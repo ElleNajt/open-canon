@@ -4,6 +4,22 @@ Live music collaboration. Edit `live.strudel` and changes play instantly in the 
 
 This file contains instructions for AI coding assistants.
 
+## MIDI Sources
+
+Bach BWV 1087 (14 Canons) MIDIs from [Mutopia Project](https://www.mutopiaproject.org/):
+```
+https://www.mutopiaproject.org/ftp/BachJS/BWV1087/bwv-1087-01/bwv-1087-01.mid
+https://www.mutopiaproject.org/ftp/BachJS/BWV1087/bwv-1087-02/bwv-1087-02.mid
+...through canon 14
+```
+
+To convert a MIDI to Strudel:
+```bash
+./convert-strudel path/to/file.mid output.strudel
+```
+
+The converter uses `note()` for pitches and outputs Strudel-compatible JavaScript.
+
 ## Setup
 
 The user runs `./start` which:

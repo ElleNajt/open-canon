@@ -1,0 +1,40 @@
+// Generated from MIDI
+
+setcps(120/60/4)
+
+// Track 1
+$: note("~!66 d5 ~ e5 ~ gb5 ~ g5 ~ b5 ~ a5 ~ g5 ~ d6 ~!3 d5 ~!5 a4 ~ b4 ~ db5 ~ d5 ~ gb5 ~ e5 ~ d5 ~ a5 ~ g5 ~ gb5 ~ d6 ~!3 e6 gb6 g6 ~ g5 ~!3 a5 b5 e5 ~ gb5 g5 gb5 ~ g6 ~ gb6 ~ e6 ~ d6 ~ b5 ~ c6 ~ d6 ~ g5 ~ gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ e6 ~ f6 ~ e6 ~ d6 ~ c6 ~ a5 ~ b5 ~ c6 ~ gb5 ~ db5 ~ d5 ~ e5 ~ gb5 ~ a5 ~ g5 ~ gb5 ~ b5 ~ d5 ~ e5 ~ gb5 ~ g5 ~ b5 ~ a5 ~ g5 ~ d6 ~!3 d5 ~!5 a4 ~ b4 ~ db5 ~ d5 ~ gb5 ~ e5 ~ d5 ~ a5 ~ g5 ~ gb5 ~ d6 ~!3 e6 gb6 g6 ~ g5 ~!3 a5 b5 e5 ~ gb5 g5 gb5 ~ g6 ~ gb6 ~ e6 ~ d6 ~ b5 ~ c6 ~ d6 ~ g5 ~ gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ e6 ~ f6 ~ e6 ~ d6 ~ c6 ~ a5 ~ b5 ~ c6 ~ gb5 ~ db5 ~ d5 ~ e5 ~ gb5 ~ a5 ~ g5 ~ gb5 ~ b5 ~ d5 ~ e5 ~ gb5 ~ g5 ~ b5 ~ a5 ~ g5 ~ d6 ~!3 d5 ~!5 a4 ~ b4 ~ db5 ~ d5 ~ gb5 ~ e5 ~ d5 ~ a5 ~ g5 ~ gb5 ~ d6 ~!3 e6 gb6 g6 ~ g5 ~!3 a5 b5 e5 ~ gb5 g5 gb5 ~ g6 ~ gb6 ~ e6 ~ d6 ~ b5 ~ c6 ~ d6 ~ g5 ~ gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ e6 ~ f6 ~ e6 ~ d6 ~ c6 ~ a5 ~ b5 ~ c6 ~ gb5 ~ db5 ~ d5 ~ e5 ~ gb5 ~ a5 ~ g5 ~ gb5 ~ b5 ~ d5 ~ e5 ~ gb5 ~ g5 ~ b5 ~ a5 ~ g5 ~ d6 ~!15")
+  .slow(480/8/4)
+  .sound("sawtooth")
+  .gain(0.6)
+  .pan(0.3)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 2
+$: note("~!8 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!15 d5 ~!23 a4 ~!7 b4 ~!7 db5 ~!7 d5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 a5 ~!7 g5 ~!7 gb5 ~!7 d6 ~!15 e6 ~!3 gb6 ~!3 g6 ~!7 g5 ~!15 a4 ~!7 b4 ~!7 db5 ~!7 d5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 a5 ~!7 g5 ~!7 gb5 ~!7 d6 ~!15 e6 ~!3 gb6 ~!3 g6 ~!7 g5 ~!15 a4 ~!7 b4 ~!7 db5 ~!7 d5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 a5 ~!7 g5 ~!7 gb5 ~!7 d6 ~!39")
+  .slow(480/8/4)
+  .sound("square")
+  .gain(0.6)
+  .pan(0.7)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 3
+$: note("~!84 g5 ~!3 gb5 ~!3 e5 ~!3 d5 ~!3 b4 ~!3 db5 ~!3 d5 ~!3 g4 ~!7 g5 ~!11 c6 ~!3 b5 ~!3 a5 ~!3 g5 ~!3 e5 ~!3 f5 ~!3 g5 ~!3 c5 ~!3 d5 ~!3 e5 ~!3 g4 ~!7 gb4 ~ e4 ~ d4 ~!3 d5 ~!23 g5 ~!3 gb5 ~!3 e5 ~!3 d5 ~!3 b4 ~!3 db5 ~!3 d5 ~!3 g4 ~!7 g5 ~!11 c6 ~!3 b5 ~!3 a5 ~!3 g5 ~!3 e5 ~!3 f5 ~!3 g5 ~!3 c5 ~!3 d5 ~!3 e5 ~!3 g4 ~!7 gb4 ~ e4 ~ d4 ~!3 d5 ~!23 g5 ~!3 gb5 ~!3 e5 ~!3 d5 ~!3 b4 ~!3 db5 ~!3 d5 ~!3 g4 ~!7 g5 ~!11 c6 ~!3 b5 ~!3 a5 ~!3 g5 ~!3 e5 ~!3 f5 ~!3 g5 ~!3 c5 ~!3 d5 ~!3 e5 ~!3 g4 ~!7 gb4 ~ e4 ~ d4 ~!3 d5 ~!3 b4 ~!31")
+  .slow(480/8/4)
+  .sound("triangle")
+  .gain(0.6)
+  .pan(0.4)
+  .decay(0.3)
+  .sustain(0.2)
+
+// Track 4
+$: note("~!80 g4 ~!15 gb4 ~!15 e4 ~!15 d4 ~!15 b3 ~!15 c4 ~!15 d4 ~!15 g3 ~!15 g4 ~!15 gb4 ~!15 e4 ~!15 d4 ~!15 b3 ~!15 c4 ~!15 d4 ~!15 g3 ~!15 g4 ~!15 gb4 ~!15 e4 ~!15 d4 ~!15 b3 ~!15 c4 ~!15 d4 ~!15 g3 ~!31")
+  .slow(480/8/4)
+  .sound("sine")
+  .gain(0.6)
+  .pan(0.6)
+  .decay(0.3)
+  .sustain(0.2)
+
