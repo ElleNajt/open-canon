@@ -43,7 +43,7 @@ Edit in your editor or the browser - both stay in sync.
 
 ## Starting Material
 
-Includes Bach's 14 Canons on the Goldberg Ground (BWV 1087) in `bach/bwv1087/` - both original transcriptions and funky remixes.
+Includes Bach's 14 Canons on the Goldberg Ground (BWV 1087) in `bach/bwv1087/` - original transcriptions plus funky remixes by Claude Opus 4.5.
 
 Replace `live.strudel` with any pattern from there, or write your own.
 
