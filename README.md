@@ -59,6 +59,12 @@ Convert any MIDI file to Strudel with the included converter (based on [midi_to_
 
 Find free classical MIDI at [Mutopia Project](https://mutopiaproject.org).
 
+## Credits
+
+Built on [Strudel](https://strudel.cc) by the [uzu collective](https://codeberg.org/uzu/strudel) - an incredible browser-based live coding environment that ports TidalCycles to JavaScript. Thank you for making music accessible.
+
+MIDI converter based on [midi_to_tidalcycles](https://github.com/ivan-googleglass/midi_to_tidalcycles) by ivan-googleglass.
+
 ## License
 
 MIT. The Bach is public domain.
