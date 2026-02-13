@@ -27,9 +27,8 @@ Open any `.tidal` file and start remixing.
 ## What's Here
 
 **Bach BWV 1087** - 14 Canons on the Goldberg Ground
-- `bach/bwv1087/canon9.tidal` - Canon at the unison
-- `bach/bwv1087/canon9_funky.tidal` - Funky remix with drums
-- `bach/bwv1087/canon3.tidal` - Canon in contrary motion
+- `bach/bwv1087/original/` - Faithful transcriptions from MIDI
+- `bach/bwv1087/remixes/` - Transformed versions
 
 ## Contributing
 

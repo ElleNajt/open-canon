@@ -16,10 +16,12 @@ A collection of classical music transcribed to TidalCycles, ready for live codin
 
 ```
 bach/
-  bwv1087/           # 14 Canons on the Goldberg Ground
-    canon9.tidal     # Original transcription
-    canon9_funky.tidal  # Example remix
-    canon3.tidal
+  bwv1087/              # 14 Canons on the Goldberg Ground
+    original/           # Faithful transcriptions from MIDI
+      canon3.tidal
+      canon9.tidal
+    remixes/            # Transformed versions
+      canon9_funky.tidal
 tools/
   midi_to_tidalcycles/  # MIDI to TidalCycles converter (submodule)
 ```
