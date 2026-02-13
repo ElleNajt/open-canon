@@ -28,6 +28,7 @@ Click **Play** in the browser, then just talk to your AI.
 
 - [Node.js](https://nodejs.org/) 18+
 - An AI coding assistant ([Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), etc.)
+- Optional: [Tailscale](https://tailscale.com/) - to play audio on your phone while editing on your computer
 
 ## How It Works
 
@@ -82,6 +83,17 @@ Or start with the included Bach material and transform it into something new.
 ```
 
 Find free classical MIDI at [Mutopia Project](https://mutopiaproject.org).
+
+## Multi-Device Setup (Optional)
+
+If you have [Tailscale](https://tailscale.com/), you can play audio on your phone while editing on your computer:
+
+1. Install Tailscale on both devices
+2. Run `./start` - it automatically binds to your tailnet
+3. Open `http://your-machine.tail....ts.net:4321` on your phone
+4. Click Play, then edit on your computer
+
+Without Tailscale, everything runs on localhost - still works fine, just single-device.
 
 ## Credits
 
