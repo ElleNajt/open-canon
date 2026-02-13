@@ -41,9 +41,21 @@ Edit in your editor or the browser - both stay in sync.
 - "remove the drums"
 - "make it creepy"
 
-## Start Fresh
+## Starting Material
 
-Replace `live.strudel` with any pattern from `bach/` or write your own.
+Includes Bach's 14 Canons on the Goldberg Ground (BWV 1087) in `bach/bwv1087/` - both original transcriptions and funky remixes.
+
+Replace `live.strudel` with any pattern from there, or write your own.
+
+## Add More Music
+
+Convert any MIDI file to Strudel with the included converter (based on [midi_to_tidalcycles](https://github.com/ivan-googleglass/midi_to_tidalcycles)):
+
+```bash
+./convert-strudel my-song.mid output.strudel
+```
+
+Find free classical MIDI at [Mutopia Project](https://mutopiaproject.org).
 
 ## License
 
