@@ -40,7 +40,9 @@ Add more pieces! Find MIDI on [Mutopia Project](https://mutopiaproject.org), con
 ./render bach/bwv1087/remixes/canon9_funky.tidal 8
 ```
 
-Requires SuperCollider + SuperDirt running. See script for details.
+Renders 8 cycles to `mp3/canon9_funky.mp3`. Fully automated - spawns SuperCollider, records, converts to MP3.
+
+Requires: SuperCollider, GHCi with Tidal, ffmpeg
 
 ## Future: Browser Playback
 

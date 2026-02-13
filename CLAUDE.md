@@ -35,6 +35,22 @@ tools/
    ```
 3. Place in appropriate composer/work folder
 
+## Rendering to MP3
+
+```bash
+./render path/to/file.tidal [cycles]
+```
+
+- Fully automated: spawns SuperCollider, plays pattern, records, converts to MP3
+- Output goes to `mp3/` folder
+- Default: 8 cycles
+
+Example:
+```bash
+./render bach/bwv1087/remixes/canon9_funky.tidal 4
+# Creates: mp3/canon9_funky.mp3
+```
+
 ## Remix Ideas
 
 - Change synths: `# s "supersaw"`, `# s "superpiano"`, `# s "superhoover"`
