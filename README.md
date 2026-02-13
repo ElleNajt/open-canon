@@ -2,7 +2,9 @@
 
 A music game where you talk to AI and hear what happens.
 
-[Listen to a sample: funky_canon.mp3](funky_canon.mp3) - Bach Canon 9, remixed by Claude Opus 4.5
+**Samples:**
+- [funky_canon.mp3](funky_canon.mp3) - Bach Canon 9, remixed
+- [claudes_groove.mp3](claudes_groove.mp3) - Built from scratch: "make a funky bass line"
 
 ```
 "make it funky"
@@ -89,4 +91,4 @@ MIDI converter based on [midi_to_tidalcycles](https://github.com/ivan-googleglas
 
 ## License
 
-MIT. The Bach is public domain.
+MIT for vibe-duet code. Strudel patches are AGPL v3 (same as Strudel). Bach is public domain.

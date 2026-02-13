@@ -20,6 +20,20 @@ To convert a MIDI to Strudel:
 
 The converter uses `note()` for pitches and outputs Strudel-compatible JavaScript.
 
+## Important: Avoid Arrow Functions
+
+Arrow functions like `.sometimes(x => x.crush(4))` can silently fail (no sound). Use mini-notation instead:
+
+```javascript
+// BAD - may not work
+.sometimes(x => x.fast(2))
+.rarely(x => x.silence())
+
+// GOOD - use mini-notation
+s("bd? sn")           // ? for 50% probability
+s("bd sn").fast("<1 2>")  // alternate values per cycle
+```
+
 ## Setup
 
 The user runs `./start` which:
