@@ -29,9 +29,9 @@ tools/
 ## Adding New Pieces
 
 1. Find MIDI on Mutopia Project (mutopiaproject.org) or similar
-2. Convert with the included tool:
+2. Convert:
    ```bash
-   python tools/midi_to_tidalcycles/src/midi_to_tidalcycles.py -l input.mid > output.tidal
+   ./convert input.mid output.tidal
    ```
 3. Place in appropriate composer/work folder
 

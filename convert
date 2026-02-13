@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Convert MIDI to TidalCycles
+# Usage: ./convert input.mid output.tidal
+
+set -e
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+CONVERTER="$SCRIPT_DIR/tools/midi_to_tidalcycles/src/midi_to_tidalcycles.py"
+
+if [ $# -lt 1 ]; then
+    echo "Usage: ./convert input.mid [output.tidal]"
+    echo "  If output is omitted, prints to stdout"
+    exit 1
+fi
+
+INPUT="$1"
+OUTPUT="${2:-/dev/stdout}"
+
+python3 "$CONVERTER" -l "$INPUT" > "$OUTPUT"
