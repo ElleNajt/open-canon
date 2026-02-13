@@ -9,11 +9,18 @@ Bi-directional sync between live.strudel and Strudel browser.
 
 import http.server
 import socketserver
+import subprocess
 from pathlib import Path
 
 PORT = 3333
 ROOT = Path(__file__).parent
 LIVE_FILE = ROOT / "live.strudel"
+
+# Get tailnet IP if available, else localhost
+try:
+    HOST = subprocess.check_output(["tailscale", "ip", "-4"], text=True).strip()
+except:
+    HOST = "127.0.0.1"
 
 
 class Handler(http.server.SimpleHTTPRequestHandler):
@@ -56,14 +63,14 @@ vibe-duet
 Bi-directional sync between live.strudel and browser.
 
   File:    {LIVE_FILE}
-  Server:  http://localhost:{PORT}
+  Server:  http://{HOST}:{PORT}
 
 Edit in your editor OR in the browser - both stay in sync!
 
 Press Ctrl+C to stop.
 """)
 
-with socketserver.TCPServer(("", PORT), Handler) as httpd:
+with socketserver.TCPServer((HOST, PORT), Handler) as httpd:
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:

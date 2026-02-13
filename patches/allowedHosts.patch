@@ -1,0 +1,67 @@
+From 638aa16c5695bd763a43c749208752614957eb58 Mon Sep 17 00:00:00 2001
+From: Elle Najt <LNAJT4@gmail.com>
+Date: Fri, 13 Feb 2026 14:29:42 -0800
+Subject: [PATCH] Add local config for server host, allowedHosts, and vibe-duet
+ URL
+
+---
+ website/astro.config.mjs | 20 ++++++++++++++++++++
+ website/package.json     |  2 +-
+ 2 files changed, 21 insertions(+), 1 deletion(-)
+
+diff --git a/website/astro.config.mjs b/website/astro.config.mjs
+index 86763588..3df5d4bb 100644
+--- a/website/astro.config.mjs
++++ b/website/astro.config.mjs
+@@ -11,6 +11,15 @@ import tailwind from '@astrojs/tailwind';
+ import AstroPWA from '@vite-pwa/astro';
+ 
+ import process from 'node:process';
++import fs from 'node:fs';
++import { fileURLToPath } from 'node:url';
++import { dirname, resolve } from 'node:path';
++
++const __dirname = dirname(fileURLToPath(import.meta.url));
++let localConfig = {};
++try {
++  localConfig = JSON.parse(fs.readFileSync(resolve(__dirname, '../../config/local.json'), 'utf8'));
++} catch (e) {}
+ 
+ const site = process.env.SITE_URL || `https://strudel.cc/`; // root url without a path
+ const base = process.env.BASE_PATH || ''; // base path of the strudel site
+@@ -137,8 +146,19 @@ export default defineConfig({
+   ],
+   site,
+   base,
++  server: {
++    host: localConfig.host || 'localhost',
++  },
+   vite: {
+     plugins: [bundleAudioWorkletPlugin()],
++    define: {
++      __VIBE_DUET_URL__: JSON.stringify(
++        localConfig.host ? `http://${localConfig.host}:3333/live.strudel` : 'http://localhost:3333/live.strudel',
++      ),
++    },
++    server: {
++      allowedHosts: localConfig.allowedHosts || ['localhost'],
++    },
+     ssr: {
+       // Example: Force a broken package to skip SSR processing, if needed
+       // external: ['fraction.js'], // https://github.com/infusion/Fraction.js/issues/51
+diff --git a/website/package.json b/website/package.json
+index eb362369..5c56dbb3 100644
+--- a/website/package.json
++++ b/website/package.json
+@@ -4,7 +4,7 @@
+   "version": "0.6.0",
+   "private": true,
+   "scripts": {
+-    "dev": "astro dev --host 0.0.0.0",
++    "dev": "astro dev",
+     "start": "astro dev",
+     "build": "astro build",
+     "preview": "astro preview --port 3009 --host 0.0.0.0",
+-- 
+2.52.0
+
