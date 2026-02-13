@@ -91,4 +91,4 @@ MIDI converter based on [midi_to_tidalcycles](https://github.com/ivan-googleglas
 
 ## License
 
-MIT for vibe-duet code. Strudel patches are AGPL v3 (same as Strudel). Bach is public domain.
+AGPL v3 (same as Strudel). Bach is public domain.
