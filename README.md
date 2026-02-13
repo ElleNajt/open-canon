@@ -18,7 +18,7 @@ cd vibe-duet
 ./start
 ```
 
-Click anywhere in the browser to enable audio. Then just talk to your AI.
+Click **Play** in the browser, then just talk to your AI.
 
 ## What You Need
 
