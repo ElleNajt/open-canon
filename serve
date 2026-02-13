@@ -1,0 +1,70 @@
+#!/usr/bin/env python3
+"""
+Hot-reload server for vibe-duet.
+Bi-directional sync between live.strudel and Strudel browser.
+
+- GET /live.strudel -> serves the file
+- POST /save -> writes browser edits back to file
+"""
+
+import http.server
+import socketserver
+from pathlib import Path
+
+PORT = 3333
+ROOT = Path(__file__).parent
+LIVE_FILE = ROOT / "live.strudel"
+
+
+class Handler(http.server.SimpleHTTPRequestHandler):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, directory=str(ROOT), **kwargs)
+
+    def end_headers(self):
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
+        self.send_header("Access-Control-Allow-Headers", "Content-Type")
+        super().end_headers()
+
+    def do_OPTIONS(self):
+        self.send_response(200)
+        self.end_headers()
+
+    def do_POST(self):
+        if self.path == "/save":
+            length = int(self.headers.get("Content-Length", 0))
+            code = self.rfile.read(length).decode("utf-8")
+            LIVE_FILE.write_text(code)
+            self.send_response(200)
+            self.end_headers()
+            self.wfile.write(b"OK")
+            print("  [sync] Browser -> live.strudel")
+        else:
+            self.send_response(404)
+            self.end_headers()
+
+    def log_message(self, format, *args):
+        if "live.strudel" in args[0] and "GET" in args[0]:
+            pass  # quiet polling
+        else:
+            print(f"  {args[0]}")
+
+
+print(f"""
+vibe-duet
+=========
+Bi-directional sync between live.strudel and browser.
+
+  File:    {LIVE_FILE}
+  Server:  http://localhost:{PORT}
+
+Edit in your editor OR in the browser - both stay in sync!
+
+Press Ctrl+C to stop.
+""")
+
+with socketserver.TCPServer(("", PORT), Handler) as httpd:
+    try:
+        httpd.serve_forever()
+    except KeyboardInterrupt:
+        print("\nStopped.")

@@ -1,0 +1,20 @@
+diff --git a/website/src/user_pattern_utils.mjs b/website/src/user_pattern_utils.mjs
+index ae39ef4..08bd80c 100644
+--- a/website/src/user_pattern_utils.mjs
++++ b/website/src/user_pattern_utils.mjs
+@@ -106,7 +106,14 @@ export function useActivePattern() {
+   return useStore($activePattern);
+ }
+ 
+-export const setLatestCode = (code) => settingsMap.setKey('latestCode', code);
++export const setLatestCode = (code) => {
++  settingsMap.setKey('latestCode', code);
++  // vibe-duet: sync back to live.strudel
++  fetch('http://localhost:3333/save', {
++    method: 'POST',
++    body: code,
++  }).catch(() => {}); // ignore if server not running
++};
+ 
+ export const defaultCode = '';
+ export const userPattern = {

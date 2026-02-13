@@ -1,0 +1,32 @@
+diff --git a/website/src/repl/useReplContext.jsx b/website/src/repl/useReplContext.jsx
+index 852c63f..d7cf733 100644
+--- a/website/src/repl/useReplContext.jsx
++++ b/website/src/repl/useReplContext.jsx
+@@ -162,6 +162,27 @@ export function useReplContext() {
+       logger(`Welcome to Strudel! ${msg} Press play or hit ctrl+enter to run it!`, 'highlight');
+     });
+ 
++    // Hot reload from local file (for vibe-duet)
++    const WATCH_FILE = 'http://localhost:3333/live.strudel';
++    let lastFileContent = '';
++    const pollFile = async () => {
++      try {
++        const res = await fetch(WATCH_FILE);
++        if (res.ok) {
++          const content = await res.text();
++          if (content !== lastFileContent && lastFileContent !== '') {
++            editor.setCode(content);
++            editor.evaluate();
++            logger('[vibe-duet] Pattern updated!', 'highlight');
++          }
++          lastFileContent = content;
++        }
++      } catch (e) {
++        // Server not running, that's fine
++      }
++    };
++    setInterval(pollFile, 500);
++
+     editorRef.current = editor;
+   }, []);
+ 

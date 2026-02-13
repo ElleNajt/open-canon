@@ -1,0 +1,20 @@
+#!/bin/bash
+# Convert MIDI to Strudel format
+# Usage: ./convert-strudel input.mid [output.txt]
+
+set -e
+cd "$(dirname "$0")"
+
+if [ -z "$1" ]; then
+    echo "Usage: ./convert-strudel input.mid [output.txt]"
+    exit 1
+fi
+
+INPUT="$1"
+OUTPUT="${2:-$(basename "$INPUT" .mid).txt}"
+
+/Library/Developer/CommandLineTools/usr/bin/python3 tools/midi_to_tidalcycles/src/midi_to_tidalcycles.py \
+    --strudel --consolidate --legato --hide \
+    "$INPUT" > "$OUTPUT"
+
+echo "Created: $OUTPUT"

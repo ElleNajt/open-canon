@@ -1,74 +1,91 @@
-# open-canon
+# vibe-duet
 
-Infinitely remixable classical music.
+Live music collaboration. Edit `live.strudel` and changes play instantly in the browser.
 
-## What is this?
+This file contains instructions for AI coding assistants.
 
-A collection of classical music transcribed to TidalCycles, ready for live coding and AI-assisted remixing. Fire up your AI coding assistant and start transforming Bach.
+## Quick Reference
 
-## Quick Start
+**The file to edit:** `live.strudel`
 
-1. Open any `.tidal` file
-2. Ask your AI assistant to remix it: "make this funky", "add drums", "make it ambient", "speed it up and add delay"
-3. Evaluate in TidalCycles and listen
+Changes are hot-reloaded into Strudel within 500ms.
 
-## Structure
+## Strudel Syntax Basics
 
-```
-bach/
-  bwv1087/              # 14 Canons on the Goldberg Ground
-    original/           # Faithful transcriptions from MIDI
-      canon3.tidal
-      canon9.tidal
-    remixes/            # Transformed versions
-      canon9_funky.tidal
-tools/
-  midi_to_tidalcycles/  # MIDI to TidalCycles converter (submodule)
-```
+```javascript
+// Set tempo (BPM / 60 / 4)
+setcps(120/60/4)
 
-## Adding New Pieces
+// Play notes with a synth
+$: note("c4 e4 g4").sound("sawtooth")
 
-1. Find MIDI on Mutopia Project (mutopiaproject.org) or similar
-2. Convert:
-   ```bash
-   ./convert input.mid output.tidal
-   ```
-3. Place in appropriate composer/work folder
+// Play drum samples
+$: s("bd hh sn hh")
 
-## Rendering to MP3
-
-```bash
-./render path/to/file.tidal [cycles]
+// Multiple patterns play together (each $: is a track)
+$: note("c3 g3").sound("triangle")  // bass
+$: s("bd cp bd cp")                  // drums
 ```
 
-- Fully automated: spawns SuperCollider, plays pattern, records, converts to MP3
-- Output goes to `mp3/` folder
-- Default: 8 cycles
+## Synths
 
-Example:
-```bash
-./render bach/bwv1087/remixes/canon9_funky.tidal 4
-# Creates: mp3/canon9_funky.mp3
+- `sawtooth` - Classic, good for leads
+- `square` - Hollow, retro
+- `triangle` - Soft, good for bass
+- `sine` - Pure tone
+
+## Drums
+
+`bd` (kick), `sn` (snare), `hh` (hihat), `oh` (open hat), `cp` (clap), `cr` (crash)
+
+## Effects
+
+```javascript
+.lpf(800)           // lowpass filter
+.lpf(sine.range(200, 2000).slow(4))  // filter sweep
+.gain(0.5)          // volume
+.pan(0.3)           // stereo (0-1)
+.room(0.5)          // reverb
+.delay(0.5)         // echo
+.crush(4)           // bitcrush
 ```
 
-## Remix Ideas
+## Transformations
 
-- Change synths: `# s "supersaw"`, `# s "superpiano"`, `# s "superhoover"`
-- Add effects: `# delay 0.5 # delaytime 0.125`, `# room 0.5`, `# crush 4`
-- Transform time: `fast 2`, `slow 2`, `rev`, `jux rev`
-- Add drums: layer a `d4 $ s "bd cp"` pattern
-- Filter sweeps: `# lpf (range 200 4000 $ slow 8 sine)`
-- Probability: `sometimes (# crush 3)`, `sometimesBy 0.2 (fast 2)`
+```javascript
+.slow(2)            // half speed
+.fast(2)            // double speed
+.rev()              // reverse
+.every(4, fast(2))  // speed up every 4th cycle
+.sometimes(x => x.crush(4))  // random effect
+```
 
-## Requirements
+## Example
 
-For TidalCycles playback:
-- SuperCollider + SuperDirt
-- GHC + TidalCycles
-- Editor with tidal-mode (Emacs, VS Code, etc.)
+```javascript
+setcps(120/60/4)
 
-Future: Strudel support for browser-based playback (no install needed)
+// Melody with filter sweep
+$: note("g4 b4 d5 g5 d5 b4")
+  .sound("sawtooth")
+  .lpf(sine.range(400, 2000).slow(8))
+  .gain(0.6)
 
-## Sources
+// Bass
+$: note("g2 ~ ~ g2 ~ ~ fs2 ~")
+  .sound("triangle")
+  .gain(0.8)
 
-MIDI files sourced from the Mutopia Project (mutopiaproject.org) - free sheet music and MIDI for classical works in the public domain.
+// Drums
+$: s("bd ~ bd ~ bd ~ bd cp")
+$: s("~ hh ~ hh").gain(0.5)
+```
+
+## User Prompts
+
+- "make it funky" → add syncopation, filter sweeps, drums
+- "add drums" → layer bd/sn/hh patterns
+- "make it ambient" → slow down, reverb, softer sounds
+- "more bass" → add low triangle/sine notes
+- "speed it up" → increase setcps or use .fast()
+- "make it weird" → .crush(), random effects, odd rhythms

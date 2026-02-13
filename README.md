@@ -1,53 +1,50 @@
-# open-canon
+# vibe-duet
 
-Infinitely remixable classical music. Fire up your AI coding assistant and start transforming Bach.
+A music game where you talk to AI and hear what happens.
 
 ```
-"make this funky"
+"make it funky"
 "add a breakbeat"  
-"slow it down and make it ambient"
-"what would this sound like as drum and bass"
+"slow it down"
+"more bass"
+"make it weird"
 ```
 
-## The Idea
-
-Classical music transcribed to [TidalCycles](https://tidalcycles.org) - a live coding language for music. Each piece is a starting point. Remix it, transform it, make it yours.
-
-Works great with AI coding assistants (Claude Code, Cursor, etc.) - just describe what you want and watch it happen.
-
-## Quick Start
+## Play
 
 ```bash
-git clone --recursive https://github.com/ElleNajt/open-canon.git
-cd open-canon
+git clone https://github.com/ElleNajt/vibe-duet.git
+cd vibe-duet
+./start
 ```
 
-Open any `.tidal` file and start remixing.
+Click anywhere in the browser to enable audio. Then just talk to your AI.
 
-## What's Here
+## What You Need
 
-**Bach BWV 1087** - 14 Canons on the Goldberg Ground
-- `bach/bwv1087/original/` - Faithful transcriptions from MIDI
-- `bach/bwv1087/remixes/` - Transformed versions
+- [Node.js](https://nodejs.org/) 18+
+- An AI coding assistant ([Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), etc.)
 
-## Contributing
+## How It Works
 
-Add more pieces! Find MIDI on [Mutopia Project](https://mutopiaproject.org), convert with the included tool, remix, and PR.
+You and the AI take turns. You describe what you want, the AI edits `live.strudel`, and you hear it instantly. The music runs in [Strudel](https://strudel.cc), a live coding environment.
 
-## Rendering to MP3
+Edit in your editor or the browser - both stay in sync.
 
-```bash
-./render bach/bwv1087/remixes/canon9_funky.tidal 8
-```
+## Ideas to Try
 
-Renders 8 cycles to `mp3/canon9_funky.mp3`. Fully automated - spawns SuperCollider, records, converts to MP3.
+- "make it sound like 80s synth"
+- "add a four-on-the-floor beat" 
+- "slow it way down and add reverb"
+- "make the bass wobble"
+- "what would this sound like as jungle?"
+- "remove the drums"
+- "make it creepy"
 
-Requires: SuperCollider, GHCi with Tidal, ffmpeg
+## Start Fresh
 
-## Future: Browser Playback
-
-[Strudel](https://strudel.cc) support planned - will enable instant playback in browser, no install needed.
+Replace `live.strudel` with any pattern from `bach/` or write your own.
 
 ## License
 
-The music is public domain. Code is MIT.
+MIT. The Bach is public domain.

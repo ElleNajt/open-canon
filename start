@@ -1,0 +1,66 @@
+#!/bin/bash
+# vibe-duet - Start the live music environment
+set -e
+cd "$(dirname "$0")"
+
+STRUDEL_REPO="https://codeberg.org/uzu/strudel.git"
+STRUDEL_COMMIT="6f108f7f28c1b7e8a829bccf1316ddc4e2a01417"
+
+# Clone and patch strudel if needed
+if [ ! -d "strudel" ]; then
+    echo "Cloning strudel..."
+    git clone --depth 100 "$STRUDEL_REPO" strudel
+    cd strudel
+    git checkout "$STRUDEL_COMMIT"
+    echo "Applying vibe-duet patches..."
+    git apply ../patches/useReplContext.patch
+    git apply ../patches/user_pattern_utils.patch
+    echo "Installing dependencies..."
+    pnpm install
+    cd ..
+fi
+
+# Kill any existing servers
+pkill -f "astro dev" 2>/dev/null || true
+pkill -f "python.*serve" 2>/dev/null || true
+sleep 1
+
+echo ""
+echo "  ┌─────────────────────────────────────┐"
+echo "  │         VIBE-DUET                   │"
+echo "  │   Talk to AI. Hear music live.      │"
+echo "  └─────────────────────────────────────┘"
+echo ""
+
+# Start file server in background
+python3 serve &
+SERVE_PID=$!
+
+# Start Strudel
+echo "Starting Strudel..."
+cd strudel
+pnpm dev &
+STRUDEL_PID=$!
+cd ..
+
+# Wait for Strudel to be ready
+echo "Waiting for Strudel to start..."
+sleep 8
+
+# Open browser
+echo "Opening browser..."
+open http://localhost:4321 2>/dev/null || xdg-open http://localhost:4321 2>/dev/null || echo "Open http://localhost:4321 in your browser"
+
+echo ""
+echo "Ready!"
+echo ""
+echo "  1. Click PLAY in Strudel"
+echo "  2. Ask your AI to edit live.strudel"
+echo "  3. Hear changes instantly!"
+echo ""
+echo "Press Ctrl+C to stop."
+echo ""
+
+# Wait for interrupt
+trap "kill $SERVE_PID $STRUDEL_PID 2>/dev/null; exit" INT
+wait
