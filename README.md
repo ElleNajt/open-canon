@@ -54,16 +54,27 @@ Tell the AI to build up step by step:
 
 This helps you understand what's happening and catch problems early. If things get messy, you can always say "start over with the original" or "undo the last change".
 
-## Starting Material
+## Starting From Scratch
 
-Includes Bach's 14 Canons on the Goldberg Ground (BWV 1087) in `bach/bwv1087/` - original transcriptions plus funky remixes by Claude Opus 4.5.
+You don't need sheet music - just start with a simple idea and build up:
 
-Replace `live.strudel` with any pattern from there, or write your own.
+```
+"let's make something from scratch"
+"start with a simple bass line in G minor"
+"add a melody on top"
+"now add some drums"
+"make it more interesting"
+```
 
-## Add More Music
+Or start with the included Bach material and transform it into something new.
 
-Convert any MIDI file to Strudel with the included converter (based on [midi_to_tidalcycles](https://github.com/ivan-googleglass/midi_to_tidalcycles)):
+## More Starting Points
 
+**Bach's 14 Canons (BWV 1087)** - in `bach/bwv1087/`, original transcriptions plus funky remixes
+
+**Italian Concerto (BWV 971)** - in `bach/bwv971/`, all three movements
+
+**Convert any MIDI** - using the included converter:
 ```bash
 ./convert-strudel my-song.mid output.strudel
 ```
