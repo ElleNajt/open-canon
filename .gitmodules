@@ -1,0 +1,3 @@
+[submodule "tools/midi_to_tidalcycles"]
+	path = tools/midi_to_tidalcycles
+	url = https://github.com/ElleNajt/midi_to_tidalcycles.git

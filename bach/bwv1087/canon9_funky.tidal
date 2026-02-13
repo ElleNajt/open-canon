@@ -1,0 +1,51 @@
+-- Bach: Canon 9 from 14 Canons on the Goldberg Ground (BWV 1087)
+-- FUNKY REMIX
+
+setcps (100/60/4)  -- 100 BPM, groovier tempo
+
+do
+  -- Track 1 - Lead with wah filter
+  d1 $ slow (33.0/4) 
+     $ sometimesBy 0.1 (# crush 6)
+     $ n "g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~!7"
+     # s "supersaw"
+     # lpf (range 400 3000 $ slow 8 sine)
+     # lpq 0.3
+     # sustain 0.3
+     # gain 0.7
+     # pan 0.3
+
+  -- Track 2 - Funky clavinet sound
+  d2 $ slow (33.0/4) 
+     $ every 4 (jux rev)
+     $ n "~!2 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ fs5 ~ a5 ~ cs5 ~ e5 ~ g5 ~ cs6 ~!3 d6 ~ a5 ~ fs5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ fs5 ~ a5 ~ d6 c6 b5 a5 g5 ~!5"
+     # s "supersquare"
+     # sustain 0.15
+     # gain 0.5
+     # pan 0.7
+
+  -- Track 3 - Deep funky bass (octave down)
+  d3 $ slow (33.0/4) 
+     $ (|- n 12)  -- drop an octave
+     $ n "~!8 g4 ~!7 fs4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7 g4 ~!7 fs4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7 g4 ~!7 fs4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7 g4 ~!7 fs4 ~!7 e4 ~!7 d4 ~!7 b3 ~!7 c4 ~!7 d4 ~!7 g3 ~!7"
+     # s "superhoover"
+     # sustain 0.8
+     # gain 0.8
+     # lpf 800
+     # pan 0.5
+
+  -- Drum pattern - funky breakbeat
+  d4 $ stack [
+       s "bd ~ ~ bd ~ ~ bd ~" # gain 1.1,
+       s "~ ~ hh ~ ~ hh ~ hh" # gain 0.7 # pan 0.6,
+       s "~ ~ ~ ~ cp ~ ~ ~" # gain 0.9 # room 0.3
+     ]
+
+  -- Hi-hat groove
+  d5 $ fast 2 
+     $ sometimesBy 0.3 (# gain 0.5)
+     $ s "hh*8" 
+     # gain 0.6 
+     # pan (range 0.4 0.6 rand)
+
+hush
