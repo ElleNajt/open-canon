@@ -2,6 +2,8 @@
 
 A music game where you talk to AI and hear what happens.
 
+[Listen to a sample: funky_canon.mp3](funky_canon.mp3) - Bach Canon 9, remixed by Claude Opus 4.5
+
 ```
 "make it funky"
 "add a breakbeat"  
