@@ -29,7 +29,9 @@ Click **Play** in the browser, then just talk to your AI.
 
 You and the AI take turns. You describe what you want, the AI edits `live.strudel`, and you hear it instantly. The music runs in [Strudel](https://strudel.cc), a live coding environment.
 
-Edit in your editor or the browser - both stay in sync.
+Bi-directional sync:
+- AI edits the file → browser updates automatically
+- You edit in the browser → file updates when you evaluate (Ctrl+Enter)
 
 ## Ideas to Try
 
