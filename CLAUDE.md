@@ -1,6 +1,6 @@
 # vibe-duet
 
-Live music collaboration. Edit `live.strudel` and changes play instantly in the browser.
+Live music collaboration. Edit `live.js` and changes play instantly in the browser.
 
 This file contains instructions for AI coding assistants.
 
@@ -42,7 +42,7 @@ The user runs `./start` which:
 3. Starts Strudel on port 4321
 4. Opens the browser
 
-**The file to edit:** `live.strudel`
+**The file to edit:** `live.js`
 
 Changes sync bi-directionally:
 - Edit in your editor → browser updates within 500ms

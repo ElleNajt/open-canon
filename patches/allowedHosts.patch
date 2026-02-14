@@ -40,7 +40,7 @@ index 86763588..3df5d4bb 100644
      plugins: [bundleAudioWorkletPlugin()],
 +    define: {
 +      __VIBE_DUET_URL__: JSON.stringify(
-+        localConfig.host ? `http://${localConfig.host}:3333/live.strudel` : 'http://localhost:3333/live.strudel',
++        localConfig.host ? `http://${localConfig.host}:3333/live.js` : 'http://localhost:3333/live.js',
 +      ),
 +    },
 +    server: {

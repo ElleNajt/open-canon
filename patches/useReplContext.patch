@@ -8,7 +8,7 @@ index 852c63f8..7529ad17 100644
  
 -    // init settings
 +    // Hot reload from local file (for vibe-duet)
-+    const WATCH_FILE = `http://${window.location.hostname}:3333/live.strudel`;
++    const WATCH_FILE = `http://${window.location.hostname}:3333/live.js`;
 +    let lastFileContent = '';
 +    const pollFile = async () => {
 +      try {
@@ -27,7 +27,7 @@ index 852c63f8..7529ad17 100644
 +      }
 +    };
 +
-+    // init settings - try live.strudel first, then fall back to URL/session/default
++    // init settings - try live.js first, then fall back to URL/session/default
      initCode().then(async (decoded) => {
        let code, msg;
 -      if (decoded) {
@@ -41,13 +41,13 @@ index 852c63f8..7529ad17 100644
 -        code = randomTune; */
 -        code = '$: s("[bd <hh oh>]*2").bank("tr909").dec(.4)';
 -        msg = `Default code has been loaded`;
-+      // Try to load from live.strudel first
++      // Try to load from live.js first
 +      try {
 +        const res = await fetch(WATCH_FILE);
 +        if (res.ok) {
 +          code = await res.text();
 +          lastFileContent = code;
-+          msg = `Loaded from live.strudel`;
++          msg = `Loaded from live.js`;
 +        }
 +      } catch (e) {}
 +

@@ -9,7 +9,7 @@ index ae39ef4..08bd80c 100644
 -export const setLatestCode = (code) => settingsMap.setKey('latestCode', code);
 +export const setLatestCode = (code) => {
 +  settingsMap.setKey('latestCode', code);
-+  // vibe-duet: sync back to live.strudel
++  // vibe-duet: sync back to live.js
 +  fetch('http://localhost:3333/save', {
 +    method: 'POST',
 +    body: code,

@@ -32,7 +32,7 @@ Click **Play** in the browser, then just talk to your AI.
 
 ## How It Works
 
-You and the AI take turns. You describe what you want, the AI edits `live.strudel`, and you hear it instantly. The music runs in [Strudel](https://strudel.cc), a live coding environment.
+You and the AI take turns. You describe what you want, the AI edits `live.js`, and you hear it instantly. The music runs in [Strudel](https://strudel.cc), a live coding environment.
 
 Bi-directional sync:
 - AI edits the file → browser updates automatically

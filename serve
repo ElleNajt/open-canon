@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 """
 Hot-reload server for vibe-duet.
-Bi-directional sync between live.strudel and Strudel browser.
+Bi-directional sync between live.js and Strudel browser.
 
-- GET /live.strudel -> serves the file
+- GET /live.js -> serves the file
 - POST /save -> writes browser edits back to file
 """
 
@@ -14,7 +14,7 @@ from pathlib import Path
 
 PORT = 3333
 ROOT = Path(__file__).parent
-LIVE_FILE = ROOT / "live.strudel"
+LIVE_FILE = ROOT / "live.js"
 
 # Read host from config if it exists, else localhost
 import json
@@ -49,13 +49,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             self.send_response(200)
             self.end_headers()
             self.wfile.write(b"OK")
-            print("  [sync] Browser -> live.strudel")
+            print("  [sync] Browser -> live.js")
         else:
             self.send_response(404)
             self.end_headers()
 
     def log_message(self, format, *args):
-        if "live.strudel" in args[0] and "GET" in args[0]:
+        if "live.js" in args[0] and "GET" in args[0]:
             pass  # quiet polling
         else:
             print(f"  {args[0]}")
@@ -64,7 +64,7 @@ class Handler(http.server.SimpleHTTPRequestHandler):
 print(f"""
 vibe-duet
 =========
-Bi-directional sync between live.strudel and browser.
+Bi-directional sync between live.js and browser.
 
   File:    {LIVE_FILE}
   Server:  http://{HOST}:{PORT}
