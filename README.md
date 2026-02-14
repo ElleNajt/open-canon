@@ -3,6 +3,7 @@
 A music game where you talk to AI and hear what happens.
 
 **Samples:**
+- [bach_canon_9.mp3](bach_canon_9.mp3) - Canon 9 from Goldberg Variations
 - [claudes_groove.mp3](claudes_groove.mp3) - Built from scratch: "make a funky bass line"
 
 **Examples:** See [bach/](bach/) for code you can copy into `live.js`.
