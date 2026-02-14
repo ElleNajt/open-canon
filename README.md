@@ -96,7 +96,7 @@ If you have [Tailscale](https://tailscale.com/), you can play audio on your phon
 4. Open `http://your-machine.tail....ts.net:4321` on your phone
 5. Click Play, then edit on your computer
 
-The servers only accept connections from hosts listed in your config - safe to use on public wifi.
+Your tailnet is private, so this is safe to use on public wifi.
 
 Without Tailscale, everything runs on localhost - still works fine, just single-device.
 
