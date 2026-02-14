@@ -20,20 +20,6 @@ To convert a MIDI to Strudel:
 
 The converter uses `note()` for pitches and outputs Strudel-compatible JavaScript.
 
-## Important: Avoid Arrow Functions
-
-Arrow functions like `.sometimes(x => x.crush(4))` can silently fail (no sound). Use mini-notation instead:
-
-```javascript
-// BAD - may not work
-.sometimes(x => x.fast(2))
-.rarely(x => x.silence())
-
-// GOOD - use mini-notation
-s("bd? sn")           // ? for 50% probability
-s("bd sn").fast("<1 2>")  // alternate values per cycle
-```
-
 ## Setup
 
 The user runs `./start` which:
@@ -238,16 +224,3 @@ $: note("c4 e4 g4 b4 g4 e4")
   .gain(0.5)
 ```
 
-## User Prompts
-
-Common requests and how to handle them:
-
-- "make it funky" → add syncopation, filter sweeps, drums
-- "add drums" → layer bd/sn/hh patterns
-- "make it ambient" → slow down, add room/reverb, softer sounds
-- "more bass" → add low triangle/sine notes (octave 2-3)
-- "speed it up" → increase setcps or use .fast()
-- "make it weird" → .crush(), .sometimes(), odd subdivisions
-- "add variation" → use .every(), .sometimes(), `< >` alternation
-- "make it minimal" → remove tracks, more rests (~)
-- "make it build" → use .slow() at start, filter sweeps opening up
