@@ -10,7 +10,7 @@ index ae39ef4..08bd80c 100644
 +export const setLatestCode = (code) => {
 +  settingsMap.setKey('latestCode', code);
 +  // vibe-duet: sync back to live.js
-+  fetch('http://localhost:3333/save', {
++  fetch(`http://${window.location.hostname}:3333/save`, {
 +    method: 'POST',
 +    body: code,
 +  }).catch(() => {}); // ignore if server not running
