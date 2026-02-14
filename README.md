@@ -5,7 +5,7 @@ A music game where you talk to AI and hear what happens.
 **Samples:**
 - [claudes_groove.mp3](claudes_groove.mp3) - Built from scratch: "make a funky bass line"
 
-**Examples:** See [examples/](examples/) for code you can copy into `live.js`.
+**Examples:** See [bach/](bach/) for code you can copy into `live.js`.
 
 ```
 "make it funky"
