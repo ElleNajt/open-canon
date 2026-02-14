@@ -86,12 +86,15 @@ Find free classical MIDI at [Mutopia Project](https://mutopiaproject.org).
 
 ## Multi-Device Setup (Optional)
 
-If you have [Tailscale](https://tailscale.com/), you can play audio on your phone while editing on your computer:
+If you have [Tailscale](https://tailscale.com/), you can play audio on your phone while editing on your computer. This can be fun if you want to take your music with you and control the files remotely (e.g. via Termux or SSH).
 
 1. Install Tailscale on both devices
-2. Run `./start` - it automatically binds to your tailnet
-3. Open `http://your-machine.tail....ts.net:4321` on your phone
-4. Click Play, then edit on your computer
+2. Copy `config/local.example.json` to `config/local.json` and add your tailnet hostname
+3. Run `./start` - it binds to your tailnet IP
+4. Open `http://your-machine.tail....ts.net:4321` on your phone
+5. Click Play, then edit on your computer
+
+The servers only accept connections from hosts listed in your config - safe to use on public wifi.
 
 Without Tailscale, everything runs on localhost - still works fine, just single-device.
 

@@ -15,8 +15,7 @@ if [ ! -d "strudel" ]; then
     echo "Applying vibe-duet patches..."
     git apply ../patches/useReplContext.patch
     git apply ../patches/user_pattern_utils.patch
-    # Remove hardcoded --host 0.0.0.0 so we can bind to tailnet only
-    sed -i '' 's/--host 0.0.0.0//' website/package.json
+    git apply ../patches/allowedHosts.patch
     echo "Installing dependencies..."
     pnpm install
     cd ..
@@ -27,9 +26,9 @@ pkill -f "astro dev" 2>/dev/null || true
 pkill -f "python.*serve" 2>/dev/null || true
 sleep 1
 
-# Get tailnet IP if available, else use localhost
-if command -v tailscale &>/dev/null; then
-    HOST=$(tailscale ip -4 2>/dev/null || echo "127.0.0.1")
+# Read host from config if it exists, else use localhost
+if [ -f "config/local.json" ]; then
+    HOST=$(python3 -c "import json; print(json.load(open('config/local.json')).get('host', '127.0.0.1'))" 2>/dev/null || echo "127.0.0.1")
 else
     HOST="127.0.0.1"
 fi

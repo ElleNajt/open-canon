@@ -16,9 +16,13 @@ PORT = 3333
 ROOT = Path(__file__).parent
 LIVE_FILE = ROOT / "live.strudel"
 
-# Get tailnet IP if available, else localhost
+# Read host from config if it exists, else localhost
+import json
+
+CONFIG_FILE = ROOT / "config" / "local.json"
 try:
-    HOST = subprocess.check_output(["tailscale", "ip", "-4"], text=True).strip()
+    config = json.loads(CONFIG_FILE.read_text())
+    HOST = config.get("host", "127.0.0.1")
 except:
     HOST = "127.0.0.1"
 

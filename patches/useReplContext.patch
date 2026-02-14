@@ -1,11 +1,12 @@
 diff --git a/website/src/repl/useReplContext.jsx b/website/src/repl/useReplContext.jsx
-index 852c63f..d7cf733 100644
+index 852c63f8..7529ad17 100644
 --- a/website/src/repl/useReplContext.jsx
 +++ b/website/src/repl/useReplContext.jsx
-@@ -162,6 +162,28 @@ export function useReplContext() {
-       logger(`Welcome to Strudel! ${msg} Press play or hit ctrl+enter to run it!`, 'highlight');
-     });
+@@ -142,26 +142,59 @@ export function useReplContext() {
+     window.strudelMirror = editor;
+     window.debugAudiograph = debugAudiograph;
  
+-    // init settings
 +    // Hot reload from local file (for vibe-duet)
 +    const WATCH_FILE = `http://${window.location.hostname}:3333/live.strudel`;
 +    let lastFileContent = '';
@@ -25,6 +26,48 @@ index 852c63f..d7cf733 100644
 +        // Server not running, that's fine
 +      }
 +    };
++
++    // init settings - try live.strudel first, then fall back to URL/session/default
+     initCode().then(async (decoded) => {
+       let code, msg;
+-      if (decoded) {
+-        code = decoded;
+-        msg = `I have loaded the code from the URL.`;
+-      } else if (latestCode) {
+-        code = latestCode;
+-        msg = `Your last session has been loaded!`;
+-      } else {
+-        /* const { code: randomTune, name } = await getRandomTune();
+-        code = randomTune; */
+-        code = '$: s("[bd <hh oh>]*2").bank("tr909").dec(.4)';
+-        msg = `Default code has been loaded`;
++      // Try to load from live.strudel first
++      try {
++        const res = await fetch(WATCH_FILE);
++        if (res.ok) {
++          code = await res.text();
++          lastFileContent = code;
++          msg = `Loaded from live.strudel`;
++        }
++      } catch (e) {}
++
++      if (!code) {
++        if (decoded) {
++          code = decoded;
++          msg = `I have loaded the code from the URL.`;
++        } else if (latestCode) {
++          code = latestCode;
++          msg = `Your last session has been loaded!`;
++        } else {
++          code = '$: s("[bd <hh oh>]*2").bank("tr909").dec(.4)';
++          msg = `Default code has been loaded`;
++        }
+       }
+       editor.setCode(code);
+       setDocumentTitle(code);
+       logger(`Welcome to Strudel! ${msg} Press play or hit ctrl+enter to run it!`, 'highlight');
+     });
+ 
 +    setInterval(pollFile, 500);
 +    logger('[vibe-duet] Watching ' + WATCH_FILE, 'highlight');
 +

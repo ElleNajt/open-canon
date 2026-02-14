@@ -1,0 +1,4 @@
+{
+  "allowedHosts": ["localhost", "my-machine.tail1234.ts.net"],
+  "host": "100.x.y.z"
+}
