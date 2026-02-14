@@ -3,8 +3,9 @@
 A music game where you talk to AI and hear what happens.
 
 **Samples:**
-- [funky_canon.mp3](funky_canon.mp3) - Bach Canon 9, remixed
 - [claudes_groove.mp3](claudes_groove.mp3) - Built from scratch: "make a funky bass line"
+
+**Examples:** See [examples/](examples/) for code you can copy into `live.js`.
 
 ```
 "make it funky"
