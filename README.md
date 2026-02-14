@@ -3,10 +3,10 @@
 A music game where you talk to AI and hear what happens.
 
 **Samples:**
-- [bach_canon_9.mp3](bach/claude_originals/bach_canon_9.mp3) - Canon 9 from Goldberg Variations
-- [claudes_groove.mp3](bach/claude_originals/claudes_groove.mp3) - Built from scratch: "make a funky bass line"
+- [bach_canon_9.mp3](examples/bach/bach_canon_9.mp3) - Canon 9 from Goldberg Variations
+- [claudes_groove.mp3](examples/claude_originals/claudes_groove.mp3) - Built from scratch: "make a funky bass line"
 
-**Examples:** See [bach/](bach/) for code you can copy into `live.js`.
+**Examples:** See [examples/](examples/) for code you can copy into `live.js`.
 
 ```
 "make it funky"
@@ -75,9 +75,9 @@ Or start with the included Bach material and transform it into something new.
 
 ## More Starting Points
 
-**Bach's 14 Canons (BWV 1087)** - in `bach/bwv1087/`, original transcriptions plus funky remixes
+**Bach's 14 Canons (BWV 1087)** - in `examples/bach/bwv1087/`, original transcriptions plus funky remixes
 
-**Italian Concerto (BWV 971)** - in `bach/bwv971/`, all three movements
+**Italian Concerto (BWV 971)** - in `examples/bach/bwv971/`, all three movements
 
 **Convert any MIDI** - using the included converter:
 ```bash
