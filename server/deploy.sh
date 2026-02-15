@@ -37,7 +37,7 @@ gcloud run deploy $SERVICE \
     --allow-unauthenticated \
     --project $PROJECT \
     --set-secrets=ANTHROPIC_API_KEY=anthropic-api-key:latest \
-    --min-instances=1 \
+    --min-instances=0 \
     --max-instances=1 \
     --service-account=YOUR_SERVICE_ACCOUNT
 

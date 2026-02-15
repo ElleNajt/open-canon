@@ -1,5 +1,58 @@
+diff --git a/website/astro.config.mjs b/website/astro.config.mjs
+index 86763588..3df5d4bb 100644
+--- a/website/astro.config.mjs
++++ b/website/astro.config.mjs
+@@ -11,6 +11,15 @@ import tailwind from '@astrojs/tailwind';
+ import AstroPWA from '@vite-pwa/astro';
+ 
+ import process from 'node:process';
++import fs from 'node:fs';
++import { fileURLToPath } from 'node:url';
++import { dirname, resolve } from 'node:path';
++
++const __dirname = dirname(fileURLToPath(import.meta.url));
++let localConfig = {};
++try {
++  localConfig = JSON.parse(fs.readFileSync(resolve(__dirname, '../../config/local.json'), 'utf8'));
++} catch (e) {}
+ 
+ const site = process.env.SITE_URL || `https://strudel.cc/`; // root url without a path
+ const base = process.env.BASE_PATH || ''; // base path of the strudel site
+@@ -137,8 +146,19 @@ export default defineConfig({
+   ],
+   site,
+   base,
++  server: {
++    host: localConfig.host || 'localhost',
++  },
+   vite: {
+     plugins: [bundleAudioWorkletPlugin()],
++    define: {
++      __VIBE_DUET_URL__: JSON.stringify(
++        localConfig.host ? `http://${localConfig.host}:3333/live.strudel` : 'http://localhost:3333/live.strudel',
++      ),
++    },
++    server: {
++      allowedHosts: localConfig.allowedHosts || ['localhost'],
++    },
+     ssr: {
+       // Example: Force a broken package to skip SSR processing, if needed
+       // external: ['fraction.js'], // https://github.com/infusion/Fraction.js/issues/51
+diff --git a/website/package.json b/website/package.json
+index eb362369..5c56dbb3 100644
+--- a/website/package.json
++++ b/website/package.json
+@@ -4,7 +4,7 @@
+   "version": "0.6.0",
+   "private": true,
+   "scripts": {
+-    "dev": "astro dev --host 0.0.0.0",
++    "dev": "astro dev",
+     "start": "astro dev",
+     "build": "astro build",
+     "preview": "astro preview --port 3009 --host 0.0.0.0",
 diff --git a/website/src/repl/components/ReplEditor.jsx b/website/src/repl/components/ReplEditor.jsx
-index 437475e6..66d1bbcd 100644
+index 437475e6..23e6eebd 100644
 --- a/website/src/repl/components/ReplEditor.jsx
 +++ b/website/src/repl/components/ReplEditor.jsx
 @@ -3,6 +3,8 @@ import Loader from '@src/repl/components/Loader';
@@ -7,18 +60,20 @@ index 437475e6..66d1bbcd 100644
  import UserFacingErrorMessage from '@src/repl/components/UserFacingErrorMessage';
  import { useSettings } from '@src/settings.mjs';
 +import CollabPanel from '@src/repl/components/CollabPanel';
-+import { useCallback, useRef, useEffect } from 'react';
++import { useCallback, useRef, useEffect, useState } from 'react';
  
  // type Props = {
  //  context: replcontext,
-@@ -14,6 +16,30 @@ export default function ReplEditor(Props) {
+@@ -14,6 +16,46 @@ export default function ReplEditor(Props) {
    const settings = useSettings();
    const { panelPosition, isZen } = settings;
    const isEmbedded = typeof window !== 'undefined' && window.location !== window.parent.location;
 +  const collabRef = useRef(null);
++  const lastServerCodeRef = useRef(null);
 +
 +  const handleCodeUpdate = useCallback(
 +    (code) => {
++      lastServerCodeRef.current = code;
 +      if (editorRef.current) {
 +        editorRef.current.setCode(code);
 +        editorRef.current.evaluate();
@@ -26,6 +81,20 @@ index 437475e6..66d1bbcd 100644
 +    },
 +    [editorRef],
 +  );
++
++  // Track user edits (any evaluation - Ctrl+Enter, play button, update button)
++  useEffect(() => {
++    const handleEval = (e) => {
++      const currentCode = e.detail?.code || '';
++      // Only send if different from last server update
++      if (currentCode && currentCode !== lastServerCodeRef.current && collabRef.current) {
++        collabRef.current.sendUserEdit(currentCode);
++        lastServerCodeRef.current = currentCode;
++      }
++    };
++    window.addEventListener('strudelEval', handleEval);
++    return () => window.removeEventListener('strudelEval', handleEval);
++  }, []);
 +
 +  // Send errors to server for Claude to fix
 +  useEffect(() => {
@@ -42,167 +111,54 @@ index 437475e6..66d1bbcd 100644
  
    return (
      <div className="h-full flex flex-col relative" {...editorProps}>
-@@ -24,6 +50,7 @@ export default function ReplEditor(Props) {
-         <div className="flex overflow-hidden h-full">
+@@ -25,6 +67,7 @@ export default function ReplEditor(Props) {
            <Code containerRef={containerRef} editorRef={editorRef} init={init} />
            {!isZen && panelPosition === 'right' && <RightPanel context={context} />}
-+          <CollabPanel ref={collabRef} onCodeUpdate={handleCodeUpdate} />
          </div>
++        <CollabPanel ref={collabRef} onCodeUpdate={handleCodeUpdate} />
        </div>
        <UserFacingErrorMessage error={error} />
-diff --git a/website/src/repl/components/CollabPanel.jsx b/website/src/repl/components/CollabPanel.jsx
-new file mode 100644
-index 00000000..3657f149
---- /dev/null
-+++ b/website/src/repl/components/CollabPanel.jsx
-@@ -0,0 +1,150 @@
-+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
+       {!isZen && panelPosition === 'bottom' && <BottomPanel context={context} />}
+diff --git a/website/src/repl/useReplContext.jsx b/website/src/repl/useReplContext.jsx
+index 852c63f8..1b2017eb 100644
+--- a/website/src/repl/useReplContext.jsx
++++ b/website/src/repl/useReplContext.jsx
+@@ -109,6 +109,9 @@ export function useReplContext() {
+ 
+         // Get the full buffer content from the editor instead of just the evaluated block
+         const fullBufferCode = editorRef.current?.code || code;
 +
-+const WS_URL = `ws://${window.location.hostname}:8000/ws`;
-+
-+const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
-+  const [name, setName] = useState(() => localStorage.getItem('collabName') || '');
-+  const [prompt, setPrompt] = useState('');
-+  const [queue, setQueue] = useState([]);
-+  const [history, setHistory] = useState([]);
-+  const [connected, setConnected] = useState(false);
-+  const wsRef = useRef(null);
-+
-+  // Expose sendError method via ref
-+  useImperativeHandle(
-+    ref,
-+    () => ({
-+      sendError: (message, code) => {
-+        console.log('[CollabPanel] sendError called:', message);
-+        if (wsRef.current?.readyState === WebSocket.OPEN) {
-+          console.log('[CollabPanel] Sending to server with code');
-+          wsRef.current.send(JSON.stringify({ type: 'error', message, code }));
-+        } else {
-+          console.log('[CollabPanel] WebSocket not open, state:', wsRef.current?.readyState);
-+        }
-+      },
-+    }),
-+    [],
-+  );
-+
-+  useEffect(() => {
-+    const ws = new WebSocket(WS_URL);
-+    wsRef.current = ws;
-+
-+    ws.onopen = () => {
-+      console.log('[CollabPanel] WebSocket connected');
-+      setConnected(true);
-+    };
-+    ws.onclose = () => {
-+      console.log('[CollabPanel] WebSocket closed');
-+      setConnected(false);
-+    };
-+
-+    ws.onmessage = (e) => {
-+      const msg = JSON.parse(e.data);
-+
-+      if (msg.type === 'init') {
-+        setQueue(msg.queue);
-+        setHistory(msg.history);
-+        if (msg.code) onCodeUpdate(msg.code);
-+      } else if (msg.type === 'queue') {
-+        setQueue(msg.queue);
-+      } else if (msg.type === 'update') {
-+        setHistory(msg.history);
-+        onCodeUpdate(msg.entry.code);
-+      }
-+    };
-+
-+    return () => ws.close();
-+  }, [onCodeUpdate]);
-+
-+  const submit = () => {
-+    if (!prompt.trim() || !name.trim() || !wsRef.current) return;
-+
-+    localStorage.setItem('collabName', name);
-+    wsRef.current.send(
-+      JSON.stringify({
-+        type: 'prompt',
-+        name: name.trim(),
-+        prompt: prompt.trim(),
-+      }),
-+    );
-+    setPrompt('');
-+  };
-+
-+  const playVersion = (code) => {
-+    onCodeUpdate(code);
-+  };
-+
-+  return (
-+    <div className="collab-panel p-3 bg-zinc-900 border-l border-zinc-700 w-72 flex flex-col gap-3 overflow-hidden">
-+      <div className="text-xs text-zinc-400 flex items-center gap-2">
-+        <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} />
-+        {connected ? 'Connected' : 'Disconnected'}
-+      </div>
-+
-+      {/* Name input */}
-+      <input
-+        type="text"
-+        placeholder="Your name"
-+        value={name}
-+        onChange={(e) => setName(e.target.value)}
-+        className="bg-zinc-800 text-white px-2 py-1 rounded text-sm border border-zinc-600"
-+      />
-+
-+      {/* Prompt input */}
-+      <div className="flex gap-2">
-+        <input
-+          type="text"
-+          placeholder="Make it funkier..."
-+          value={prompt}
-+          onChange={(e) => setPrompt(e.target.value)}
-+          onKeyDown={(e) => e.key === 'Enter' && submit()}
-+          className="flex-1 bg-zinc-800 text-white px-2 py-1 rounded text-sm border border-zinc-600"
-+        />
-+        <button
-+          onClick={submit}
-+          disabled={!prompt.trim() || !name.trim()}
-+          className="bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-700 px-3 py-1 rounded text-sm"
-+        >
-+          Send
-+        </button>
-+      </div>
-+
-+      {/* Queue */}
-+      {queue.length > 0 && (
-+        <div className="text-xs">
-+          <div className="text-zinc-400 mb-1">Queue ({queue.length})</div>
-+          <div className="space-y-1">
-+            {queue.map((item, i) => (
-+              <div key={i} className="bg-zinc-800 p-1 rounded text-zinc-300 truncate">
-+                <span className="text-zinc-500">{item.name}:</span> {item.prompt}
-+              </div>
-+            ))}
-+          </div>
-+        </div>
-+      )}
-+
-+      {/* History */}
-+      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-+        <div className="text-zinc-400 text-xs mb-1">History</div>
-+        <div className="flex-1 overflow-y-auto space-y-1">
-+          {[...history].reverse().map((entry, i) => (
-+            <button
-+              key={i}
-+              onClick={() => playVersion(entry.code)}
-+              className="w-full text-left bg-zinc-800 hover:bg-zinc-700 p-2 rounded text-xs"
-+            >
-+              <div className="text-zinc-300 truncate">
-+                <span className="text-zinc-500">{entry.name}:</span> {entry.prompt}
-+              </div>
-+            </button>
-+          ))}
-+          {history.length === 0 && <div className="text-zinc-500 text-xs">No history yet</div>}
-+        </div>
-+      </div>
-+    </div>
-+  );
-+});
-+
-+export default CollabPanel;
++        // Dispatch event for collab panel to track user edits
++        window.dispatchEvent(new CustomEvent('strudelEval', { detail: { code: fullBufferCode } }));
+         setLatestCode(fullBufferCode);
+ 
+         try {
+@@ -152,8 +155,6 @@ export function useReplContext() {
+         code = latestCode;
+         msg = `Your last session has been loaded!`;
+       } else {
+-        /* const { code: randomTune, name } = await getRandomTune();
+-        code = randomTune; */
+         code = '$: s("[bd <hh oh>]*2").bank("tr909").dec(.4)';
+         msg = `Default code has been loaded`;
+       }
+diff --git a/website/src/user_pattern_utils.mjs b/website/src/user_pattern_utils.mjs
+index ae39ef44..013d5da2 100644
+--- a/website/src/user_pattern_utils.mjs
++++ b/website/src/user_pattern_utils.mjs
+@@ -106,7 +106,14 @@ export function useActivePattern() {
+   return useStore($activePattern);
+ }
+ 
+-export const setLatestCode = (code) => settingsMap.setKey('latestCode', code);
++export const setLatestCode = (code) => {
++  settingsMap.setKey('latestCode', code);
++  // vibe-duet: sync back to live.js
++  fetch(`http://${window.location.hostname}:3333/save`, {
++    method: 'POST',
++    body: code,
++  }).catch(() => {}); // ignore if server not running
++};
+ 
+ export const defaultCode = '';
+ export const userPattern = {
