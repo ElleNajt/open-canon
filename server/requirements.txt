@@ -1,0 +1,4 @@
+anthropic
+fastapi
+uvicorn[standard]
+google-cloud-firestore

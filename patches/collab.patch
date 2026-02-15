@@ -1,0 +1,208 @@
+diff --git a/website/src/repl/components/ReplEditor.jsx b/website/src/repl/components/ReplEditor.jsx
+index 437475e6..66d1bbcd 100644
+--- a/website/src/repl/components/ReplEditor.jsx
++++ b/website/src/repl/components/ReplEditor.jsx
+@@ -3,6 +3,8 @@ import Loader from '@src/repl/components/Loader';
+ import { BottomPanel, MainPanel, RightPanel } from '@src/repl/components/panel/Panel';
+ import UserFacingErrorMessage from '@src/repl/components/UserFacingErrorMessage';
+ import { useSettings } from '@src/settings.mjs';
++import CollabPanel from '@src/repl/components/CollabPanel';
++import { useCallback, useRef, useEffect } from 'react';
+ 
+ // type Props = {
+ //  context: replcontext,
+@@ -14,6 +16,30 @@ export default function ReplEditor(Props) {
+   const settings = useSettings();
+   const { panelPosition, isZen } = settings;
+   const isEmbedded = typeof window !== 'undefined' && window.location !== window.parent.location;
++  const collabRef = useRef(null);
++
++  const handleCodeUpdate = useCallback(
++    (code) => {
++      if (editorRef.current) {
++        editorRef.current.setCode(code);
++        editorRef.current.evaluate();
++      }
++    },
++    [editorRef],
++  );
++
++  // Send errors to server for Claude to fix
++  useEffect(() => {
++    if (error) {
++      console.log('[ReplEditor] Error detected:', error);
++      if (collabRef.current && editorRef.current) {
++        const code = editorRef.current.getCode?.() || editorRef.current.code || '';
++        collabRef.current.sendError(error.message || String(error), code);
++      } else {
++        console.log('[ReplEditor] collabRef or editorRef not ready');
++      }
++    }
++  }, [error, editorRef]);
+ 
+   return (
+     <div className="h-full flex flex-col relative" {...editorProps}>
+@@ -24,6 +50,7 @@ export default function ReplEditor(Props) {
+         <div className="flex overflow-hidden h-full">
+           <Code containerRef={containerRef} editorRef={editorRef} init={init} />
+           {!isZen && panelPosition === 'right' && <RightPanel context={context} />}
++          <CollabPanel ref={collabRef} onCodeUpdate={handleCodeUpdate} />
+         </div>
+       </div>
+       <UserFacingErrorMessage error={error} />
+diff --git a/website/src/repl/components/CollabPanel.jsx b/website/src/repl/components/CollabPanel.jsx
+new file mode 100644
+index 00000000..3657f149
+--- /dev/null
++++ b/website/src/repl/components/CollabPanel.jsx
+@@ -0,0 +1,150 @@
++import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
++
++const WS_URL = `ws://${window.location.hostname}:8000/ws`;
++
++const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
++  const [name, setName] = useState(() => localStorage.getItem('collabName') || '');
++  const [prompt, setPrompt] = useState('');
++  const [queue, setQueue] = useState([]);
++  const [history, setHistory] = useState([]);
++  const [connected, setConnected] = useState(false);
++  const wsRef = useRef(null);
++
++  // Expose sendError method via ref
++  useImperativeHandle(
++    ref,
++    () => ({
++      sendError: (message, code) => {
++        console.log('[CollabPanel] sendError called:', message);
++        if (wsRef.current?.readyState === WebSocket.OPEN) {
++          console.log('[CollabPanel] Sending to server with code');
++          wsRef.current.send(JSON.stringify({ type: 'error', message, code }));
++        } else {
++          console.log('[CollabPanel] WebSocket not open, state:', wsRef.current?.readyState);
++        }
++      },
++    }),
++    [],
++  );
++
++  useEffect(() => {
++    const ws = new WebSocket(WS_URL);
++    wsRef.current = ws;
++
++    ws.onopen = () => {
++      console.log('[CollabPanel] WebSocket connected');
++      setConnected(true);
++    };
++    ws.onclose = () => {
++      console.log('[CollabPanel] WebSocket closed');
++      setConnected(false);
++    };
++
++    ws.onmessage = (e) => {
++      const msg = JSON.parse(e.data);
++
++      if (msg.type === 'init') {
++        setQueue(msg.queue);
++        setHistory(msg.history);
++        if (msg.code) onCodeUpdate(msg.code);
++      } else if (msg.type === 'queue') {
++        setQueue(msg.queue);
++      } else if (msg.type === 'update') {
++        setHistory(msg.history);
++        onCodeUpdate(msg.entry.code);
++      }
++    };
++
++    return () => ws.close();
++  }, [onCodeUpdate]);
++
++  const submit = () => {
++    if (!prompt.trim() || !name.trim() || !wsRef.current) return;
++
++    localStorage.setItem('collabName', name);
++    wsRef.current.send(
++      JSON.stringify({
++        type: 'prompt',
++        name: name.trim(),
++        prompt: prompt.trim(),
++      }),
++    );
++    setPrompt('');
++  };
++
++  const playVersion = (code) => {
++    onCodeUpdate(code);
++  };
++
++  return (
++    <div className="collab-panel p-3 bg-zinc-900 border-l border-zinc-700 w-72 flex flex-col gap-3 overflow-hidden">
++      <div className="text-xs text-zinc-400 flex items-center gap-2">
++        <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} />
++        {connected ? 'Connected' : 'Disconnected'}
++      </div>
++
++      {/* Name input */}
++      <input
++        type="text"
++        placeholder="Your name"
++        value={name}
++        onChange={(e) => setName(e.target.value)}
++        className="bg-zinc-800 text-white px-2 py-1 rounded text-sm border border-zinc-600"
++      />
++
++      {/* Prompt input */}
++      <div className="flex gap-2">
++        <input
++          type="text"
++          placeholder="Make it funkier..."
++          value={prompt}
++          onChange={(e) => setPrompt(e.target.value)}
++          onKeyDown={(e) => e.key === 'Enter' && submit()}
++          className="flex-1 bg-zinc-800 text-white px-2 py-1 rounded text-sm border border-zinc-600"
++        />
++        <button
++          onClick={submit}
++          disabled={!prompt.trim() || !name.trim()}
++          className="bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-700 px-3 py-1 rounded text-sm"
++        >
++          Send
++        </button>
++      </div>
++
++      {/* Queue */}
++      {queue.length > 0 && (
++        <div className="text-xs">
++          <div className="text-zinc-400 mb-1">Queue ({queue.length})</div>
++          <div className="space-y-1">
++            {queue.map((item, i) => (
++              <div key={i} className="bg-zinc-800 p-1 rounded text-zinc-300 truncate">
++                <span className="text-zinc-500">{item.name}:</span> {item.prompt}
++              </div>
++            ))}
++          </div>
++        </div>
++      )}
++
++      {/* History */}
++      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
++        <div className="text-zinc-400 text-xs mb-1">History</div>
++        <div className="flex-1 overflow-y-auto space-y-1">
++          {[...history].reverse().map((entry, i) => (
++            <button
++              key={i}
++              onClick={() => playVersion(entry.code)}
++              className="w-full text-left bg-zinc-800 hover:bg-zinc-700 p-2 rounded text-xs"
++            >
++              <div className="text-zinc-300 truncate">
++                <span className="text-zinc-500">{entry.name}:</span> {entry.prompt}
++              </div>
++            </button>
++          ))}
++          {history.length === 0 && <div className="text-zinc-500 text-xs">No history yet</div>}
++        </div>
++      </div>
++    </div>
++  );
++});
++
++export default CollabPanel;
