@@ -12,21 +12,20 @@ SERVICE="vibe-duet"
 IMAGE="gcr.io/$PROJECT/collab-server"
 SITE_URL="https://YOUR_CLOUD_RUN_URL/"
 
-echo "==> Applying collab patch to Strudel..."
-cd strudel
-git checkout -- .
-git apply ../patches/collab.patch
-
 echo "==> Building Strudel..."
-cd website
+cd strudel/website
 SITE_URL="$SITE_URL" npm run build
 
 echo "==> Copying static files..."
 rm -rf ../../server/static
 cp -r dist ../../server/static
 
-echo "==> Building container..."
+echo "==> Copying shabda source..."
 cd ../../server
+rm -rf shabda
+cp -r ../shabda shabda
+
+echo "==> Building container..."
 gcloud builds submit --tag $IMAGE --project $PROJECT
 
 echo "==> Deploying to Cloud Run..."

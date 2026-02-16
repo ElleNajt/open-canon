@@ -3,3 +3,8 @@ fastapi
 uvicorn[standard]
 google-cloud-firestore
 google-cloud-texttospeech
+flask[async]
+freesound-api
+pydub
+termcolor
+requests

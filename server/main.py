@@ -21,6 +21,7 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from google.cloud import firestore, texttospeech
+from starlette.middleware.wsgi import WSGIMiddleware
 
 app = FastAPI()
 app.add_middleware(
@@ -123,7 +124,7 @@ tts_semaphore = asyncio.Semaphore(10)
 tts_pending: dict[str, asyncio.Future] = {}
 
 
-def _synthesize_tts(text, voice, speed):
+def _synthesize_tts(text, voice, speed, pitch=0.0):
     """Blocking Google TTS call -- run via asyncio.to_thread."""
     if "-" in voice:
         language_code = "-".join(voice.split("-")[:2])
@@ -138,17 +139,19 @@ def _synthesize_tts(text, voice, speed):
             language_code=language_code, name=voice_name
         ),
         audio_config=texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.MP3, speaking_rate=speed
+            audio_encoding=texttospeech.AudioEncoding.MP3,
+            speaking_rate=speed,
+            pitch=max(-20.0, min(20.0, pitch)),
         ),
     )
     return response.audio_content
 
 
 async def generate_tts(
-    text: str, voice: str = "en-US-Studio-O", speed: float = 1.0
+    text: str, voice: str = "en-US-Studio-O", speed: float = 1.0, pitch: float = 0.0
 ) -> tuple[str, bytes]:
     """Generate TTS audio and return (sample_id, audio_bytes)."""
-    key = f"{text}:{voice}:{speed}"
+    key = f"{text}:{voice}:{speed}:{pitch}"
     sample_id = "tts_" + hashlib.md5(key.encode()).hexdigest()[:12]
 
     # Check cache
@@ -197,7 +200,7 @@ def save_state():
         db.collection("state").document("current").set(
             {
                 "code": current_code,
-                "history": history[-100:],  # Keep last 100 entries
+                "history": history[-20:],  # Keep last 20 entries
             }
         )
     except Exception as e:
@@ -459,9 +462,22 @@ async def fix_error(error: str, broken_code: str = None):
 
     code_to_fix = broken_code if broken_code else current_code
 
+    MAX_FIX_ATTEMPTS = 5
+
     async with error_lock:
         now = time.time()
         attempt = len(fix_history)
+
+        if attempt >= MAX_FIX_ATTEMPTS:
+            print(f"Giving up after {attempt} fix attempts")
+            fix_history.clear()
+            await broadcast(
+                {
+                    "type": "error",
+                    "message": f"Could not fix error after {MAX_FIX_ATTEMPTS} attempts: {error[:100]}",
+                }
+            )
+            return
 
         # Calculate backoff based on number of attempts
         if attempt > 0:
@@ -785,6 +801,12 @@ async def create_tts_sample(request: dict):
     sample_id, _ = await generate_tts(text, voice, speed)
     return {"sample_id": sample_id, "url": f"/tts/{sample_id}.mp3"}
 
+
+# Mount shabda Flask app at /shabda
+from shabda import create_app as create_shabda_app
+
+shabda_app = create_shabda_app()
+app.mount("/shabda", WSGIMiddleware(shabda_app), name="shabda")
 
 # Serve static files (Strudel frontend) - must be last
 import os
