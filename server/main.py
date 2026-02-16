@@ -266,6 +266,28 @@ Available voices: en-US-Studio-O (default, warm female), en-US-Studio-Q (male), 
 The tts function returns a pattern you can chain with .slow(), .fast(), .room(), etc.
 Note: First play may be silent while loading; it auto-replays once the sample is ready.
 
+## Shabda Speech Samples (with pitch control)
+Use samples() with shabda/speech to load spoken words as samples with optional pitch shifting.
+Pitch uses Google TTS neural synthesis, so it sounds natural (no chipmunk effect).
+
+Basic usage:
+  $: samples('shabda/speech:hello,world'), s("hello world")
+  $: samples('shabda/speech:hello,world'), s("<hello world>")  // alternates
+
+With pitch (semitones, -20 to +20):
+  $: samples('shabda/speech:hello,world?pitch=4'), s("hello_p4 world_p4")
+  $: samples('shabda/speech:hello?pitch=-3'), s("hello_p-3")
+
+Multiple pitches for chords/harmony:
+  $: samples('shabda/speech:hello?pitch=0'), samples('shabda/speech:hello?pitch=4'), samples('shabda/speech:hello?pitch=7'), stack(s("hello"), s("hello_p4"), s("hello_p7"))
+
+Language/gender params (default: en-GB female):
+  $: samples('shabda/speech/en-US/m:hello,world'), s("hello world")
+
+Pitch-aware sample names: when pitch!=0, sample names get a _p suffix (e.g. hello_p4, hello_p-3).
+When pitch=0 or omitted, sample names are plain (e.g. hello, world).
+All standard effects (.room(), .delay(), .gain(), etc.) work on shabda samples.
+
 ## Effects
 Filters: .lpf(hz), .hpf(hz), .bpf(hz), .resonance(0-1)
 Reverb: .room(0-1), .size(0-1), .roomlp(hz)
