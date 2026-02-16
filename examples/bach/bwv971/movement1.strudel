@@ -1,23 +1,36 @@
-// Generated from MIDI
+// Italian Concerto Movement 1 (BWV 971)
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
 
 setcps(120/60/4)
 
 // upper:
 $: note("~!72 a6 ~!9 g6 ~ f6 ~ e6 ~ d6 ~ db6 ~ d6 ~ f6 ~!2 e6 d6 ~ e6 ~!5 g6 ~ a6 ~ bb6 ~!3 db6 ~ d6 ~ e6 ~ a5 g5 f5 ~ g5 ~!5 a5 ~ bb5 ~ db6 ~!3 d6 ~!3 e6 ~!3 g5 ~ f5 ~ e5 ~ f5 ~ bb5 ~ a5 ~ g5 ~ a5 ~ b5 db6 d6 e6 f6 g6 f6 e6 d6 e6 f6 ~ d6 c6 bb5 ~!17 a5 g5 f5 g5 e5!2 a5 ~!17 b5 db6 d6 db6 b5 a5 d6 ~ bb5 ~ a5 ~ g5 ~!2 a5 g5 gb5 g5 ~!2 g5!2 ~ e6 ~!6 d6 db6 d6 e6 d6 db6 b5 a5 ~ g5 ~!2 bb5 a5 g5 f5 g5 f5 e5 f5 a5 db5 ~ db5 ~ d5 ~!9 d6 ~!5 c6 ~ bb5 ~ a5 ~ bb5 ~ g5 ~ bb5 ~ d6 ~ g6 ~ d6 ~ bb6 ~!4 c7 bb6 a6 bb6 g6 a6 bb6 f6 ~ e6 ~!9 c6 d6 e6 ~!2 bb5 c6 d6 c6 bb5 a5 g5 a5 f5 g5 a5 bb5 c6 d6 e6 f6 e6 d6 c6 a6 ~!5 d6 ~ d6 c6 d6 ~ d6 ~ g6 ~!14 bb6 a6 g6 f6 e6 d6 c6!2 ~ f6 ~!14 e6 d6 e6 f6 ~ d6 ~ c6 bb5 a5 ~ bb5 ~!4 c6 bb5 a5 bb5 ~!2 bb5!2 ~ g6 ~!6 f6 e6 f6 g6 f6 e6 d6 c6 ~ bb5 a5 bb5 ~!2 g6 bb5 ~ c6 ~ a6 ~!4 g6 f6 g6 a6 g6 f6 e6 d6 c6 bb5 a5 g5 f5 e5 f5!2 ~ e5 ~!2 g5 f5 e5 bb5 c6 bb5 a5 bb5 ~ c6 ~!3 d6 ~!3 e6 ~!2 g6 f6 e6 f6 c6 d6 e6 f6 e6 f6 g6 f6 g6 a6 g6 a6 bb6 a6 bb6 c7 a6 bb6 c7!2 ~ f6 ~!3 e6 ~!2 d6 e6 f6 e6 g6 f6 e6 d6 c6 bb5 a5 bb5 ~!2 g6!2 f6 e6 g6 f6 e6 d6 f6 e6 d6 c6 e6 d6 c6 bb5 d6 c6 bb5 a5 c6 bb5 a5 g5 bb5!2 ~ c5 ~!3 e5 ~ g5 ~ bb5 ~ d6 ~ c6 ~!2 bb5 a5 g5 a5 ~ c6 ~!2 g5 f5 e5 f5 ~ d6 ~ a5 bb5 a5 g5 a5 g5 f5 g5!2 ~!5 d5 g5 f5 ~!31 f6 ~!17 e6 d6 db6 ~ d6 ~ g5 a5 bb5 ~!3 bb5 ~!2 c6 bb5 a5 bb5 c6 bb5 a5 bb5 ~ g6 ~!3 db6 ~!3 e6 ~!3 g6 ~!3 bb6 ~!3 a6 ~!2 g6 f6 e6 f6 ~ d6 ~!2 db6 d6 e6 d6 db6 b5 a5 ~!2 d6 ~!3 f6 ~!2 g6 f6 e6 f6 ~ bb6 ~!3 a6 ~!3 g6 ~ g6 ~ f6 e6 d6 c6 bb5 a5 g5 b5 d6 f6 ~!2 e6 ~!2 d6 c6 b5 c6 ~ g5 ~!3 c6 ~!3 e6 ~!2 f6 eb6 d6 eb6 ~ c7 ~!2 bb6 a6 ~!2 g6 f6 ~!2 e6 d6 e6 f6 e6 d6 e6 f5 a5 g5 f5 c6 bb5 a5 eb6 d6 db6 d6 ~!6 d5 db5 d5 e5 f5 g5 a5 bb5 d6 bb5 a5 bb5 d6 bb5 a5 g5 gb5 g5 ~!6 bb5 g5 f5 g5 e6 g5 f5 g5 ~ bb5 ~ db6 ~ e6 ~!2 d6 c6 d6 e6 d6 c6 b5 a5 ~ g5 f5 g5 ~!2 e6 g5 ~ f5 ~ f6 ~!4 e6 d6 e6 f6 e6 d6 c6 bb5 ~ a5 g5 a5 ~!2 f6 a5 ~ g5 ~ g6 ~!4 f6 e6 f6 g6 f6 e6 d6 db6 ~ bb5 a5 bb5 ~!2 g6 bb5 ~ a5 ~!3 db6 ~!3 d6 ~!3 e6 f6 g6 a6 bb6 a6 bb6 ~!2 bb6!2 ~ db6 ~!3 d6 e6!2 ~ g5 ~!3 a5 bb5!2 e6 f6 g6 ~!2 bb5 ~ a5 d6 e6 f6 ~!2 ab5 ~!2 b5 a5 ab5 a5 b5 db6 d6 e6 bb5 a5 ab5 a5 g5 gb5 g5!2 ~!8 a5 db6 e6 g6 bb6 a6 ~!2 g6 f6 e6 f6 ~ a6 ~!2 e6 d6 db6 d6 ~ bb6 ~ f6 g6 f6 e6 f6 e6 d6 e6!2 ~!5 d6 e6 d6 ~!3 c6 d6 eb6 ~!2 d6 c6 ~!2 bb5 a5 ~!2 g5 gb5 e5 d5 db5 d5 ~!3 e5 gb5 g5 f5 g5 a5 bb5 g5 bb5 c6 d6 a5 db6 d6 e6 f6 g6 a6 bb6 d6 db6 d6!2 ~ g5 ~!2 a5 g5 f5 g5 ~ db6 d6 e6 ~ g5 ~ f5 a5 b5 db6 d6 ~ bb5 ~ db6 ~ a5 ~!3 d5 g5 f5 ~ g5 e5!3 db5 e5!2 ~!5 d5 e5 d5 ~!7")
   .slow(1160/8/4)
-  .sound("sawtooth")
-  .gain(0.6)
+  .apply(upperVoice)
   .pan(0.3)
-  .decay(0.3)
-  .sustain(0.2)
 
-// lower:1
+// lower:
 $: stack(
   note("f5 ~!3 d4 ~!3 d4 ~!3 f5 ~!3 g5 ~!3 a5 ~!3 bb5 ~!3 d4 ~!3 d4 ~!3 a5 ~!3 g5 ~!3 f5 ~!3 e5 ~!3 d4 ~!3 d4 ~!3 g5 ~!3 f5 ~!3 db5 ~!3 f5 ~!3 d4 ~!3 d4 ~!3 f5 ~!3 g5 ~!3 a5 ~!3 bb5 ~!3 d4 ~!3 d4 ~!3 f5 ~!3 g5 ~!3 f5 ~!3 e5 ~!3 d4 ~!3 d4 ~!3 g5 ~!3 f5 ~!3 c5 ~!3 f5 ~!3 d4 ~!3 d4 ~!3 e5 ~!3 d5 ~!3 db5 ~!3 d5 ~!3 d3 ~!3 d3 ~!3 d5 ~!3 e5 ~!3 d5 ~!3 e5 ~!3 e4 ~!3 e4 ~!3 e5 ~!3 d5 ~!3 a4 ~!3 d5 ~!3 bb3 ~!3 bb3 ~!3 d5 ~!3 db5 ~!3 b4 ~!3 db5 ~!3 a3 ~!3 a3 ~!3 a4 ~!3 d5 ~!3 e5 ~!3 f5 ~!3 d4 ~!3 d4 ~!3 f5 ~!3 g5 ~!3 f5 ~!3 bb5 ~!3 g4 ~!3 g4 ~!3 a5 ~!3 g5 ~!3 f5 ~!3 e5 ~!3 c4 ~!3 c4 ~!3 c5 ~!3 f5 ~!3 g5 ~!3 a5 ~!3 f4 ~!3 f4 ~!3 g5 ~!3 f5 ~!3 c5 ~!3 d5 ~!3 bb3 ~!3 bb3 ~!3 d5 ~!3 c5 ~!3 bb4 ~!3 c5 ~!3 a3 ~!3 a3 ~!3 a4 ~!3 bb4 ~!3 a4 ~!3 bb4 ~!3 g3 ~!3 g3 ~!3 a4 ~!3 g4 ~!3 d4 ~!3 e4 ~!3 c3 ~!3 c3 ~!3 e4 ~!3 f4 ~!3 g4 ~!3 a4 ~!3 c3 ~!3 c3 ~!3 d4 ~!3 g4 ~!3 a4 ~!3 bb4 ~!3 c3 ~!3 c3 ~!3 g4 ~!3 a4 ~!3 g4 ~!3 c5 ~!3 c3 ~!3 c3 ~!3 c5 ~!3 bb4 ~!3 a4 ~!3 bb4 ~!3 c3 ~!3 c3 ~!3 g4 ~!3 a4 ~!3 g4 ~!3 a4 ~!3 c3 ~!3 c3 ~!3 a4 ~!3 g4 ~!3 d4 ~!3 g4 ~!3 c3 ~!3 c3 ~!3 g4 ~!3 a4 ~!3 e4 ~!3 f4 ~!3 bb3 ~!3 c4 ~!3 e4 ~ d4 ~ e4 ~!3 bb4 ~!3 a4 ~!3 f3 ~!3 f3 ~!3 a4 ~!3 b4 ~!3 db5 ~!3 d4 ~!3 d3 ~!3 d3 ~!3 f5 ~!3 g5 ~!3 a5 ~!3 bb5 ~!3 d4 ~!3 d4 ~!3 a5 ~!3 e5 ~!3 f5 ~!3 e5 ~!3 d4 ~!3 d4 ~!3 g5 ~!3 f5 ~!3 e5 ~!3 d5 ~!3 d4 ~!3 d4 ~!3 f5 ~!3 g5 ~!3 a5 ~!3 bb5 ~!3 g3 ~!3 g3 ~!3 bb4 ~!3 a4 ~!3 d5 ~!3 e5 ~!3 c4 ~!3 c4 ~!3 e5 ~!3 f5 ~!3 g5 ~!3 f5 ~!3 f3 ~!3 f3 ~!3 a4 ~!3 bb4 ~!3 c5 ~!3 d5 ~!3 bb3 ~!3 bb3 ~!3 c5 ~!3 g4 ~!3 a4 ~!3 g4 ~!3 e3 ~!3 e3 ~!3 f4 ~!3 e4 ~!3 d4 ~!3 a3 ~!3 a2 ~!3 a2 ~!3 db4 ~!3 d4 ~!3 e4 ~!3 f4 ~!3 a2 ~!3 a2 ~!3 d4 ~!3 db4 ~!3 f4 ~!3 g4 ~!3 a2 ~!3 a2 ~!3 e4 ~!3 f4 ~!3 g4 ~!3 f4 ~!3 a2 ~!3 a2 ~!3 a4 ~!3 g4 ~!3 f4 ~!3 g4 ~!3 a2 ~!3 a2 ~!3 g4 ~!3 d4 ~!3 e4 ~!3 f4 ~!3 a2 ~!3 a2 ~!3 f4 ~!3 e4 ~!3 d4 ~!3 db4 ~!3 a2 ~!3 a2 ~!3 e4 ~!3 f4 ~!3 db4 ~!3 d4 ~!3 g3 ~!3 a3 ~!3 db4 ~ b3 ~ db4 ~!3 g4 ~!3 gb4 ~!3 d3 ~!3 d3 ~!3 gb4 ~!3 g4 ~!3 a4 ~!3 bb4 ~!3 d3 ~!3 d3 ~!3 a4 ~!3 g4 ~!3 f4 ~!3 g4 ~!3 d3 ~!3 d3 ~!3 e4 ~!3 d4 ~!3 a4 ~!3 d4 ~!3 bb3 ~!3 a3 ~!3 ab3 ~!3 a3 ~ db4 ~ g4 ~!3 d4 ~!3 f4 ~!3"),
   note("d5 ~!11 d5 ~!3 e5 ~!3 f5 ~!3 g5 ~!11 f5 ~!3 e5 ~!3 d5 ~!3 db5 ~!11 e5 ~!3 d5 ~!3 e5 ~!3 d5 ~!11 d5 ~!3 e5 ~!3 f5 ~!3 g5 ~!11 a5 ~!3 e5 ~!3 d5 ~!3 db5 ~!11 e5 ~!3 d5 ~!3 e5 ~!3 d5 ~!11 g4 ~!3 f4 ~!3 e4 ~!3 d4 ~!11 f5 ~!3 c5 ~!3 bb4 ~!3 c5 ~!11 c5 ~!3 bb4 ~!3 db5 ~!3 bb4 ~!11 bb4 ~!3 a4 ~!3 g4 ~!3 a4 ~!11 db5 ~!3 b4 ~!3 db5 ~!3 d5 ~!11 d5 ~!3 e5 ~!3 a5 ~!3 g5 ~!11 f5 ~!3 e5 ~!3 d5 ~!3 c5 ~!11 e5 ~!3 d5 ~!3 e5 ~!3 f5 ~!11 e5 ~!3 d5 ~!3 eb5 ~!3 bb4 ~!11 bb4 ~!3 a4 ~!3 g4 ~!3 a4 ~!11 c5 ~!3 g4 ~!3 f4 ~!3 g4 ~!11 f4 ~!3 e4 ~!3 f4 ~!3 c4 ~!11 c4 ~!3 d4 ~!3 e4 ~!3 f4 ~!11 f4 ~!3 e4 ~!3 f4 ~!3 g4 ~!11 e4 ~!3 f4 ~!3 bb4 ~!3 a4 ~!11 a4 ~!3 g4 ~!3 f4 ~!3 g4 ~!11 bb4 ~!3 f4 ~!3 e4 ~!3 f4 ~!11 f4 ~!3 e4 ~!3 f4 ~!3 e4 ~!11 e4 ~!3 f4 ~!3 c4 ~!3 d4 ~!23 f4 ~!11 g4 ~!3 f4 ~!3 e4 ~!3 d5 ~!11 d5 ~!3 e5 ~!3 f5 ~!3 g5 ~!11 f5 ~!3 g5 ~!3 d5 ~!3 db5 ~!11 e5 ~!3 d5 ~!3 c5 ~!3 f5 ~!11 d5 ~!3 e5 ~!3 f5 ~!3 g5 ~!11 g4 ~!3 c5 ~!3 bb4 ~!3 c5 ~!11 c5 ~!3 d5 ~!3 e5 ~!3 a5 ~!11 f4 ~!3 g4 ~!3 a4 ~!3 bb4 ~!11 a4 ~!3 bb4 ~!3 f4 ~!3 e4 ~!11 d4 ~!3 db4 ~!3 b3 ~!3 db4 ~!11 a3 ~!3 b3 ~!3 db4 ~!3 d4 ~!11 b3 ~!3 e4 ~!3 d4 ~!3 e4 ~!11 db4 ~!3 d4 ~!3 e4 ~!3 a4 ~!11 f4 ~!3 e4 ~!3 d4 ~!3 e4 ~!11 e4 ~!3 f4 ~!3 db4 ~!3 d4 ~!11 d4 ~!3 db4 ~!3 b3 ~!3 e4 ~!11 db4 ~!3 d4 ~!3 a3 ~!3 bb3 ~!23 d4 ~!11 d4 ~!3 e4 ~!3 gb4 ~!3 g4 ~!11 f4 ~!3 e4 ~!3 d4 ~!3 e4 ~!11 db4 ~!3 f4 ~!3 f4 ~!3 b3 ~!31")
 )
   .slow(1160/8/4)
-  .sound("square")
-  .gain(0.6)
+  .apply(lowerVoice)
   .pan(0.7)
 

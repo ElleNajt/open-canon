@@ -1,0 +1,77 @@
+// BWV 1050 Brandenburg Concerto No. 5 - Movement 1: Finale
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
+
+setcps(100/60/4)
+
+// Cembalo RH
+$: stack(
+  note("db6 ~ d6 ~ e6 ~ db6 ~ d6 ~!5 e6 ~ e6 ~!5 d6 ~ a5 ~!243 gb5 ~!3 e5 ~!3 g5 ~!3 a5 ~!7"),
+  note("~!28 d5 ~!243 b5 ~!3 a5 ~!3 a5 ~!3 gb5 ~!3"),
+  note("~!28 gb5 ~!243 d6 ~!3 d6 ~!3 db6 ~!3 d6 ~!3"),
+  note("~!28 d6 ~!259")
+)
+  .slow(2.25)
+  .apply(upperVoice)
+  .pan(0.4)
+
+// Cembalo LH
+$: stack(
+  note("g3 ~ d4 ~ a3 ~ d4 ~ bb3 ~ db4 ~ b3 ~ gb4 ~ b4 ~ g4 ~ a4 ~!3 a3 ~!3 a4 ~!11 d4 ~!3 a4 ~!3 b4 ~!3 db5 ~!3 a4 ~!3 gb4 ~!3 e4 ~!3 gb4 ~!3 d4 ~!3 a4 ~!3 b4 ~!3 db5 ~!3 a4 ~!3 d5 ~!3 db5 ~!3 b4 ~!3 a4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 db4 ~!3 d4 ~!3 g3 ~!3 gb3 ~!3 e3 ~!3 d3 ~!3 db3 ~!3 db4 ~!3 d4 ~!3 b3 ~!3 g3 ~!3 a3 ~!3 b3 ~ db4 ~ d4 ~ e4 ~ gb4 ~ g4 ~ a4 ~ gb4 ~ b4 ~!3 a4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 db4 ~!3 a3 ~!3 d4 ~!3 gb4 ~!3 g4 ~!3 a4 ~ g4 ~ gb4 ~!3 g4 ~!7 db4 ~ db4 ~ d4 ~ d4 ~ db4 ~ db4 ~ d4 ~ d4 ~ gb3 ~ gb3 ~ g3 ~!3 g4 ~!3 a4 ~!3 a3 ~!3 d4 ~!3"),
+  note("~!28 d4 ~!259"),
+  note("~!28 gb4 ~!259")
+)
+  .slow(2.25)
+  .apply(lowerVoice)
+  .pan(0.6)
+
+// Flute
+$: note("~!287")
+  .slow(2.25)
+  .apply(upperVoice)
+  .pan(0.3)
+
+// Violin pr
+$: note("~!25 d5 ~ d5 ~ gb5 ~ gb5 ~ a5 ~ a5 ~ d6 ~ d6 ~ db6 ~ d6 ~ db6 ~ b5 ~ a5 ~ g5 ~ gb5 ~ e5 ~ d5 ~ d5 ~ gb5 ~ gb5 ~ a5 ~ a5 ~ d6 ~ d6 ~ e6 ~!3 a5 ~!7 e6 ~!3 gb6 ~ gb6 ~ e6 ~ e6 ~ g6 ~ g6 ~ gb6 ~ gb6 ~ b6 ~ b6 ~ a6 ~ a6 ~ db6 ~ db6 ~ d6 ~ d6 ~ g5 ~ g5 ~ gb5 ~ gb5 ~ b5 ~ b5 ~ a5 ~ a5 ~ db5 ~ db5 ~ d5 ~ d5 ~ a4 ~ a4 ~ g5 ~ g5 ~ gb5 ~ e5 ~ gb5 ~ d5 ~ e5 ~ e5 ~ a4 ~ a4 ~ d5 ~ e5 ~ gb5 ~ g5 ~ a5 ~ b5 ~ db6 ~ a5 ~ d6 ~ d6 ~ db6 ~ db6 ~ e6 ~ e6 ~ d6 ~ d6 ~ g6 ~ g6 ~ gb6 ~ gb6 ~ b6 ~ b6 ~ a6 ~ a6 ~ g6 ~ gb6 ~ e6 ~ d6 ~ e6 ~!3 a5 ~ b5 ~ c6 ~ a5 ~ b5 ~ d6 ~ db6 ~ e6 ~ a5 ~ g5 ~ gb5 ~ d5 ~ e5 ~ g5 ~ gb5 ~ a5 ~ d5 ~ db5 ~ b4 ~ g5 ~ gb5 ~ e5 ~ e5 ~!5 d5 ~ d5 ~!6")
+  .slow(2.25)
+  .apply(upperVoice)
+  .pan(0.35)
+
+// 2nd Violin
+$: note("~!28 d5 ~ d5 ~ gb5 ~ gb5 ~ a5 ~ a5 ~ d6 ~ d6 ~ db6 ~ d6 ~ db6 ~ b5 ~ a5 ~ g5 ~ gb5 ~ e5 ~ d5 ~ d5 ~ gb5 ~ gb5 ~ a5 ~ a5 ~ d6 ~ d6 ~ e6 ~!3 a5 ~!7 e6 ~!3 gb6 ~ gb6 ~ e6 ~ e6 ~ g6 ~ g6 ~ gb6 ~ gb6 ~ b6 ~ b6 ~ a6 ~ a6 ~ db6 ~ db6 ~ d6 ~ d6 ~ g5 ~ g5 ~ gb5 ~ gb5 ~ b5 ~ b5 ~ a5 ~ a5 ~ db5 ~ db5 ~ d5 ~ d5 ~ a4 ~ a4 ~ g5 ~ g5 ~ gb5 ~ e5 ~ gb5 ~ d5 ~ e5 ~ e5 ~ a4 ~ a4 ~ d5 ~ e5 ~ gb5 ~ g5 ~ a5 ~ b5 ~ db6 ~ a5 ~ d6 ~ d6 ~ db6 ~ db6 ~ e6 ~ e6 ~ d6 ~ d6 ~ g6 ~ g6 ~ gb6 ~ gb6 ~ b6 ~ b6 ~ a6 ~ a6 ~ g6 ~ gb6 ~ e6 ~ d6 ~ e6 ~!3 a5 ~ b5 ~ c6 ~ a5 ~ b5 ~ d6 ~ db6 ~ e6 ~ a5 ~ g5 ~ gb5 ~ d5 ~ e5 ~ g5 ~ gb5 ~ a5 ~ d5 ~ db5 ~ b4 ~ g5 ~ gb5 ~ e5 ~ e5 ~!5 d5 ~ d5 ~!3")
+  .slow(2.25)
+  .apply(upperVoice)
+  .pan(0.45)
+
+// Viola
+$: note("~!28 gb5 ~!11 gb5 ~!3 e5 ~!3 d5 ~!3 e5 ~!3 db5 ~!3 d5 ~!3 a4 ~!3 d5 ~!3 gb5 ~!3 db5 ~!3 d5 ~!3 e5 ~!3 db5 ~!3 d5 ~!3 a5 ~!3 d6 ~!3 db6 ~!3 d6 ~!3 d5 ~!3 g5 ~!3 gb5 ~!3 e5 ~!3 d5 ~!3 d5 ~!3 d5 ~!3 g5 ~!3 gb5 ~!3 e5 ~!3 a4 ~!3 a4 ~!3 d5 ~!3 b4 ~!3 db5 ~!3 d5 ~ e5 ~ gb5 ~ g5 ~ a5 ~ b5 ~ db6 ~ a5 ~ d6 ~!3 gb5 ~!3 b5 ~!3 a5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!3 e5 ~!3 d5 ~!3 a5 ~!3 b5 ~!3 db6 ~!3 a5 ~!3 g5 ~ gb5 ~ e5 ~!3 e5 ~!3 a4 ~!3 a4 ~!3 a4 ~!3 a4 ~!3 d4 ~!3 db5 ~!3 db5 ~!3 g5 ~!3 gb5 ~!3")
+  .slow(2.25)
+  .apply(lowerVoice)
+  .pan(0.55)
+
+// Cello
+$: note("~!28 d4 ~!11 d4 ~!3 a4 ~!3 b4 ~!3 db5 ~!3 a4 ~!3 gb4 ~!3 e4 ~!3 gb4 ~!3 d4 ~!3 a4 ~!3 b4 ~!3 db5 ~!3 a4 ~!3 d5 ~!3 db5 ~!3 b4 ~!3 a4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 db4 ~!3 d4 ~!3 g3 ~!3 gb3 ~!3 e3 ~!3 d3 ~!3 db3 ~!3 db4 ~!3 d4 ~!3 b3 ~!3 g3 ~!3 a3 ~!3 b3 ~ db4 ~ d4 ~ e4 ~ gb4 ~ g4 ~ a4 ~ gb4 ~ b4 ~!3 a4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 db4 ~!3 a3 ~!3 d4 ~!3 gb4 ~!3 g4 ~!3 a4 ~ g4 ~ gb4 ~!3 g4 ~!7 db4 ~ db4 ~ d4 ~ d4 ~ db4 ~ db4 ~ d4 ~ d4 ~ gb3 ~ gb3 ~ g3 ~!3 g4 ~!3 a4 ~!3 a3 ~!3 d4 ~!3")
+  .slow(2.25)
+  .apply(lowerVoice)
+  .pan(0.65)
+
+// Bass
+$: note("~!28 d3 ~!11 d3 ~!3 a3 ~!3 b3 ~!3 db4 ~!3 a3 ~!3 gb3 ~!3 e3 ~!3 gb3 ~!3 d3 ~!3 a3 ~!3 b3 ~!3 db4 ~!3 a3 ~!3 d4 ~!3 db4 ~!3 b3 ~!3 a3 ~!3 g3 ~!3 gb3 ~!3 e3 ~!3 d3 ~!3 db3 ~!3 d3 ~!3 g3 ~!3 gb3 ~!3 e3 ~!3 d3 ~!3 db3 ~!3 a2 ~!3 d3 ~!3 b2 ~!3 g2 ~!3 a2 ~!3 b2 ~ db3 ~ d3 ~ e3 ~ gb3 ~ g3 ~ a3 ~ gb3 ~ b3 ~!3 a3 ~!3 g3 ~!3 gb3 ~!3 e3 ~!3 d3 ~!3 db3 ~!3 a2 ~!3 d3 ~!3 gb3 ~!3 g3 ~!3 a3 ~ g3 ~ gb3 ~!3 g3 ~!7 db3 ~ db3 ~ d3 ~ d3 ~ db3 ~ db3 ~ d3 ~ d3 ~ gb2 ~ gb2 ~ g2 ~!3 g3 ~!3 a3 ~!3 a2 ~!3 d3 ~!3")
+  .slow(2.25)
+  .apply(lowerVoice)
+  .pan(0.7)

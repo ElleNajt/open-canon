@@ -1,31 +1,38 @@
-// Generated from MIDI
+// BWV 1087 Canon 8
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
 
 setcps(120/60/4)
 
 // Track 1
 $: note("~!36 d5 ~ e5 ~ gb5 ~!3 ab5 ~!3 a5 ~!3 c6 ~!3 b5 ~!3 a5 ~!3 e6 ~!11 d6 ~!3 a6 ~!3 a5 ~!3 b5 ~!3 db6 ~!3 d6 ~!3 d5 ~ e5 ~ gb5 ~!3 ab5 ~!3 a5 ~!3 c6 ~!3 b5 ~!3 a5 ~!3 e6 ~!11 d6 ~!3 a6 ~!3 a5 ~!3 b5 ~!3 db6 ~!3 d6 ~!3 d5 ~ e5 ~ gb5 ~!3 ab5 ~!3 a5 ~!3 c6 ~!3 b5 ~!3 a5 ~!3 e6 ~!11 d6 ~!3 a6 ~!3 a5 ~!3 b5 ~!3 db6 ~!3 d6 ~!15")
   .slow(240/8/4)
-  .sound("sawtooth")
-  .gain(0.6)
+  .apply(upperVoice)
   .pan(0.3)
-  .decay(0.3)
-  .sustain(0.2)
 
 // Track 2
 $: note("~!8 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!15")
   .slow(240/8/4)
-  .sound("square")
-  .gain(0.6)
-  .pan(0.7)
-  .decay(0.3)
-  .sustain(0.2)
+  .apply(upperVoice)
+  .pan(0.4)
 
 // Track 3
 $: note("~!4 e5 ~ d5 ~ c5 ~!3 bb4 ~!3 a4 ~!3 gb4 ~!3 g4 ~!3 a4 ~!3 d4 ~!11 e4 ~!3 a3 ~!3 a4 ~!3 g4 ~!3 f4 ~!3 e4 ~!3 e5 ~ d5 ~ c5 ~!3 bb4 ~!3 a4 ~!3 gb4 ~!3 g4 ~!3 a4 ~!3 d4 ~!11 e4 ~!3 a3 ~!3 a4 ~!3 g4 ~!3 f4 ~!3 e4 ~!3 e5 ~ d5 ~ c5 ~!3 bb4 ~!3 a4 ~!3 gb4 ~!3 g4 ~!3 a4 ~!3 d4 ~!11 e4 ~!3 a3 ~!3 a4 ~!3 g4 ~!3 f4 ~!3 e4 ~!3 e5 ~ d5 ~ c5 ~!3 bb4 ~!3 a4 ~!3 gb4 ~!3 g4 ~!3 a4 ~!3 d4 ~!15")
   .slow(240/8/4)
-  .sound("triangle")
-  .gain(0.6)
-  .pan(0.4)
-  .decay(0.3)
-  .sustain(0.2)
-
+  .apply(lowerVoice)
+  .pan(0.7)

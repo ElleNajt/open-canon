@@ -1,40 +1,44 @@
-// Generated from MIDI
+// BWV 1087 Canon 10
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
 
 setcps(120/60/4)
 
 // Track 1
 $: note("~!12 b5 ~!7 a5 ~!7 g5 ~!5 gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ a5 ~ g5 ~ gb5 ~ e5 ~ d5 ~ c5 ~ b4 ~ a4 ~ g4 ~ a4 ~ b4 ~!7 b5 ~!7 a5 ~!7 g5 ~!5 gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ a5 ~ g5 ~ gb5 ~ e5 ~ d5 ~ c5 ~ b4 ~ a4 ~ g4 ~ a4 ~ b4 ~!7 b5 ~!7 a5 ~!7 g5 ~!5 gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ a5 ~ g5 ~ gb5 ~ e5 ~ d5 ~ c5 ~ b4 ~ a4 ~ g4 ~ a4 ~ b4 ~!7 b5 ~!7 a5 ~!7 g5 ~!5 gb5 ~ g5 ~ a5 ~ b5 ~ d6 ~ c6 ~ b5 ~ a5 ~ g5 ~ gb5 ~ e5 ~ d5 ~ c5 ~ b4 ~ a4 ~ g4 ~ a4 ~ b4 ~!11")
   .slow(272/8/4)
-  .sound("sawtooth")
-  .gain(0.6)
+  .apply(upperVoice)
   .pan(0.3)
-  .decay(0.3)
-  .sustain(0.2)
 
 // Track 2
 $: note("~!40 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!15")
   .slow(272/8/4)
-  .sound("square")
-  .gain(0.6)
-  .pan(0.7)
-  .decay(0.3)
-  .sustain(0.2)
+  .apply(upperVoice)
+  .pan(0.4)
 
 // Track 3
 $: note("~!8 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!15")
   .slow(272/8/4)
-  .sound("triangle")
-  .gain(0.6)
-  .pan(0.4)
-  .decay(0.3)
-  .sustain(0.2)
+  .apply(lowerVoice)
+  .pan(0.6)
 
 // Track 4
 $: note("~!44 g3 ~!7 a3 ~!7 b3 ~!5 c4 ~ b3 ~ a3 ~ g3 ~ e3 ~ gb3 ~ g3 ~ a3 ~ b3 ~ c4 ~ d4 ~ e4 ~ gb4 ~ g4 ~ a4 ~ b4 ~ a4 ~ g4 ~!7 g3 ~!7 a3 ~!7 b3 ~!5 c4 ~ b3 ~ a3 ~ g3 ~ e3 ~ gb3 ~ g3 ~ a3 ~ b3 ~ c4 ~ d4 ~ e4 ~ gb4 ~ g4 ~ a4 ~ b4 ~ a4 ~ g4 ~!7 g3 ~!7 a3 ~!7 b3 ~!5 c4 ~ b3 ~ a3 ~ g3 ~ e3 ~ gb3 ~ g3 ~ a3 ~ b3 ~ c4 ~ d4 ~ e4 ~ gb4 ~ g4 ~ a4 ~ b4 ~ a4 ~ g4 ~!7 g3 ~!7 a3 ~!7 b3 ~!5 c4 ~ b3 ~ a3 ~ g3 ~!7")
   .slow(272/8/4)
-  .sound("sine")
-  .gain(0.6)
-  .pan(0.6)
-  .decay(0.3)
-  .sustain(0.2)
-
+  .apply(lowerVoice)
+  .pan(0.7)

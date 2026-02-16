@@ -1,0 +1,75 @@
+// BWV 1050 Brandenburg Concerto No. 5 - Third Movement (Allegro)
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
+
+setcps(90/60/4)
+
+// Cembalo RH (Harpsichord Right Hand)
+$: stack(
+  note("~!166 d6 ~ a6 ~!5 e6 ~ gb6 ~ e6 ~!2 d6 ~!2 db6 ~ d6 ~!2 e6 ~!2 a5 ~ db6 ~!2 b5 ~!2 a5 ~ b5 ~!2 db6 ~!2 gb5 ~ b5 ~!2 a5 ~!2 ab5 ~ db6 ~!2 b5 ~!2 a5 ab5 a5 ~ b5 db6 d6 ~ e6 gb6 e6 ~ d6 db6 b5 ~ a5 db6 b5 ~ a5 ab5 gb5 ~ e5 gb5 e5 ~ d5 db5 b4 ~ a4 ~!7 a5 ~!7 a5 ~!7 ab5 ~!7 a5 b5 a5 b5 a5 b5 a5 b5 a5 b5 a5 b5 a5 b5 a5 b5 a5 ~ db6 ~!2 b5 ~!2 a5 ~ ab5 ~!2 gb5 ~!2 e5 gb5 e5 gb5 e5 gb5 e5 gb5 e5 gb5 e5 gb5 e5 gb5 e5 gb5 e5 ~ db5 ~!2 d5 ~!2 e5 ~ d5 ~!2 e5 ~!2 gb5 ~ a5 ~!2 ab5 ~!2 gb5 ~ a5 ~!2 ab5 ~!2 gb5 ~ eb5 ~!2 e5 ~!2 gb5 ~ e5 ~!2 gb5 ~!2 ab5 ~!7 db6 ~!7 db6 ~!7 b5 ~!7 b5 ~!7 a5 ~!5 d6 ~ e6 ~!5 gb6 ~ b5 ~!5 a5 ~ a5 ~!15"),
+  note("~!392 b5 ~!7 a5 ~!7 gb5 ~!7 ab5 ~!7 db6 ~!15"),
+  note("~!392 e6 ~!7 e6 ~!7 d6 ~!7 d6 ~!15")
+)
+  .slow(155.0/3)
+  .apply(upperVoice)
+  .pan(0.4)
+
+// Cembalo LH (Harpsichord Left Hand)  
+$: stack(
+  note("~!134 a4 ~ d5 ~!5 a4 ~ b4 ~ a4 ~!2 g4 ~!2 gb4 ~ g4 ~!2 a4 ~!2 d4 ~!7 db4 ~!7 d4 ~!7 e4 ~!7 gb4 ~!7 db4 ~!7 d4 ~!7 e4 ~!7 gb4 ~!7 e4 ~!7 gb4 ~!7 ab4 ~!7 a4 ~ db5 ~!2 b4 ~!2 a4 ~ b4 ~!2 db5 ~!2 d5 ~!7 e5 ~!7 gb5 ab5 gb5 ab5 gb5 ab5 gb5 ab5 gb5 ab5 gb5 ab5 gb5 ab5 gb5 ab5 gb5 ~ a5 ~!2 ab5 ~!2 gb5 ~ e5 ~!2 d5 ~!2 db5 d5 db5 d5 db5 d5 db5 d5 db5 d5 db5 d5 db5 d5 db5 d5 db5 ~ a4 ~!2 b4 ~!2 db5 ~ b4 ~!2 db5 ~!2 eb5 ~ gb5 ~!2 e5 ~!2 eb5 ~ gb5 ~!2 e5 ~!2 eb5 ~ b4 ~!2 db5 ~!2 eb5 ~ db5 ~!2 eb5 ~!2 e5 d5 e5 ~ gb5 e5 d5 ~ db5 d5 db5 ~ b4 a4 ab4 ~ gb4 e4 gb4 ~ ab4 a4 gb4 ~ b4 db5 b4 ~ a4 ab4 gb4 ~ e4 d4 e4 ~ gb4 ab4 e4 ~ gb4 a4 ab4 ~ gb4 e4 d4 ~ db4 ~ b3 ~!2 a3 ~!2 e4 ~!5 e3 ~ a3 ~!7 gb3 ~!7 g3 ~!7 a3 ~!7 b3 ~!7 db4 ~!7 d4 ~!7 e4 ~!7 gb4 ~!7 gb4 ~!7 g4 ~!7 a4 ~!7 b4 ~!7 a4 ~!7 b4 ~!7 db5 ~!7 d5 ~!15"),
+  note("~!3360 e3 ~!15")
+)
+  .slow(155.0/3)
+  .apply(lowerVoice)
+  .pan(0.6)
+
+// Flute
+$: note("~!38 d6 ~ a6 ~!5 e6 ~ gb6 ~ e6 ~!2 d6 ~!2 db6 ~ d6 ~!2 e6 ~!2 a5 ~!7 gb5 ~!7 g5 ~!7 a5 ~!7 b5 ~ d6 ~!2 gb6 ~!2 gb6 ~ e6 ~!2 gb6 ~!2 d6 ~ g6 ~!2 gb6 ~!2 e6 ~ a6 ~!2 g6 ~!2 gb6 ~ a6 ~!2 g6 ~!2 gb6 ~ a6 ~!2 g6 ~!2 gb6 ~!5 a6 ~ a6 ~!5 g6 ~ gb6 ~!5 a5 ~ e6 ~!5 a5 ~ gb6 ~!7 ab6 ~!7 a6 ~!31 a6 ~!7 ab6 ~!7 a6 ~!7 b6 ~!7 e6 ~!5 e6 ~ a6 ~!5 e6 ~ gb6 ~ e6 ~!2 d6 ~!2 db6 ~ d6 ~!2 e6 ~!2 a5 ~ db6 ~!2 b5 ~!2 a5 ~ db6 ~!2 b5 ~!2 a5 ~!15 a5 ~ db6 ~!2 b5 ~!2 a5 ~ db6 ~!2 b5 ~!2 a5 ~!15 a5 ~!15 a5 ~!15 ab5 ~ a5 ~!2 b5 ~!2 db6 ~!9 gb6 ~!2 e6 ~!2 d6 ~!15")
+  .slow(155.0/3)
+  .apply(upperVoice)
+  .pan(0.3)
+
+// Violin principal
+$: note("~!6 a5 ~ d6 ~!5 a5 ~ b5 ~ a5 ~!2 g5 ~!2 gb5 ~ g5 ~!2 a5 ~!2 d5 ~!7 db5 ~!7 d5 ~!7 e5 ~!7 gb5 ~ a5 ~!2 d6 ~!2 d6 ~ db6 ~!2 d6 ~!2 b5 ~ e6 ~!2 d6 ~!2 db6 ~ gb6 ~!2 e6 ~!2 d6 ~!7 a5 ~!7 b5 ~!7 db6 ~!7 d6 ~ gb6 ~!2 e6 ~!2 d6 ~ gb6 ~!2 e6 ~!2 d6 ~!13 db6 ~ d6 ~ e6 ~!2 gb6 ~!2 e6 ~ gb6 ~!2 g6 ~!2 gb6 ~ g6 ~!2 gb6 ~!2 e6 ~ gb6 ~!2 d6 ~!2 db6 ~ e6 ~!2 d6 ~!2 db6 ~ d6 ~!2 e6 ~!2 b5 ~!7 db6 ~!7 d6 ~!33 e6 ~!2 d6 ~!2 db6 ~ d6 ~!2 e6 ~!2 a5 ~!5 gb6 ~ e6 ~!5 d6 ~ db6 ~ e6 ~!2 d6 ~!2 db6 ~ e6 ~!2 d6 ~!2 db6 ~!17 e5 ~!2 d5 ~!2 db5 ~ e5 ~!2 d5 ~!2 db5 ~!15 b4 ~!15")
+  .slow(155.0/3)
+  .apply(upperVoice)
+  .pan(0.35)
+
+// 2nd Violin
+$: note("~!486 d6 ~ a6 ~!5 d6 ~ gb6 ~ e6 ~!2 d6 ~!2 db6 ~ d6 ~!2 e6 ~!2 a5 ~ b5 ~!2 db6 ~!2 d6 ~ e6 ~!2 gb6 ~!2 b5 ~!7 db6 ~!7 b5 ~ d6 ~!2 gb6 ~!2 gb6 ~ e6 ~!2 gb6 ~!2 b5 ~ g6 ~!2 gb6 ~!2 e6 ~ a6 ~!2 g6 ~!2 gb6 ~!7 e6 ~!7 e6 ~!7 d6 ~!7 db6 ~ d6 ~!2 e6 ~!2 gb6 ~ g6 ~!2 a6 ~!2 d6 ~!13 db6 ~ d6 ~!7 db6 ~!7 d6 ~!7 a5 ~!7 g5 ~!7 gb5 ~!7 b5 ~!7 db5 ~ e5 ~!2 a5 ~!2 d5 ~ gb5 ~!2 a5 ~!2 a4 ~ db5 ~!2 e5 ~!2 d5 ~!15")
+  .slow(155.0/3)
+  .apply(upperVoice)
+  .pan(0.45)
+
+// Viola
+$: note("~!454 a5 ~ d6 ~!5 a5 ~ b5 ~ a5 ~!2 g5 ~!2 gb5 ~ g5 ~!2 a5 ~!2 d5 ~!7 e5 ~!7 a4 ~!7 e5 ~!7 db5 ~ d5 ~!2 e5 ~!2 gb5 ~ g5 ~!2 a5 ~!2 d5 ~!7 a5 ~!7 gb5 ~!7 a5 ~ g5 ~!2 a5 ~!2 gb5 ~ e5 ~!2 d5 ~!2 a5 ~!7 a5 ~!7 db5 ~!7 d5 ~!7 e5 ~!7 gb5 ~!5 db6 ~ a5 ~!5 g5 ~ gb5 ~!5 g5 ~ a5 ~!5 a5 ~ a5 ~!7 g5 ~!7 gb5 ~!7 d5 ~!15")
+  .slow(155.0/3)
+  .apply(lowerVoice)
+  .pan(0.55)
+
+// Cello
+$: note("~!456 gb3 ~!7 g3 ~!7 a3 ~!7 b3 ~!7 db4 ~!7 d4 ~!7 e4 ~!7 gb4 ~!7 gb4 ~!7 g4 ~!7 a4 ~!7 b4 ~!7 a4 ~!7 b4 ~!7 db5 ~!7 d5 ~!37 a4 ~ d5 ~!5 a4 ~ b4 ~ a4 ~!2 g4 ~!2 gb4 ~ g4 ~!2 a4 ~!2 d4 ~!7 e4 ~!7 gb4 ~!7 gb3 ~!7 g3 ~!7 a3 ~!7 b3 ~!7 db4 ~!7 d4 ~!7 e4 ~!7 gb4 ~!7 g4 ~!7 a4 ~!7 b4 ~!7 db5 ~!5 a4 ~ d5 ~!5 a4 ~ b4 ~ a4 ~!2 g4 ~!2 gb4 ~ g4 ~!2 a4 ~!2 d4 ~ gb4 ~!2 e4 ~!2 d4 ~ e4 ~!2 gb4 ~!2 g4 ~!7 a4 ~!7 b4 ~!15")
+  .slow(155.0/3)
+  .apply(lowerVoice)
+  .pan(0.65)
+
+// Bass
+$: note("~!456 gb2 ~!7 g2 ~!7 a2 ~!7 b2 ~!7 db3 ~!7 d3 ~!7 e3 ~!7 gb3 ~!7 gb3 ~!7 g3 ~!7 a3 ~!7 b3 ~!7 a3 ~!7 b3 ~!7 db4 ~!7 d4 ~!37 a3 ~ d4 ~!5 a3 ~ b3 ~ a3 ~!2 g3 ~!2 gb3 ~ g3 ~!2 a3 ~!2 d3 ~!7 e3 ~!7 gb3 ~!7 gb2 ~!7 g2 ~!7 a2 ~!7 b2 ~!7 db3 ~!7 d3 ~!7 e3 ~!7 gb3 ~!7 g3 ~!7 a3 ~!7 b3 ~!7 db4 ~!5 a3 ~ d4 ~!5 a3 ~ b3 ~ a3 ~!2 g3 ~!2 gb3 ~ g3 ~!2 a3 ~!2 d3 ~ gb3 ~!2 e3 ~!2 d3 ~ e3 ~!2 gb3 ~!2 g3 ~!7 a3 ~!7 b3 ~!15")
+  .slow(155.0/3)
+  .apply(lowerVoice)
+  .pan(0.7)

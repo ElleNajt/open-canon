@@ -1,5 +1,4 @@
 // BWV 1050 Brandenburg Concerto No. 5 - Movement 1: Cadenza
-// The famous solo harpsichord cadenza
 
 // Baroque style voices
 let upperVoice = x => x
@@ -40,3 +39,39 @@ $: stack(
   .slow(15.98)
   .apply(lowerVoice)
   .pan(0.6)
+
+// Flute
+$: note("~!2045")
+  .slow(15.98)
+  .apply(upperVoice)
+  .pan(0.3)
+
+// Violin pr
+$: note("~!2045")
+  .slow(15.98)
+  .apply(upperVoice)
+  .pan(0.35)
+
+// 2nd Violin
+$: note("~!2045")
+  .slow(15.98)
+  .apply(upperVoice)
+  .pan(0.45)
+
+// Viola
+$: note("~!2045")
+  .slow(15.98)
+  .apply(lowerVoice)
+  .pan(0.55)
+
+// Cello
+$: note("~!2045")
+  .slow(15.98)
+  .apply(lowerVoice)
+  .pan(0.65)
+
+// Bass
+$: note("~!2045")
+  .slow(15.98)
+  .apply(lowerVoice)
+  .pan(0.7)

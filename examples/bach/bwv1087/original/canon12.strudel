@@ -1,49 +1,50 @@
-// Generated from MIDI
+// BWV 1087 Canon 12
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
 
 setcps(120/60/4)
 
 // Track 1
 $: note("~!138 d5 ~ e5 ~ gb5 ~ g5 ~ b5 ~ a5 ~ g5 ~ d6 ~ g6 ~ b6 ~!9 a6 ~ g6 ~ gb6 ~ e6 ~ d6 ~ db6 ~!3 g6 ~!5 e6 ~ gb6 ~ g6 ~ gb6 ~!3 a5 ~!5 d5 ~ e5 ~ gb5 ~ g5 ~!3 g6 ~!5 b5 ~ a5 ~ g5 ~ e6 ~!3 e5 ~!5 gb5 ~ g5 ~ a5 ~ a5 ~ c5 ~ a5 ~!5 c6 ~ a5 ~ e5 ~ d5 ~!3 c5 ~!3 b4 ~ d5 ~ e5 ~ gb5 ~ g5 ~ b5 ~ a5 ~ g5 ~ d6 ~ g6 ~ b6 ~!9 a6 ~ g6 ~ gb6 ~ e6 ~ d6 ~ db6 ~!3 g6 ~!5 e6 ~ gb6 ~ g6 ~ gb6 ~!3 a5 ~!5 d5 ~ e5 ~ gb5 ~ g5 ~!3 g6 ~!5 b5 ~ a5 ~ g5 ~ e6 ~!3 e5 ~!5 gb5 ~ g5 ~ a5 ~ a5 ~ c5 ~ a5 ~!5 c6 ~ a5 ~ e5 ~ d5 ~!15")
   .slow(400/8/4)
-  .sound("sawtooth")
-  .gain(0.6)
+  .apply(upperVoice)
   .pan(0.3)
-  .decay(0.3)
-  .sustain(0.2)
 
 // Track 2
 $: note("~!130 g6 ~ gb6 ~ e6 ~ d6 ~ b5 ~ c6 ~ d6 ~ g5 ~ d5 ~ b4 ~!9 db5 ~ d5 ~ e5 ~ gb5 ~ g5 ~ a5 ~!3 d5 ~!5 gb5 ~ e5 ~ d5 ~ e5 ~!3 db6 ~!5 g6 ~ gb6 ~ e6 ~ d6 ~!3 d5 ~!5 b5 ~ c6 ~ d6 ~ f5 ~!3 f6 ~!5 e6 ~ d6 ~ c6 ~ c6 ~ a6 ~ c6 ~!5 a5 ~ c6 ~ gb6 ~ g6 ~!3 a6 ~!3 b6 ~ g6 ~ gb6 ~ e6 ~ d6 ~ b5 ~ c6 ~ d6 ~ g5 ~ d5 ~ b4 ~!9 db5 ~ d5 ~ e5 ~ gb5 ~ g5 ~ a5 ~!3 d5 ~!5 gb5 ~ e5 ~ d5 ~ e5 ~!3 db6 ~!5 g6 ~ gb6 ~ e6 ~ d6 ~!3 d5 ~!5 b5 ~ c6 ~ d6 ~ f5 ~!3 f6 ~!5 e6 ~ d6 ~ c6 ~ c6 ~ a6 ~ c6 ~!5 a5 ~ c6 ~ gb6 ~ g6 ~!3 a6 ~!3 b6 ~!15")
   .slow(400/8/4)
-  .sound("square")
-  .gain(0.6)
-  .pan(0.7)
-  .decay(0.3)
-  .sustain(0.2)
+  .apply(upperVoice)
+  .pan(0.4)
 
 // Track 3
 $: note("~!36 d5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!3 b5 ~!3 a5 ~!3 g5 ~!3 d6 ~!3 d5 ~!3 a5 ~!7 g5 ~!19 b5 ~!3 a5 ~!3 g5 ~!3 gb5 ~!3 d5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!11 a5 ~!3 b5 ~!19 d5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!3 b5 ~!3 a5 ~!3 g5 ~!3 d6 ~!3 d5 ~!3 a5 ~!7 g5 ~!19 b5 ~!3 a5 ~!3 g5 ~!3 gb5 ~!3 d5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!11 a5 ~!3 b5 ~!19 d5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!3 b5 ~!3 a5 ~!3 g5 ~!3 d6 ~!3 d5 ~!3 a5 ~!7 g5 ~!19 b5 ~!3 a5 ~!3 g5 ~!3 gb5 ~!3 d5 ~!3 e5 ~!3 gb5 ~!3 g5 ~!15")
   .slow(400/8/4)
-  .sound("triangle")
-  .gain(0.6)
-  .pan(0.4)
-  .decay(0.3)
-  .sustain(0.2)
+  .apply(lowerVoice)
+  .pan(0.6)
 
 // Track 4
 $: note("~!20 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 b3 ~!3 db4 ~!3 d4 ~!3 g3 ~!3 g4 ~!3 db4 ~!7 d4 ~!19 b3 ~!3 c4 ~!3 d4 ~!3 e4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!11 c4 ~!3 b3 ~!19 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 b3 ~!3 db4 ~!3 d4 ~!3 g3 ~!3 g4 ~!3 c4 ~!7 d4 ~!19 b3 ~!3 c4 ~!3 d4 ~!3 e4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!11 c4 ~!3 b3 ~!19 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!3 b3 ~!3 db4 ~!3 d4 ~!3 g3 ~!3 g4 ~!3 c4 ~!7 d4 ~!19 b3 ~!3 c4 ~!3 d4 ~!3 e4 ~!3 g4 ~!3 gb4 ~!3 e4 ~!3 d4 ~!11 c4 ~!3 b3 ~!15")
   .slow(400/8/4)
-  .sound("sine")
-  .gain(0.6)
-  .pan(0.6)
-  .decay(0.3)
-  .sustain(0.2)
+  .apply(lowerVoice)
+  .pan(0.65)
 
 // Track 5
 $: note("~!16 g4 ~!15 gb4 ~!15 e4 ~!15 d4 ~!15 b3 ~!15 c4 ~!15 d4 ~!15 g3 ~!15 g4 ~!15 gb4 ~!15 e4 ~!15 d4 ~!15 b3 ~!15 c4 ~!15 d4 ~!15 g3 ~!15 g4 ~!15 gb4 ~!15 e4 ~!15 d4 ~!15 b3 ~!15 c4 ~!15 d4 ~!15 g3 ~!15")
   .slow(400/8/4)
-  .sound("sawtooth")
-  .gain(0.6)
-  .pan(0.5)
-  .decay(0.3)
-  .sustain(0.2)
-
+  .apply(lowerVoice)
+  .pan(0.7)

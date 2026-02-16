@@ -192,6 +192,33 @@ note("cs4 ds4 gs4")           // use 's' for sharp
 // Octaves: 2=low bass, 3=bass, 4=middle, 5=high, 6=very high
 ```
 
+## Styles
+
+Voice presets are in `styles/`. To use them, copy the voice definitions into your `live.js`:
+
+```javascript
+// From styles/baroque.js - staccato harpsichord-like voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
+
+// Then apply with:
+$: note("...").apply(upperVoice).pan(0.3)
+$: note("...").apply(lowerVoice).pan(0.7)
+```
+
 ## Example Patterns
 
 ### Funky Beat
