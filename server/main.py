@@ -117,11 +117,37 @@ processing = False
 repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
 
 
-def generate_tts(
+# Limit concurrent TTS API calls so they don't block the event loop
+tts_semaphore = asyncio.Semaphore(2)
+# Track in-flight TTS requests to deduplicate
+tts_pending: dict[str, asyncio.Future] = {}
+
+
+def _synthesize_tts(text, voice, speed):
+    """Blocking Google TTS call -- run via asyncio.to_thread."""
+    if "-" in voice:
+        language_code = "-".join(voice.split("-")[:2])
+        voice_name = voice
+    else:
+        language_code = "en-US"
+        voice_name = f"en-US-{voice}"
+
+    response = tts_client.synthesize_speech(
+        input=texttospeech.SynthesisInput(text=text),
+        voice=texttospeech.VoiceSelectionParams(
+            language_code=language_code, name=voice_name
+        ),
+        audio_config=texttospeech.AudioConfig(
+            audio_encoding=texttospeech.AudioEncoding.MP3, speaking_rate=speed
+        ),
+    )
+    return response.audio_content
+
+
+async def generate_tts(
     text: str, voice: str = "en-US-Studio-O", speed: float = 1.0
 ) -> tuple[str, bytes]:
     """Generate TTS audio and return (sample_id, audio_bytes)."""
-    # Create a hash-based ID for this text+voice combo
     key = f"{text}:{voice}:{speed}"
     sample_id = "tts_" + hashlib.md5(key.encode()).hexdigest()[:12]
 
@@ -129,35 +155,23 @@ def generate_tts(
     if sample_id in tts_samples:
         return sample_id, tts_samples[sample_id]
 
-    # Parse voice name (format: lang-region-name or just name)
-    if "-" in voice:
-        parts = voice.rsplit("-", 1)
-        language_code = "-".join(voice.split("-")[:2])  # e.g., "en-US"
-        voice_name = voice  # Full name like "en-US-Studio-O"
-    else:
-        language_code = "en-US"
-        voice_name = f"en-US-{voice}"
+    # Deduplicate: if this exact request is already in-flight, wait for it
+    if sample_id in tts_pending:
+        await tts_pending[sample_id]
+        return sample_id, tts_samples[sample_id]
 
-    synthesis_input = texttospeech.SynthesisInput(text=text)
+    # Run the blocking API call in a thread, limited by semaphore
+    loop = asyncio.get_event_loop()
+    future = loop.create_future()
+    tts_pending[sample_id] = future
 
-    voice_params = texttospeech.VoiceSelectionParams(
-        language_code=language_code,
-        name=voice_name,
-    )
+    async with tts_semaphore:
+        audio_content = await asyncio.to_thread(_synthesize_tts, text, voice, speed)
 
-    audio_config = texttospeech.AudioConfig(
-        audio_encoding=texttospeech.AudioEncoding.MP3,
-        speaking_rate=speed,
-    )
-
-    response = tts_client.synthesize_speech(
-        input=synthesis_input,
-        voice=voice_params,
-        audio_config=audio_config,
-    )
-
-    tts_samples[sample_id] = response.audio_content
-    return sample_id, response.audio_content
+    tts_samples[sample_id] = audio_content
+    future.set_result(True)
+    del tts_pending[sample_id]
+    return sample_id, audio_content
 
 
 def load_state():
@@ -691,7 +705,7 @@ async def websocket_endpoint(ws: WebSocket):
                 voice = data.get("voice", "en-US-Studio-O")
                 speed = data.get("speed", 1.0)
                 if text:
-                    sample_id, _ = generate_tts(text, voice, speed)
+                    sample_id, _ = await generate_tts(text, voice, speed)
                     await ws.send_text(
                         json.dumps(
                             {
@@ -768,7 +782,7 @@ async def create_tts_sample(request: dict):
     if not text:
         return {"error": "No text provided"}
 
-    sample_id, _ = generate_tts(text, voice, speed)
+    sample_id, _ = await generate_tts(text, voice, speed)
     return {"sample_id": sample_id, "url": f"/tts/{sample_id}.mp3"}
 
 
