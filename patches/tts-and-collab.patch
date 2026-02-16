@@ -450,7 +450,7 @@ index 437475e6..dce53fe3 100644
        <UserFacingErrorMessage error={error} />
        {!isZen && panelPosition === 'bottom' && <BottomPanel context={context} />}
 diff --git a/website/src/repl/prebake.mjs b/website/src/repl/prebake.mjs
-index 53a2a600..a0c31ee0 100644
+index 53a2a600..230732d9 100644
 --- a/website/src/repl/prebake.mjs
 +++ b/website/src/repl/prebake.mjs
 @@ -1,5 +1,13 @@
@@ -468,7 +468,7 @@ index 53a2a600..a0c31ee0 100644
  import { registerSamplesFromDB } from './idbutils.mjs';
  import './piano.mjs';
  import './files.mjs';
-@@ -156,6 +164,120 @@ export async function prebake() {
+@@ -156,6 +164,98 @@ export async function prebake() {
    ]);
  
    aliasBank(`${baseCDN}/tidal-drum-machines-alias.json`);
@@ -526,61 +526,39 @@ index 53a2a600..a0c31ee0 100644
 +      pattern = String(strings);
 +    }
 +
-+    // Find all text segments (words not part of mini-notation syntax)
-+    const textSegments = new Set();
++    // Find all text words (individual words become TTS samples)
++    // Mini-notation syntax characters are preserved
++    const syntaxChars = /^[~?:!*\/,|<>\[\]\d.]+$/;
++    const textWords = new Set();
 +
-+    // Match text inside brackets like [hello world]
-+    const bracketRegex = /\[([^\[\]]+)\]/g;
++    // Extract all words (letters only, not syntax)
++    const wordRegex = /\b([a-zA-Z]+)\b/g;
 +    let match;
-+    while ((match = bracketRegex.exec(pattern)) !== null) {
-+      const inner = match[1].trim();
-+      // Skip if it's just mini-notation syntax or numbers
-+      if (inner && !/^[\s~?:!*\/,|<>\d.]+$/.test(inner)) {
-+        textSegments.add(inner);
-+      }
-+    }
-+
-+    // Also match bare words (not in brackets, not syntax)
-+    const withoutBrackets = pattern.replace(/\[[^\]]*\]/g, '___BRACKET___');
-+    const bareWordRegex = /\b([a-zA-Z][a-zA-Z\s]*[a-zA-Z]|[a-zA-Z])\b/g;
-+    while ((match = bareWordRegex.exec(withoutBrackets)) !== null) {
-+      const word = match[1].trim();
-+      if (word) {
-+        textSegments.add(word);
++    while ((match = wordRegex.exec(pattern)) !== null) {
++      const word = match[1];
++      if (!syntaxChars.test(word)) {
++        textWords.add(word);
 +      }
 +    }
 +
 +    // Start fetching all TTS samples and build replacement map
 +    const sampleMap = {};
-+    textSegments.forEach((text) => {
-+      const sampleId = fetchTTS(text);
-+      sampleMap[text] = sampleId || '~'; // silence while loading
++    textWords.forEach((word) => {
++      const sampleId = fetchTTS(word);
++      sampleMap[word] = sampleId || '~'; // silence while loading
 +    });
 +
-+    // Replace text segments with sample IDs in the pattern
-+    let miniNotation = pattern;
-+
-+    // Replace bracketed text
-+    miniNotation = miniNotation.replace(/\[([^\[\]]+)\]/g, (match, inner) => {
-+      const trimmed = inner.trim();
-+      if (sampleMap[trimmed] !== undefined) {
-+        return sampleMap[trimmed];
++    // Replace each word with its sample ID
++    let miniNotation = pattern.replace(/\b([a-zA-Z]+)\b/g, (match, word) => {
++      if (sampleMap[word] !== undefined) {
++        return sampleMap[word];
 +      }
 +      return match;
 +    });
 +
-+    // Replace bare words (longer phrases first to avoid partial replacement)
-+    const sortedTexts = [...textSegments].sort((a, b) => b.length - a.length);
-+    sortedTexts.forEach((text) => {
-+      if (sampleMap[text] && !text.includes('[')) {
-+        const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-+        miniNotation = miniNotation.replace(new RegExp(escaped, 'g'), sampleMap[text]);
-+      }
-+    });
-+
 +    // Return the pattern using mini-notation parser
 +    console.log('[tts] input:', pattern);
-+    console.log('[tts] segments:', [...textSegments]);
++    console.log('[tts] words:', [...textWords]);
 +    console.log('[tts] sampleMap:', sampleMap);
 +    console.log('[tts] miniNotation:', miniNotation);
 +    // Use mini() to parse the notation, then .s() to make it a sound pattern
