@@ -312,7 +312,8 @@ async def broadcast(msg: dict):
         try:
             await ws.send_text(data)
         except:
-            connections.remove(ws)
+            if ws in connections:
+                connections.remove(ws)
 
 
 def get_rate_limit_info():
@@ -703,7 +704,8 @@ async def websocket_endpoint(ws: WebSocket):
                     )
 
     except WebSocketDisconnect:
-        connections.remove(ws)
+        if ws in connections:
+            connections.remove(ws)
 
 
 @app.get("/live.js")
