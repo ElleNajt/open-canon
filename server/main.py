@@ -7,15 +7,20 @@ Collaborative vibe-duet server.
 """
 
 import asyncio
+import base64
+import hashlib
 import json
 import os
+import subprocess
+import tempfile
 import time
 from collections import deque
 
 import anthropic
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from google.cloud import firestore
+from fastapi.responses import Response
+from google.cloud import firestore, texttospeech
 
 app = FastAPI()
 app.add_middleware(
@@ -27,6 +32,76 @@ app.add_middleware(
 
 client = anthropic.Anthropic()
 db = firestore.Client()
+tts_client = texttospeech.TextToSpeechClient()
+
+# TTS sample storage (in-memory cache, keyed by hash of text+voice)
+tts_samples: dict[str, bytes] = {}
+
+# Git repo for code history
+code_repo_dir = tempfile.mkdtemp(prefix="vibe-duet-code-")
+code_file_path = os.path.join(code_repo_dir, "live.js")
+
+
+def init_code_repo():
+    """Initialize git repo for tracking code changes."""
+    subprocess.run(["git", "init"], cwd=code_repo_dir, capture_output=True)
+    subprocess.run(
+        ["git", "config", "user.email", "vibe-duet@local"],
+        cwd=code_repo_dir,
+        capture_output=True,
+    )
+    subprocess.run(
+        ["git", "config", "user.name", "vibe-duet"],
+        cwd=code_repo_dir,
+        capture_output=True,
+    )
+
+
+def commit_code(code: str, message: str) -> str | None:
+    """Write code to file and commit. Returns the commit hash."""
+    with open(code_file_path, "w") as f:
+        f.write(code)
+
+    subprocess.run(["git", "add", "live.js"], cwd=code_repo_dir, capture_output=True)
+
+    result = subprocess.run(
+        ["git", "commit", "-m", message],
+        cwd=code_repo_dir,
+        capture_output=True,
+        text=True,
+    )
+
+    if result.returncode == 0:
+        # Get commit hash
+        hash_result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            cwd=code_repo_dir,
+            capture_output=True,
+            text=True,
+        )
+        return hash_result.stdout.strip()[:8]
+    return None
+
+
+def get_diff_from_commit(commit_hash: str) -> str:
+    """Get the diff introduced by a specific commit."""
+    result = subprocess.run(
+        ["git", "show", "--format=", commit_hash],
+        cwd=code_repo_dir,
+        capture_output=True,
+        text=True,
+    )
+    return result.stdout.strip()
+
+
+def get_recent_fix_history(n: int = 3) -> list[dict]:
+    """Get the last N fix attempts with their diffs and errors."""
+    # This will be populated by fix_error
+    return fix_history[-n:] if fix_history else []
+
+
+# Track fix attempts with their diffs
+fix_history: list[dict] = []  # [{commit, diff, error, timestamp}, ...]
 
 # Rate limiting: 1000 requests per hour
 RATE_LIMIT = 1000
@@ -39,6 +114,50 @@ history: list[dict] = []  # {name, prompt, code, timestamp}
 connections: list[WebSocket] = []
 request_times: deque = deque()  # timestamps of processed requests
 processing = False
+repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
+
+
+def generate_tts(
+    text: str, voice: str = "en-US-Studio-O", speed: float = 1.0
+) -> tuple[str, bytes]:
+    """Generate TTS audio and return (sample_id, audio_bytes)."""
+    # Create a hash-based ID for this text+voice combo
+    key = f"{text}:{voice}:{speed}"
+    sample_id = "tts_" + hashlib.md5(key.encode()).hexdigest()[:12]
+
+    # Check cache
+    if sample_id in tts_samples:
+        return sample_id, tts_samples[sample_id]
+
+    # Parse voice name (format: lang-region-name or just name)
+    if "-" in voice:
+        parts = voice.rsplit("-", 1)
+        language_code = "-".join(voice.split("-")[:2])  # e.g., "en-US"
+        voice_name = voice  # Full name like "en-US-Studio-O"
+    else:
+        language_code = "en-US"
+        voice_name = f"en-US-{voice}"
+
+    synthesis_input = texttospeech.SynthesisInput(text=text)
+
+    voice_params = texttospeech.VoiceSelectionParams(
+        language_code=language_code,
+        name=voice_name,
+    )
+
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.MP3,
+        speaking_rate=speed,
+    )
+
+    response = tts_client.synthesize_speech(
+        input=synthesis_input,
+        voice=voice_params,
+        audio_config=audio_config,
+    )
+
+    tts_samples[sample_id] = response.audio_content
+    return sample_id, response.audio_content
 
 
 def load_state():
@@ -51,6 +170,9 @@ def load_state():
             current_code = data.get("code", current_code)
             history = data.get("history", [])
             print(f"Loaded state: {len(history)} history entries")
+        # Initialize git repo and commit current code
+        init_code_repo()
+        commit_code(current_code, "Initial state from Firestore")
     except Exception as e:
         print(f"Error loading state: {e}")
 
@@ -83,15 +205,40 @@ Keep changes minimal and musical.
 - ~ rest: s("bd ~ sn ~") adds silence
 - ! replicate: s("bd!3") same as "bd bd bd"
 
-## Samples (use with s())
-Drums: bd (kick), sn (snare), hh (closed hat), oh (open hat), cp (clap), cr (crash), rim (rimshot), mt/ht/lt (toms)
-Other: piano, bass, pluck, arpy, superpiano, metal, jazz, casio, crow, insect, wind, space, flbass, rhodes, kalimba
-Use :n for variations: s("bd:0"), s("bd:1"), s("bd:2"), etc.
+## COMPLETE SAMPLE LIST
+
+### Core Drums (uzu-drumkit) - USE THESE FIRST
+bd (kick), sn (snare), hh (closed hat), oh (open hat), cp (clap), cr (crash), rim (rimshot), mt/ht/lt (toms), cb (cowbell), rd (ride), sh (shaker), tb (tambourine), brk (break), misc
+
+### Dirt Samples
+casio, crow, insect, wind, jazz, metal, east, space, numbers
+
+### Orchestral (vcsl)
+Drums: bassdrum1, bassdrum2, bongo, conga, darbuka, framedrum, timpani, timpani_roll, timpani2
+Snares: snare_modern, snare_hi, snare_low, snare_rim
+Toms: tom_mallet, tom_stick, tom_rim, tom2_mallet, tom2_stick, tom2_rim
+Recorders: recorder_alto_stacc, recorder_alto_vib, recorder_alto_sus, recorder_bass_stacc, recorder_bass_vib, recorder_bass_sus, recorder_soprano_stacc, recorder_soprano_sus, recorder_tenor_stacc, recorder_tenor_vib, recorder_tenor_sus
+Ocarinas: ocarina_small_stacc, ocarina_small, ocarina, ocarina_vib
+Organs: pipeorgan_loud_pedal, pipeorgan_loud, pipeorgan_quiet_pedal, pipeorgan_quiet, organ_4inch, organ_8inch, organ_full
+Wind: harmonica, harmonica_soft, harmonica_vib, super64, super64_acc, super64_vib, didgeridoo, saxello, saxello_stacc, saxello_vib, sax
+Other: trainwhistle, siren, ballwhistle
+
+### Drum Machines (use Machine_type format, e.g., RolandTR808_bd)
+Machines: RolandTR808, RolandTR909, RolandTR707, RolandTR606, RolandTR505, RolandTR626, LinnDrum, LinnLM1, LinnLM2, Linn9000, AkaiMPC60, AkaiLinn, OberheimDMX, EmuSP12, EmuDrumulator, KorgM1, KorgKR55, BossDR110, BossDR220, BossDR550, CasioRZ1, YamahaRM50
+Types: _bd, _sn, _hh, _oh, _cp, _cr, _rim, _ht, _mt, _lt, _cb, _rd, _sh, _tb, _perc, _misc
+
+### Piano
+piano (chromatic samples, use with note())
 
 ## Synths (use with .sound())
 Waveforms: sawtooth/saw, square/sqr, triangle/tri, sine/sin, pulse
 Special: supersaw (unison saw), sbd (synthetic bass drum)
 Noise: white, pink, brown, crackle
+
+## Text-to-Speech Samples
+You can use TTS-generated samples! Format: samples("/tts/SAMPLE_ID.mp3", "voice")
+To use speech in patterns, reference the TTS URL that was generated.
+Available voices: en-US-Studio-O (warm female), en-US-Studio-Q (male), en-GB-Studio-B (British male)
 
 ## Effects
 Filters: .lpf(hz), .hpf(hz), .bpf(hz), .resonance(0-1)
@@ -220,7 +367,7 @@ def build_user_content(
 
 async def process_item(item: dict):
     """Process a single prompt."""
-    global current_code, processing
+    global current_code, processing, fix_history
 
     processing = True
 
@@ -239,6 +386,12 @@ async def process_item(item: dict):
 
         current_code = new_code
         request_times.append(time.time())
+
+        # Commit to git and clear fix history (successful change)
+        commit_hash = commit_code(
+            current_code, f"{item['name']}: {item['prompt'][:50]}"
+        )
+        fix_history = []  # Reset fix history on successful prompt
 
         entry = {
             "name": item["name"],
@@ -267,67 +420,86 @@ async def process_item(item: dict):
         processing = False
 
 
-last_error_time = 0
-last_fixed_code = ""  # Track code we already tried to fix
-ERROR_DEBOUNCE = 5  # seconds
-MAX_FIX_ATTEMPTS = 2  # Max fix attempts per code version
-fix_attempts = 0
 error_lock = asyncio.Lock()
+last_error_time = 0
+
+
+def get_backoff_delay(attempt: int) -> float:
+    """Exponential backoff: 5s, 10s, 20s, 40s, ..."""
+    return min(5 * (2**attempt), 120)  # Cap at 2 minutes
 
 
 async def fix_error(error: str, broken_code: str = None):
     """Ask Claude to fix an error in the current code."""
-    global current_code, processing, last_error_time, last_fixed_code, fix_attempts
+    global current_code, processing, fix_history, last_error_time
 
-    code_to_check = broken_code or current_code
+    code_to_fix = broken_code if broken_code else current_code
 
     async with error_lock:
         now = time.time()
+        attempt = len(fix_history)
 
-        # If same code we already tried to fix, increment attempts
-        if code_to_check == last_fixed_code:
-            fix_attempts += 1
-            if fix_attempts >= MAX_FIX_ATTEMPTS:
-                print(
-                    f"Max fix attempts reached for this code, giving up: {error[:50]}"
-                )
-                return
-        else:
-            # New code, reset attempts
-            fix_attempts = 1
-            last_fixed_code = code_to_check
+        # Calculate backoff based on number of attempts
+        if attempt > 0:
+            backoff = get_backoff_delay(attempt)
+            time_since_last = now - last_error_time
+            if time_since_last < backoff:
+                wait_time = backoff - time_since_last
+                print(f"Backoff: waiting {wait_time:.1f}s before attempt {attempt + 1}")
+                await asyncio.sleep(wait_time)
 
-        # Also debounce by time
-        if now - last_error_time < ERROR_DEBOUNCE:
-            print(f"Debouncing error (too soon): {error[:50]}")
-            return
-        last_error_time = now
-
-    # Use the broken code if provided, otherwise fall back to current_code
-    code_to_fix = broken_code if broken_code else current_code
+        last_error_time = time.time()
 
     processing = True
-    print(f"Fixing error: {error}")
-    print(f"Code to fix: {code_to_fix[:100]}...")
+    print(f"Fix attempt {attempt + 1}: {error[:80]}")
 
     try:
+        # Build context with previous fix attempts
+        context_parts = [f"Current code:\n{code_to_fix}\n"]
+        context_parts.append(f"Error: {error}\n")
+
+        if fix_history:
+            context_parts.append("\n## Previous fix attempts that failed:\n")
+            for i, fh in enumerate(fix_history[-3:], 1):  # Last 3 attempts
+                context_parts.append(f"\n### Attempt {i}:\n")
+                context_parts.append(f"Diff applied:\n```\n{fh['diff']}\n```\n")
+                context_parts.append(f"Resulting error: {fh['error']}\n")
+            context_parts.append(
+                "\nDo NOT repeat these failed approaches. Try something different.\n"
+            )
+
+        context_parts.append(
+            "\nFix ONLY the error while keeping the musical intent intact. Return the corrected code."
+        )
+
         new_code = await call_claude(
             SYSTEM_PROMPT,
-            [
-                {
-                    "role": "user",
-                    "content": f"Current code:\n{code_to_fix}\n\nThis code produces an error when evaluated: {error}\n\nFix ONLY the error while keeping the musical intent intact. Return the corrected code.",
-                }
-            ],
+            [{"role": "user", "content": "".join(context_parts)}],
         )
         print(f"Claude returned: {new_code[:100]}...")
+
+        # Commit the fix attempt
+        commit_hash = commit_code(new_code, f"Fix attempt {attempt + 1}: {error[:40]}")
+
+        # Get the diff for this attempt
+        diff = get_diff_from_commit(commit_hash) if commit_hash else ""
+
+        # Record this attempt (will be used if it also fails)
+        fix_history.append(
+            {
+                "commit": commit_hash,
+                "diff": diff,
+                "error": error,
+                "timestamp": time.time(),
+            }
+        )
 
         current_code = new_code
         request_times.append(time.time())
 
         entry = {
             "name": "Claude",
-            "prompt": f"Fix error: {error[:50]}...",
+            "prompt": f"Fix error (attempt {attempt + 1}): {error[:50]}...",
             "code": current_code,
             "timestamp": time.time(),
         }
@@ -380,10 +552,34 @@ async def process_queue():
         await process_item(item)
 
 
+async def process_repeating():
+    """Check and execute repeating prompts."""
+    global repeating_prompts
+
+    while True:
+        await asyncio.sleep(1)  # Check every second
+
+        now = time.time()
+        for rp in repeating_prompts[:]:
+            if now >= rp["next_run"] and not processing:
+                # Queue this prompt
+                queue.append(
+                    {
+                        "name": rp["name"],
+                        "prompt": rp["prompt"],
+                        "timestamp": now,
+                    }
+                )
+                rp["next_run"] = now + rp["interval"]
+                await broadcast({"type": "queue", "queue": queue})
+                await broadcast({"type": "repeating", "repeating": repeating_prompts})
+
+
 @app.on_event("startup")
 async def startup():
     load_state()
     asyncio.create_task(process_queue())
+    asyncio.create_task(process_repeating())
 
 
 @app.websocket("/ws")
@@ -402,6 +598,7 @@ async def websocket_endpoint(ws: WebSocket):
                 "code": current_code,
                 "queue": queue,
                 "history": history,
+                "repeating": repeating_prompts,
                 "rateLimit": {"used": used, "limit": RATE_LIMIT, "resetIn": reset_in},
             }
         )
@@ -450,6 +647,51 @@ async def websocket_endpoint(ws: WebSocket):
                         }
                     )
 
+            elif data["type"] == "addRepeating":
+                # Add a repeating prompt
+                import uuid
+
+                rp = {
+                    "id": str(uuid.uuid4())[:8],
+                    "name": data["name"],
+                    "prompt": data["prompt"],
+                    "interval": data.get("interval", 30),
+                    "next_run": time.time() + data.get("interval", 30),
+                }
+                repeating_prompts.append(rp)
+                await broadcast({"type": "repeating", "repeating": repeating_prompts})
+
+            elif data["type"] == "removeRepeating":
+                # Remove a repeating prompt by id
+                rp_id = data.get("id")
+                repeating_prompts[:] = [
+                    rp for rp in repeating_prompts if rp["id"] != rp_id
+                ]
+                await broadcast({"type": "repeating", "repeating": repeating_prompts})
+
+            elif data["type"] == "clearQueue":
+                # Clear the queue
+                queue.clear()
+                await broadcast({"type": "queue", "queue": queue})
+
+            elif data["type"] == "tts":
+                # Generate TTS sample
+                text = data.get("text", "")
+                voice = data.get("voice", "en-US-Studio-O")
+                speed = data.get("speed", 1.0)
+                if text:
+                    sample_id, _ = generate_tts(text, voice, speed)
+                    await ws.send_text(
+                        json.dumps(
+                            {
+                                "type": "tts",
+                                "sample_id": sample_id,
+                                "url": f"/tts/{sample_id}.mp3",
+                                "text": text,
+                            }
+                        )
+                    )
+
     except WebSocketDisconnect:
         connections.remove(ws)
 
@@ -458,6 +700,64 @@ async def websocket_endpoint(ws: WebSocket):
 async def get_live():
     """For Strudel to poll."""
     return current_code
+
+
+@app.post("/clear-queue")
+async def clear_queue_endpoint():
+    """Clear the queue via HTTP."""
+    queue.clear()
+    await broadcast({"type": "queue", "queue": queue})
+    return {"status": "ok", "queue_length": 0}
+
+
+@app.get("/status")
+async def get_status():
+    """Get current server state."""
+    return {
+        "queue_length": len(queue),
+        "queue": queue,
+        "repeating_count": len(repeating_prompts),
+        "repeating": repeating_prompts,
+        "processing": processing,
+        "history_length": len(history),
+    }
+
+
+@app.post("/clear-all")
+async def clear_all_endpoint():
+    """Clear queue and repeating prompts."""
+    global repeating_prompts
+    queue.clear()
+    repeating_prompts = []
+    await broadcast({"type": "queue", "queue": queue})
+    await broadcast({"type": "repeating", "repeating": repeating_prompts})
+    return {"status": "ok", "queue_length": 0, "repeating_count": 0}
+
+
+@app.get("/tts/{sample_id}.mp3")
+async def get_tts_sample(sample_id: str):
+    """Serve a TTS-generated sample."""
+    if sample_id not in tts_samples:
+        return Response(status_code=404, content="Sample not found")
+    return Response(
+        content=tts_samples[sample_id],
+        media_type="audio/mpeg",
+        headers={"Cache-Control": "public, max-age=31536000"},
+    )
+
+
+@app.post("/tts")
+async def create_tts_sample(request: dict):
+    """Generate a TTS sample and return its URL."""
+    text = request.get("text", "")
+    voice = request.get("voice", "en-US-Studio-O")
+    speed = request.get("speed", 1.0)
+
+    if not text:
+        return {"error": "No text provided"}
+
+    sample_id, _ = generate_tts(text, voice, speed)
+    return {"sample_id": sample_id, "url": f"/tts/{sample_id}.mp3"}
 
 
 # Serve static files (Strudel frontend) - must be last
