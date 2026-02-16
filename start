@@ -13,9 +13,7 @@ if [ ! -d "strudel" ]; then
     cd strudel
     git checkout "$STRUDEL_COMMIT"
     echo "Applying vibe-duet patches..."
-    git apply ../patches/useReplContext.patch
-    git apply ../patches/user_pattern_utils.patch
-    git apply ../patches/allowedHosts.patch
+    git apply ../patches/tts-and-collab.patch
     echo "Installing dependencies..."
     pnpm install
     cd ..
