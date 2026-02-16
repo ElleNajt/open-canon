@@ -51,6 +51,125 @@ index eb362369..5c56dbb3 100644
      "start": "astro dev",
      "build": "astro build",
      "preview": "astro preview --port 3009 --host 0.0.0.0",
+diff --git a/website/src/repl/components/CollabPanel.jsx b/website/src/repl/components/CollabPanel.jsx
+index e4c52e13..fb6740d6 100644
+--- a/website/src/repl/components/CollabPanel.jsx
++++ b/website/src/repl/components/CollabPanel.jsx
+@@ -10,8 +10,11 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+   const [connected, setConnected] = useState(false);
+   const [expanded, setExpanded] = useState(true);
+   const [image, setImage] = useState(null); // {data: base64, type: mime}
++  const [keepGoing, setKeepGoing] = useState(false);
++  const [keepGoingPrompt, setKeepGoingPrompt] = useState('');
+   const wsRef = useRef(null);
+   const fileInputRef = useRef(null);
++  const keepGoingRef = useRef(null);
+ 
+   // Expose methods via ref
+   useImperativeHandle(
+@@ -101,24 +104,66 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+     if (fileInputRef.current) fileInputRef.current.value = '';
+   };
+ 
+-  const submit = () => {
+-    if (!prompt.trim() || !name.trim() || !wsRef.current) return;
++  const sendPrompt = (promptText) => {
++    if (!promptText.trim() || !name.trim() || !wsRef.current) return;
+ 
+     localStorage.setItem('collabName', name);
+     const msg = {
+       type: 'prompt',
+       name: name.trim(),
+-      prompt: prompt.trim(),
++      prompt: promptText.trim(),
+     };
+     if (image) {
+       msg.image = image.data;
+       msg.imageType = image.type;
+     }
+     wsRef.current.send(JSON.stringify(msg));
++  };
++
++  const submit = () => {
++    if (!prompt.trim() || !name.trim()) return;
++    sendPrompt(prompt);
+     setPrompt('');
+     clearImage();
+   };
+ 
++  const toggleKeepGoing = () => {
++    if (keepGoing) {
++      // Stop
++      if (keepGoingRef.current) {
++        clearInterval(keepGoingRef.current);
++        keepGoingRef.current = null;
++      }
++      setKeepGoing(false);
++      setKeepGoingPrompt('');
++    } else {
++      // Start - use current prompt
++      if (!prompt.trim() || !name.trim()) return;
++      const savedPrompt = prompt.trim();
++      setKeepGoingPrompt(savedPrompt);
++      setKeepGoing(true);
++
++      // Send immediately
++      sendPrompt(savedPrompt);
++      setPrompt('');
++      clearImage();
++
++      // Then every 30 seconds
++      keepGoingRef.current = setInterval(() => {
++        sendPrompt(savedPrompt);
++      }, 30000);
++    }
++  };
++
++  // Cleanup interval on unmount
++  useEffect(() => {
++    return () => {
++      if (keepGoingRef.current) {
++        clearInterval(keepGoingRef.current);
++      }
++    };
++  }, []);
++
+   const playVersion = (code) => {
+     onCodeUpdate(code);
+   };
+@@ -173,13 +218,31 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+         </button>
+         <button
+           onClick={submit}
+-          disabled={!prompt.trim() || !name.trim()}
++          disabled={!prompt.trim() || !name.trim() || keepGoing}
+           className="bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-700 px-4 py-2 rounded text-base"
+         >
+           Send
+         </button>
++        <button
++          onClick={toggleKeepGoing}
++          disabled={!keepGoing && (!prompt.trim() || !name.trim())}
++          className={`px-3 py-2 rounded text-base ${keepGoing ? 'bg-orange-600 hover:bg-orange-500' : 'bg-zinc-700 hover:bg-zinc-600'} disabled:bg-zinc-700`}
++          title={keepGoing ? 'Stop auto-sending' : 'Send every 30s'}
++        >
++          {keepGoing ? '⏹' : '🔄'}
++        </button>
+       </div>
+ 
++      {/* Keep going indicator */}
++      {keepGoing && (
++        <div className="flex items-center gap-2 text-sm text-orange-400">
++          <span>🔄 Repeating every 30s: "{keepGoingPrompt}"</span>
++          <button onClick={toggleKeepGoing} className="text-red-400 hover:text-red-300">
++            ⏹ Stop
++          </button>
++        </div>
++      )}
++
+       {/* Image preview */}
+       {image && (
+         <div className="flex items-center gap-2 text-sm text-zinc-400">
 diff --git a/website/src/repl/components/ReplEditor.jsx b/website/src/repl/components/ReplEditor.jsx
 index 437475e6..23e6eebd 100644
 --- a/website/src/repl/components/ReplEditor.jsx
@@ -162,3 +281,240 @@ index ae39ef44..013d5da2 100644
  
  export const defaultCode = '';
  export const userPattern = {
+diff --git a/website/src/repl/components/CollabPanel.jsx b/website/src/repl/components/CollabPanel.jsx
+new file mode 100644
+index 00000000..e4c52e13
+--- /dev/null
++++ b/website/src/repl/components/CollabPanel.jsx
+@@ -0,0 +1,231 @@
++import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
++
++const WS_URL = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`;
++
++const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
++  const [name, setName] = useState(() => localStorage.getItem('collabName') || '');
++  const [prompt, setPrompt] = useState('');
++  const [queue, setQueue] = useState([]);
++  const [history, setHistory] = useState([]);
++  const [connected, setConnected] = useState(false);
++  const [expanded, setExpanded] = useState(true);
++  const [image, setImage] = useState(null); // {data: base64, type: mime}
++  const wsRef = useRef(null);
++  const fileInputRef = useRef(null);
++
++  // Expose methods via ref
++  useImperativeHandle(
++    ref,
++    () => ({
++      sendError: (message, code) => {
++        console.log('[CollabPanel] sendError called:', message);
++        if (wsRef.current?.readyState === WebSocket.OPEN) {
++          console.log('[CollabPanel] Sending to server with code');
++          wsRef.current.send(JSON.stringify({ type: 'error', message, code }));
++        } else {
++          console.log('[CollabPanel] WebSocket not open, state:', wsRef.current?.readyState);
++        }
++      },
++      sendUserEdit: (code) => {
++        const userName = localStorage.getItem('collabName') || 'Anonymous';
++        if (wsRef.current?.readyState === WebSocket.OPEN) {
++          wsRef.current.send(JSON.stringify({ type: 'userEdit', name: userName, code }));
++        }
++      },
++    }),
++    [],
++  );
++
++  useEffect(() => {
++    let ws;
++    let reconnectTimeout;
++
++    const connect = () => {
++      ws = new WebSocket(WS_URL);
++      wsRef.current = ws;
++
++      ws.onopen = () => {
++        console.log('[CollabPanel] WebSocket connected');
++        setConnected(true);
++      };
++
++      ws.onclose = () => {
++        console.log('[CollabPanel] WebSocket closed, reconnecting in 2s...');
++        setConnected(false);
++        reconnectTimeout = setTimeout(connect, 2000);
++      };
++
++      ws.onerror = (err) => {
++        console.log('[CollabPanel] WebSocket error:', err);
++        ws.close();
++      };
++
++      ws.onmessage = (e) => {
++        const msg = JSON.parse(e.data);
++
++        if (msg.type === 'init') {
++          setQueue(msg.queue);
++          setHistory(msg.history);
++          if (msg.code) onCodeUpdate(msg.code);
++        } else if (msg.type === 'queue') {
++          setQueue(msg.queue);
++        } else if (msg.type === 'update') {
++          setHistory(msg.history);
++          onCodeUpdate(msg.entry.code);
++        }
++      };
++    };
++
++    connect();
++
++    return () => {
++      clearTimeout(reconnectTimeout);
++      ws?.close();
++    };
++  }, [onCodeUpdate]);
++
++  const handleImageSelect = (e) => {
++    const file = e.target.files?.[0];
++    if (!file) return;
++
++    const reader = new FileReader();
++    reader.onload = () => {
++      const base64 = reader.result.split(',')[1]; // Remove data:image/...;base64, prefix
++      setImage({ data: base64, type: file.type });
++    };
++    reader.readAsDataURL(file);
++  };
++
++  const clearImage = () => {
++    setImage(null);
++    if (fileInputRef.current) fileInputRef.current.value = '';
++  };
++
++  const submit = () => {
++    if (!prompt.trim() || !name.trim() || !wsRef.current) return;
++
++    localStorage.setItem('collabName', name);
++    const msg = {
++      type: 'prompt',
++      name: name.trim(),
++      prompt: prompt.trim(),
++    };
++    if (image) {
++      msg.image = image.data;
++      msg.imageType = image.type;
++    }
++    wsRef.current.send(JSON.stringify(msg));
++    setPrompt('');
++    clearImage();
++  };
++
++  const playVersion = (code) => {
++    onCodeUpdate(code);
++  };
++
++  return (
++    <div
++      className={`collab-panel p-3 bg-zinc-900 border-t border-zinc-700 flex flex-col gap-3 overflow-hidden transition-all ${
++        expanded ? 'h-[50vh]' : 'h-12'
++      }`}
++    >
++      {/* Header with expand toggle */}
++      <div className="flex items-center gap-2">
++        <button
++          onClick={() => setExpanded(!expanded)}
++          className="text-zinc-400 hover:text-white p-1 text-lg"
++          title={expanded ? 'Collapse' : 'Expand'}
++        >
++          {expanded ? '▼' : '▲'}
++        </button>
++        <div className="text-xs text-zinc-400 flex items-center gap-2">
++          <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} />
++          {connected ? 'Connected' : 'Disconnected'}
++        </div>
++      </div>
++
++      {/* Name input */}
++      <input
++        type="text"
++        placeholder="Your name"
++        value={name}
++        onChange={(e) => setName(e.target.value)}
++        className="bg-zinc-800 text-white px-2 py-2 rounded text-base border border-zinc-600"
++      />
++
++      {/* Prompt input */}
++      <div className="flex gap-2">
++        <input
++          type="text"
++          placeholder={image ? 'Describe what to do with this image...' : 'Make it funkier...'}
++          value={prompt}
++          onChange={(e) => setPrompt(e.target.value)}
++          onKeyDown={(e) => e.key === 'Enter' && submit()}
++          className="flex-1 bg-zinc-800 text-white px-2 py-2 rounded text-base border border-zinc-600"
++        />
++        <input type="file" accept="image/*" onChange={handleImageSelect} ref={fileInputRef} className="hidden" />
++        <button
++          onClick={() => fileInputRef.current?.click()}
++          className={`px-3 py-2 rounded text-base ${image ? 'bg-green-600 hover:bg-green-500' : 'bg-zinc-700 hover:bg-zinc-600'}`}
++          title={image ? 'Image attached - click to change' : 'Attach image'}
++        >
++          📷
++        </button>
++        <button
++          onClick={submit}
++          disabled={!prompt.trim() || !name.trim()}
++          className="bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-700 px-4 py-2 rounded text-base"
++        >
++          Send
++        </button>
++      </div>
++
++      {/* Image preview */}
++      {image && (
++        <div className="flex items-center gap-2 text-sm text-zinc-400">
++          <span>📷 Image attached</span>
++          <button onClick={clearImage} className="text-red-400 hover:text-red-300">
++            ✕ Remove
++          </button>
++        </div>
++      )}
++
++      {/* Queue */}
++      {queue.length > 0 && (
++        <div className={expanded ? 'text-base' : 'text-xs'}>
++          <div className="text-zinc-400 mb-1">Queue ({queue.length})</div>
++          <div className="space-y-1">
++            {queue.map((item, i) => (
++              <div key={i} className="bg-zinc-800 p-2 rounded text-zinc-300">
++                <span className="text-zinc-500">{item.name}:</span> {item.prompt}
++              </div>
++            ))}
++          </div>
++        </div>
++      )}
++
++      {/* History */}
++      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
++        <div className={`text-zinc-400 mb-1 ${expanded ? 'text-base' : 'text-xs'}`}>History</div>
++        <div className="flex-1 overflow-y-auto space-y-1">
++          {[...history].reverse().map((entry, i) => (
++            <button
++              key={i}
++              onClick={() => playVersion(entry.code)}
++              className={`w-full text-left bg-zinc-800 hover:bg-zinc-700 p-2 rounded ${expanded ? 'text-base' : 'text-xs'}`}
++            >
++              <div className="text-zinc-300">
++                <span className="text-zinc-500">{entry.name}:</span> {entry.prompt}
++              </div>
++            </button>
++          ))}
++          {history.length === 0 && (
++            <div className={`text-zinc-500 ${expanded ? 'text-base' : 'text-xs'}`}>No history yet</div>
++          )}
++        </div>
++      </div>
++    </div>
++  );
++});
++
++export default CollabPanel;

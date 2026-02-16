@@ -121,31 +121,32 @@ $: starts each track (all play together)
 stack(...) combines patterns
 setcps(bpm/60/4) sets tempo
 
-Example:
+## Hydra Visuals
+Add `await initHydra()` at the top to enable visuals. Hydra functions chain together.
+
+Sources: osc(freq,sync,offset), shape(sides), noise(scale), voronoi(scale), gradient()
+Transforms: .color(r,g,b), .rotate(angle), .scale(amt), .kaleid(sides), .pixelate(amt)
+Blend: .diff(src), .add(src,amt), .modulate(src), .modulateScale(src)
+Output: .out() sends to screen
+
+Use H(pattern) to sync Strudel patterns to Hydra params:
+  shape(H("3 4 5")).out()
+
+Audio-reactive with detectAudio:
+  await initHydra({detectAudio:true})
+  osc(10).modulate(noise(()=>a.fft[0]*2)).out()
+
+Feed Strudel visuals to Hydra with feedStrudel:
+  await initHydra({feedStrudel:1})
+  src(s0).kaleid(4).out()
+
+Example with music + visuals:
+await initHydra()
+osc(10,0.1,1).color(0.9,0.3,0.5).kaleid(H("<3 4 5 6>")).out()
 $: s("bd cp bd cp")
 $: s("hh*4").gain(0.6)
 $: note("c3 eb3 g3").sound("sawtooth").lpf(800).room(0.3)
-
-## Undo/Revert
-You will be given recent change history. If the user asks to "undo", "revert", "go back", or similar, return the code from before that change. You can undo multiple steps if asked (e.g., "undo last 3 changes").
 """
-
-
-def get_recent_history(n: int = 5) -> str:
-    """Get the last n changes as context for Claude."""
-    if len(history) < 2:
-        return ""
-
-    # Get history excluding the current state (which is shown separately)
-    past = history[:-1][-n:] if len(history) > 1 else []
-    if not past:
-        return ""
-
-    lines = ["\n\n## Recent changes (for undo - oldest to newest):"]
-    for i, entry in enumerate(past):
-        lines.append(f'\n### Change {i + 1}: {entry["name"]} said "{entry["prompt"]}"')
-        lines.append(f"```\n{entry['code']}\n```")
-    return "\n".join(lines)
 
 
 async def broadcast(msg: dict):
@@ -187,11 +188,34 @@ async def call_claude(prompt: str, messages: list) -> str:
     """Call Claude and return the response."""
     response = client.messages.create(
         model="claude-sonnet-4-20250514",
-        max_tokens=1024,
+        max_tokens=8192,
         system=prompt,
         messages=messages,
     )
     return strip_markdown_fences(response.content[0].text.strip())
+
+
+def build_user_content(
+    text: str, image_data: str = None, image_type: str = None
+) -> list:
+    """Build user message content, optionally with an image."""
+    content = []
+
+    if image_data and image_type:
+        # Add image first so Claude sees it before the text
+        content.append(
+            {
+                "type": "image",
+                "source": {
+                    "type": "base64",
+                    "media_type": image_type,
+                    "data": image_data,
+                },
+            }
+        )
+
+    content.append({"type": "text", "text": text})
+    return content
 
 
 async def process_item(item: dict):
@@ -201,17 +225,16 @@ async def process_item(item: dict):
     processing = True
 
     try:
-        # Include recent history for context (helps with undo)
-        history_context = get_recent_history(5)
+        text = f"Current code:\n{current_code}\n\nRequest: {item['prompt']}"
+        content = build_user_content(
+            text,
+            image_data=item.get("image"),
+            image_type=item.get("imageType"),
+        )
 
         new_code = await call_claude(
             SYSTEM_PROMPT,
-            [
-                {
-                    "role": "user",
-                    "content": f"Current code:\n{current_code}{history_context}\n\nRequest: {item['prompt']}",
-                }
-            ],
+            [{"role": "user", "content": content}],
         )
 
         current_code = new_code
@@ -245,19 +268,40 @@ async def process_item(item: dict):
 
 
 last_error_time = 0
+last_fixed_code = ""  # Track code we already tried to fix
 ERROR_DEBOUNCE = 5  # seconds
+MAX_FIX_ATTEMPTS = 2  # Max fix attempts per code version
+fix_attempts = 0
+error_lock = asyncio.Lock()
 
 
 async def fix_error(error: str, broken_code: str = None):
     """Ask Claude to fix an error in the current code."""
-    global current_code, processing, last_error_time
+    global current_code, processing, last_error_time, last_fixed_code, fix_attempts
 
-    # Debounce errors
-    now = time.time()
-    if now - last_error_time < ERROR_DEBOUNCE:
-        print(f"Debouncing error (too soon): {error[:50]}")
-        return
-    last_error_time = now
+    code_to_check = broken_code or current_code
+
+    async with error_lock:
+        now = time.time()
+
+        # If same code we already tried to fix, increment attempts
+        if code_to_check == last_fixed_code:
+            fix_attempts += 1
+            if fix_attempts >= MAX_FIX_ATTEMPTS:
+                print(
+                    f"Max fix attempts reached for this code, giving up: {error[:50]}"
+                )
+                return
+        else:
+            # New code, reset attempts
+            fix_attempts = 1
+            last_fixed_code = code_to_check
+
+        # Also debounce by time
+        if now - last_error_time < ERROR_DEBOUNCE:
+            print(f"Debouncing error (too soon): {error[:50]}")
+            return
+        last_error_time = now
 
     # Use the broken code if provided, otherwise fall back to current_code
     code_to_fix = broken_code if broken_code else current_code
@@ -368,13 +412,16 @@ async def websocket_endpoint(ws: WebSocket):
             data = json.loads(await ws.receive_text())
 
             if data["type"] == "prompt":
-                queue.append(
-                    {
-                        "name": data["name"],
-                        "prompt": data["prompt"],
-                        "timestamp": time.time(),
-                    }
-                )
+                item = {
+                    "name": data["name"],
+                    "prompt": data["prompt"],
+                    "timestamp": time.time(),
+                }
+                # Include image if present
+                if data.get("image"):
+                    item["image"] = data["image"]
+                    item["imageType"] = data.get("imageType", "image/png")
+                queue.append(item)
                 await broadcast({"type": "queue", "queue": queue})
 
             elif data["type"] == "error":
