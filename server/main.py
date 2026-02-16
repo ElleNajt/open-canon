@@ -343,7 +343,7 @@ def strip_markdown_fences(code: str) -> str:
 async def call_claude(prompt: str, messages: list) -> str:
     """Call Claude and return the response."""
     response = client.messages.create(
-        model="claude-opus-4-6-20250205",
+        model="claude-opus-4-5-20251101",
         max_tokens=8192,
         system=prompt,
         messages=messages,
