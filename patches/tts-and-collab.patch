@@ -141,142 +141,73 @@ index 3907ae24..30993c4c 100644
    content: ' ';
    position: fixed;
 diff --git a/website/src/repl/components/CollabPanel.jsx b/website/src/repl/components/CollabPanel.jsx
-new file mode 100644
-index 00000000..0fee1d80
---- /dev/null
+index e4c52e13..0fee1d80 100644
+--- a/website/src/repl/components/CollabPanel.jsx
 +++ b/website/src/repl/components/CollabPanel.jsx
-@@ -0,0 +1,323 @@
-+import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 'react';
-+
-+const WS_URL = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`;
-+
+@@ -2,7 +2,7 @@ import { useState, useEffect, useRef, useImperativeHandle, forwardRef } from 're
+ 
+ const WS_URL = `${window.location.protocol === 'https:' ? 'wss:' : 'ws:'}//${window.location.host}/ws`;
+ 
+-const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
 +const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate, height, onHeightChange }, ref) {
-+  const [name, setName] = useState(() => localStorage.getItem('collabName') || '');
-+  const [prompt, setPrompt] = useState('');
-+  const [queue, setQueue] = useState([]);
-+  const [history, setHistory] = useState([]);
-+  const [connected, setConnected] = useState(false);
-+  const [expanded, setExpanded] = useState(true);
-+  const [image, setImage] = useState(null); // {data: base64, type: mime}
+   const [name, setName] = useState(() => localStorage.getItem('collabName') || '');
+   const [prompt, setPrompt] = useState('');
+   const [queue, setQueue] = useState([]);
+@@ -10,6 +10,8 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+   const [connected, setConnected] = useState(false);
+   const [expanded, setExpanded] = useState(true);
+   const [image, setImage] = useState(null); // {data: base64, type: mime}
 +  const [repeating, setRepeating] = useState([]); // server-side repeating prompts
 +  const [repeatInterval, setRepeatInterval] = useState(30);
-+  const wsRef = useRef(null);
-+  const fileInputRef = useRef(null);
-+
-+  // Expose methods via ref
-+  useImperativeHandle(
-+    ref,
-+    () => ({
-+      sendError: (message, code) => {
-+        console.log('[CollabPanel] sendError called:', message);
-+        if (wsRef.current?.readyState === WebSocket.OPEN) {
-+          console.log('[CollabPanel] Sending to server with code');
-+          wsRef.current.send(JSON.stringify({ type: 'error', message, code }));
-+        } else {
-+          console.log('[CollabPanel] WebSocket not open, state:', wsRef.current?.readyState);
-+        }
-+      },
-+      sendUserEdit: (code) => {
-+        const userName = localStorage.getItem('collabName') || 'Anonymous';
-+        if (wsRef.current?.readyState === WebSocket.OPEN) {
-+          wsRef.current.send(JSON.stringify({ type: 'userEdit', name: userName, code }));
-+        }
-+      },
-+    }),
-+    [],
-+  );
-+
-+  useEffect(() => {
-+    let ws;
-+    let reconnectTimeout;
-+
-+    const connect = () => {
-+      ws = new WebSocket(WS_URL);
-+      wsRef.current = ws;
-+
-+      ws.onopen = () => {
-+        console.log('[CollabPanel] WebSocket connected');
-+        setConnected(true);
-+      };
-+
-+      ws.onclose = () => {
-+        console.log('[CollabPanel] WebSocket closed, reconnecting in 2s...');
-+        setConnected(false);
-+        reconnectTimeout = setTimeout(connect, 2000);
-+      };
-+
-+      ws.onerror = (err) => {
-+        console.log('[CollabPanel] WebSocket error:', err);
-+        ws.close();
-+      };
-+
-+      ws.onmessage = (e) => {
-+        const msg = JSON.parse(e.data);
-+
-+        if (msg.type === 'init') {
-+          setQueue(msg.queue);
-+          setHistory(msg.history);
+   const wsRef = useRef(null);
+   const fileInputRef = useRef(null);
+ 
+@@ -66,12 +68,15 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+         if (msg.type === 'init') {
+           setQueue(msg.queue);
+           setHistory(msg.history);
 +          setRepeating(msg.repeating || []);
-+          if (msg.code) onCodeUpdate(msg.code);
-+        } else if (msg.type === 'queue') {
-+          setQueue(msg.queue);
-+        } else if (msg.type === 'update') {
-+          setHistory(msg.history);
-+          onCodeUpdate(msg.entry.code);
+           if (msg.code) onCodeUpdate(msg.code);
+         } else if (msg.type === 'queue') {
+           setQueue(msg.queue);
+         } else if (msg.type === 'update') {
+           setHistory(msg.history);
+           onCodeUpdate(msg.entry.code);
 +        } else if (msg.type === 'repeating') {
 +          setRepeating(msg.repeating || []);
-+        }
-+      };
-+    };
-+
-+    connect();
-+
-+    return () => {
-+      clearTimeout(reconnectTimeout);
-+      ws?.close();
-+    };
-+  }, [onCodeUpdate]);
-+
-+  const handleImageSelect = (e) => {
-+    const file = e.target.files?.[0];
-+    if (!file) return;
-+
-+    const reader = new FileReader();
-+    reader.onload = () => {
-+      const base64 = reader.result.split(',')[1]; // Remove data:image/...;base64, prefix
-+      setImage({ data: base64, type: file.type });
-+    };
-+    reader.readAsDataURL(file);
-+  };
-+
-+  const clearImage = () => {
-+    setImage(null);
-+    if (fileInputRef.current) fileInputRef.current.value = '';
-+  };
-+
+         }
+       };
+     };
+@@ -101,33 +106,72 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+     if (fileInputRef.current) fileInputRef.current.value = '';
+   };
+ 
+-  const submit = () => {
+-    if (!prompt.trim() || !name.trim() || !wsRef.current) return;
 +  const sendPrompt = (promptText) => {
 +    if (!promptText.trim() || !name.trim() || !wsRef.current) return;
-+
-+    localStorage.setItem('collabName', name);
-+    const msg = {
-+      type: 'prompt',
-+      name: name.trim(),
+ 
+     localStorage.setItem('collabName', name);
+     const msg = {
+       type: 'prompt',
+       name: name.trim(),
+-      prompt: prompt.trim(),
 +      prompt: promptText.trim(),
-+    };
-+    if (image) {
-+      msg.image = image.data;
-+      msg.imageType = image.type;
-+    }
-+    wsRef.current.send(JSON.stringify(msg));
+     };
+     if (image) {
+       msg.image = image.data;
+       msg.imageType = image.type;
+     }
+     wsRef.current.send(JSON.stringify(msg));
 +  };
 +
 +  const submit = () => {
 +    if (!prompt.trim() || !name.trim()) return;
 +    sendPrompt(prompt);
-+    setPrompt('');
-+    clearImage();
-+  };
-+
+     setPrompt('');
+     clearImage();
+   };
+ 
 +  const addRepeating = () => {
 +    if (!prompt.trim() || !name.trim() || !wsRef.current) return;
 +
@@ -308,68 +239,28 @@ index 00000000..0fee1d80
 +    wsRef.current.send(JSON.stringify({ type: 'clearQueue' }));
 +  };
 +
-+  const playVersion = (code) => {
-+    onCodeUpdate(code);
-+  };
-+
+   const playVersion = (code) => {
+     onCodeUpdate(code);
+   };
+ 
 +  const panelStyle = expanded ? (height ? { height: `${height}px` } : {}) : { height: '48px' };
 +
-+  return (
-+    <div
+   return (
+     <div
+-      className={`collab-panel p-3 bg-zinc-900 border-t border-zinc-700 flex flex-col gap-3 overflow-hidden transition-all ${
+-        expanded ? 'h-[50vh]' : 'h-12'
+-      }`}
 +      className={`collab-panel p-3 bg-zinc-900 border-t border-zinc-700 flex flex-col gap-3 ${
 +        expanded ? 'overflow-auto' : 'overflow-hidden'
 +      } ${!height && expanded ? 'h-[50vh]' : ''}`}
 +      style={panelStyle}
-+    >
-+      {/* Header with expand toggle */}
-+      <div className="flex items-center gap-2">
-+        <button
-+          onClick={() => setExpanded(!expanded)}
-+          className="text-zinc-400 hover:text-white p-1 text-lg"
-+          title={expanded ? 'Collapse' : 'Expand'}
-+        >
-+          {expanded ? '▼' : '▲'}
-+        </button>
-+        <div className="text-xs text-zinc-400 flex items-center gap-2">
-+          <span className={`w-2 h-2 rounded-full ${connected ? 'bg-green-500' : 'bg-red-500'}`} />
-+          {connected ? 'Connected' : 'Disconnected'}
-+        </div>
-+      </div>
-+
-+      {/* Name input */}
-+      <input
-+        type="text"
-+        placeholder="Your name"
-+        value={name}
-+        onChange={(e) => setName(e.target.value)}
-+        className="bg-zinc-800 text-white px-2 py-2 rounded text-base border border-zinc-600"
-+      />
-+
-+      {/* Prompt input */}
-+      <div className="flex gap-2">
-+        <input
-+          type="text"
-+          placeholder={image ? 'Describe what to do with this image...' : 'Make it funkier...'}
-+          value={prompt}
-+          onChange={(e) => setPrompt(e.target.value)}
-+          onKeyDown={(e) => e.key === 'Enter' && submit()}
-+          className="flex-1 bg-zinc-800 text-white px-2 py-2 rounded text-base border border-zinc-600"
-+        />
-+        <input type="file" accept="image/*" onChange={handleImageSelect} ref={fileInputRef} className="hidden" />
-+        <button
-+          onClick={() => fileInputRef.current?.click()}
-+          className={`px-3 py-2 rounded text-base ${image ? 'bg-green-600 hover:bg-green-500' : 'bg-zinc-700 hover:bg-zinc-600'}`}
-+          title={image ? 'Image attached - click to change' : 'Attach image'}
-+        >
-+          📷
-+        </button>
-+        <button
-+          onClick={submit}
-+          disabled={!prompt.trim() || !name.trim()}
-+          className="bg-blue-600 hover:bg-blue-500 disabled:bg-zinc-700 px-4 py-2 rounded text-base"
-+        >
-+          Send
-+        </button>
+     >
+       {/* Header with expand toggle */}
+       <div className="flex items-center gap-2">
+@@ -178,8 +222,46 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+         >
+           Send
+         </button>
 +        <input
 +          type="number"
 +          min="5"
@@ -387,8 +278,8 @@ index 00000000..0fee1d80
 +        >
 +          🔄
 +        </button>
-+      </div>
-+
+       </div>
+ 
 +      {/* Repeating prompts */}
 +      {repeating.length > 0 && (
 +        <div className="text-sm space-y-1">
@@ -410,18 +301,16 @@ index 00000000..0fee1d80
 +        </div>
 +      )}
 +
-+      {/* Image preview */}
-+      {image && (
-+        <div className="flex items-center gap-2 text-sm text-zinc-400">
-+          <span>📷 Image attached</span>
-+          <button onClick={clearImage} className="text-red-400 hover:text-red-300">
-+            ✕ Remove
-+          </button>
-+        </div>
-+      )}
-+
-+      {/* Queue */}
-+      {queue.length > 0 && (
+       {/* Image preview */}
+       {image && (
+         <div className="flex items-center gap-2 text-sm text-zinc-400">
+@@ -192,9 +274,14 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+ 
+       {/* Queue */}
+       {queue.length > 0 && (
+-        <div className={expanded ? 'text-base' : 'text-xs'}>
+-          <div className="text-zinc-400 mb-1">Queue ({queue.length})</div>
+-          <div className="space-y-1">
 +        <div className={`flex flex-col ${expanded ? 'text-base max-h-32' : 'text-xs max-h-16'}`}>
 +          <div className="text-zinc-400 mb-1 flex items-center justify-between">
 +            <span>Queue ({queue.length})</span>
@@ -430,45 +319,21 @@ index 00000000..0fee1d80
 +            </button>
 +          </div>
 +          <div className="flex-1 overflow-y-auto space-y-1">
-+            {queue.map((item, i) => (
-+              <div key={i} className="bg-zinc-800 p-2 rounded text-zinc-300">
-+                <span className="text-zinc-500">{item.name}:</span> {item.prompt}
-+              </div>
-+            ))}
-+          </div>
-+        </div>
-+      )}
-+
-+      {/* History */}
-+      <div className="flex-1 overflow-hidden flex flex-col min-h-0">
-+        <div className={`text-zinc-400 mb-1 ${expanded ? 'text-base' : 'text-xs'}`}>History</div>
-+        <div className="flex-1 overflow-y-auto space-y-1">
-+          {[...history].reverse().map((entry, i) => (
-+            <button
-+              key={i}
-+              onClick={() => playVersion(entry.code)}
-+              className={`w-full text-left bg-zinc-800 hover:bg-zinc-700 p-2 rounded ${expanded ? 'text-base' : 'text-xs'}`}
-+            >
-+              <div className="text-zinc-300">
-+                <span className="text-zinc-500">{entry.name}:</span> {entry.prompt}
-+              </div>
+             {queue.map((item, i) => (
+               <div key={i} className="bg-zinc-800 p-2 rounded text-zinc-300">
+                 <span className="text-zinc-500">{item.name}:</span> {item.prompt}
+@@ -217,6 +304,11 @@ const CollabPanel = forwardRef(function CollabPanel({ onCodeUpdate }, ref) {
+               <div className="text-zinc-300">
+                 <span className="text-zinc-500">{entry.name}:</span> {entry.prompt}
+               </div>
 +              {entry.error && (
 +                <pre className="text-red-400 text-xs mt-1 whitespace-pre-wrap overflow-x-auto max-h-32 overflow-y-auto">
 +                  {entry.error}
 +                </pre>
 +              )}
-+            </button>
-+          ))}
-+          {history.length === 0 && (
-+            <div className={`text-zinc-500 ${expanded ? 'text-base' : 'text-xs'}`}>No history yet</div>
-+          )}
-+        </div>
-+      </div>
-+    </div>
-+  );
-+});
-+
-+export default CollabPanel;
+             </button>
+           ))}
+           {history.length === 0 && (
 diff --git a/website/src/repl/components/ReplEditor.jsx b/website/src/repl/components/ReplEditor.jsx
 index 437475e6..dce53fe3 100644
 --- a/website/src/repl/components/ReplEditor.jsx
@@ -585,13 +450,13 @@ index 437475e6..dce53fe3 100644
        <UserFacingErrorMessage error={error} />
        {!isZen && panelPosition === 'bottom' && <BottomPanel context={context} />}
 diff --git a/website/src/repl/prebake.mjs b/website/src/repl/prebake.mjs
-index 53a2a600..0c8f9e98 100644
+index 53a2a600..a0c31ee0 100644
 --- a/website/src/repl/prebake.mjs
 +++ b/website/src/repl/prebake.mjs
-@@ -1,5 +1,12 @@
--import { Pattern, noteToMidi, valueToMidi } from '@strudel/core';
+@@ -1,5 +1,13 @@
+ import { Pattern, noteToMidi, valueToMidi } from '@strudel/core';
 -import { aliasBank, registerSynthSounds, registerZZFXSounds, samples } from '@strudel/webaudio';
-+import { Pattern, noteToMidi, valueToMidi, s as soundControl } from '@strudel/core';
++import { mini } from '@strudel/mini';
 +import {
 +  aliasBank,
 +  registerSynthSounds,
@@ -603,7 +468,7 @@ index 53a2a600..0c8f9e98 100644
  import { registerSamplesFromDB } from './idbutils.mjs';
  import './piano.mjs';
  import './files.mjs';
-@@ -156,6 +163,66 @@ export async function prebake() {
+@@ -156,6 +164,120 @@ export async function prebake() {
    ]);
  
    aliasBank(`${baseCDN}/tidal-drum-machines-alias.json`);
@@ -652,20 +517,74 @@ index 53a2a600..0c8f9e98 100644
 +  // Returns a pattern immediately (plays silence until sample is loaded)
 +  globalThis.tts = function (strings, ...values) {
 +    // Handle template literal: tts`hello ${name}`
-+    let textStr;
++    // Parses mini-notation and replaces text with TTS samples
++    // e.g., tts`[hello world] ~ [goodbye]` becomes s("[tts_xxx] ~ [tts_yyy]")
++    let pattern;
 +    if (Array.isArray(strings)) {
-+      textStr = strings.reduce((acc, str, i) => acc + str + (values[i] || ''), '');
++      pattern = strings.reduce((acc, str, i) => acc + str + (values[i] || ''), '');
 +    } else {
-+      // Fallback for direct call: tts("hello")
-+      textStr = String(strings);
++      pattern = String(strings);
 +    }
 +
-+    // Start fetching (non-blocking)
-+    const sampleId = fetchTTS(textStr);
++    // Find all text segments (words not part of mini-notation syntax)
++    const textSegments = new Set();
 +
-+    // Always return a valid pattern with all methods available
-+    const pattern = sampleId ? soundControl(sampleId) : soundControl('~');
-+    return pattern;
++    // Match text inside brackets like [hello world]
++    const bracketRegex = /\[([^\[\]]+)\]/g;
++    let match;
++    while ((match = bracketRegex.exec(pattern)) !== null) {
++      const inner = match[1].trim();
++      // Skip if it's just mini-notation syntax or numbers
++      if (inner && !/^[\s~?:!*\/,|<>\d.]+$/.test(inner)) {
++        textSegments.add(inner);
++      }
++    }
++
++    // Also match bare words (not in brackets, not syntax)
++    const withoutBrackets = pattern.replace(/\[[^\]]*\]/g, '___BRACKET___');
++    const bareWordRegex = /\b([a-zA-Z][a-zA-Z\s]*[a-zA-Z]|[a-zA-Z])\b/g;
++    while ((match = bareWordRegex.exec(withoutBrackets)) !== null) {
++      const word = match[1].trim();
++      if (word) {
++        textSegments.add(word);
++      }
++    }
++
++    // Start fetching all TTS samples and build replacement map
++    const sampleMap = {};
++    textSegments.forEach((text) => {
++      const sampleId = fetchTTS(text);
++      sampleMap[text] = sampleId || '~'; // silence while loading
++    });
++
++    // Replace text segments with sample IDs in the pattern
++    let miniNotation = pattern;
++
++    // Replace bracketed text
++    miniNotation = miniNotation.replace(/\[([^\[\]]+)\]/g, (match, inner) => {
++      const trimmed = inner.trim();
++      if (sampleMap[trimmed] !== undefined) {
++        return sampleMap[trimmed];
++      }
++      return match;
++    });
++
++    // Replace bare words (longer phrases first to avoid partial replacement)
++    const sortedTexts = [...textSegments].sort((a, b) => b.length - a.length);
++    sortedTexts.forEach((text) => {
++      if (sampleMap[text] && !text.includes('[')) {
++        const escaped = text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
++        miniNotation = miniNotation.replace(new RegExp(escaped, 'g'), sampleMap[text]);
++      }
++    });
++
++    // Return the pattern using mini-notation parser
++    console.log('[tts] input:', pattern);
++    console.log('[tts] segments:', [...textSegments]);
++    console.log('[tts] sampleMap:', sampleMap);
++    console.log('[tts] miniNotation:', miniNotation);
++    // Use mini() to parse the notation, then .s() to make it a sound pattern
++    return mini(miniNotation).s();
 +  };
  }
  
