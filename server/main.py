@@ -8,7 +8,6 @@ Collaborative vibe-duet server.
 
 import asyncio
 import base64
-import hashlib
 import json
 import os
 import subprocess
@@ -19,8 +18,7 @@ from collections import deque
 import anthropic
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import Response
-from google.cloud import firestore, texttospeech
+from google.cloud import firestore
 from starlette.middleware.wsgi import WSGIMiddleware
 
 app = FastAPI()
@@ -33,10 +31,6 @@ app.add_middleware(
 
 client = anthropic.Anthropic()
 db = firestore.Client()
-tts_client = texttospeech.TextToSpeechClient()
-
-# TTS sample storage (in-memory cache, keyed by hash of text+voice)
-tts_samples: dict[str, bytes] = {}
 
 # Git repo for code history
 code_repo_dir = tempfile.mkdtemp(prefix="vibe-duet-code-")
@@ -116,65 +110,6 @@ connections: list[WebSocket] = []
 request_times: deque = deque()  # timestamps of processed requests
 processing = False
 repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
-
-
-# Limit concurrent TTS API calls so they don't block the event loop
-tts_semaphore = asyncio.Semaphore(10)
-# Track in-flight TTS requests to deduplicate
-tts_pending: dict[str, asyncio.Future] = {}
-
-
-def _synthesize_tts(text, voice, speed, pitch=0.0):
-    """Blocking Google TTS call -- run via asyncio.to_thread."""
-    if "-" in voice:
-        language_code = "-".join(voice.split("-")[:2])
-        voice_name = voice
-    else:
-        language_code = "en-US"
-        voice_name = f"en-US-{voice}"
-
-    response = tts_client.synthesize_speech(
-        input=texttospeech.SynthesisInput(text=text),
-        voice=texttospeech.VoiceSelectionParams(
-            language_code=language_code, name=voice_name
-        ),
-        audio_config=texttospeech.AudioConfig(
-            audio_encoding=texttospeech.AudioEncoding.MP3,
-            speaking_rate=speed,
-            pitch=max(-20.0, min(20.0, pitch)),
-        ),
-    )
-    return response.audio_content
-
-
-async def generate_tts(
-    text: str, voice: str = "en-US-Studio-O", speed: float = 1.0, pitch: float = 0.0
-) -> tuple[str, bytes]:
-    """Generate TTS audio and return (sample_id, audio_bytes)."""
-    key = f"{text}:{voice}:{speed}:{pitch}"
-    sample_id = "tts_" + hashlib.md5(key.encode()).hexdigest()[:12]
-
-    # Check cache
-    if sample_id in tts_samples:
-        return sample_id, tts_samples[sample_id]
-
-    # Deduplicate: if this exact request is already in-flight, wait for it
-    if sample_id in tts_pending:
-        await tts_pending[sample_id]
-        return sample_id, tts_samples[sample_id]
-
-    # Run the blocking API call in a thread, limited by semaphore
-    loop = asyncio.get_event_loop()
-    future = loop.create_future()
-    tts_pending[sample_id] = future
-
-    async with tts_semaphore:
-        audio_content = await asyncio.to_thread(_synthesize_tts, text, voice, speed)
-
-    tts_samples[sample_id] = audio_content
-    future.set_result(True)
-    del tts_pending[sample_id]
-    return sample_id, audio_content
 
 
 def load_state():
@@ -723,24 +658,6 @@ async def websocket_endpoint(ws: WebSocket):
                 queue.clear()
                 await broadcast({"type": "queue", "queue": queue})
 
-            elif data["type"] == "tts":
-                # Generate TTS sample
-                text = data.get("text", "")
-                voice = data.get("voice", "en-US-Studio-O")
-                speed = data.get("speed", 1.0)
-                if text:
-                    sample_id, _ = await generate_tts(text, voice, speed)
-                    await ws.send_text(
-                        json.dumps(
-                            {
-                                "type": "tts",
-                                "sample_id": sample_id,
-                                "url": f"/tts/{sample_id}.mp3",
-                                "text": text,
-                            }
-                        )
-                    )
-
     except WebSocketDisconnect:
         if ws in connections:
             connections.remove(ws)
@@ -782,32 +699,6 @@ async def clear_all_endpoint():
     await broadcast({"type": "queue", "queue": queue})
     await broadcast({"type": "repeating", "repeating": repeating_prompts})
     return {"status": "ok", "queue_length": 0, "repeating_count": 0}
-
-
-@app.get("/tts/{sample_id}.mp3")
-async def get_tts_sample(sample_id: str):
-    """Serve a TTS-generated sample."""
-    if sample_id not in tts_samples:
-        return Response(status_code=404, content="Sample not found")
-    return Response(
-        content=tts_samples[sample_id],
-        media_type="audio/mpeg",
-        headers={"Cache-Control": "public, max-age=31536000"},
-    )
-
-
-@app.post("/tts")
-async def create_tts_sample(request: dict):
-    """Generate a TTS sample and return its URL."""
-    text = request.get("text", "")
-    voice = request.get("voice", "en-US-Studio-O")
-    speed = request.get("speed", 1.0)
-
-    if not text:
-        return {"error": "No text provided"}
-
-    sample_id, _ = await generate_tts(text, voice, speed)
-    return {"sample_id": sample_id, "url": f"/tts/{sample_id}.mp3"}
 
 
 # Mount shabda Flask app at /shabda
