@@ -105,6 +105,26 @@ Your tailnet is private, so this is safe to use on public wifi.
 
 Without Tailscale, everything runs on localhost - still works fine, just single-device.
 
+## Deploying to Cloud Run
+
+The hosted version runs on Google Cloud Run. To deploy:
+
+```bash
+# 1. Build Strudel with our patches
+cd strudel
+pnpm run --filter @strudel/website build
+
+# 2. Copy built files to server
+cp -R website/dist ../server/static
+
+# 3. Build and deploy
+cd ..
+gcloud builds submit --tag gcr.io/vibe-duet/vibe-duet server/
+gcloud run deploy vibe-duet --image gcr.io/vibe-duet/vibe-duet --region us-central1 --allow-unauthenticated
+```
+
+Requires: GCP project with Cloud Run, Cloud Build, and Text-to-Speech APIs enabled. Set `ANTHROPIC_API_KEY` as a Cloud Run secret.
+
 ## Credits
 
 Built on [Strudel](https://strudel.cc) by the [uzu collective](https://codeberg.org/uzu/strudel) - a browser-based live coding environment that ports TidalCycles to JavaScript.
