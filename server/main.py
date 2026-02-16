@@ -658,7 +658,7 @@ async def websocket_endpoint(ws: WebSocket):
                 queue.clear()
                 await broadcast({"type": "queue", "queue": queue})
 
-    except WebSocketDisconnect:
+    except (WebSocketDisconnect, RuntimeError):
         if ws in connections:
             connections.remove(ws)
 
