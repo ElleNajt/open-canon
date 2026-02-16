@@ -236,12 +236,13 @@ Special: supersaw (unison saw), sbd (synthetic bass drum)
 Noise: white, pink, brown, crackle
 
 ## Text-to-Speech
-Use tts() to generate speech samples:
-  $: await tts("hello world")
-  $: await tts("goodbye", "en-GB-Studio-B").slow(2)
+Use tts with template literals (backticks) to generate speech samples:
+  $: tts`hello world`
+  $: tts`goodbye`.slow(2)
   
-Available voices: en-US-Studio-O (warm female), en-US-Studio-Q (male), en-GB-Studio-B (British male)
-The tts() function returns a pattern you can chain with .slow(), .fast(), .room(), etc.
+Available voices: en-US-Studio-O (default, warm female), en-US-Studio-Q (male), en-GB-Studio-B (British male)
+The tts function returns a pattern you can chain with .slow(), .fast(), .room(), etc.
+Note: First play may be silent while loading; it auto-replays once the sample is ready.
 
 ## Effects
 Filters: .lpf(hz), .hpf(hz), .bpf(hz), .resonance(0-1)

@@ -8,6 +8,8 @@ A music game where you talk to AI and hear what happens.
 
 **Examples:** See [examples/](examples/) for code you can copy into `live.js`.
 
+**Styles:** See [styles/](styles/) for voice presets (e.g., baroque staccato voices).
+
 ```
 "make it funky"
 "add a breakbeat"  
@@ -40,6 +42,8 @@ Bi-directional sync:
 - AI edits the file → browser updates automatically
 - You edit in the browser → file updates when you evaluate (Ctrl+Enter)
 
+**Share your creations:** Click the share button to copy a strudel.cc link - works even if vibe-duet is down.
+
 ## Ideas to Try
 
 - "make it sound like 80s synth"
@@ -49,6 +53,7 @@ Bi-directional sync:
 - "what would this sound like as jungle?"
 - "remove the drums"
 - "make it creepy"
+- "add a voice saying 'hello world'" (uses text-to-speech)
 
 ## Tips for Better Results
 
