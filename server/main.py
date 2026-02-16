@@ -252,21 +252,7 @@ Waveforms: sawtooth/saw, square/sqr, triangle/tri, sine/sin, pulse
 Special: supersaw (unison saw), sbd (synthetic bass drum)
 Noise: white, pink, brown, crackle
 
-## Text-to-Speech
-Use tts with template literals (backticks) to generate speech samples.
-Each word becomes a separate TTS sample, so mini-notation works:
-  $: tts`hello world` - two words in sequence
-  $: tts`<hello world>` - alternates between hello and world each cycle
-  $: tts`[hello world]` - both words subdivided into one step
-  $: tts`hello ~ world` - hello, silence, world
-  $: tts`hello*2 world` - hello twice, then world
-  $: tts`hello world`.slow(2) - chain effects as usual
-  
-Available voices: en-US-Studio-O (default, warm female), en-US-Studio-Q (male), en-GB-Studio-B (British male)
-The tts function returns a pattern you can chain with .slow(), .fast(), .room(), etc.
-Note: First play may be silent while loading; it auto-replays once the sample is ready.
-
-## Shabda Speech Samples (with pitch control)
+## Speech Samples (shabda, with pitch control)
 Use samples() with shabda/speech to load spoken words as samples with optional pitch shifting.
 Pitch uses Google TTS neural synthesis, so it sounds natural (no chipmunk effect).
 
