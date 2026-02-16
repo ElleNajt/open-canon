@@ -118,7 +118,7 @@ repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
 
 
 # Limit concurrent TTS API calls so they don't block the event loop
-tts_semaphore = asyncio.Semaphore(2)
+tts_semaphore = asyncio.Semaphore(10)
 # Track in-flight TTS requests to deduplicate
 tts_pending: dict[str, asyncio.Future] = {}
 
