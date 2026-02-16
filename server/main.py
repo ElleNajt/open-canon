@@ -235,10 +235,13 @@ Waveforms: sawtooth/saw, square/sqr, triangle/tri, sine/sin, pulse
 Special: supersaw (unison saw), sbd (synthetic bass drum)
 Noise: white, pink, brown, crackle
 
-## Text-to-Speech Samples
-You can use TTS-generated samples! Format: samples("/tts/SAMPLE_ID.mp3", "voice")
-To use speech in patterns, reference the TTS URL that was generated.
+## Text-to-Speech
+Use tts() to generate speech samples:
+  $: await tts("hello world")
+  $: await tts("goodbye", "en-GB-Studio-B").slow(2)
+  
 Available voices: en-US-Studio-O (warm female), en-US-Studio-Q (male), en-GB-Studio-B (British male)
+The tts() function returns a pattern you can chain with .slow(), .fast(), .room(), etc.
 
 ## Effects
 Filters: .lpf(hz), .hpf(hz), .bpf(hz), .resonance(0-1)
@@ -499,7 +502,8 @@ async def fix_error(error: str, broken_code: str = None):
 
         entry = {
             "name": "Claude",
-            "prompt": f"Fix error (attempt {attempt + 1}): {error[:50]}...",
+            "prompt": f"Fix error (attempt {attempt + 1})",
+            "error": error,  # Full error with stack trace
             "code": current_code,
             "timestamp": time.time(),
         }
