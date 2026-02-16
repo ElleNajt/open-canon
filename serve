@@ -27,19 +27,29 @@ except:
     HOST = "127.0.0.1"
 
 
-class Handler(http.server.SimpleHTTPRequestHandler):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, directory=str(ROOT), **kwargs)
-
-    def end_headers(self):
+class Handler(http.server.BaseHTTPRequestHandler):
+    def send_cors_headers(self):
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, POST, OPTIONS")
         self.send_header("Access-Control-Allow-Headers", "Content-Type")
-        super().end_headers()
 
     def do_OPTIONS(self):
         self.send_response(200)
+        self.send_cors_headers()
         self.end_headers()
+
+    def do_GET(self):
+        if self.path in ("/live.js", "/live.strudel"):
+            content = LIVE_FILE.read_bytes()
+            self.send_response(200)
+            self.send_header("Content-Type", "application/javascript")
+            self.send_cors_headers()
+            self.end_headers()
+            self.wfile.write(content)
+        else:
+            self.send_response(404)
+            self.send_cors_headers()
+            self.end_headers()
 
     def do_POST(self):
         if self.path == "/save":
@@ -47,11 +57,13 @@ class Handler(http.server.SimpleHTTPRequestHandler):
             code = self.rfile.read(length).decode("utf-8")
             LIVE_FILE.write_text(code)
             self.send_response(200)
+            self.send_cors_headers()
             self.end_headers()
             self.wfile.write(b"OK")
             print("  [sync] Browser -> live.js")
         else:
             self.send_response(404)
+            self.send_cors_headers()
             self.end_headers()
 
     def log_message(self, format, *args):
