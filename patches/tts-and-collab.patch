@@ -1,0 +1,31 @@
+diff --git a/website/src/repl/useReplContext.jsx b/website/src/repl/useReplContext.jsx
+index 1b2017eb..22be2ad4 100644
+--- a/website/src/repl/useReplContext.jsx
++++ b/website/src/repl/useReplContext.jsx
+@@ -161,6 +161,26 @@ export function useReplContext() {
+       editor.setCode(code);
+       setDocumentTitle(code);
+       logger(`Welcome to Strudel! ${msg} Press play or hit ctrl+enter to run it!`, 'highlight');
++
++      // vibe-duet: poll live.js from file server and hot-reload
++      if (typeof __VIBE_DUET_URL__ !== 'undefined') {
++        let lastCode = '';
++        const poll = async () => {
++          try {
++            const res = await fetch(__VIBE_DUET_URL__);
++            if (res.ok) {
++              const newCode = await res.text();
++              if (newCode && newCode !== lastCode) {
++                lastCode = newCode;
++                editor.setCode(newCode);
++                editor.repl.evaluate(newCode);
++              }
++            }
++          } catch (e) {} // ignore if server not running
++        };
++        poll();
++        window._vibeDuetPoll = window.setInterval(poll, 500);
++      }
+     });
+ 
+     editorRef.current = editor;
