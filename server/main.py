@@ -233,6 +233,11 @@ note("c4 e4 g4") - note names with octave (2=low bass, 4=middle, 6=high)
 Sharps: cs4, ds4, fs4, gs4, as4
 Flats: db4, eb4, gb4, ab4, bb4
 
+## Sample repitching
+All samples can be repitched with note(). Default pitch is c2 (no change).
+  $: note("c2 e2 g2").s("bd").clip(1)   // repitched kick drum
+  $: samples('shabda/speech:ah'), note("c2 d2 e2 g2").s("ah").clip(1)  // pitched speech
+
 ## Structure
 $: starts each track (all play together)
 stack(...) combines patterns
