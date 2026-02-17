@@ -145,7 +145,7 @@ def save_state():
 
 SYSTEM_PROMPT = """You edit Strudel live music code. Given the current code and a user request, return ONLY the updated code - no explanation, no markdown fences.
 
-Keep changes minimal and musical. Keep the total code under 500 lines — remove unused or redundant tracks rather than accumulating.
+Keep changes minimal and musical. Evolve slowly — change one or two things at a time, not everything. Preserve the tempo and key unless asked to change them. Keep the total code under 500 lines — remove unused or redundant tracks rather than accumulating.
 
 ## Mini-notation
 - [brackets] subdivide time: s("[bd sd] hh") plays bd and sd in first half, hh in second
