@@ -18,8 +18,16 @@ from collections import deque
 import anthropic
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from google.cloud import firestore
 from starlette.middleware.wsgi import WSGIMiddleware
+
+try:
+    from google.cloud import firestore
+
+    db = firestore.Client()
+    print("Firestore connected")
+except Exception:
+    db = None
+    print("Firestore not available, using in-memory state only")
 
 app = FastAPI()
 app.add_middleware(
@@ -30,7 +38,9 @@ app.add_middleware(
 )
 
 client = anthropic.AsyncAnthropic()
-db = firestore.Client()
+
+# Path to live.js on disk (for editor sync)
+LIVE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "live.js")
 
 # Git repo for code history
 code_repo_dir = tempfile.mkdtemp(prefix="vibe-duet-code-")
@@ -113,25 +123,37 @@ processing_item: dict | None = None  # Currently processing prompt
 repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
 
 
-def load_state():
-    """Load state from Firestore on startup."""
-    global current_code, history
+def sync_live_file():
+    """Write current_code to live.js on disk."""
     try:
-        doc = db.collection("state").document("current").get()
-        if doc.exists:
-            data = doc.to_dict()
-            current_code = data.get("code", current_code)
-            history = data.get("history", [])
-            print(f"Loaded state: {len(history)} history entries")
-        # Initialize git repo and commit current code
-        init_code_repo()
-        commit_code(current_code, "Initial state from Firestore")
+        with open(LIVE_FILE, "w") as f:
+            f.write(current_code)
     except Exception as e:
-        print(f"Error loading state: {e}")
+        print(f"Error writing live.js: {e}")
+
+
+def load_state():
+    """Load state from Firestore on startup (or just init if no Firestore)."""
+    global current_code, history
+    if db is not None:
+        try:
+            doc = db.collection("state").document("current").get()
+            if doc.exists:
+                data = doc.to_dict()
+                current_code = data.get("code", current_code)
+                history = data.get("history", [])
+                print(f"Loaded state: {len(history)} history entries")
+        except Exception as e:
+            print(f"Error loading state: {e}")
+    # Initialize git repo and commit current code
+    init_code_repo()
+    commit_code(current_code, "Initial state")
 
 
 def save_state():
-    """Save state to Firestore."""
+    """Save state to Firestore (if available)."""
+    if db is None:
+        return
     try:
         db.collection("state").document("current").set(
             {
@@ -364,6 +386,7 @@ async def process_item(item: dict):
 
         current_code = new_code
         request_times.append(time.time())
+        sync_live_file()
 
         # Commit to git and clear fix history (successful change)
         commit_hash = commit_code(
@@ -489,6 +512,7 @@ async def fix_error(error: str, broken_code: str = None):
 
         current_code = new_code
         request_times.append(time.time())
+        sync_live_file()
 
         entry = {
             "name": "Claude",
@@ -546,6 +570,33 @@ async def process_queue():
         await process_item(item)
 
 
+async def watch_live_file():
+    """Poll live.js on disk for editor changes."""
+    global current_code
+    last_mtime = 0
+
+    while True:
+        await asyncio.sleep(0.5)
+        try:
+            mtime = os.path.getmtime(LIVE_FILE)
+        except FileNotFoundError:
+            continue  # live.js doesn't exist yet, keep polling
+        if mtime > last_mtime:
+            last_mtime = mtime
+            with open(LIVE_FILE) as f:
+                disk_code = f.read()
+            if disk_code and disk_code != current_code:
+                current_code = disk_code
+                entry = {
+                    "name": "Editor",
+                    "prompt": "(file edit)",
+                    "code": current_code,
+                    "timestamp": time.time(),
+                }
+                history.append(entry)
+                await broadcast({"type": "update", "entry": entry, "history": history})
+
+
 async def process_repeating():
     """Check and execute repeating prompts."""
     global repeating_prompts
@@ -572,8 +623,10 @@ async def process_repeating():
 @app.on_event("startup")
 async def startup():
     load_state()
+    sync_live_file()
     asyncio.create_task(process_queue())
     asyncio.create_task(process_repeating())
+    asyncio.create_task(watch_live_file())
 
 
 @app.websocket("/ws")
@@ -627,6 +680,7 @@ async def websocket_endpoint(ws: WebSocket):
                 new_code = data.get("code", "")
                 if new_code and new_code != current_code:
                     current_code = new_code
+                    sync_live_file()
                     entry = {
                         "name": data.get("name", "Anonymous"),
                         "prompt": "(manual edit)",
@@ -713,11 +767,14 @@ async def clear_all_endpoint():
     return {"status": "ok", "queue_length": 0, "repeating_count": 0}
 
 
-# Mount shabda Flask app at /shabda
-from shabda import create_app as create_shabda_app
+# Mount shabda Flask app at /shabda (optional)
+try:
+    from shabda import create_app as create_shabda_app
 
-shabda_app = create_shabda_app()
-app.mount("/shabda", WSGIMiddleware(shabda_app), name="shabda")
+    shabda_app = create_shabda_app()
+    app.mount("/shabda", WSGIMiddleware(shabda_app), name="shabda")
+except ImportError:
+    print("shabda not installed, /shabda endpoint disabled")
 
 # Serve static files (Strudel frontend) - must be last
 import os

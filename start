@@ -15,17 +15,46 @@ if [ ! -d "strudel" ]; then
     cd ..
 fi
 
-# Kill any existing servers
-pkill -f "astro dev" 2>/dev/null || true
-pkill -f "python.*serve" 2>/dev/null || true
-sleep 1
-
 # Read host from config if it exists, else use localhost
 if [ -f "config/local.json" ]; then
     HOST=$(python3 -c "import json; print(json.load(open('config/local.json')).get('host', '127.0.0.1'))" 2>/dev/null || echo "127.0.0.1")
 else
     HOST="127.0.0.1"
 fi
+
+PORT=8090
+
+# Build Strudel static files if needed
+if [ ! -d "server/static" ]; then
+    echo "Building Strudel frontend..."
+    cd strudel/website
+    SITE_URL="http://$HOST:$PORT/" pnpm run build
+    cd ../..
+    rm -rf server/static
+    cp -r strudel/website/dist server/static
+    echo "Frontend built."
+fi
+
+# Set up server venv if needed
+if [ ! -d "server/.venv" ]; then
+    echo "Setting up server..."
+    python3 -m venv server/.venv
+    server/.venv/bin/pip install -r server/requirements.txt
+fi
+
+# Load API key
+if [ -f "server/.env" ]; then
+    export $(cat server/.env | grep -v '^#' | xargs)
+elif [ -n "$ANTHROPIC_API_KEY" ]; then
+    : # already set
+else
+    echo "Warning: No ANTHROPIC_API_KEY found. Set it in server/.env or environment."
+    echo "CollabPanel AI chat will not work without it."
+fi
+
+# Kill any existing servers
+pkill -f "uvicorn main:app" 2>/dev/null || true
+sleep 1
 
 echo ""
 echo "  ┌─────────────────────────────────────┐"
@@ -34,35 +63,28 @@ echo "  │   Talk to AI. Hear music live.      │"
 echo "  └─────────────────────────────────────┘"
 echo ""
 
-# Start file server in background
-python3 serve &
-SERVE_PID=$!
+# Start FastAPI server
+echo "Starting server..."
+server/.venv/bin/uvicorn --app-dir server main:app --host $HOST --port $PORT &
+SERVER_PID=$!
 
-# Start Strudel (bind to tailnet IP only)
-echo "Starting Strudel..."
-cd strudel
-ASTRO_HOST=$HOST pnpm run start -- --host $HOST &
-STRUDEL_PID=$!
-cd ..
-
-# Wait for Strudel to be ready
-echo "Waiting for Strudel to start..."
-sleep 8
+# Wait for server to be ready
+echo "Waiting for server to start..."
+sleep 3
 
 # Open browser
 echo "Opening browser..."
-open http://$HOST:4321 2>/dev/null || xdg-open http://$HOST:4321 2>/dev/null || echo "Open http://$HOST:4321 in your browser"
+open "http://$HOST:$PORT" 2>/dev/null || xdg-open "http://$HOST:$PORT" 2>/dev/null || echo "Open http://$HOST:$PORT in your browser"
 
 echo ""
 echo "Ready!"
 echo ""
-echo "  1. Click PLAY in Strudel"
-echo "  2. Ask your AI to edit live.js"
-echo "  3. Hear changes instantly!"
+echo "  Edit live.js in your editor - changes appear instantly"
+echo "  Use the CollabPanel in-browser to chat with Claude"
 echo ""
 echo "Press Ctrl+C to stop."
 echo ""
 
 # Wait for interrupt
-trap "kill $SERVE_PID $STRUDEL_PID 2>/dev/null; exit" INT
+trap "kill $SERVER_PID 2>/dev/null; exit" INT
 wait
