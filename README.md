@@ -23,25 +23,33 @@ A music game where you talk to AI and hear what happens.
 ```bash
 git clone https://github.com/ElleNajt/vibe-duet.git
 cd vibe-duet
+cp .env.example .env  # add your ANTHROPIC_API_KEY
 ./start
 ```
 
-Click **Play** in the browser, then just talk to your AI.
+Click **Play** in the browser, then use the CollabPanel to chat with Claude, or have your AI edit `live.js` directly.
 
 ## What You Need
 
-- [Node.js](https://nodejs.org/) 18+
-- An AI coding assistant ([Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), etc.)
+- [Node.js](https://nodejs.org/) 18+ and [pnpm](https://pnpm.io/)
+- Python 3.12+
+- An `ANTHROPIC_API_KEY` in `.env`
 - **Chrome or Chromium-based browser** (Firefox has AudioWorklet issues that cause crashes)
 - Optional: [Tailscale](https://tailscale.com/) - to play audio on your phone while editing on your computer
 
 ## How It Works
 
-You and the AI take turns. You describe what you want, the AI edits `live.js`, and you hear it instantly. The music runs in [Strudel](https://strudel.cc), a live coding environment.
+`./start` clones [a Strudel fork](https://codeberg.org/ElleNajt/strudel), builds it into static files, and runs a single FastAPI server that handles everything:
 
-Bi-directional sync:
-- AI edits the file → browser updates automatically
-- You edit in the browser → file updates when you evaluate (Ctrl+Enter)
+- **Frontend**: Strudel live coding UI with a CollabPanel for chatting with Claude
+- **WebSocket**: Real-time updates — Claude's edits appear instantly in your browser
+- **File sync**: Edit `live.js` in your editor and the browser updates within 500ms. When Claude changes code via the CollabPanel, `live.js` updates on disk too.
+
+Two ways to make music:
+1. **CollabPanel** (in-browser): Type prompts like "make it funky" and Claude edits the code live
+2. **Editor + AI assistant**: Have Claude Code, Cursor, etc. edit `live.js` directly
+
+Both work simultaneously.
 
 **Share your creations:** Click the share button to copy a strudel.cc link - works even if vibe-duet is down.
 
@@ -92,14 +100,28 @@ Or start with the included Bach material and transform it into something new.
 
 Find free classical MIDI at [Mutopia Project](https://mutopiaproject.org).
 
+## Model Evolution Experiment
+
+The `examples/evolve/` directory contains an experiment where 4 AI models (Claude, GPT, Gemini, Grok) independently evolve music over 100 steps starting from a simple beat. Each step, the model is asked to "evolve this according to your preferences."
+
+```bash
+cd examples/evolve
+python evolve.py                              # default seed, 100 steps
+python evolve.py --seed path/to/file.js       # custom seed (e.g., a Bach canon)
+python evolve.py --name bach01 --steps 50     # named experiment
+python evolve.py --resume                     # continue from where you left off
+```
+
+Requires `ANTHROPIC_API_KEY` and `OPENROUTER_API_KEY` in environment. Code is validated with Strudel's runtime before saving.
+
 ## Multi-Device Setup (Optional)
 
-If you have [Tailscale](https://tailscale.com/), you can play audio on your phone while editing on your computer. This can be fun if you want to take your music with you and control the files remotely (e.g. via Termux or SSH).
+If you have [Tailscale](https://tailscale.com/), you can play audio on your phone while editing on your computer.
 
 1. Install Tailscale on both devices
 2. Copy `config/local.example.json` to `config/local.json` and add your tailnet hostname
 3. Run `./start` - it binds to your tailnet IP
-4. Open `http://your-machine.tail....ts.net:4321` on your phone
+4. Open the URL printed by `./start` on your phone
 5. Click Play, then edit on your computer
 
 Your tailnet is private, so this is safe to use on public wifi.
@@ -108,23 +130,11 @@ Without Tailscale, everything runs on localhost - still works fine, just single-
 
 ## Deploying to Cloud Run
 
-The hosted version runs on Google Cloud Run. To deploy:
-
 ```bash
-# 1. Build Strudel with our patches
-cd strudel
-pnpm run --filter @strudel/website build
-
-# 2. Copy built files to server
-cp -R website/dist ../server/static
-
-# 3. Build and deploy
-cd ..
-gcloud builds submit --tag gcr.io/vibe-duet/vibe-duet server/
-gcloud run deploy vibe-duet --image gcr.io/vibe-duet/vibe-duet --region us-central1 --allow-unauthenticated
+server/deploy.sh
 ```
 
-Requires: GCP project with Cloud Run, Cloud Build, and Text-to-Speech APIs enabled. Set `ANTHROPIC_API_KEY` as a Cloud Run secret.
+This builds Strudel, copies static files into the server, and deploys to Cloud Run. Requires a GCP project with Cloud Run and Cloud Build enabled. Set `ANTHROPIC_API_KEY` as a Cloud Run secret.
 
 ## Credits
 
