@@ -44,13 +44,14 @@ if [ ! -d "server/.venv" ]; then
 fi
 
 # Load API key
-if [ -f "server/.env" ]; then
-    export $(cat server/.env | grep -v '^#' | xargs)
+if [ -f ".env" ]; then
+    export $(cat .env | grep -v '^#' | xargs)
 elif [ -n "$ANTHROPIC_API_KEY" ]; then
     : # already set
 else
-    echo "Warning: No ANTHROPIC_API_KEY found. Set it in server/.env or environment."
-    echo "CollabPanel AI chat will not work without it."
+    echo "Error: No ANTHROPIC_API_KEY found."
+    echo "Create .env with: ANTHROPIC_API_KEY=your-key"
+    exit 1
 fi
 
 # Kill any existing servers
