@@ -20,14 +20,14 @@ from fastapi import FastAPI, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.wsgi import WSGIMiddleware
 
-try:
+if os.environ.get("USE_FIRESTORE"):
     from google.cloud import firestore
 
     db = firestore.Client()
     print("Firestore connected")
-except Exception:
+else:
     db = None
-    print("Firestore not available, using in-memory state only")
+    print("Firestore disabled, using in-memory state")
 
 app = FastAPI()
 app.add_middleware(
