@@ -1,0 +1,1 @@
+s("bd [sn sn:2] bd [sn hh] cp [bd cp bd:3]!2 [oh? hh tb] [cp!3 bd]").gain(0.8).crush(16).every(4, rev).room(0.4).hpf(400).off(1/4, jux(rev)).delay(0.25).sometimes(pan(-0.5)).often(distort(0.3)).every(8, rev).reverb(0.2).rarely("cb").slow(2)

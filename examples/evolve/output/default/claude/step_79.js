@@ -1,0 +1,8 @@
+$: s("bd sn bd [sn cp]").sometimes(x=>x.s("bd [sn rim] bd [sn cp]"))
+$: s("hh*8").gain(0.5).hpf(8000).sometimes(rev).every(8,x=>x.ply(2)).often(x=>x.degradeBy(0.2))
+$: s("~ ~ ~ cp").delay(0.4).delayfeedback(0.5).sometimes(x=>x.fast(2)).every(6,x=>x.s("~ ~ ~ [cp rim]"))
+$: note("c3 ~ eb3 <g3 ab3>").sound("sawtooth").lpf(650).room(0.2).sometimes(x=>x.note(x=>x.add(7))).every(4,x=>x.off(0.125,y=>y.lpf(400)))
+$: note("c4 eb4 <g4 bb4>").sound("triangle").lpf(1200).gain(0.4).attack(0.1).pan(sine.slow(8).range(-0.5,0.5)).often(x=>x.off(0.25,y=>y.note(y=>y.add(12))))
+$: note("c2 ~ ~ <eb2 f2>").sound("sine").lpf(300).gain(0.7).room(0.4).jux(x=>x.add(12))
+$: note("~ bb4 ~ <c5 d5 eb5>").sound("pulse").lpf(1800).gain(0.3).resonance(0.3).attack(0.4).release(0.6).pan(cosine.slow(12).range(-0.7,0.7)).sometimes(x=>x.note(x=>x.add(-12))).crush(6)
+$: s("[rd*2, sh*4]").gain(0.3).every(4,x=>x.s("[rd*3, sh*6]")).degradeBy(0.3).pan(0.6).sometimes(x=>x.off(0.25,y=>y.gain(0.8)))
