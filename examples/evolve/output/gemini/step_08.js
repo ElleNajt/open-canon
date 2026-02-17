@@ -1,0 +1,1 @@
+$: s("<bd sn> /2 cp/4 oh/8").room(0.3).degradeBy(0.1).pan(0.2)

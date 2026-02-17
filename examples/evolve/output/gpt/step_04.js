@@ -1,0 +1,1 @@
+$: s("bd [sn cp] bd [sn hh] cp [bd cp]!2")

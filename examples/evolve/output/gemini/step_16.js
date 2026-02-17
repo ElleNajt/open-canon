@@ -1,0 +1,1 @@
+$: s("<bd, sn> /2 cp/4 oh/8").room(0.3).degradeBy(0.1).pan(0.1).compressor("8:-20:12:0.01:0.05").hpf(200).gain(0.7)

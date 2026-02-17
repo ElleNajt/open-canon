@@ -1,0 +1,1 @@
+$: s("bd [sn cp:2] bd [sn hh] cp [bd cp bd]!2 [oh? hh oh hh]!2").gain(0.8).crush(16)
