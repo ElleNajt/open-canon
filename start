@@ -15,12 +15,7 @@ if [ ! -d "strudel" ]; then
     cd ..
 fi
 
-# Read host from config if it exists, else use localhost
-if [ -f "config/local.json" ]; then
-    HOST=$(python3 -c "import json; print(json.load(open('config/local.json')).get('host', '127.0.0.1'))" 2>/dev/null || echo "127.0.0.1")
-else
-    HOST="127.0.0.1"
-fi
+HOST="127.0.0.1"
 
 # Find a free port
 PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.getsockname()[1]); s.close()")
@@ -76,7 +71,7 @@ sleep 3
 
 # Open browser
 echo "Opening browser..."
-open "http://$HOST:$PORT" 2>/dev/null || xdg-open "http://$HOST:$PORT" 2>/dev/null || echo "Open http://$HOST:$PORT in your browser"
+open "http://localhost:$PORT" 2>/dev/null || xdg-open "http://localhost:$PORT" 2>/dev/null || echo "Open http://localhost:$PORT in your browser"
 
 echo ""
 echo "Ready!"
