@@ -32,6 +32,7 @@ Click **Play** in the browser, then just talk to your AI.
 
 - [Node.js](https://nodejs.org/) 18+
 - An AI coding assistant ([Claude Code](https://claude.ai/code), [Cursor](https://cursor.sh), etc.)
+- **Chrome or Chromium-based browser** (Firefox has AudioWorklet issues that cause crashes)
 - Optional: [Tailscale](https://tailscale.com/) - to play audio on your phone while editing on your computer
 
 ## How It Works
