@@ -2,8 +2,12 @@ anthropic
 fastapi
 uvicorn[standard]
 google-cloud-firestore
+google-cloud-texttospeech
 flask[async]
 freesound-api
 pydub
+audioop-lts
 termcolor
 requests
+gunicorn
+typer[all]

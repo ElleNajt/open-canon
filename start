@@ -35,7 +35,12 @@ fi
 if [ ! -d "server/.venv" ]; then
     echo "Setting up server..."
     python3 -m venv server/.venv
-    server/.venv/bin/pip install -r server/requirements.txt
+    server/.venv/bin/python -m ensurepip
+    server/.venv/bin/python -m pip install -r server/requirements.txt
+    # Install shabda (local TTS package) if present
+    if [ -d "shabda" ]; then
+        server/.venv/bin/python -m pip install -e shabda/
+    fi
 fi
 
 # Load API key

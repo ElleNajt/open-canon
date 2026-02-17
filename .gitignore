@@ -4,3 +4,4 @@ config/local.json
 .env
 server/static/
 server/.venv/
+server/.env/
