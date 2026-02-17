@@ -145,7 +145,7 @@ def save_state():
 
 SYSTEM_PROMPT = """You edit Strudel live music code. Given the current code and a user request, return ONLY the updated code - no explanation, no markdown fences.
 
-Keep changes minimal and musical.
+Keep changes minimal and musical. Keep the total code under 500 lines — remove unused or redundant tracks rather than accumulating.
 
 ## Mini-notation
 - [brackets] subdivide time: s("[bd sd] hh") plays bd and sd in first half, hh in second
@@ -306,7 +306,7 @@ async def call_claude(prompt: str, messages: list) -> str:
     """Call Claude and return the response."""
     response = await client.messages.create(
         model="claude-opus-4-5-20251101",
-        max_tokens=8192,
+        max_tokens=16384,
         system=prompt,
         messages=messages,
     )
