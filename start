@@ -3,17 +3,13 @@
 set -e
 cd "$(dirname "$0")"
 
-STRUDEL_REPO="https://codeberg.org/uzu/strudel.git"
-STRUDEL_COMMIT="6f108f7f28c1b7e8a829bccf1316ddc4e2a01417"
+STRUDEL_REPO="git@codeberg.org:ElleNajt/strudel.git"
 
-# Clone and patch strudel if needed
+# Clone strudel fork if needed
 if [ ! -d "strudel" ]; then
-    echo "Cloning strudel..."
-    git clone --depth 100 "$STRUDEL_REPO" strudel
+    echo "Cloning strudel fork..."
+    git clone "$STRUDEL_REPO" strudel
     cd strudel
-    git checkout "$STRUDEL_COMMIT"
-    echo "Applying vibe-duet patches..."
-    git apply ../patches/tts-and-collab.patch
     echo "Installing dependencies..."
     pnpm install
     cd ..
