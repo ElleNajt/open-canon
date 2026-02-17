@@ -109,6 +109,7 @@ history: list[dict] = []  # {name, prompt, code, timestamp}
 connections: list[WebSocket] = []
 request_times: deque = deque()  # timestamps of processed requests
 processing = False
+processing_item: dict | None = None  # Currently processing prompt
 repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
 
 
@@ -337,9 +338,11 @@ def build_user_content(
 
 async def process_item(item: dict):
     """Process a single prompt."""
-    global current_code, processing, fix_history
+    global current_code, processing, processing_item, fix_history
 
     processing = True
+    processing_item = {"name": item["name"], "prompt": item["prompt"]}
+    await broadcast({"type": "processing", "item": processing_item})
 
     try:
         text = f"Current code:\n{current_code}\n\nRequest: {item['prompt']}"
@@ -388,6 +391,8 @@ async def process_item(item: dict):
 
     finally:
         processing = False
+        processing_item = None
+        await broadcast({"type": "processing", "item": None})
 
 
 error_lock = asyncio.Lock()
@@ -583,6 +588,7 @@ async def websocket_endpoint(ws: WebSocket):
                 "queue": queue,
                 "history": history,
                 "repeating": repeating_prompts,
+                "processing_item": processing_item,
                 "rateLimit": {"used": used, "limit": RATE_LIMIT, "resetIn": reset_in},
             }
         )
