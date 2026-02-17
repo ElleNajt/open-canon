@@ -602,7 +602,8 @@ async def websocket_endpoint(ws: WebSocket):
                 if data.get("image"):
                     item["image"] = data["image"]
                     item["imageType"] = data.get("imageType", "image/png")
-                queue.append(item)
+                # User prompts go to the front so they're not stuck behind repeating prompts
+                queue.insert(0, item)
                 await broadcast({"type": "queue", "queue": queue})
 
             elif data["type"] == "error":
