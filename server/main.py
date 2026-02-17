@@ -29,7 +29,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = anthropic.Anthropic()
+client = anthropic.AsyncAnthropic()
 db = firestore.Client()
 
 # Git repo for code history
@@ -303,7 +303,7 @@ def strip_markdown_fences(code: str) -> str:
 
 async def call_claude(prompt: str, messages: list) -> str:
     """Call Claude and return the response."""
-    response = client.messages.create(
+    response = await client.messages.create(
         model="claude-opus-4-5-20251101",
         max_tokens=8192,
         system=prompt,
