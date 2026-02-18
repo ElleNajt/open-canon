@@ -243,6 +243,10 @@ async def main():
         "--steps", type=int, default=100, help="Number of evolution steps"
     )
     parser.add_argument("--resume", action="store_true", help="Resume from latest step")
+    parser.add_argument(
+        "--models",
+        help="Comma-separated list of models to run (default: all)",
+    )
     args = parser.parse_args()
 
     seed = load_seed(args.seed)
@@ -250,6 +254,12 @@ async def main():
     experiment_name = f"{args.name}_{phash}"
     output_dir = os.path.join(SCRIPT_DIR, "output", experiment_name)
     os.makedirs(output_dir, exist_ok=True)
+
+    if args.models:
+        selected = {m.strip() for m in args.models.split(",")}
+        models = {k: v for k, v in MODELS.items() if k in selected}
+    else:
+        models = MODELS
 
     # Save experiment config
     config_path = os.path.join(output_dir, "config.json")
@@ -259,7 +269,7 @@ async def main():
         "prompt_hash": phash,
         "seed": args.seed,
         "steps": args.steps,
-        "models": {k: v["model"] for k, v in MODELS.items()},
+        "models": {k: v["model"] for k, v in models.items()},
         "system_prompt": SYSTEM_PROMPT,
     }
     if not os.path.exists(config_path):
@@ -270,6 +280,7 @@ async def main():
     print(f"Experiment: {experiment_name}")
     print(f"Prompt: {args.prompt}")
     print(f"Steps: {args.steps}")
+    print(f"Models: {', '.join(models.keys())}")
     print(f"Seed: {seed[:80]}{'...' if len(seed) > 80 else ''}")
     print(f"Output: {output_dir}")
     print()
@@ -284,11 +295,11 @@ async def main():
             args.resume,
             iteration_prompt=args.prompt,
         )
-        for name, cfg in MODELS.items()
+        for name, cfg in models.items()
     ]
     results = await asyncio.gather(*tasks, return_exceptions=True)
 
-    for (name, _), result in zip(MODELS.items(), results):
+    for (name, _), result in zip(models.items(), results):
         if isinstance(result, Exception):
             print(f"[{name}] FAILED: {result}")
 
