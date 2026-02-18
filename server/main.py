@@ -263,10 +263,13 @@ All samples can be repitched with note(). Default pitch is c2 (no change).
   $: samples('shabda/speech:ah'), note("c2 d2 e2 g2").s("ah").clip(1)  // pitched speech
 
 ## Mic Recordings
-Users can record audio from their mic via the 🎙 button. Recordings are saved as samples.
-To use them: samples('/mic-samples/strudel.json'), s("mic:0")
-Multiple recordings are indexed: mic:0, mic:1, mic:2, etc.
+Users can record audio from their mic. Each recording becomes a named sample bank.
+Load all mic samples: samples('/mic-samples/strudel.json')
+Play by name: s("my_voice"), s("recording"), s("recording:1")
+The recording name (chosen by the user) becomes the sample name in Strudel.
+If there are multiple recordings with the same name, use :N to select (e.g. s("recording:2")).
 Works with all effects, slicing (.chop, .slice, .loopAt), and repitching.
+The available mic recordings will be listed in the user message when present.
 
 ## Structure
 $: starts each track (all play together)
