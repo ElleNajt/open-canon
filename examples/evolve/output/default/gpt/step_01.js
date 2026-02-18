@@ -1,1 +1,0 @@
-$: s("bd [sn cp] bd sn")

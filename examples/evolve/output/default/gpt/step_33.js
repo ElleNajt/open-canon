@@ -1,1 +1,0 @@
-$: s("bd [sn sn:2] bd [sn hh] cp [bd cp bd:3]!2 [oh? hh tb] ~<cp>!3").gain(0.8).crush(16).every(4, .rev()).room(0.4).hpf(400).off(1/4, .jux(rev)).delay(0.25).sometimes(.pan(-0.5)).rarely(.distort(0.3)).every(8, .rev())

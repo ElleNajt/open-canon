@@ -1,7 +1,0 @@
-$: s("<bd, sn>/2 cp/4 [oh tb]/8").room(0.1).pan(0.1).compressor("8:-20:12:0.01:0.05").lpf(4000).gain(0.5).fast(1.05).hpf(150).distort(0.1).sometimes(rev).delay(0.05).degradeBy(0.05).bpf(300)
-$: s("hh*8").gain(0.4).pan(-0.1).lpf(8000).delay(0.1)
-$: s("cb*4").gain(0.2).fast(1.2).pan(0.2)
-$: s("mt/2 ht/4 lt/8").gain(0.3).pan(-0.2).room(0.2)
-$: note("c3 e3 g3").sound("supersaw").lpf(800).room(0.3).vibrato(0.1).gain(0.8)
-$: note("g2 c3 e3").sound("square").lpf(500).gain(0.3).distort(0.1)
-$: s("brk/4").gain(0.25)

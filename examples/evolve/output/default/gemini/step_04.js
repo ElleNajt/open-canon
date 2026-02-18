@@ -1,1 +1,0 @@
-$: s("<bd sn>/2 cp/4").room(0.3).degradeBy(0.1)

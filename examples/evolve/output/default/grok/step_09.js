@@ -1,5 +1,0 @@
-$: s("bd <sn cp> bd <cp rim>")
-$: s("hh*4 oh*4").room(0.1)
-$: s("cr/4")
-$: note("c2 eb2 g2 <bb2 ab2>").sound("sine").lpf(300).gain(0.4)
-$: s("sh*16").gain(0.2)

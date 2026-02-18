@@ -1,6 +1,0 @@
-$: s("bd <[sn cp <cb ~ rim>] [cp <rim sn?> <sn/2 ~>]> [bd <sn/2 lt>] <lt [cp mt/2 ~ cp/2]>").sometimes(rev).every(8, x => x.gain(0.8))
-$: s("hh*4 <oh*2 ~ [oh oh ~]>").room(0.1).every(4, rev).euclid(4,8)
-$: s("cr/8 <rd ~ [rd rd/4 ~]>").gain(0.8).every(8, rev).sometimes(x => x.gain(0.5))
-$: note("c2 <eb2 f2> g2 [bb2 <ab2 g2>] [g2 bb2 <ab2 eb3 g3>] <c3 eb3>").sound("sine").lpf(800).gain(0.5).room(0.3).attack(0.05).delay(0.2).every(4, rev).sometimes(x => x.add(note("<g2 bb2>")))
-$: s("sh*8").slow(2).gain(0.3).degradeBy(0.1).room(0.1).pan(rand)
-$: note("<c4 eb4 g4 <bb4 ab4>> [eb5 g5 <bb5 c6 eb6>] <c5 [eb5 g5 c6 bb5]>").sound("sawtooth").lpf(800).gain(0.3).delay(0.3).chorus(0.3).phaser(0.3).every(4, rev).every(8, x => x.fast(2)).jux(rev).sometimes(x => x.gain(0.2)).sometimes(x => x.add(note("eb4"))).every(4, x => x.ply(2)).sometimes(x => x.add(note("<g4 bb4>")))

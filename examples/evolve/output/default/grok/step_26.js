@@ -1,6 +1,0 @@
-$: s("bd <[sn cp] cp> [bd sn/2] <rim ~ cp>")
-$: s("hh*4 <oh ~ oh>").room(0.1).sometimes(rev).euclid(4,8)
-$: s("cr/4").gain(0.8)
-$: note("c2 [eb2 g2 bb2] [g2 bb2 <ab2 c3>]").sound("sine").lpf(300).gain(0.4).room(0.1)
-$: s("sh*16").gain(0.2)
-$: note("<c4 eb4 g4> [bb4 c5 <d5 eb5>]").sound("supersaw").lpf(1000).gain(0.3).delay(0.3).every(4, rev)

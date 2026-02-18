@@ -1,1 +1,0 @@
-$: s("bd [sn cp:2] bd [sn hh] cp [bd cp bd]!2 [oh? hh tb hh<cp>]!2").gain(0.8).crush(16).every(4, .rev()).room(0.4).lpf(1100).off(1/4, .jux(rev)).delay(0.25)

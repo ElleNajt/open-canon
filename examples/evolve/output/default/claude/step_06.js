@@ -1,8 +1,0 @@
-$: s("bd sn bd [sn cp]")
-$: s("hh*8").gain(0.6).hpf(8000).sometimes(rev)
-$: s("~ ~ ~ cp").delay(0.3).delayfeedback(0.4).sometimes(x=>x.fast(2))
-$: note("c3 ~ eb3 <g3 ab3>").sound("sawtooth").lpf(650).room(0.2)
-$: note("c4 eb4 <g4 bb4>").sound("triangle").lpf(1200).gain(0.4).attack(0.1).pan(sine.slow(8).range(-0.5,0.5))
-$: note("c2 ~ ~ eb2").sound("sine").lpf(300).gain(0.7).room(0.4)
-$: note("g1").sound("sine").lpf(200).gain(0.3).every(4,x=>x.note("f1"))
-$: s("[rim, ~]*2").gain(0.3).pan(0.3).sometimes(x=>x.fast(4))
