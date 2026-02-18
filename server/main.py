@@ -382,16 +382,17 @@ async def process_item(item: dict):
     try:
         # Build context with available mic samples
         mic_info = ""
-        mic_files = sorted(
-            f.name
-            for f in MIC_SAMPLES_DIR.iterdir()
-            if f.suffix in (".wav", ".webm", ".ogg", ".mp3")
-        )
-        if mic_files:
+        mic_banks = mic_samples_json()
+        mic_banks_filtered = {k: v for k, v in mic_banks.items() if k != "_base"}
+        if mic_banks_filtered:
+            bank_list = ", ".join(
+                f"{name} ({len(files)} file{'s' if len(files) > 1 else ''})"
+                for name, files in mic_banks_filtered.items()
+            )
             mic_info = (
-                f"\n\nAvailable mic recordings ({len(mic_files)} samples): {', '.join(mic_files)}"
+                f"\n\nAvailable mic recordings: {bank_list}"
                 f"\nLoad with: samples('/mic-samples/strudel.json')"
-                f'\nPlay with: s("mic:0"), s("mic:1"), etc.'
+                f'\nPlay by name: s("my_voice"), s("recording:0"), etc.'
             )
 
         text = f"Current code:\n{current_code}{mic_info}\n\nRequest: {item['prompt']}"
@@ -795,15 +796,29 @@ MIC_SAMPLES_DIR.mkdir(exist_ok=True)
 
 
 def mic_samples_json(request_url: str = "") -> dict:
-    """Build strudel.json-style index of mic recordings."""
+    """Build strudel.json-style index of mic recordings.
+
+    Groups files by base name so each recording name becomes a sample bank.
+    e.g. my_voice.webm -> s("my_voice"), recording.webm + recording_1.webm -> s("recording:0"), s("recording:1")
+    """
     files = sorted(
-        f.name
+        f
         for f in MIC_SAMPLES_DIR.iterdir()
         if f.suffix in (".wav", ".webm", ".ogg", ".mp3")
     )
     if not files:
         return {}
-    result = {"_base": "/mic-samples/", "mic": files}
+    banks = {}
+    for f in files:
+        stem = f.stem
+        # Strip trailing _N suffix to group variants under the base name
+        base = (
+            stem.rsplit("_", 1)[0]
+            if "_" in stem and stem.rsplit("_", 1)[1].isdigit()
+            else stem
+        )
+        banks.setdefault(base, []).append(f.name)
+    result = {"_base": "/mic-samples/", **banks}
     return result
 
 
