@@ -14,10 +14,12 @@ import subprocess
 import tempfile
 import time
 from collections import deque
+from pathlib import Path
 
 import anthropic
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect
+from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import FileResponse, JSONResponse
 from starlette.middleware.wsgi import WSGIMiddleware
 
 if os.environ.get("USE_FIRESTORE"):
@@ -260,6 +262,12 @@ All samples can be repitched with note(). Default pitch is c2 (no change).
   $: note("c2 e2 g2").s("bd").clip(1)   // repitched kick drum
   $: samples('shabda/speech:ah'), note("c2 d2 e2 g2").s("ah").clip(1)  // pitched speech
 
+## Mic Recordings
+Users can record audio from their mic via the 🎙 button. Recordings are saved as samples.
+To use them: samples('/mic-samples/strudel.json'), s("mic:0")
+Multiple recordings are indexed: mic:0, mic:1, mic:2, etc.
+Works with all effects, slicing (.chop, .slice, .loopAt), and repitching.
+
 ## Structure
 $: starts each track (all play together)
 stack(...) combines patterns
@@ -372,7 +380,21 @@ async def process_item(item: dict):
     await broadcast({"type": "processing", "item": processing_item})
 
     try:
-        text = f"Current code:\n{current_code}\n\nRequest: {item['prompt']}"
+        # Build context with available mic samples
+        mic_info = ""
+        mic_files = sorted(
+            f.name
+            for f in MIC_SAMPLES_DIR.iterdir()
+            if f.suffix in (".wav", ".webm", ".ogg", ".mp3")
+        )
+        if mic_files:
+            mic_info = (
+                f"\n\nAvailable mic recordings ({len(mic_files)} samples): {', '.join(mic_files)}"
+                f"\nLoad with: samples('/mic-samples/strudel.json')"
+                f'\nPlay with: s("mic:0"), s("mic:1"), etc.'
+            )
+
+        text = f"Current code:\n{current_code}{mic_info}\n\nRequest: {item['prompt']}"
         content = build_user_content(
             text,
             image_data=item.get("image"),
@@ -767,6 +789,86 @@ async def clear_all_endpoint():
     return {"status": "ok", "queue_length": 0, "repeating_count": 0}
 
 
+# --- Mic sample recording ---
+MIC_SAMPLES_DIR = Path(os.path.dirname(os.path.abspath(__file__))) / "mic_samples"
+MIC_SAMPLES_DIR.mkdir(exist_ok=True)
+
+
+def mic_samples_json(request_url: str = "") -> dict:
+    """Build strudel.json-style index of mic recordings."""
+    files = sorted(
+        f.name
+        for f in MIC_SAMPLES_DIR.iterdir()
+        if f.suffix in (".wav", ".webm", ".ogg", ".mp3")
+    )
+    if not files:
+        return {}
+    result = {"_base": "/mic-samples/", "mic": files}
+    return result
+
+
+@app.get("/mic-samples/strudel.json")
+async def mic_samples_index():
+    return mic_samples_json()
+
+
+@app.get("/mic-samples/{filename}")
+async def mic_sample_file(filename: str):
+    """Serve an individual mic sample."""
+    filepath = MIC_SAMPLES_DIR / filename
+    if not filepath.exists() or not filepath.is_file():
+        return JSONResponse({"error": "not found"}, status_code=404)
+    media_types = {
+        ".wav": "audio/wav",
+        ".webm": "audio/webm",
+        ".ogg": "audio/ogg",
+        ".mp3": "audio/mpeg",
+    }
+    media_type = media_types.get(filepath.suffix, "application/octet-stream")
+    return FileResponse(filepath, media_type=media_type)
+
+
+@app.post("/upload-sample")
+async def upload_sample(request: Request):
+    """Receive a recorded audio sample from the browser."""
+    body = await request.json()
+    audio_b64 = body.get("audio")
+    name = body.get("name", "recording")
+    mime = body.get("mimeType", "audio/webm")
+
+    if not audio_b64:
+        return JSONResponse({"error": "no audio data"}, status_code=400)
+
+    # Determine extension from mime
+    ext_map = {
+        "audio/webm": ".webm",
+        "audio/ogg": ".ogg",
+        "audio/wav": ".wav",
+        "audio/mpeg": ".mp3",
+    }
+    ext = ext_map.get(mime, ".webm")
+
+    # Sanitize name
+    safe_name = (
+        "".join(c for c in name if c.isalnum() or c in "-_").strip() or "recording"
+    )
+
+    # Find next available filename
+    existing = list(MIC_SAMPLES_DIR.glob(f"{safe_name}*{ext}"))
+    if existing:
+        idx = len(existing)
+        filename = f"{safe_name}_{idx}{ext}"
+    else:
+        filename = f"{safe_name}{ext}"
+
+    filepath = MIC_SAMPLES_DIR / filename
+    filepath.write_bytes(base64.b64decode(audio_b64))
+
+    print(f"Saved mic sample: {filepath} ({filepath.stat().st_size} bytes)")
+
+    return {"status": "ok", "filename": filename, "bank": "mic"}
+
+
 # Mount shabda Flask app at /shabda (optional)
 try:
     from shabda import create_app as create_shabda_app
@@ -777,9 +879,6 @@ except ImportError:
     print("shabda not installed, /shabda endpoint disabled")
 
 # Serve static files (Strudel frontend) - must be last
-import os
-
-from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 
 static_dir = os.path.join(os.path.dirname(__file__), "static")

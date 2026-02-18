@@ -7,3 +7,4 @@ server/.venv/
 server/.env/
 samples/
 speech_samples/
+server/mic_samples/
