@@ -25,7 +25,13 @@ import anthropic
 import httpx
 
 DEFAULT_SEED = '$: s("bd sn bd sn")'
-DEFAULT_ITERATION_PROMPT = "Evolve this according to your preferences"
+DEFAULT_ITERATION_PROMPT = """Evolve this according to your preferences, considering:
+
+Keep it simple. A great piece has 2-5 tracks, not 15. Evolving means refining — changing sounds, rhythms, and effects — not piling on more tracks. Remove a part before adding one. Restraint is musicality.
+
+Each edit should be a small, deliberate change — not a rewrite. A listener should recognize the previous version in the new one. Change one or two things at a time: swap a sound, adjust a rhythm, add or tweak an effect. The piece should evolve gradually, like variations on a theme.
+
+Keep .slow() and .fast() values reasonable (1-16). A .slow(119) sweep takes minutes to hear any change — it's effectively static. Modulations should be perceptible: use .slow(2) to .slow(16) so listeners can actually hear the movement."""
 MAX_FIX_ATTEMPTS = 2
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
