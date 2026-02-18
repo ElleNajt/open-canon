@@ -23,16 +23,15 @@ The converter uses `note()` for pitches and outputs Strudel-compatible JavaScrip
 ## Setup
 
 The user runs `./start` which:
-1. Clones Strudel and applies patches for hot-reload
-2. Starts a file server on port 3333
-3. Starts Strudel on port 4321
-4. Opens the browser
+1. Clones the Strudel fork and builds static files
+2. Starts a FastAPI server (serves frontend + WebSocket + API + shabda TTS)
+3. Opens the browser on localhost
 
 **The file to edit:** `live.js`
 
 Changes sync bi-directionally:
-- Edit in your editor → browser updates within 500ms
-- Edit in browser → file updates on evaluate (Ctrl+Enter)
+- Edit in your editor → server picks up changes within 500ms
+- Edit via CollabPanel (AI chat) → file updates on disk
 
 ## Mini Notation
 
@@ -106,6 +105,44 @@ s("jazz")        // jazz kit
 ```
 
 Use `:n` for variations: `s("bd:0")`, `s("bd:1")`, `s("bd:2")`, etc.
+
+### Custom Sample Library (GCS)
+
+Custom samples are hosted on GCS. Load them with:
+
+```javascript
+$: samples('https://storage.googleapis.com/vibe-duet-samples/strudel.json')
+  , s("claude_originals").chop(16)
+```
+
+To add samples: put audio files in `samples/<bank_name>/` and run `./sync-samples`.
+
+### Slicing and Chopping Samples
+
+```javascript
+.chop(n)                // Chop into n equal pieces, play in order
+.slice(n, pattern)      // Slice into n, play slices by index
+.splice(n, pattern)     // Like slice but stretches to fit
+.loopAt(n)              // Loop sample over n cycles
+.begin(0.25)            // Start playback at 25%
+.end(0.75)              // End playback at 75%
+.speed(2)               // Playback speed (negative = reverse)
+.unit("c")              // Treat speed as cycles (fit to cycle length)
+```
+
+### Speech (shabda TTS)
+
+Generate spoken words as samples via Google TTS:
+
+```javascript
+$: samples('shabda/speech:hello?pitch=-2'), samples('shabda/speech:world?pitch=3')
+  , s("<hello world>")
+```
+
+- Words become sample names: `s("hello")`, `s("world")`
+- `pitch` shifts in semitones (-20 to +20)
+- Default voice: en-GB female
+- Other voices: `samples('shabda/speech/en-US/m:hello')` (US English, male)
 
 ## Effects
 

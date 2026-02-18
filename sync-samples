@@ -1,0 +1,63 @@
+#!/bin/bash
+# Sync local samples/ directory to GCS bucket
+# Generates strudel.json from folder structure, then uploads everything
+#
+# Directory structure:
+#   samples/
+#     breaks/
+#       amen.wav
+#       think.wav
+#     bass/
+#       sub01.wav
+#       sub02.wav
+#
+# Produces strudel.json:
+#   { "_base": "https://storage.googleapis.com/BUCKET/",
+#     "breaks": ["breaks/amen.wav", "breaks/think.wav"],
+#     "bass": ["bass/sub01.wav", "bass/sub02.wav"] }
+
+set -e
+cd "$(dirname "$0")"
+
+# Config — change these if you use a different bucket
+SAMPLES_BUCKET="${SAMPLES_BUCKET:-vibe-duet-samples}"
+SAMPLES_DIR="samples"
+
+BUCKET="gs://${SAMPLES_BUCKET}"
+BASE_URL="https://storage.googleapis.com/${SAMPLES_BUCKET}/"
+
+if [ ! -d "$SAMPLES_DIR" ]; then
+    echo "No samples/ directory found."
+    exit 1
+fi
+
+# Generate strudel.json
+python3 -c "
+import json, os
+
+samples_dir = '$SAMPLES_DIR'
+result = {'_base': '$BASE_URL'}
+
+for bank in sorted(os.listdir(samples_dir)):
+    bank_path = os.path.join(samples_dir, bank)
+    if not os.path.isdir(bank_path):
+        continue
+    files = []
+    for f in sorted(os.listdir(bank_path)):
+        if f.lower().endswith(('.wav', '.mp3', '.ogg', '.flac')):
+            files.append(bank + '/' + f)
+    if files:
+        result[bank] = files
+
+with open(os.path.join(samples_dir, 'strudel.json'), 'w') as f:
+    json.dump(result, f, indent=2)
+
+print(f'Generated strudel.json with {len(result) - 1} banks')
+"
+
+# Sync to GCS
+echo "Syncing to $BUCKET..."
+gcloud storage rsync "$SAMPLES_DIR" "$BUCKET" --recursive --delete-unmatched-destination-objects
+echo ""
+echo "Done! Use in Strudel:"
+echo "  samples('${BASE_URL}strudel.json')"
