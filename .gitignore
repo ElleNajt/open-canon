@@ -5,3 +5,5 @@ config/local.json
 server/static/
 server/.venv/
 server/.env/
+samples/
+speech_samples/
