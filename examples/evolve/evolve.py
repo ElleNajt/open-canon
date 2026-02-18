@@ -15,6 +15,8 @@ Validates syntax with Strudel's parser (acorn) and retries on errors.
 
 import argparse
 import asyncio
+import hashlib
+import json
 import os
 import subprocess
 import time
@@ -23,6 +25,7 @@ import anthropic
 import httpx
 
 DEFAULT_SEED = '$: s("bd sn bd sn")'
+DEFAULT_ITERATION_PROMPT = "Evolve this according to your preferences"
 MAX_FIX_ATTEMPTS = 2
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -30,25 +33,31 @@ STRUDEL_DIR = os.path.join(SCRIPT_DIR, "..", "..", "strudel")
 
 SYSTEM_PROMPT = open(os.path.join(SCRIPT_DIR, "system_prompt.txt")).read()
 
+
+def prompt_hash(prompt: str, system_prompt: str) -> str:
+    combined = prompt + "\n---\n" + system_prompt
+    return hashlib.sha256(combined.encode()).hexdigest()[:8]
+
+
 ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY") or None
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY") or None
 
 MODELS = {
     "claude": {
         "provider": "anthropic",
-        "model": "claude-sonnet-4-20250514",
+        "model": "claude-sonnet-4-6",
     },
     "gpt": {
         "provider": "openrouter",
-        "model": "openai/gpt-4o",
+        "model": "openai/gpt-4.1",
     },
     "gemini": {
         "provider": "openrouter",
-        "model": "google/gemini-2.0-flash-001",
+        "model": "google/gemini-2.5-pro",
     },
     "grok": {
         "provider": "openrouter",
-        "model": "x-ai/grok-4-fast",
+        "model": "x-ai/grok-4.1-fast",
     },
 }
 
@@ -60,21 +69,7 @@ def strip_markdown_fences(code: str) -> str:
     return code
 
 
-VALIDATE_JS = """\
-(async () => {
-  const { evaluate } = await import('@strudel/transpiler');
-  const { evalScope, Pattern } = await import('@strudel/core');
-  await evalScope(import('@strudel/core'), import('@strudel/mini'), import('@strudel/tonal'));
-  Pattern.prototype.p = function() { return this; };
-  try {
-    await evaluate(process.argv[1]);
-    process.exit(0);
-  } catch(e) {
-    process.stdout.write(e.message);
-    process.exit(1);
-  }
-})();
-"""
+VALIDATE_JS = open(os.path.join(os.path.dirname(__file__), "validate.js")).read()
 
 
 def validate_syntax(code: str) -> str | None:
@@ -144,7 +139,13 @@ def find_latest_step(model_dir: str, seed: str) -> tuple[int, str]:
 
 
 async def evolve_model(
-    name: str, config: dict, output_dir: str, seed: str, steps: int, resume: bool
+    name: str,
+    config: dict,
+    output_dir: str,
+    seed: str,
+    steps: int,
+    resume: bool,
+    iteration_prompt: str = DEFAULT_ITERATION_PROMPT,
 ):
     model_dir = os.path.join(output_dir, name)
     os.makedirs(model_dir, exist_ok=True)
@@ -166,12 +167,22 @@ async def evolve_model(
         print(f"[{name}] Resuming from step {start_step}")
 
     for step in range(start_step + 1, steps + 1):
-        user_msg = f"Current code:\n{code}\n\nRequest: Evolve this according to your preferences"
+        user_msg = f"Current code:\n{code}\n\nRequest: {iteration_prompt}"
 
         print(f"[{name}] Step {step}/{steps}...", flush=True)
         t0 = time.time()
 
         new_code = await call_model(config, SYSTEM_PROMPT, user_msg)
+
+        # Reject if output collapsed (less than 20% of previous code)
+        if len(new_code) < len(code) * 0.2:
+            print(
+                f"[{name}] Step {step} collapsed ({len(new_code)} chars vs {len(code)}), keeping previous code",
+                flush=True,
+            )
+            with open(os.path.join(model_dir, f"step_{step:02d}.js"), "w") as f:
+                f.write(code)
+            continue
 
         # Validate syntax and retry if needed
         error = validate_syntax(new_code)
@@ -224,24 +235,56 @@ async def main():
         "--name", default="default", help="Experiment name (output subdirectory)"
     )
     parser.add_argument(
+        "--prompt",
+        default=DEFAULT_ITERATION_PROMPT,
+        help="Iteration prompt sent each step (default: 'Evolve this according to your preferences')",
+    )
+    parser.add_argument(
         "--steps", type=int, default=100, help="Number of evolution steps"
     )
     parser.add_argument("--resume", action="store_true", help="Resume from latest step")
     args = parser.parse_args()
 
     seed = load_seed(args.seed)
-    output_dir = os.path.join(SCRIPT_DIR, "output", args.name)
+    phash = prompt_hash(args.prompt, SYSTEM_PROMPT)
+    experiment_name = f"{args.name}_{phash}"
+    output_dir = os.path.join(SCRIPT_DIR, "output", experiment_name)
     os.makedirs(output_dir, exist_ok=True)
 
-    print(f"Experiment: {args.name}")
+    # Save experiment config
+    config_path = os.path.join(output_dir, "config.json")
+    config = {
+        "name": args.name,
+        "prompt": args.prompt,
+        "prompt_hash": phash,
+        "seed": args.seed,
+        "steps": args.steps,
+        "models": {k: v["model"] for k, v in MODELS.items()},
+        "system_prompt": SYSTEM_PROMPT,
+    }
+    if not os.path.exists(config_path):
+        with open(config_path, "w") as f:
+            json.dump(config, f, indent=2)
+            f.write("\n")
+
+    print(f"Experiment: {experiment_name}")
+    print(f"Prompt: {args.prompt}")
     print(f"Steps: {args.steps}")
     print(f"Seed: {seed[:80]}{'...' if len(seed) > 80 else ''}")
     print(f"Output: {output_dir}")
     print()
 
     tasks = [
-        evolve_model(name, config, output_dir, seed, args.steps, args.resume)
-        for name, config in MODELS.items()
+        evolve_model(
+            name,
+            cfg,
+            output_dir,
+            seed,
+            args.steps,
+            args.resume,
+            iteration_prompt=args.prompt,
+        )
+        for name, cfg in MODELS.items()
     ]
     results = await asyncio.gather(*tasks, return_exceptions=True)
 

@@ -1,0 +1,76 @@
+#+TITLE: Evolving Music with LLMs: A Comparative Study
+#+DATE: 2026-02-17
+
+* The Experiment
+
+We give four frontier LLMs the same seed -- a piece of music written in
+Strudel (a live-coding language for music) -- and ask them to repeatedly
+"evolve" it. Each model runs independently for 30 steps, receiving its
+own previous output each time. The prompt is minimal:
+
+#+begin_quote
+Evolve this according to your preferences
+#+end_quote
+
+The system prompt is three lines: return only code, no markdown fences,
+keep it under 500 lines. No style guidance, no music theory, no
+examples. We want to see what each model's aesthetic instincts produce.
+
+** Models
+
+- Claude Sonnet 4.6 (Anthropic API, direct)
+- GPT-4.1 (OpenRouter)
+- Gemini 2.5 Pro (OpenRouter)
+- Grok 4.1 Fast (OpenRouter)
+
+** Seeds
+
+- Bach BWV 1087 Canon 3 (two-voice canon with bass)
+- Bach BWV 1087 Canon 9 (two-voice canon with bass)
+- Twinkle Twinkle Little Star (simple melody, triangle wave)
+
+* Observations
+
+** The Grok Collapse
+
+Grok has a distinctive failure mode: it periodically deletes everything.
+A piece will grow normally over several steps (1162 -> 1693 -> 1961
+chars), then suddenly collapse to near-zero (40 chars -- just a
+comment). This happened consistently across multiple seeds and runs.
+
+Example from Bach Canon 3, step 10:
+#+begin_src js
+// BWV 1087 Canon 4 Hyper-Evolved v6
+
+//
+#+end_src
+
+That's the entire output. The previous step was nearly 2000 characters
+of working music.
+
+Same pattern in Canon 9: steps 0-3 grew normally, step 4 collapsed to 5
+lines (just a voice definition, no notes).
+
+This appears to be a Grok-specific behavior -- the other models never
+exhibited it. We added a guard: if the output is less than 20% of the
+input length, we reject it and keep the previous code.
+
+** The Complexity Explosion
+
+All models share a tendency to make the music increasingly complex with
+each step. What starts as a simple melody quickly becomes a dense wall
+of layered tracks, effects chains, and modulations. By step 15-20, a
+simple Twinkle Twinkle has become a 10-track orchestral piece with FM
+synthesis, ring modulation, shabda speech samples, and euclidean
+rhythms.
+
+Claude is the worst offender -- producing 15-20k character outputs per
+step (compared to GPT's 5-10k and Grok's 2-5k). More isn't better:
+the resulting music is often an overwhelming wash of sound where no
+individual voice is discernible.
+
+This is the "more is more" instinct that all LLMs seem to share when
+given creative freedom. Left unchecked, they treat "evolve" as "add
+more stuff" rather than "refine what's there." We added a prompt
+instruction to prefer clarity over complexity.
+
