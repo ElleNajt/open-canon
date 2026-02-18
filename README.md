@@ -50,7 +50,9 @@ The in-browser panel (right side) supports:
 - **Text prompts**: Describe what you want and Claude edits the code
 - **Image upload**: Attach an image for visual inspiration (Claude sees it)
 - **Webcam**: Toggle live webcam feed — each prompt includes a frame so Claude can see you / your environment
-- **Repeating prompts**: Set a prompt to run every N seconds (5-300s), with or without webcam. Useful for continuous evolution.
+- **Screen share**: Toggle screen capture — sends a screenshot with each prompt
+- **Mic recording**: Record audio from your mic and save it as a sample. Use in code: `samples('/mic-samples/strudel.json'), s("mic:0")`
+- **Repeating prompts**: Set a prompt to run every N seconds (5-300s), with or without webcam/screen. Useful for continuous evolution.
 - **History**: Click any previous version to load it. Shows who made each change and what they asked for.
 - **Error auto-fix**: If the code crashes, Claude automatically attempts to fix it (up to 5 tries with exponential backoff)
 - **Queue**: Multiple prompts queue up. User prompts jump ahead of repeating ones.
@@ -62,6 +64,30 @@ The in-browser panel (right side) supports:
 - Claude edits via CollabPanel write back to `live.js` on disk
 - Browser edits (Ctrl+Enter) also sync back to the file
 - All changes tracked in an internal git repo with diffs
+
+## Custom Samples
+
+### GCS Sample Library
+
+Host your own sample banks on Google Cloud Storage:
+
+```javascript
+$: samples('https://storage.googleapis.com/vibe-duet-samples/strudel.json')
+  , s("claude_originals").chop(16)
+```
+
+To add samples: put audio files in `samples/<bank_name>/` and run `./sync-samples`.
+
+### Mic Recordings
+
+Record audio directly from the browser mic button. Recordings are saved as a `mic` sample bank:
+
+```javascript
+$: samples('/mic-samples/strudel.json')
+  , s("mic:0").gain(0.5)
+```
+
+Multiple recordings are indexed as `mic:0`, `mic:1`, etc. Works with all effects, slicing, and repitching. Claude knows about available mic samples and can incorporate them when you ask.
 
 ## Speech Synthesis (shabda)
 
