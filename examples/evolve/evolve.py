@@ -283,6 +283,10 @@ async def main():
         "--name", default="default", help="Experiment name (output subdirectory)"
     )
     parser.add_argument(
+        "--dir",
+        help="Resume from an existing experiment directory (reads config.json from it)",
+    )
+    parser.add_argument(
         "--prompt",
         default=DEFAULT_ITERATION_PROMPT,
         help="Iteration prompt sent each step (default: 'Evolve this according to your preferences')",
@@ -316,37 +320,60 @@ async def main():
     )
     args = parser.parse_args()
 
-    seed = load_seed(args.seed)
-    phash = prompt_hash(args.prompt, SYSTEM_PROMPT)
-    experiment_name = f"{args.name}_{phash}"
-    output_dir = os.path.join(SCRIPT_DIR, "output", experiment_name)
-    os.makedirs(output_dir, exist_ok=True)
-
-    if args.models:
-        selected = {m.strip() for m in args.models.split(",")}
-        models = {k: v for k, v in MODELS.items() if k in selected}
+    if args.dir:
+        # Resume from existing experiment directory
+        output_dir = args.dir
+        if not os.path.isabs(output_dir):
+            output_dir = os.path.join(SCRIPT_DIR, output_dir)
+        config_path = os.path.join(output_dir, "config.json")
+        with open(config_path) as f:
+            saved = json.load(f)
+        seed = load_seed(saved.get("seed")) or DEFAULT_SEED
+        iteration_prompt = (
+            args.prompt if args.prompt != DEFAULT_ITERATION_PROMPT else saved["prompt"]
+        )
+        steps = args.steps if args.steps != 100 else saved.get("steps", 100)
+        experiment_name = os.path.basename(output_dir)
+        args.resume = True
+        if args.models:
+            selected = {m.strip() for m in args.models.split(",")}
+            models = {k: v for k, v in MODELS.items() if k in selected}
+        else:
+            models = {k: MODELS[k] for k in saved.get("models", {}) if k in MODELS}
     else:
-        models = MODELS
+        seed = load_seed(args.seed)
+        iteration_prompt = args.prompt
+        steps = args.steps
+        phash = prompt_hash(args.prompt, SYSTEM_PROMPT)
+        experiment_name = f"{args.name}_{phash}"
+        output_dir = os.path.join(SCRIPT_DIR, "output", experiment_name)
+        os.makedirs(output_dir, exist_ok=True)
 
-    # Save experiment config
-    config_path = os.path.join(output_dir, "config.json")
-    config = {
-        "name": args.name,
-        "prompt": args.prompt,
-        "prompt_hash": phash,
-        "seed": args.seed,
-        "steps": args.steps,
-        "models": {k: v["model"] for k, v in models.items()},
-        "system_prompt": SYSTEM_PROMPT,
-    }
-    if not os.path.exists(config_path):
-        with open(config_path, "w") as f:
-            json.dump(config, f, indent=2)
-            f.write("\n")
+        if args.models:
+            selected = {m.strip() for m in args.models.split(",")}
+            models = {k: v for k, v in MODELS.items() if k in selected}
+        else:
+            models = MODELS
+
+        # Save experiment config
+        config_path = os.path.join(output_dir, "config.json")
+        config = {
+            "name": args.name,
+            "prompt": iteration_prompt,
+            "prompt_hash": phash,
+            "seed": args.seed,
+            "steps": steps,
+            "models": {k: v["model"] for k, v in models.items()},
+            "system_prompt": SYSTEM_PROMPT,
+        }
+        if not os.path.exists(config_path):
+            with open(config_path, "w") as f:
+                json.dump(config, f, indent=2)
+                f.write("\n")
 
     print(f"Experiment: {experiment_name}")
-    print(f"Prompt: {args.prompt}")
-    print(f"Steps: {args.steps}")
+    print(f"Prompt: {iteration_prompt}")
+    print(f"Steps: {steps}")
     print(f"Models: {', '.join(models.keys())}")
     print(f"Seed: {seed[:80]}{'...' if len(seed) > 80 else ''}")
     print(f"Output: {output_dir}")
@@ -358,9 +385,9 @@ async def main():
             cfg,
             output_dir,
             seed,
-            args.steps,
+            steps,
             args.resume,
-            iteration_prompt=args.prompt,
+            iteration_prompt=iteration_prompt,
             pin_original=args.pin_original,
             milestone_interval=args.milestones,
             recent_count=args.recent,
