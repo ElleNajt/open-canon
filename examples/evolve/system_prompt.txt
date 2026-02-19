@@ -148,6 +148,11 @@ samples('shabda/speech/fr-FR/m:magnifique')
 $: s("the_drum*2").chop(16).speed(rand.range(0.85, 1.1))
 $: s("forever magnifique").slow(4).late(0.125)
 
+### Arrangement
+arrange([cycles, pattern], ...) — play sections in sequence
+Example: arrange([8, stack(s("bd*4"), note("c4 e4 g4"))], [4, s("hh*8")])
+seqPLoop([start, stop, pattern], ...) — overlapping sections by cycle range
+
 ### Orbit & Routing
 .orbit(n) — route to different effect buses (each has own reverb/delay)
 .bus(n), .channel(n)

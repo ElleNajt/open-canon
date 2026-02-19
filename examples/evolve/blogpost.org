@@ -74,3 +74,62 @@ given creative freedom. Left unchecked, they treat "evolve" as "add
 more stuff" rather than "refine what's there." We added a prompt
 instruction to prefer clarity over complexity.
 
+** What Makes It Sound Inhuman
+
+Even when the code is syntactically valid and the piece "works," the
+outputs share patterns that no human musician would produce:
+
+*** Everything modulates, nothing is anchored
+
+By step 30, every parameter on every track is attached to a
+=sine.range().slow()=. Filter cutoff, reverb amount, FM index, ring
+mod depth, detune, phaser rate, panning -- all drifting simultaneously.
+A human musician picks one or two things to move and leaves the rest as
+a stable foundation. When everything moves, nothing moves: the ear has
+no contrast to latch onto.
+
+*** Effect stacking without identity
+
+A single track in Claude's Canon 3 output chains 18 effect parameters:
+vowel filter, detune, FM (3 params), pitch envelope (2 params),
+tremolo (3 params), phaser (3 params), reverb (3 params), and a juxBy
+layer. No human would apply every effect at moderate amounts. A good
+synth patch picks 2-3 defining effects and commits to them -- "this is
+the phaser voice," not "this is the everything voice."
+
+*** No dynamics or structure
+
+These pieces are continuous textures with no arc. No verse/chorus
+thinking, no drops, no call-and-response between tracks. The =.every()=
+conditionals in some outputs are the closest thing to structural
+variation, but they're cosmetic -- they don't create sections or
+tension/release.
+
+*** The prime number fetish
+
+Claude especially loves =.slow(113)=, =.slow(127)=, =.slow(167)= --
+all primes. The idea (presumably) is that coprime modulation rates
+never sync up, creating "organic" movement. In practice it means
+nothing ever resolves or arrives anywhere. Human music has moments of
+alignment: the downbeat, the cadence, the resolution.
+
+*** Reverb as default, not choice
+
+Almost every track across all models ends up with =.room(0.88+)= and
+=.size(0.97+)=. Everything swims in the same vast reverb. A human mix
+uses dry/wet contrast to create depth -- close present elements against
+distant washed ones. When everything is equally wet, the spatial
+dimension collapses.
+
+*** Inaudible ghost layers
+
+Several models produce =.off()= and =.jux()= layers with gains like
+0.008, 0.011, 0.018. These are functionally silent. It appears to be
+an artifact of gradual reduction: each step makes a layer "a little
+more subtle" until it's below the threshold of hearing but never gets
+deleted.
+
+We addressed these with prompt constraints: max 5-6 effects per track,
+anchor most parameters and modulate only 1-2 per track, vary reverb
+across tracks, minimum gain of 0.05, and filter Q below 10.
+

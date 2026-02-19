@@ -21,17 +21,19 @@ import os
 import subprocess
 import time
 
+import dotenv
+
+dotenv.load_dotenv(
+    os.path.join(os.path.dirname(__file__), "..", "..", ".env"), override=True
+)
+
 import anthropic
 import httpx
 
 DEFAULT_SEED = '$: s("bd sn bd sn")'
-DEFAULT_ITERATION_PROMPT = """Evolve this according to your preferences, considering:
+DEFAULT_ITERATION_PROMPT = """Evolve this piece. Imbue it with your personality. Make a musical choice: rewrite a melody, change the harmony, swap a rhythm, drop a track and add something unexpected, shift the mood. Be bold — a listener should hear something new each step, not just a knob tweak. Think like a composer writing variations, not an engineer adjusting a mix.
 
-Keep it simple. A great piece has 2-5 tracks, not 15. Evolving means refining — changing sounds, rhythms, and effects — not piling on more tracks. Remove a part before adding one. Restraint is musicality.
-
-Each edit should be a small, deliberate change — not a rewrite. A listener should recognize the previous version in the new one. Change one or two things at a time: swap a sound, adjust a rhythm, add or tweak an effect. The piece should evolve gradually, like variations on a theme.
-
-Keep .slow() and .fast() values reasonable (1-16). A .slow(119) sweep takes minutes to hear any change — it's effectively static. Modulations should be perceptible: use .slow(2) to .slow(16) so listeners can actually hear the movement."""
+Technical limits: .slow()/.fast() 1-16, .gain() above 0.05, filter Q (.lpq etc) below 10."""
 MAX_FIX_ATTEMPTS = 2
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -51,7 +53,7 @@ OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY") or None
 MODELS = {
     "claude": {
         "provider": "anthropic",
-        "model": "claude-sonnet-4-6",
+        "model": "claude-opus-4-5-20251101",
     },
     "gpt": {
         "provider": "openrouter",
