@@ -133,3 +133,36 @@ We addressed these with prompt constraints: max 5-6 effects per track,
 anchor most parameters and modulate only 1-2 per track, vary reverb
 across tracks, minimum gain of 0.05, and filter Q below 10.
 
+** Giving the Model Memory
+
+In the basic setup, each evolution step sees only the current code.
+The model has no memory of the original theme or its previous
+variations. This creates two problems: the piece drifts into a random
+walk with no relationship to the source material, and the model can't
+learn from its own trajectory (it may circle back to ideas it already
+tried).
+
+We added two optional context modes:
+
+*** Pinning the original theme (=--pin-original=)
+
+Every prompt includes the original seed alongside the current code.
+The model always knows what it's writing variations /of/. This is the
+difference between "evolve this code" and "write the next variation on
+this theme." It's what makes the output feel like a variation set
+rather than an aimless drift.
+
+*** Milestone memory (=--milestones N=)
+
+Every Nth step is included in subsequent prompts as history. With
+=--milestones 5=, the model at step 22 sees: the original theme,
+steps 5, 10, 15, and 20, plus the current code. This gives it a sense
+of trajectory -- it can see where it's been and choose to continue in
+a direction or deliberately diverge.
+
+The tradeoff is context length. With both flags on a 30-step run using
+milestone interval 5, the prompt at step 30 includes: the original
+seed + 5 milestone snapshots + the current code. For a typical piece
+this is 10-15k tokens, well within Opus's context window but worth
+watching for longer runs.
+

@@ -154,6 +154,9 @@ async def evolve_model(
     steps: int,
     resume: bool,
     iteration_prompt: str = DEFAULT_ITERATION_PROMPT,
+    pin_original: bool = False,
+    milestone_interval: int = 0,
+    recent_count: int = 0,
 ):
     model_dir = os.path.join(output_dir, name)
     os.makedirs(model_dir, exist_ok=True)
@@ -174,8 +177,37 @@ async def evolve_model(
     if start_step > 0:
         print(f"[{name}] Resuming from step {start_step}")
 
+    # Load history if resuming
+    milestones = {}
+    recent = []  # list of (step_num, code) tuples
+    if start_step > 0:
+        for f in sorted(os.listdir(model_dir)):
+            if f.startswith("step_") and f.endswith(".js"):
+                n = int(f.replace("step_", "").replace(".js", ""))
+                if n > 0 and n <= start_step:
+                    with open(os.path.join(model_dir, f)) as fh:
+                        step_code = fh.read()
+                    if milestone_interval > 0 and n % milestone_interval == 0:
+                        milestones[n] = step_code
+                    if recent_count > 0:
+                        recent.append((n, step_code))
+                        recent = recent[-recent_count:]
+
     for step in range(start_step + 1, steps + 1):
-        user_msg = f"Current code:\n{code}\n\nRequest: {iteration_prompt}"
+        parts = []
+        if pin_original:
+            parts.append(f"Original theme:\n{seed}")
+        if milestones:
+            parts.append("Previous variations:")
+            for ms_step in sorted(milestones):
+                parts.append(f"--- Step {ms_step} ---\n{milestones[ms_step]}")
+        if recent:
+            parts.append("Recent steps:")
+            for rs_step, rs_code in recent:
+                parts.append(f"--- Step {rs_step} ---\n{rs_code}")
+        parts.append(f"Current code:\n{code}")
+        parts.append(f"Request: {iteration_prompt}")
+        user_msg = "\n\n".join(parts)
 
         print(f"[{name}] Step {step}/{steps}...", flush=True)
         t0 = time.time()
@@ -224,6 +256,12 @@ async def evolve_model(
         with open(os.path.join(model_dir, f"step_{step:02d}.js"), "w") as f:
             f.write(code)
 
+        if milestone_interval > 0 and step % milestone_interval == 0:
+            milestones[step] = code
+        if recent_count > 0:
+            recent.append((step, code))
+            recent = recent[-recent_count:]
+
     print(f"[{name}] Complete! Steps saved to {model_dir}/")
 
 
@@ -254,6 +292,25 @@ async def main():
     parser.add_argument(
         "--models",
         help="Comma-separated list of models to run (default: all)",
+    )
+    parser.add_argument(
+        "--pin-original",
+        action="store_true",
+        help="Include the original seed in every prompt so the model remembers the theme",
+    )
+    parser.add_argument(
+        "--milestones",
+        type=int,
+        default=0,
+        metavar="N",
+        help="Include every Nth step in the prompt as variation history (e.g. --milestones 5)",
+    )
+    parser.add_argument(
+        "--recent",
+        type=int,
+        default=0,
+        metavar="M",
+        help="Include the last M steps in the prompt as recent history (e.g. --recent 3)",
     )
     args = parser.parse_args()
 
@@ -302,6 +359,9 @@ async def main():
             args.steps,
             args.resume,
             iteration_prompt=args.prompt,
+            pin_original=args.pin_original,
+            milestone_interval=args.milestones,
+            recent_count=args.recent,
         )
         for name, cfg in models.items()
     ]
