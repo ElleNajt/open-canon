@@ -268,9 +268,11 @@ async def evolve_model(
 def load_seed(seed_arg: str | None) -> str:
     if seed_arg is None:
         return DEFAULT_SEED
-    if os.path.isfile(seed_arg):
-        with open(seed_arg) as f:
-            return f.read()
+    # Try as-is, then relative to script dir
+    for path in [seed_arg, os.path.join(SCRIPT_DIR, seed_arg)]:
+        if os.path.isfile(path):
+            with open(path) as f:
+                return f.read()
     return seed_arg
 
 
