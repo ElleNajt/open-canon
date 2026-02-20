@@ -34,7 +34,7 @@ DEFAULT_SEED = '$: s("bd sn bd sn")'
 DEFAULT_ITERATION_PROMPT = """Evolve this piece. Imbue it with your personality. Make a musical choice: rewrite a melody, change the harmony, swap a rhythm, drop a track and add something unexpected, shift the mood. Be bold — a listener should hear something new each step, not just a knob tweak. Think like a composer writing variations, not an engineer adjusting a mix.
 
 Technical limits: .slow()/.fast() 1-16, .gain() above 0.05, filter Q (.lpq etc) below 10."""
-MAX_FIX_ATTEMPTS = 2
+MAX_FIX_ATTEMPTS = 5
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 STRUDEL_DIR = os.path.join(SCRIPT_DIR, "..", "..", "strudel")
@@ -224,23 +224,24 @@ async def evolve_model(
                 f.write(code)
             continue
 
-        # Validate syntax and retry if needed
+        # Validate syntax and retry from scratch if needed
         error = validate_syntax(new_code)
         if error:
             for attempt in range(MAX_FIX_ATTEMPTS):
                 print(
-                    f"[{name}] Step {step} syntax error: {error} (fix attempt {attempt + 1})",
+                    f"[{name}] Step {step} syntax error: {error} (retry {attempt + 1}/{MAX_FIX_ATTEMPTS})",
                     flush=True,
                 )
-                fix_msg = f"Current code:\n{new_code}\n\nThis code has a syntax error: {error}\nFix the syntax error and return the corrected code."
-                new_code = await call_model(config, SYSTEM_PROMPT, fix_msg)
+                new_code = await call_model(config, SYSTEM_PROMPT, user_msg)
+                if len(new_code) < len(code) * 0.2:
+                    continue
                 error = validate_syntax(new_code)
                 if not error:
                     break
 
         if error:
             print(
-                f"[{name}] Step {step} STILL has syntax error after {MAX_FIX_ATTEMPTS} fixes, keeping previous code",
+                f"[{name}] Step {step} STILL failing after {MAX_FIX_ATTEMPTS} retries, keeping previous code",
                 flush=True,
             )
             with open(os.path.join(model_dir, f"step_{step:02d}.js"), "w") as f:
