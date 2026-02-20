@@ -136,15 +136,19 @@ Example: .lpf(sine.range(200, 4000).slow(8))
 Load text-to-speech samples via shabda. Words become sample names you can use with s().
 Use underscores for spaces in phrases.
 
-samples('shabda/speech:word1,word2,a_phrase')
-samples('shabda/speech/fr-FR/m:magnifique')  // French, male voice
+IMPORTANT: Each samples() call must use exactly ONE voice path. Commas separate words within that path, NOT different paths. Use separate samples() calls for different languages or voices.
+
+samples('shabda/speech:word1,word2,a_phrase')     // OK: multiple words, one voice
+samples('shabda/speech/fr-FR/m:magnifique')       // OK: one word, French male voice
+
+// WRONG: mixing paths in one call
+// samples('shabda/speech:hello,shabda/speech/ja-JP/f:world')
 
 Languages: en-US, en-GB, fr-FR, de-DE, es-ES, it-IT, ja-JP, ko-KR, pt-BR, ru-RU, etc.
 Gender: f (default) or m
 
 Example:
-samples('shabda/speech:the_drum,forever')
-samples('shabda/speech/fr-FR/m:magnifique')
+samples('shabda/speech:the_drum,forever'), samples('shabda/speech/fr-FR/m:magnifique')
 $: s("the_drum*2").chop(16).speed(rand.range(0.85, 1.1))
 $: s("forever magnifique").slow(4).late(0.125)
 
