@@ -1,0 +1,52 @@
+setcps(160/60/4)
+samples('shabda/speech:groove,pulse,evolve,grok,mutate,change,strudel,livecode')
+
+$: note("bb1 [eb2 g2 bb2] [d3 f3 ab3] [c4 eb5 g5 bb5]")
+  .slow(2.5)
+  .sound("sawtooth")
+  .lpf(sine.range(80,5200).slow(2.8))
+  .lpq(perlin.range(1.2,4.8))
+  .iter(tri.range(2,6).slow(12))
+  .gain(0.75)
+
+$: note("eb3 [ab3 c4 eb4] [g4 bb4 d5] [f5 ab5 c6 eb6]")
+  .slow(2.7)
+  .sound("square")
+  .lpf(perlin.range(220,5600).slow(3.1))
+  .phaser(tri.range(0.3,1.3).slow(2.7))
+  .resonance(2.8)
+  .gain(0.72)
+
+$: note("g3 [c4 eb4 g4] [bb4 d5 f5] [ab5 c6 eb7 g7]")
+  .slow(2.4)
+  .sound("supersaw")
+  .lpf(saw.range(380,6200).slow(3.9))
+  .pan(cosine.range(0.05,0.95).slow(6.2))
+  .fmi(rand.range(0.3,1.8).slow(4.5))
+  .detune(sine.range(-15,15).slow(8))
+
+$: stack(
+  s("bd*2 [bd ~] bd").euclid(9,16).slow(2.6).gain(0.82),
+  s("~ sn [cp rim]").euclid(10,16).slow(2.6).gain(0.68).pan(saw.range(0.15,0.85)),
+  s("hh*16? oh*8?").fast(4.5).gain(0.52).hpf(4800).degradeBy(0.48).crush(rand.range(3,15).slow(5.2))
+).room(0.82)
+.delay(0.72)
+.delaytime(sine.range(0.22,0.46))
+.swing(0.28)
+.juxBy(-0.35, rev)
+
+$: note("ab1 [c2 g2 bb2] [d3 f3 ab3] [eb4 g4 c5 eb5 g5]")
+  .slow(2.9)
+  .sound("pulse")
+  .drive(saw.range(0.35,1.0).slow(3.5))
+  .pan(perlin.range(0.05,0.95).slow(8.2))
+  .tremolo(0.42)
+  .gain(0.7)
+
+$: s("[grok groove*2] [strudel livecode*2] [evolve mutate] [pulse change*2], [grok*3 evolve] [strudel groove livecode mutate pulse change]")
+  .slow(3.0)
+  .gain(perlin.range(0.7,0.95))
+  .lpf(perlin.range(320,3200).slow(4.8))
+  .chop(sine.range(14,22).slow(6.0))
+  .speed(rand.range(0.7,1.3).slow(6.8))
+  .vowel("a i o")

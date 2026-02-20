@@ -1,0 +1,93 @@
+// Goldberg Variations - Shattered Mirror
+// Bold shift: moving to C# minor, rhythmic displacement, ghostly textures
+
+setcps(72/60/4)
+
+// Bass transforms into pulsing fifths with irregular accents
+$: note("[cs2 gs2] [~ cs2] [gs1 ~] [cs2 gs2 cs2 ~]")
+  .slow(4)
+  .sound("sawtooth")
+  .lpf(350)
+  .gain(0.4)
+  .attack(0.005)
+  .decay(0.2)
+  .sustain(0.3)
+  .release(0.5)
+  .room(0.45)
+  .distort(0.15)
+
+// Soprano becomes fragmented, breath-like phrases
+$: note("[~ gs5 ~ a5] [e5 ~ ~ ~] [~ ~ fs5 ~] [b5 ~ cs6 ~]")
+  .slow(3)
+  .sound("sine")
+  .lpf(3500)
+  .gain(0.26)
+  .attack(0.15)
+  .release(1.8)
+  .delay(0.5)
+  .delaytime(0.333)
+  .delayfeedback(0.6)
+  .room(0.65)
+  .pan(sine.range(0.2, 0.8).slow(7))
+
+// Replace whole tone with chromatic cluster in 5/4 feel
+$: note("[cs4 d4 ds4 e4 f4]*5")
+  .slow(6)
+  .sound("triangle")
+  .gain(0.16)
+  .lpf(sine.range(600, 2800).slow(8))
+  .lpq(6)
+  .attack(0.12)
+  .release(0.35)
+  .detune(rand.range(-20, 20))
+
+// New: spectral bells replacing metallic resonance
+$: note("<cs7 e7> <gs6 b6> <a6 fs6>")
+  .slow(4)
+  .sound("sine")
+  .fm(3)
+  .fmh(4.5)
+  .gain(0.11)
+  .attack(0.001)
+  .decay(0.4)
+  .sustain(0)
+  .release(2)
+  .room(0.8)
+  .hpf(1500)
+
+// New: sub bass drone shifts to tritone tension
+$: note("<cs1 g1>")
+  .slow(16)
+  .sound("sine")
+  .gain(0.25)
+  .lpf(120)
+  .attack(4)
+  .release(4)
+
+// Chord stabs become spread voicings with tremolo
+$: note("[~ <cs4 fs4 a4 cs5> ~ ~] [~ ~ ~ <bs3 ds4 gs4 bs4>]")
+  .slow(2)
+  .sound("supersaw")
+  .gain(0.13)
+  .lpf(1400)
+  .lpq(3)
+  .attack(0.02)
+  .decay(0.25)
+  .sustain(0.15)
+  .release(0.4)
+  .tremolo(0.6)
+  .tremolosync(3)
+  .room(0.4)
+
+// New: high descending line in counterpoint
+$: note("[gs6 ~ fs6 ~] [~ e6 ~ ds6] [~ ~ cs6 ~] [b5 ~ ~ ~]")
+  .slow(8)
+  .sound("pulse")
+  .gain(0.1)
+  .lpf(4000)
+  .attack(0.05)
+  .release(0.8)
+  .delay(0.35)
+  .delaytime(0.5)
+  .delayfeedback(0.45)
+  .pan(0.7)

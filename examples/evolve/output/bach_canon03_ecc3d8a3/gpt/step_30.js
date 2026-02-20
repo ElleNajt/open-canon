@@ -1,0 +1,152 @@
+// BWV 1087 Canon 3 — Evolved REVISED 21 (Strudel: pale aurora, shifting constellations, arctic breath, gold shadow, clear shimmer, new arcs)
+
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.19)
+  .attack(0.012)
+  .decay(0.13)
+  .sustain(0.41)
+  .lpf(sine.range(1200,4320).slow(22))
+  .room(sine.range(0.27,0.46).slow(21))
+  .pan(sine.range(0.13,0.53).slow(17))
+  .every(4, z => z.tremolo(0.15).tremolosync(5))
+  .sometimesBy(0.22, z => z.lpf(4900))
+  .sometimes(z => z.rev())
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.12)
+  .attack(0.018)
+  .decay(0.16)
+  .sustain(0.20)
+  .bpf(sine.range(410,1320).slow(15))
+  .room(sine.range(0.19,0.32).slow(14))
+  .pan(sine.range(0.69,0.98).slow(19))
+  .every(5, z => z.tremolo(0.16).tremolosync(10))
+  .often(z => z.hpf(170))
+  .sometimes(z => z.rev())
+  .sometimesBy(0.17, z => z.lpf(3000))
+
+let bassVoice = x => x
+  .sound("sawtooth")
+  .gain(0.1)
+  .attack(0.022)
+  .decay(0.13)
+  .lpf(sine.range(120,690).slow(23))
+  .release(0.38)
+  .room(0.36)
+  .octave(-1)
+  .pan(sine.range(0.15,0.42).slow(13))
+  .every(8, z => z.detune(sine.range(-22,16).slow(37)))
+  .sometimesBy(0.16, z => z.bandf(790))
+  .sometimesBy(0.18, z => z.lpf(400))
+
+let harpsiAccent = x => x
+  .sound("piano")
+  .gain(0.079)
+  .attack(0.001)
+  .decay(0.049)
+  .sustain(0.032)
+  .lpf(sine.range(5300,8300).slow(10))
+  .room(sine.range(0.26,0.38).slow(13))
+  .pan(rand.range(0.15,0.56))
+  .sometimesBy(0.23, z => z.hpf(1000))
+
+setcps(124/60/4)
+
+// Track 1 — upper canon: new aurora, lucid, more flowing
+$: stack([
+  note("~!33 d5 ~!6 e5 ~!11 gb5 ~!9 g5 ~!17 b5 ~!14 a5 ~!13 g5 ~!7 d6 ~!6 d5 ~!8 e5 ~!7 gb5 ~!8 g5 ~!19 b5 ~!11 a5 ~ g5").slow(196/8/6.2),
+  note("[<b4 e5>] ~ [d5 g5] ~ ![g5 b5] ~").slow(41/8/7.7)
+])
+  .apply(upperVoice)
+  .degradeBy(0.15)
+  .lpf(sine.range(1400,3970).slow(18))
+  .room(sine.range(0.37,0.5).slow(22))
+  .every(3, x => x.vowel("i o u a"))
+  .every(8, x => x.palindrome())
+  .sometimesBy(0.18, x => x.swing(rand.range(0.11,0.19)))
+  .often(x => x.delay(0.11).delayfeedback(rand.range(0.17,0.23)))
+  .sometimesBy(0.19, x => x.rev())
+
+// Track 2 — lower canon: illuminate, trailing, swept
+$: stack([
+  note("~!17 g5 ~!9 gb5 ~!13 e5 ~!2 d5 ~!8 ~ b4 ~!7 c5 ~!3 d5 ~!11 g4 ~!5 gb5 ~!7 e5 ~!6 d5 ~!14 b4 ~!2 c5 ~!17 d5 ~!2 g4").slow(208/8/8.3),
+  note("~!11 g4 ~!7 c5 ~ ~!8 d4 ~!2").slow(26/8/6.6)
+])
+  .apply(lowerVoice)
+  .degradeBy(0.15)
+  .swing(0.13)
+  .every(6, x => x.bpf(sine.range(360,1280).slow(12)).bpq(0.31))
+  .every(10, x => x.vowel("o u i"))
+  .sometimesBy(0.19, x => x.palindrome())
+  .rarely(x => x.rev())
+  .pan(sine.range(0.52,0.99).slow(14))
+
+// Track 3 — Bass: evolving deep arcs, airy
+$: stack([
+  note("~!19 d3 ~!10 g3 ~ b2 ~!23 a2 ~!5 g3 ~!8 d3 ~!13 g2 ~!9 b2 ~!11 a2 ~!12 e3 ~!7 d3 ~!14 g2 ~!7 b2 ~!12 a2 ~!5 d2").slow(173/8/7.3),
+  note("[g3~d4] ~ ~ ~").slow(50/8/10.2)
+])
+  .apply(bassVoice)
+  .degradeBy(0.14)
+  .shape(sine.range(0.13,0.37).slow(15))
+  .every(6, x => x.transpose(-12))
+  .sometimesBy(0.23, x => x.sustain(0.48))
+  .sometimesBy(0.18, x => x.release(0.81))
+  .rarely(x => x.vowel("a"))
+  .sometimesBy(0.17, x => x.rev())
+
+// Track 4 — Accent triangle: icy sparks, mist
+$: note("[g4] ~ ~ ~ [e4] ~ [ds4] ~ [b4] ~ [a4] ~ ~ ~ [g4] ~")
+  .sound("triangle")
+  .gain(0.021)
+  .lpf(sine.range(900,1600).slow(19))
+  .room(sine.range(0.15,0.30).slow(15))
+  .pan(rand.range(0.18,0.91))
+  .attack(0.031)
+  .release(0.14)
+  .degradeBy(0.28)
+  .every(8, x=>x.palindrome())
+  .every(6, x=>x.rev())
+  .sometimesBy(0.27, x=>x.drive(0.17))
+
+// Track 5 — Harpsichord: satellite gold, more airy, resonant
+$: note("<d4 ~ g4~> ~ <c4 ~ e4 ~> ~ <b3 ~ d5~> ~ <a3 ds4 ~> ~ ~ <e4 ~ cs5> ~")
+  .slow(21/8/3.1)
+  .apply(harpsiAccent)
+  .degradeBy(0.18)
+  .velocity(rand.range(0.12,0.17))
+  .lpf(sine.range(5900,7500).slow(13))
+  .pan(rand.range(0.11,0.59))
+  .sustain(0.077)
+  .every(7, x=>x.rev())
+
+// Ghost sine: aurora veils, paler, bright
+$: note("g6 ~ b5 ~ d6 ~ fs6 ~ gs6 ~ a6 ~ ~")
+    .sound("sine")
+    .gain(0.022)
+    .attack(0.8)
+    .release(4.1)
+    .room(0.99)
+    .pan(sine.range(0.09,0.94).slow(22))
+    .slow(121/8/7.7)
+    .degradeBy(0.36)
+    .tremolo(sine.range(0.10,0.19).slow(16))
+    .sometimesBy(0.11, x=>x.slide(rand.range(46,62)))
+    .every(14, x => x.vowel("i o a"))
+    .delay(0.39).delayfeedback(sine.range(0.21,0.36).slow(14))
+    .rarely(x=>x.rev())
+
+// Percussive metal/noise: crystalline fragments, shimmering mist
+$: s("cp:2 ~ ~ ~ [~ cp:1] ~ ~ ~ ~ ~ ~")
+    .gain(0.013)
+    .pan(rand.range(0.44,1.0))
+    .room(sine.range(0.23,0.41).slow(19))
+    .decay(0.14)
+    .sometimes(x=>x.delay(0.18))
+    .rarely(x=>x.crush(1))
+    .velocity(rand.range(0.11,0.15))
+    .slow(57/8/4.2)
+    .degradeBy(sine.range(0.79,0.97).slow(22))
+    .every(11, x => x.distort(0.11).gain(0.13))

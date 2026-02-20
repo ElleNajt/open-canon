@@ -1,0 +1,50 @@
+samples('shabda/speech:binary,thought,process,data', 'shabda/speech/de-DE:maschine,geist')
+setcps(135/60/4)
+
+$: note("[c2(3,8) g#1(3,8)] f1 [a#1 a#1]").slow(8)
+  .sound("pulse")
+  .shape(0.4)
+  .cutoff(200)
+  .resonance(8)
+  .gain(0.18)
+  .delay(0.25)
+
+$: note("0 7 5 8 7 3 5 0").scale("c:aeolian")
+  .sound("sine")
+  .fmi(cosine.range(1, 10).slow(8))
+  .fmh(2)
+  .gain(0.15)
+  .delay(0.5)
+  .pan(perlin.range(0,1).slow(6))
+
+$: stack(
+    s("bd*4"),
+    s("[~ sn]*4"),
+    s("hh*16").gain(0.4).hpf(4000)
+  ).crush(8)
+  .distort(0.2)
+  .room(0.1)
+  .gain(0.6)
+
+$: note("<c3:maj7 g3:min7>").chord().slow(16)
+  .sound("sawtooth")
+  .gain(0.2)
+  .attack(2)
+  .release(3)
+  .cutoff(sine.range(800, 3000).slow(12))
+  .room(0.5)
+
+$: s("<binary process> <maschine geist>").slow(4)
+  .striate(16)
+  .speed(perlin.range(0.7, 1.3).slow(9))
+  .gain(0.18)
+  .delay(0.6)
+  .pan(perlin.slow(11).range(0.1, 0.9))
+
+$: note("~ c5 d#5 f5 g5 a#5 g5 [f5 d#5]").fast(2)
+  .sound("triangle")
+  .gain(0.12)
+  .slide(0.1)
+  .delay(0.3)
+  .delayfeedback(0.6)
+  .hpf(800)

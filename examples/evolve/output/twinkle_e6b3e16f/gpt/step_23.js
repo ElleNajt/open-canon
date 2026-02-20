@@ -1,0 +1,41 @@
+setcps(70/60/4)
+
+$: stack([
+  note("c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~ g4 g4 f4 f4 e4 e4 d4 ~ g4 g4 f4 f4 e4 e4 d4 ~ c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~")
+    .sound("triangle")
+    .room(0.53)
+    .lpf(sine.range(300, 1800).slow(16))
+    .attack(0.13)
+    .release(0.37)
+    .delay(0.19)
+    .delayfeedback(0.28)
+    .every(8, x => x.distort(0.41).resonance(14))
+    .every(4, x => x.rev())
+    .sometimes(x => x.pan(0.2))
+    .sometimes(x => x.vowel("e o"))
+    .every(16, x => x.shape(0.33).degradeBy(0.21)),
+  note("c3 ~ g3 ~ f3 ~ e3 ~ d3 ~ c3 ~")
+    .sound("sine")
+    .gain(0.12)
+    .room(0.41)
+    .lpf(220)
+    .attack(0.19)
+    .release(0.42)
+    .cutoff(tri.range(120, 920).slow(13))
+    .every(8, x => x.hpf(540).room(0.58).pan(0.79)),
+  "[bd ~] [bd bd] ~"
+    .sound("bd")
+    .gain(0.13)
+    .room(0.18)
+    .every(4, x => x.gain(0.19).attack(0.13))
+    .degradeBy(0.13)
+    .every(8, x => x.crush(7)),
+  "[oh*2 ~] ~ [oh bd] ~"
+    .sound("oh")
+    .gain(0.07)
+    .room(0.1)
+    .attack(0.02)
+    .release(0.15)
+    .pan(sine.range(0.05, 0.8).slow(6))
+    .degradeBy(0.17)
+])

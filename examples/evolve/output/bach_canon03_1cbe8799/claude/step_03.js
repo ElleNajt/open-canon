@@ -1,0 +1,66 @@
+setcps(120/60/4)
+
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(sine.range(1800, 3200).slow(8))
+  .room(0.3)
+  .size(0.65)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.38)
+  .decay(0.18)
+  .sustain(0.15)
+  .lpf(sine.range(900, 1600).slow(11))
+  .room(0.2)
+  .shape(0.12)
+
+// Track 1 - upper canon voice
+$: note("~!40 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!15")
+  .slow(208/8/4)
+  .apply(upperVoice)
+  .pan(0.28)
+  .off(0.25, x => x.note(x => x + 7).gain(0.15).pan(0.5).lpf(2200))
+  .phaser(sine.range(0.2, 0.9).slow(14))
+  .phaserdepth(0.35)
+
+// Track 2 - lower canon voice
+$: note("~!8 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!15")
+  .slow(208/8/4)
+  .apply(lowerVoice)
+  .pan(0.72)
+  .juxBy(0.25, x => x.detune(12).lpf(800).room(0.35))
+
+// Track 3 - bass with FM warmth
+$: note("<g2 g2 d3 b2>")
+  .sound("sine")
+  .gain(perlin.range(0.2, 0.32).slow(6))
+  .attack(0.12)
+  .release(0.8)
+  .lpf(sine.range(250, 480).slow(9))
+  .room(0.35)
+  .size(0.7)
+  .pan(0.5)
+  .fmi(perlin.range(0.1, 1.2).slow(7))
+  .fmh(2)
+
+// Track 4 - sparse shimmer, drifting pans
+$: note("<d6 ~ g5 ~ b5 ~ ~ e6>")
+  .sound("triangle")
+  .gain(perlin.range(0.12, 0.22).slow(8))
+  .attack(0.12)
+  .decay(0.5)
+  .sustain(0.08)
+  .release(1.2)
+  .lpf(3600)
+  .room(0.65)
+  .size(0.9)
+  .pan(sine.range(0.25, 0.75).slow(7))
+  .degradeBy(0.35)
+  .delay(0.3)
+  .delaytime(0.375)
+  .delayfeedback(0.3)

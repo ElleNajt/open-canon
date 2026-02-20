@@ -1,0 +1,37 @@
+setcps(112/60/4)
+
+$: note("<g4 c5> <d5 g4> <a#4 d#4> <d5 g4>")
+  .s("supersaw")
+  .slow(2)
+  .release(0.4)
+  .sustain(0)
+  .lpf(sine.range(500, 5000).slow(2))
+  .lpenv(1000)
+  .lpdecay(0.2)
+  .lpq(8)
+  .gain(0.35)
+  .pan(perlin.slow(6).range(0.2, 0.8))
+  .delay(0.5)
+  .dfb(0.6)
+  .dt(3/8)
+  .room(0.5)
+
+$: n("[g1 g1] ~ g1 [c2 ~ c2] ~ [d#1 d#1] ~ d#1 [f1 ~ f1] ~")
+  .s("square")
+  .slow(4)
+  .attack(0.01)
+  .release(0.3)
+  .sustain(0)
+  .lpf(100)
+  .lpenv(1200)
+  .lpdecay(0.3)
+  .lpq(12)
+  .drive(0.4)
+  .crush(6)
+  .gain(0.5)
+
+$: stack(
+  s("bd ~ bd ~"),
+  stack(s("~ sn"), s("~ cp").gain(0.8)),
+  s("[hh hh] hh [hh oh]").hpf(5000).velocity(perlin.range(0.5, 1).slow(3))
+).swing(0.05).compressor().drive(0.1).gain(0.9)

@@ -1,0 +1,50 @@
+// Goldberg Variations - Ground Bass (BWV 988)
+// The 8-note descending bass that underlies all 30 variations
+
+setcps(76/60/4)
+
+$: stack(
+  note("g3 gb3 e3 d3 b2 c3 d3 g2")
+    .slow(3)
+    .sound("triangle")
+    .gain(0.45)
+    .lpf(sine.range(300, 1700).slow(8))
+    .lpq(3.5),
+  note("g4 gb4 e4 d4 b3 c4 d4 <g3 e4>")
+    .slow(4)
+    .sound("piano")
+    .gain(0.2)
+    .hpf(777)
+    .release(0.13)
+    .every(3, x => x.rev())
+)
+
+$: s("<hh~ cr> [~ hh] hh*6")
+  .gain(0.07)
+  .pan(perlin.range(0,1).slow(7))
+  .degradeBy(0.19)
+  .every(5, x => x.rev())
+
+$: s("supersaw")
+  .n("<7 [~ 5]> ~ 3 2 0")
+  .scale("C:minor")
+  .gain(0.14)
+  .room(0.25)
+  .delay(0.13)
+  .every(4, x=>x.jux(y=>y.hpf(1300)))
+
+$: s("[bd bd ~ bd] [bd*2 ~] ~ bd")
+  .gain(0.13)
+  .lpf(570)
+  .room(0.1)
+  .degradeBy(0.12)
+  .every(4, x=>x.rev())
+
+$: s("[triangle supersaw]~ [pulse square] [triangle ~] triangle*4")
+  .n("0 7 4 <9 [11 3]> ~ 2 5")
+  .scale("E:minor")
+  .gain(0.1)
+  .room(0.37)
+  .hpf(perlin.range(290,880).slow(13))
+  .rev()
+  .every(3, x => x.palindrome())

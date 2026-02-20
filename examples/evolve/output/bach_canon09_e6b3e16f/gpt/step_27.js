@@ -1,0 +1,70 @@
+// BWV 1087 Canon 9
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.44)
+  .attack(0.03)
+  .decay(0.12)
+  .sustain(0.2)
+  .lpf(2100)
+  .room(0.24)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.41)
+  .decay(0.18)
+  .sustain(0.19)
+  .lpf(790)
+  .room(0.19)
+
+setcps(120/60/4)
+
+// Track 1 — upper melody, newly more resonant and shifting
+$: note("g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ gb5 ~ a5 ~ db5 ~ e5 ~ g5 ~ db6 ~!3 d6 ~ a5 ~ gb5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ gb5 ~ a5 ~ d6 c6 b5 a5")
+  .slow(264/8/4)
+  .apply(upperVoice)
+  .pan(rand.range(0.09, 0.65).slow(25))
+  .lpf(sine.range(1800, 4300).slow(7))
+  .hpf(sine.range(380, 1200).slow(15))
+  .room(0.31)
+  .degradeBy(0.16)
+  .every(13, x => x.vowel("<i u a>"))
+  .every(21, x => x.rev())
+  .every(25, x => x.distort(0.24))
+  .every(32, x => x.delay(0.27).delaytime(0.13).delayfeedback(0.17))
+  .every(29, x => x.pan(0.79))
+  .every(17, x => x.tremolo(0.13).tremolosync(0.24))
+
+// Track 2 — lower voice, deep shimmer
+$: note("g3 ~ d4 ~ b3 ~ d4 ~ g4 ~ d4 ~ b3 ~ d4 ~ g3 ~ d3 ~ e3 ~ c3 ~ b2 ~ d3 ~ g3 ~!3 d3 ~ a2 ~ g3 ~ d3 ~ g2 ~ g3 ~ b3 ~ d4 ~ g3 ~ e4 ~ c4 ~ a3 ~ c4 ~ g3 ~ a3 ~ d4 c4 b3 a3")
+  .slow(264/8/4)
+  .apply(lowerVoice)
+  .pan(sine.range(0.22, 0.78).slow(17))
+  .lpf(sine.range(310, 1240).slow(19))
+  .hpf(70)
+  .room(0.21)
+  .degradeBy(0.22)
+  .every(11, x => x.vowel("o"))
+  .every(17, x => x.rev())
+  .every(23, x => x.distort(0.29))
+  .every(19, x => x.tremolo(0.1).tremolosync(0.16))
+
+// Track 3 — shimmer, glasslike, now more enveloped
+$: note("e6 ~!4 b5 ~!7 d6 ~!6 g6 ~!8 b6 ~!6 e7 ~!9")
+  .slow(264/24)
+  .sound("sine")
+  .attack(1.3)
+  .release(6.4)
+  .decay(2.6)
+  .sustain(0.07)
+  .gain(0.041)
+  .pan(sine.range(0.32, 0.74).slow(11))
+  .room(1)
+  .lpf(sine.range(440, 990).slow(16))
+  .every(7, x => x.vowel("i"))
+  .every(18, x => x.rev())
+  .every(11, x => x.distort(0.19))
+  .every(17, x => x.tremolo(0.23).tremolosync(0.14))
+  .every(23, x => x.hpf(360))
+  .every(19, x => x.delay(0.18).delaytime(0.21).delayfeedback(0.21))

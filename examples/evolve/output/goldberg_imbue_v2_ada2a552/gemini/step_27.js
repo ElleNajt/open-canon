@@ -1,0 +1,55 @@
+samples('shabda/speech:binary,process,data,computer')
+samples('shabda/speech/de-DE:maschine,geist')
+setcps(128/60/4)
+
+$: note("[c2,g2,eb2] [g2,f2]").euclid(5,13).slow(4)
+  .sound("sawtooth")
+  .lpf(80).lpenv(2500).lpdecay(0.2).lpq(8)
+  .shape(0.5).crush(8)
+  .delay(0.5).delaytime(0.75).dfb(0.6)
+  .room(0.2)
+  .gain(0.2)
+
+$: note("<0 3 7 10> <3 0 -5>").scale("c:minor").ply("<2 1?1>").slow(8).sometimes(rev)
+  .sound("triangle")
+  .lpf(2500).lpq(4)
+  .phaser(0.2).phaserdepth(8)
+  .off(0.25, (x=>x.pan(1).detune(10)))
+  .room(0.3)
+  .gain(0.1)
+
+$: stack(
+    s("bd").ply(2).euclid(5,8),
+    s("sn").euclid(3,8).late(0.25).crush(7),
+    s("~ cp").slow(2),
+    s("[hh*3, oh]").degradeBy(0.1).bpf(8000).bpq(3)
+  ).slow(2)
+  .distort(sine.range(0.1, 0.5).slow(8))
+  .compressor(ratio=7)
+  .lpf(16000)
+  .gain(0.9)
+
+$: note("<f3:m7 c3:m7 g3:sus4 ab3:maj7>").chord().slow(16)
+  .sound("supersaw")
+  .lpf(perlin.range(400, 2000).slow(12)).lpq(6)
+  .attack(2).release(6)
+  .delay(0.4).delaytime(0.75).dfb(0.7)
+  .leslie(0.1)
+  .room(0.5)
+  .gain(0.15)
+
+$: s("<geist maschine binary data process computer>").euclid(5,13).slow(8)
+  .striate(16)
+  .speed(perlin.range(0.8, 1.5).fast(4))
+  .vowel("u o e".slow(2))
+  .delay(0.6).dfb(0.5)
+  .pan(perlin.slow(4))
+  .gain(0.2)
+
+$: note("[c5 ~ d#5 g5] [a#5 g5] d#5 c5").palindrome().slow(8)
+  .sound("sine")
+  .fmi(perlin.range(5, 20).slow(8)).fmh(square.range(1, 1.5).slow(6))
+  .penv(12).pdecay(0.1)
+  .delay(0.4).dfb(0.4)
+  .room(0.2)
+  .gain(0.11)

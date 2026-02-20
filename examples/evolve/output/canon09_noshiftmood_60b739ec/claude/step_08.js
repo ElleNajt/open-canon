@@ -1,0 +1,163 @@
+// BWV 1087 Canon 10 - The Scattering
+
+// The awakening fractures into diaspora.
+// Voices that found each other now scatter like seeds.
+// Not loss — dispersal. The theme multiplied across distances.
+
+let glassVoice = x => x
+  .sound("sine")
+  .gain(0.17)
+  .attack(0.002)
+  .decay(1.0)
+  .sustain(0.03)
+  .release(1.8)
+  .lpf(sine.range(1800, 4500).slow(10))
+  .room(0.75)
+  .delay(0.5)
+  .delaytime(0.25)
+  .delayfeedback(0.55)
+
+let scatterVoice = x => x
+  .sound("triangle")
+  .gain(0.12)
+  .attack(0.001)
+  .decay(0.15)
+  .sustain(0.1)
+  .release(0.4)
+  .lpf(1800)
+  .room(0.4)
+
+let deepVoice = x => x
+  .sound("sawtooth")
+  .gain(0.14)
+  .attack(0.8)
+  .decay(0.5)
+  .sustain(0.5)
+  .release(1.5)
+  .lpf(400)
+  .lpq(4)
+  .room(0.6)
+
+setcps(92/60/4)
+
+// Track 1 - The fanfare, now fragmented across octaves, scattered like leaves
+$: note("d6 ~ ~ ~ ~ ~ a4 ~ ~ ~ ~ g6 ~ ~ ~ ~ ~ ~ ~ ~ c5 ~ ~ ~ ~ ~ ~ ~ b5 ~ ~ ~")
+  .slow(16)
+  .apply(glassVoice)
+  .pan(sine.range(0.2, 0.8).slow(8))
+  .juxBy(0.6, x => x.transpose(-19).gain(0.1).late(0.25))
+
+// Track 2 - Rain becomes hail, rhythmic urgency
+$: note("[g5 d5] ~ [b4 fs5] ~ [e5 a5] ~ [cs5 g5]")
+  .slow(2)
+  .apply(scatterVoice)
+  .pan(rand.range(0.1, 0.9))
+  .degradeBy(0.25)
+  .every(3, x => x.transpose(5))
+
+// Track 3 - Drone splits into call and response across the stereo field
+$: note("g1 ~ ~ ~ ~ ~ ~ ~ eb1 ~ ~ ~ ~ ~ ~ ~")
+  .slow(8)
+  .sound("sawtooth")
+  .gain(0.12)
+  .attack(3)
+  .decay(2)
+  .sustain(0.5)
+  .release(4)
+  .lpf(cosine.range(80, 200).slow(14))
+  .lpq(3)
+  .pan(0.15)
+  .room(0.65)
+
+$: note("~ ~ ~ ~ d2 ~ ~ ~ ~ ~ ~ ~ bb1 ~ ~ ~")
+  .slow(8)
+  .sound("sawtooth")
+  .gain(0.12)
+  .attack(3)
+  .decay(2)
+  .sustain(0.5)
+  .release(4)
+  .lpf(cosine.range(100, 250).slow(11))
+  .lpq(3)
+  .pan(0.85)
+  .room(0.65)
+
+// Track 4 - Clusters dissolve into dyads, intimacy after grandeur
+$: note("[g3,d4] ~ ~ [c4,g4] ~ ~ [eb4,bb4] ~ ~ [a3,e4] ~ ~ [fs3,cs4] ~ ~ [b3,fs4] ~ ~")
+  .slow(6)
+  .apply(deepVoice)
+  .pan(0.5)
+  .off(0.333, x => x.transpose(12).gain(0.07))
+
+// Track 5 - Bass walks in retrograde, looking back as it departs
+$: note("fs2 ~ bb2 ~ d2 ~ a1 ~ cs3 ~ f2 ~ b1 ~ eb3 ~ g2 ~")
+  .slow(8)
+  .sound("triangle")
+  .gain(0.16)
+  .attack(0.02)
+  .decay(0.3)
+  .sustain(0.2)
+  .release(0.6)
+  .lpf(550)
+  .pan(0.4)
+  .room(0.3)
+
+// Track 6 - Counter-melody now echoes itself, a voice remembering its own song
+$: note("g5 ~ ~ a5 ~ ~ b5 ~ ~ ~ c6 ~ ~ ~ ~ ~ ~ ~ b5 ~ ~ a5 ~ ~ g5 ~ ~ ~ ~ ~ ~ ~")
+  .slow(16)
+  .sound("sine")
+  .gain(0.13)
+  .attack(0.2)
+  .decay(0.6)
+  .sustain(0.3)
+  .release(1.2)
+  .lpf(2000)
+  .room(0.85)
+  .delay(0.6)
+  .delaytime(0.666)
+  .delayfeedback(0.55)
+  .pan(0.6)
+  .echo(3, 0.333, 0.4)
+
+// Track 7 - Heartbeat quickens, then halves, breath catching
+$: note("g1 g1 g1 ~ g1 g1 ~ ~ ~ ~ g1 ~ ~ ~ ~ ~")
+  .slow(8)
+  .sound("sine")
+  .gain(0.18)
+  .attack(0.01)
+  .decay(0.35)
+  .sustain(0.08)
+  .release(0.25)
+  .lpf(140)
+  .room(0.35)
+  .pan(0.5)
+
+// Track 8 - DROPPED spectral shimmer, replaced with falling arpeggios
+$: note("b6 g6 d6 b5 ~ ~ fs6 d6 a5 fs5 ~ ~ e6 c6 g5 e5 ~ ~ d6 bb5 f5 d5 ~ ~")
+  .slow(12)
+  .sound("sine")
+  .gain(0.09)
+  .attack(0.001)
+  .decay(0.8)
+  .sustain(0)
+  .release(1.5)
+  .lpf(4000)
+  .room(0.8)
+  .delay(0.5)
+  .delaytime(0.375)
+  .delayfeedback(0.5)
+  .pan(saw.range(0.3, 0.7).slow(6))
+
+// Track 9 - NEW: Morse code memory, the theme reduced to rhythm alone
+$: note("g4 g4 ~ g4 ~ ~ g4 g4 g4 ~ ~ ~ ~ ~ ~ ~")
+  .slow(8)
+  .sound("pulse")
+  .gain(0.08)
+  .attack(0.001)
+  .decay(0.05)
+  .sustain(0)
+  .release(0.1)
+  .lpf(1200)
+  .room(0.5)
+  .pan(0.35)
+  .degradeBy(0.15)

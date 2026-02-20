@@ -1,0 +1,56 @@
+setcps(101/60/4)
+
+$: stack(
+  note("g3 gb3 e3 <d3 b2> c3 d3 g2").slow(4)
+    .sound("triangle")
+    .gain(0.41)
+    .lpf(sine.range(1100, 3320).slow(5))
+    .lpq(5.2)
+    .every(4, x => x.jux(y => y.rev())),
+  s("bd*3 <bd bd~>")
+    .gain(0.22)
+    .cutoff(1710)
+    .room(0.3)
+    .every(2, x => x.jux(y => y.pan(0.88)))
+)
+
+$: s("hh cp <cp [cp~]> hh").slow(3)
+  .gain(0.18)
+  .pan(perlin.range(0.19,0.81).slow(6))
+  .cutoff(2990)
+  .degradeBy(0.13)
+  .every(5, x => x.jux(y => y.rev()))
+
+$: stack(
+  note("<c4 e4 g4 eb4 d4 f4 eb4>").slow(10)
+    .sound("supersaw")
+    .gain(0.23)
+    .cutoff(3370)
+    .tremolo(0.51)
+    .pan(sine.range(0.13,0.95).slow(7)),
+  note("a3 <d4~ f4> g3").slow(13)
+    .sound("supersaw")
+    .gain(0.12)
+    .tremolo(0.88)
+    .lpf(1440)
+)
+
+$: note("g4 d4 [f4~] <e4 a4>").slow(6)
+  .sound("piano")
+  .gain(0.21)
+  .release(0.9)
+  .every(7, x => x.jux(y => y.pan(0.74)))
+  .pan(sine.range(0.21,0.88).slow(9))
+
+$: note("<b3 g3 eb4 d4> [a3~] <fs3 cs4>").slow(9)
+  .sound("pulse")
+  .gain(0.17)
+  .cutoff(rand.range(1300,3300).slow(4))
+  .pan(cosine.range(0.2,0.8).slow(7))
+  .degradeBy(0.17)
+
+$: s("[saw square] <triangle~> supersaw*2").slow(7)
+  .gain(0.14)
+  .pan(perlin.range(0.12,0.94).slow(11))
+  .cutoff(sine.range(500,4200).slow(10))
+  .every(3, x => x.jux(y => y.rev()))

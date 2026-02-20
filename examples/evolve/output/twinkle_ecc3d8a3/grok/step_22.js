@@ -1,0 +1,53 @@
+setcps(0.65)
+
+stack(
+  s("bd*4 [~ sn cp] [bd sn cp] [bd ~ cp], bd [bd sn cp rd] [hh*16 ~], euclid(13,16):oh [oh*4 rd cp] [oh*8 hh*8]")
+    .gain(0.95).room(0.55).pan(0.25).swing(sine.range(0.24,0.4).slow(3))
+    .compressor().compressorKnee(0.4).compressorRatio(8)
+    .off(1/8, rev())
+    .every(16, "~?").sometimesBy(0.25, rev()).every(32, fast(1.04)).every(128, p=>p.swing(0.5)).every(256, p=>p.add(0.1).mul(0.92)),
+  s("[~ cp*4 hh*4] [cp oh rd*2] [hh*3 cp oh] ~")
+    .gain(0.28).pan(0.78).room(0.5).degradeBy(0.28)
+    .sometimesBy(0.42, rev()).every(64, rev()).every(128, p=>p.fast(1.1)),
+  note("eb1*2 c2*2 [eb1 g1 bb1 f1] [ab1 c2], [f1*3 ab1*2 g1 bb1] eb1*2 ~")
+    .sound("square").cut(1)
+    .lpf(500).lpq(28)
+    .attack(0.01).decay(0.25).sustain(0.72).release(0.7)
+    .slide(0.35).distort(0.22)
+    .delay(0.38).dfb(0.52)
+    .room(0.72).pan(0.12).late(0.08)
+    .every(16, rev()).every(64, p=>p.transpose(12).mul(0.8)).every(256, p=>p.transpose(-12)),
+  note("c2 eb2 g2 bb2, [f2 ab2 c3] eb3, [g2 bb2 d3] f3, [f2 a2 c3 eb3]")
+    .sound("sawtooth")
+    .detune(22)
+    .gain(0.4).lpf(1100).lpq(25).voicing()
+    .phaser(0.55).phaserdepth(0.85)
+    .attack(0.015).hold(0.18).decay(0.32).sustain(0.82).release(0.95)
+    .every(16, rev()).every(32, p=>p.transpose(12)).every(128, p=>p.add(-12)).every(256, p=>p.transpose(7)).room(0.88).pan(0.42),
+  note("eb4 [bb4 d5] f5 [bb4 ab4], [eb4 g4 f4 eb4 d4] bb4, [ab4 g4 f4] [eb4 d4 c4], bb3 eb4*2")
+    .sound("triangle")
+    .attack(0.012).decay(0.22).sustain(0.68).release(1.15)
+    .lpf(sine.range(350,5600).slow(4.2).mul(0.88).add(480))
+    .lpq(23)
+    .delay(0.45).dfb(0.48)
+    .leslie(0.8).vowel("e:3 a i o u")
+    .room(0.92).pan(0.72)
+    .sometimesBy(0.22, p=>p.arp("up")).sometimesBy(0.15, p=>p.arp("down")).every(64, p=>p.add(12)),
+  note("~ [eb6 g6 bb6 d7] ~ [f6 a6 c7], [bb6 g6 eb6] ~ [d6 bb5 g5 eb5]")
+    .sound("supersaw")
+    .detune(30)
+    .gain(0.36).lpf(2400).hpf(850)
+    .tremolo(0.8).tremolosync(4.8)
+    .fmi(4.2).fmenv(1.6).ring(0.55)
+    .every(16, p=>p.transpose(-7)).sometimesBy(0.6, p=>p.arp("down")).sometimesBy(0.32, p=>p.arp("up"))
+    .fast(2)
+    .echo(8, 1/8, 0.52)
+    .room(0.92).pan(0.88),
+  note("[c1 eb1 g1]*2 [bb1 f1 ab1 c2] [eb1 g1 bb1]*2")
+    .sound("sine").lpf(520).lpq(20)
+    .gain(0.34).slow(4)
+    .attack(0.42).decay(0.85).sustain(0.88).release(2.1).detune(24)
+    .room(0.98).pan(sine.range(0.15,0.85).slow(4.5))
+    .sometimesBy(0.22, p=>p.add(12)).jux(p=>rev(p).pan(0.88).mul(0.68)).every(128, p=>p.slow(2)),
+  s("euclid(5,8):hh*2, euclid(3,16):cp").gain(0.15).pan(rand.range(0.6,1)).room(0.3).fast(2).degradeBy(0.35).every(128, rev())
+)

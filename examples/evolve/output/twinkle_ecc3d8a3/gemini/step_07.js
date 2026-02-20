@@ -1,0 +1,66 @@
+setcps(128/60/4)
+
+// Arp
+$: chord("[cm g] [ab eb] [fm g] [abmaj7 g]")
+  .arp("up")
+  .slow(2)
+  .octave(5)
+  .sound("square")
+  .attack(0.01)
+  .release(0.15)
+  .lpenv(2500)
+  .lpdecay(0.08)
+  .crush(10)
+  .gain(0.35)
+  .pan(0.4)
+  .jux(p => p.add(7).pan(0.6).gain(0.7))
+  .delay(0.4)
+  .delaytime("3/8")
+  .dfb(0.5)
+  .room(0.2)
+  .roomlp(4000)
+
+// Pads
+$: chord("[cm g] [ab eb] [fm g] [abmaj7 gm]")
+  .slow(8)
+  .sound("supersaw")
+  .voicing()
+  .octave(3)
+  .attack(3)
+  .release(5)
+  .cutoff(perlin.range(800, 3500).slow(16))
+  .resonance(6)
+  .ftype(1)
+  .phaser(perlin.range(0.05, 0.2).slow(32))
+  .gain(0.4)
+  .room(0.7)
+  .roomsize(0.9)
+
+// Bass
+$: n("c1 c1 g0 as0")
+  .slow(2)
+  .sound("sawtooth")
+  .cut(1)
+  .attack(0.01)
+  .release(0.2)
+  .cutoff(180)
+  .lpenv(700)
+  .lpdecay(0.06)
+  .drive(0.5)
+  .gain(0.7)
+
+// Drums
+$: stack(
+  s("bd ~ bd ~").gain(1.1).drive(0.1),
+  s("~ sn ~ sn!2").crush(8).gain(0.6).release(0.2).hpf(100).room(0.15),
+  s("hh*8")
+    .swing(0.5)
+    .velocity(perlin.range(0.5, 1).slow(2))
+    .hpf(7000)
+    .gain(0.7)
+    .degradeBy(0.05),
+  s("~ ~ oh ~")
+    .gain(0.4)
+    .release(0.3)
+    .hpf(6000)
+).compressorRatio(10).compressorAttack(0.005).compressorRelease(0.1).gain(1.1)

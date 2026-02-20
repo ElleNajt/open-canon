@@ -1,0 +1,37 @@
+setcps(112/60/4)
+
+$: n("[0 3] 5 ~ 0 [7 8] 5 ~").scale("g:minor")
+  .s("sawtooth")
+  .slow(2)
+  .release(0.1)
+  .sustain(0)
+  .lpf(saw.range(400, 5000).slow(6))
+  .lpq(8)
+  .rarely(p => p.add(12))
+  .pan(perlin.slow(8).range(0.1, 0.9))
+  .delay(0.6)
+  .dfb(0.65)
+  .dt(3/8)
+  .room(0.5)
+  .gain(0.4)
+
+$: n("g1 ~ ~ ~ d1 ~ ~ ~")
+  .s("sine")
+  .slow(2)
+  .release(0.8)
+  .lpf(200)
+  .gain(0.7)
+
+$: stack(
+  s("~ ~ bd ~"),
+  s("~ ~ rim*2 ~")
+    .delay(0.8)
+    .dt(3/16)
+    .dfb(0.75)
+    .room(0.9)
+    .gain(0.7),
+  s("[hh hh ~ hh]*4")
+    .cut(1)
+    .hpf(8000)
+    .gain(perlin.range(0.4, 0.9).slow(3))
+).compressor().swing(0.05).gain(0.9)

@@ -1,0 +1,37 @@
+setcps(92/60/4)
+
+$: stack(
+   s("bd").euclid(3,16).gain(1.1),
+   s("sn").euclid(2,16).late(0.03).hpf(300).distort(0.15).crush(12).gain(1.05),
+   s("hh*16,rd*8").euclid(11,16).gain(0.22).hpf(6500).degradeBy(0.3).swing(0.1).pan(sine.range(0.3,0.7).slow(3))
+  ).compressorRatio(4).room(0.25).swing(0.08)
+
+$: sound("triangle")
+  .note("eb1*2 g1*2 bb1*4 ~ f1*2 db1*2 eb1*4 ~ g1 bb1 eb2*2")
+  .slow(1.4)
+  .lpf(saw.range(80,350).slow(6))
+  .lpq(3)
+  .hpf(25)
+  .fmi(0.5)
+  .detune(15)
+  .attack(0.005)
+  .decay(0.35)
+  .sustain(0.75)
+  .release(0.9)
+  .room(0.4)
+  .delay(0.15)
+  .delaytime(0.125)
+
+$: note("eb5 g5 bb5 db6 ~ ab5 f5 db5 ~ eb5 g5 bb5 f5 ~ c6 ab5 g5")
+  .sound("pulse")
+  .fm(1.8)
+  .every(8,rev())
+  .lpf(tri.range(350,2800).slow(4))
+  .lpq(10)
+  .phaser(0.4)
+  .tremolo(0.6).tremolosync(6)
+  .room(0.5)
+  .delay(0.3)
+  .delaytime(0.22)
+  .delayfeedback(0.25)
+  .jux(p=>p.octave(-0.7).gain(0.5).pan(0.8).hpf(180).lpf(700))

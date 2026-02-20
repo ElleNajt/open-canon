@@ -1,0 +1,10 @@
+2026-02-19: Fixed samples() calls in steps 12-18.
+
+Gemini combined two shabda paths in one samples() call:
+  samples('shabda/speech:evolve,future,personality,shabda/speech/ja-JP/f:mirai')
+
+Fixed to separate calls:
+  samples('shabda/speech:evolve,future,personality'), samples('shabda/speech/ja-JP/f:mirai')
+
+Also updated system_prompt.txt to document the correct format and
+include a WRONG example to prevent this in future runs.

@@ -1,0 +1,32 @@
+// BWV 1087 Canon 3
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.45)
+  .attack(0.02)
+  .decay(0.15)
+  .sustain(0.2)
+  .lpf(2500)
+  .room(0.15)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.5)
+  .decay(0.15)
+  .sustain(0.2)
+  .room(0.15)
+
+setcps(120/60/4)
+
+// Track 1
+$: note("~!40 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!7 b5 ~!7 a5 ~!7 g5 ~!7 d6 ~!7 d5 ~!7 e5 ~!7 gb5 ~!7 g5 ~!15")
+  .slow(208/8/4)
+  .apply(upperVoice)
+  .pan(0.3)
+
+// Track 2
+$: note("~!8 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!7 g5 ~!7 gb5 ~!7 e5 ~!7 d5 ~!7 b4 ~!7 c5 ~!7 d5 ~!7 g4 ~!15")
+  .slow(208/8/4)
+  .apply(lowerVoice)
+  .pan(0.7)

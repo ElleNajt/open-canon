@@ -1,0 +1,37 @@
+setcps(110/60/4)
+
+$: n("<0 3> 7 <5 8>").scale("g:minor").every(2, x => x.rev()).slow(2)
+  .s("pulse")
+  .attack(0.01)
+  .release(0.4)
+  .sustain(0)
+  .penv(200).pdecay(0.15)
+  .lpf(perlin.range(500, 2500).slow(8))
+  .lpq(10)
+  .pan(perlin.range(0.2, 0.8).slow(12))
+  .delay(0.4).dfb(0.6).dt(3/16)
+  .room(0.2)
+  .gain(0.5)
+
+$: n("0 ~ 0 5 ~ 0 ~ ~").scale("g:minor").octave(-2).slow(2)
+  .s("sine")
+  .attack(0.01)
+  .release(0.4)
+  .sustain(0.1)
+  .shape(0.5)
+  .distort(0.4)
+  .gain(0.8)
+
+$: stack(
+  s("bd").velocity(perlin.range(0.8, 1)),
+  s("~ sn")
+    .hpf(200)
+    .room(0.25)
+    .gain(0.8),
+  s("oh").euclid(7, 8)
+    .decay(0.09)
+    .hpf(3000)
+    .gain(perlin.range(0.4, 0.6).slow(6))
+    .swing(0.1)
+).compressor()
+ .gain(0.9)

@@ -1,0 +1,70 @@
+// BWV 1087 Canon 9
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("triangle")
+  .gain(0.47)
+  .attack(0.03)
+  .decay(0.13)
+  .sustain(0.23)
+  .lpf(2200)
+  .room(0.22)
+
+let lowerVoice = x => x
+  .sound("square")
+  .gain(0.42)
+  .decay(0.19)
+  .sustain(0.22)
+  .lpf(880)
+  .room(0.19)
+
+setcps(120/60/4)
+
+// Track 1 — upper melody, focus evolves with brighter tail & less repetition
+$: note("g5 ~ b5 ~ d6 ~ g6 ~ d6 ~ b5 ~ g5 ~ d6 ~ d5 ~ gb5 ~ a5 ~ db5 ~ e5 ~ g5 ~ db6 ~!3 d6 ~ a5 ~ gb5 ~ d5 ~ g5 ~ b5 ~ d6 ~ g5 ~ e6 ~ c6 ~ a5 ~ c6 ~ gb5 ~ a5 ~ d6 c6 b5 a5")
+  .slow(264/8/4)
+  .apply(upperVoice)
+  .pan(rand.range(0.1, 0.6).slow(24))
+  .lpf(sine.range(1700, 5100).slow(12))
+  .hpf(sine.range(310, 870).slow(23))
+  .room(0.37)
+  .degradeBy(0.09)
+  .every(19, x => x.vowel("<o i u>"))
+  .every(24, x => x.rev())
+  .every(27, x => x.distort(0.31))
+  .every(36, x => x.delay(0.21).delaytime(0.26).delayfeedback(0.18))
+  .every(42, x => x.pan(0.66))
+  .every(33, x => x.tremolo(0.17).tremolosync(0.12))
+
+// Track 2 — lower voice, more submerged, adds bit of movement and warmth
+$: note("g3 ~ d4 ~ b3 ~ d4 ~ g4 ~ d4 ~ b3 ~ d4 ~ g3 ~ d3 ~ e3 ~ c3 ~ b2 ~ d3 ~ g3 ~!3 d3 ~ a2 ~ g3 ~ d3 ~ g2 ~ g3 ~ b3 ~ d4 ~ g3 ~ e4 ~ c4 ~ a3 ~ c4 ~ g3 ~ a3 ~ d4 c4 b3 a3")
+  .slow(264/8/4)
+  .apply(lowerVoice)
+  .pan(sine.range(0.48, 0.94).slow(31))
+  .lpf(sine.range(440, 1450).slow(18))
+  .hpf(60)
+  .room(0.25)
+  .degradeBy(0.18)
+  .every(16, x => x.vowel("<a o>"))
+  .every(41, x => x.rev())
+  .every(52, x => x.distort(0.23))
+  .every(32, x => x.tremolo(0.15).tremolosync(0.13))
+
+// Track 4 — shimmer, now even more delicate and spectral
+$: note("e6 ~!4 b5 ~!4 d6 ~!4 g6 ~!4 b6 ~!4 e7 ~!4")
+  .slow(264/30)
+  .sound("sine")
+  .attack(1.2)
+  .release(8.3)
+  .decay(3.4)
+  .sustain(0.03)
+  .gain(0.035)
+  .pan(sine.range(0.13, 0.81).slow(23))
+  .room(0.92)
+  .lpf(sine.range(560, 970).slow(15))
+  .every(9, x => x.vowel("i"))
+  .every(17, x => x.rev())
+  .every(32, x => x.distort(0.19))
+  .every(22, x => x.tremolo(0.22).tremolosync(0.16))
+  .every(42, x => x.hpf(290))
+  .every(54, x => x.delay(0.31).delaytime(0.38).delayfeedback(0.18))

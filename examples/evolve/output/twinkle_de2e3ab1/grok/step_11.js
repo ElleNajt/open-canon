@@ -1,0 +1,21 @@
+setcps(70/60/4)
+$: stack(
+  note("c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~ g4 g4 f4 f4 e4 e4 d4 ~ g4 g4 f4 f4 e4 e4 d4 ~ c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~")
+    .sound("supersaw")
+    .gain(0.8)
+    .room(0.4)
+    .lpf(sine.range(800,3000).slow(8))
+    .lpq(2)
+    .phaser(0.3),
+  note("c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~ g4 g4 f4 f4 e4 e4 d4 ~ g4 g4 f4 f4 e4 e4 d4 ~ c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~")
+    .octave(-1)
+    .sound("triangle")
+    .gain(0.6)
+    .hpf(100)
+    .lpf(450)
+    .room(0.2),
+  s("bd*2 ~ cp sn , hh*8 oh*8")
+    .gain(0.5)
+    .room(0)
+    .swing(0.2)
+)

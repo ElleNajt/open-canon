@@ -1,0 +1,32 @@
+setcps(70/60/4)
+
+$: stack([
+  note("c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~ g4 g4 f4 f4 e4 e4 d4 ~ g4 g4 f4 f4 e4 e4 d4 ~ c4 c4 g4 g4 a4 a4 g4 ~ f4 f4 e4 e4 d4 d4 c4 ~")
+    .sound("triangle")
+    .room(0.7)
+    .lpf(sine.range(1600, 3500).slow(14))
+    .attack(0.02)
+    .release(0.32)
+    .delay(0.24)
+    .delayfeedback(0.28)
+    .sometimes(x => x.hpf(1200))
+    .every(8, x => x.distort(0.35).resonance(33))
+    .every(6, x => x.rev())
+    .sometimes(x => x.pan(0.18)),
+  note("c3 ~ g3 ~ f3 ~ e3 ~ d3 ~ c3 ~")
+    .sound("sine")
+    .gain(0.19)
+    .room(0.29)
+    .lpf(400)
+    .attack(0.08)
+    .release(0.33)
+    .cutoff(tri.range(360, 2100).slow(8))
+    .every(8, x => x.hpf(410).room(0.48).pan(0.57)),
+  "[bd ~] [bd bd] ~ bd"
+    .sound("bd")
+    .gain(0.13)
+    .room(0.25)
+    .every(4, x => x.gain(0.21).attack(0.10))
+    .degradeBy(0.12)
+    .sometimes(x => x.pan(0.11))
+])

@@ -1,0 +1,61 @@
+// Goldberg Variations - Ground Bass (BWV 988) - evolved, more vibrant, subtly playful, now with more mischievous character
+
+setcps(97/60/4)
+
+$: stack(
+  note("g3 gb3 e3 d3 b2 c3 d3 g2")
+    .slow(8)
+    .sound("triangle")
+    .gain(0.44)
+    .lpf(perlin.range(1000, 1900).slow(9))
+    .lpq(7)
+    .every(6, x=>x.rev())
+    .sometimes(x=>x.hold(0.5)),
+  note("g4 gb4 e4 d4 b3 c4 d4 <g3 cs4>")
+    .slow(7)
+    .sound("piano")
+    .gain(0.22)
+    .hpf(1200)
+    .palindrome()
+    .every(2, x=>x.slide(0.56))
+    .sometimesBy(0.52, x=>x.pan(0.28))
+)
+
+$: s("hh [cr hh] <cr oh> [oh hh] cp")
+  .gain(0.19)
+  .pan(sine.range(0.07, 0.91).slow(9))
+  .every(7, x=>x.rev())
+  .degradeBy(0.27)
+  .hpf(490)
+
+$: s("[supersaw <triangle>] [pulse supersaw] <triangle supersaw>*2")
+  .n("[7 <5 9>] ~ <2 4> [0 11] 4")
+  .scale("C:minor")
+  .gain(0.19)
+  .room(0.34)
+  .sometimes(x=>x.chop(5))
+  .palindrome()
+  .every(6, x=>x.pan(perlin.range(0.31,0.59)))
+
+$: s("[bd bd bd bd] [bd*2 ~] bd bd")
+  .gain(0.16)
+  .lpf(410)
+  .swing(0.12)
+  .distort(0.18)
+  .every(5, x=>x.off(0.26, y=>y.room(0.45)))
+
+$: stack(
+  note("[cs5 <a4 gb4>] e5 [gs4 b4] <e4 a4> gs3 bb4")
+    .sound("supersaw")
+    .slow(11)
+    .pan(rand.range(0.16,0.69).slow(4))
+    .gain(0.13)
+    .room(0.48)
+    .palindrome(),
+  note("<g5 e5> ~ <d5 g4> [e5 cs5] e4 [g5 b4]")
+    .sound("square")
+    .gain(0.1)
+    .slow(5)
+    .hpf(perlin.range(725, 1950).slow(12))
+    .every(3, x=>x.pan(rand.range(0.15,0.91)))
+)

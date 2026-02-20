@@ -1,0 +1,38 @@
+setcps(112/60/4)
+
+$: n("0 3 5 0 <7 8> 5 3 2").scale("g:minor")
+  .s("pulse")
+  .slow(2)
+  .release(0.3)
+  .sustain(0)
+  .fm(sine.range(0.5, 2).slow(8))
+  .lpf(saw.range(600, 6000).slow(4))
+  .lpenv(800)
+  .lpdecay(0.1)
+  .lpq(6)
+  .gain(0.35)
+  .pan(perlin.slow(8).range(0.2, 0.8))
+  .delay(0.4)
+  .dfb(0.5)
+  .dt(3/8)
+  .room(0.4)
+
+$: n("[g1 g1] ~ g1 [c2 ~ c2] ~ [d1 d1] ~ d1 [d#1 ~ d#1] ~")
+  .s("square")
+  .slow(4)
+  .attack(0.01)
+  .release(0.25)
+  .sustain(0)
+  .lpf(100)
+  .lpenv(1000)
+  .lpdecay(0.15)
+  .lpq(6)
+  .shape(0.6)
+  .distort(0.2)
+  .gain(0.45)
+
+$: stack(
+  s("bd ~ bd [~ bd]"),
+  stack(s("~ sn"), s("~ rim").gain(0.7)),
+  s("[hh hh hh hh] [hh hh] [hh oh]").cut(1).hpf(5000).velocity(perlin.range(0.6, 1).slow(3))
+).swing(0.05).compressor().shape(0.2).gain(0.9)

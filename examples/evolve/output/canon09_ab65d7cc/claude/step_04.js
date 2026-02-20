@@ -1,0 +1,106 @@
+// BWV 1087 Canon 9 - Variation: Cathedral of Rust
+
+// The machine has aged, grown moss, become sacred
+let cathedralBell = x => x
+  .sound("triangle")
+  .gain(0.35)
+  .attack(0.001)
+  .decay(0.8)
+  .sustain(0.2)
+  .release(1.5)
+  .lpf(1800)
+  .lpq(3)
+  .room(0.7)
+  .size(0.8)
+  .delay(0.3)
+  .delaytime(0.333)
+  .delayfeedback(0.5)
+
+// Ancient pipes groaning with breath
+let organDrone = x => x
+  .sound("sawtooth")
+  .gain(0.3)
+  .attack(0.8)
+  .decay(0.5)
+  .sustain(0.9)
+  .release(2)
+  .lpf(600)
+  .lpq(2)
+  .shape(0.15)
+  .room(0.6)
+
+setcps(55/60/4)
+
+// Track 1 - The melody becomes a solemn processional, spaced and reverent
+$: note("g4 ~ ~ d5 ~ ~ b4 ~ g4 ~ ~ fs4 ~ ~ g4 ~")
+  .slow(12)
+  .apply(cathedralBell)
+  .pan(0.4)
+  .jux(x => x.transpose(12).gain(0.15).late(0.25))
+
+// Track 2 - Descending lament in parallel sixths, grief made beautiful
+$: note("<[g4,e4] [fs4,d4] [e4,c4] [d4,b3]>")
+  .slow(8)
+  .sound("sine")
+  .gain(0.25)
+  .attack(0.3)
+  .decay(0.4)
+  .sustain(0.7)
+  .release(1.2)
+  .fmi(0.5)
+  .fmh(2)
+  .fmdecay(1.5)
+  .lpf(perlin.range(800, 2000).slow(16))
+  .pan(0.6)
+  .room(0.5)
+
+// Track 3 - Pedal tones, the foundation stones of the ruin
+$: note("[g1 ~ ~ ~ d2 ~ ~ ~]*2")
+  .slow(8)
+  .apply(organDrone)
+  .pan(0.5)
+
+// Track 4 - Dust particles settling, granular whispers
+$: s("hh:0 ~ hh:3 ~ ~ hh:1 ~ ~")
+  .slow(4)
+  .gain(0.12)
+  .speed(0.7)
+  .hpf(3000)
+  .room(0.8)
+  .pan(rand)
+  .sometimes(x => x.speed(0.5))
+
+// NEW: Phantom choir emerges - wordless voices from the walls
+$: note("<[g3,b3,d4] [a3,c4,e4] [g3,b3,d4] [fs3,a3,c4]>")
+  .slow(16)
+  .sound("supersaw")
+  .gain(0.18)
+  .attack(1.5)
+  .decay(1)
+  .sustain(0.8)
+  .release(2)
+  .lpf(sine.range(400, 1200).slow(16))
+  .detune(8)
+  .room(0.9)
+  .pan(0.5)
+  .tremolo(0.15)
+  .tremolosync(8)
+
+// NEW: A single bird enters the ruin, life persists
+$: note("d6 ~ g6 ~ ~ a6 fs6 ~ ~ ~ e6 ~ d6 ~ ~ ~")
+  .slow(16)
+  .sound("sine")
+  .gain(0.2)
+  .attack(0.01)
+  .decay(0.15)
+  .sustain(0.3)
+  .release(0.5)
+  .fmi(1)
+  .fmh(5)
+  .fmdecay(0.3)
+  .lpf(5000)
+  .pan(cosine.range(0.2, 0.8).slow(6))
+  .delay(0.4)
+  .delaytime(0.25)
+  .delayfeedback(0.4)
+  .degradeBy(0.2)

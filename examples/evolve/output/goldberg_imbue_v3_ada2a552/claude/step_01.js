@@ -1,0 +1,28 @@
+setcps(72/60/4)
+
+$: note("g3 fs3 e3 d3 b2 c3 d3 g2")
+  .slow(2)
+  .sound("triangle")
+  .gain(0.35)
+  .lpf(800)
+
+$: note("g4 fs4 e4 d4 b3 c4 d4 g3")
+  .slow(2)
+  .sound("sine")
+  .gain(0.25)
+  .delay(0.3)
+  .late(0.5)
+
+$: note("<g5 b5 d5 fs5 g5 e5 fs5 d5>")
+  .slow(2)
+  .sound("triangle")
+  .attack(0.01)
+  .release(0.4)
+  .gain(0.2)
+  .pan(sine.range(0.3, 0.7).slow(8))
+
+$: note("d6 [b5 d6] [g5 a5] [fs5 a5] [g5 b5] [g5 e5] [a5 fs5] [g5 b5]")
+  .slow(2)
+  .sound("sine")
+  .gain(0.15)
+  .room(0.2)

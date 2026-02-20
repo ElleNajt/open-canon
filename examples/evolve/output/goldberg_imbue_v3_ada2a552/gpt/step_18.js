@@ -1,0 +1,58 @@
+// Goldberg Variations - Ground Bass (BWV 988) - evolved, personalized
+
+setcps(93/60/4)
+
+$: stack(
+  note("g3 gb3 e3 d3 b2 c3 d3 g2")
+    .slow(9)
+    .sound("triangle")
+    .gain(0.41)
+    .lpf(sine.range(570,1350).slow(12))
+    .lpq(4.8)
+    .every(3, x=>x.rev()),
+  note("g4 gb4 e4 d4 b3 c4 d4 <g3 cs4>")
+    .slow(10)
+    .sound("piano")
+    .gain(0.21)
+    .hpf(1020)
+    .palindrome()
+    .every(4, x=>x.slide(0.57))
+)
+
+$: s("hh [cr hh] <cr oh> [oh hh] cp")
+  .gain(0.19)
+  .pan(perlin.range(0.08, 0.92).slow(13))
+  .degradeBy(0.15)
+  .hpf(400)
+  .delay(0.19)
+
+$: s("[supersaw <triangle>] [pulse supersaw] <triangle supersaw>*2")
+  .n("[7 <5 9>] ~ <2 4> [0 11] 4")
+  .scale("C:minor")
+  .gain(0.17)
+  .room(0.44)
+  .palindrome()
+  .degradeBy(0.21)
+
+$: s("[bd bd bd bd] [bd*2 ~] bd bd")
+  .gain(0.16)
+  .lpf(430)
+  .swing(0.16)
+  .distort(0.17)
+  .room(0.48)
+
+$: s("triangle [pulse ~] supersaw [square <triangle>]")
+  .n("0 <7 9> 4 <3 1> 2 5")
+  .scale("E:minor")
+  .gain(0.13)
+  .room(0.37)
+  .hpf(sine.range(770,1300).slow(7))
+  .every(3, x=>x.rev())
+
+$: note("[cs5 <a4 gb4>] e5 [gs4 b4] <e4 a4> gs3 bb4")
+  .sound("supersaw")
+  .slow(11)
+  .pan(sine.range(0.2,0.8).slow(7))
+  .gain(0.12)
+  .delay(0.19)
+  .room(0.36)

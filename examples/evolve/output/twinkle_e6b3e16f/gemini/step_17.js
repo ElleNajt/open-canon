@@ -1,0 +1,38 @@
+setcps(120/60/4)
+
+$: n("[0 2]/2 3 [~ 5] 7 [5 3] 2").scale("g:minor")
+  .s("sawtooth")
+  .slow(4)
+  .release(0.2)
+  .sustain(0)
+  .lpf(800)
+  .lpq(8)
+  .lpenv(4000)
+  .lpdecay(0.15)
+  .pan(sine.range(0.2, 0.8).slow(8))
+  .delay(0.4)
+  .dfb(0.5)
+  .dt(3/16)
+  .room(0.3)
+  .gain(0.6)
+
+$: n("0*4 3*2 2*2").scale("g:minor").octave(2)
+  .s("triangle")
+  .slow(2)
+  .lpf(sine.range(300, 1000).slow(8))
+  .lpq(3)
+  .attack(0.01)
+  .release(0.4)
+  .distort(0.1)
+  .gain(0.8)
+
+$: stack(
+  s("bd ~ [bd bd/2] ~"),
+  s("~ sn ~ [sn/2 sn]").gain(0.9).room(0.1),
+  s("hh*8")
+    .hpf(1500)
+    .velocity(perlin.range(0.5, 1).slow(2))
+    .every(4, (x) => x.s('oh').gain(1.2))
+    .crush(10)
+    .gain(0.5)
+).compressor()

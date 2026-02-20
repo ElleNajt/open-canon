@@ -1,0 +1,70 @@
+setcps(124/60/4)
+
+// Dreamy Arp
+$: chord("[cm g] [ab eb] [fm g] [abmaj7 g]")
+  .arp("updown")
+  .slow(2)
+  .octave(5)
+  .s("sawtooth")
+  .attack(0.01)
+  .release(0.4)
+  .gain(0.3)
+  .lpenv(2500)
+  .lpdecay(0.15)
+  .jux(p => p.s("sine").octave(4).gain(0.25).pan(perlin.range(0.2, 0.8).slow(9)))
+  .delay(0.5)
+  .delaytime("3/16")
+  .dfb(0.65)
+  .room(0.5)
+  .roomlp(4000)
+  .lpf(perlin.range(1200, 5000).slow(12))
+  .lpq(4)
+
+// Pads
+$: chord("[cm g] [ab eb] [fm g] [abmaj7 g]")
+  .slow(8)
+  .s("supersaw")
+  .voicing()
+  .octave(3)
+  .attack(4)
+  .release(8)
+  .cutoff(perlin.range(800, 4000).slow(16))
+  .resonance(6)
+  .ftype(1)
+  .phaser(perlin.range(0.02, 0.1).slow(19))
+  .gain(0.5)
+  .pan(perlin.range(0.2, 0.8).slow(20))
+  .jux(p => p.s("sine").octave(2).gain(0.3))
+  .room(0.8)
+  .roomsize(0.9)
+
+// Bassline
+$: n("c1 g1 ab0 eb1 f0 g1 ab0 g1")
+  .slow(2)
+  .s("square")
+  .cut(1)
+  .attack(0.01)
+  .release(0.4)
+  .gain(0.7)
+  .lpf(450)
+  .lpq(4)
+  .shape(0.2)
+
+// Drums
+$: stack(
+  s("bd*4").gain(1.2),
+  s("~ sn ~ sn").gain(0.9),
+  s("hh*16")
+    .velocity(perlin.range(0.4, 0.9).slow(3))
+    .hpf(8000)
+    .gain(0.4)
+    .degradeBy(0.05)
+    .swing(0.02),
+  s("~ oh ~ oh")
+    .hpf(7000)
+    .release(0.4)
+    .gain(0.6),
+  s("<~ ~ ~ ~ [~ ~ rim ~]>")
+    .gain(0.8)
+    .room(0.2)
+).gain(0.9).compressor()

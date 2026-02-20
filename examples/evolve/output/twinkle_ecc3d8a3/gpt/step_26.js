@@ -1,0 +1,138 @@
+// Twinkle Twinkle Little Star — nocturne glimmers, mystery deepens, ever softer shimmer, stars inhale
+
+setcps(76/60/4)
+
+// Melody: sine, triangle, and a faint supersaw glint; echoes drift, motif a dream remnant, deepening tone, breaths longer
+$: stack([
+  note("c4 c4 g4 g4 a4 a4 <g4 b4 g5> ~ f4 f4 <e4 ~> d4 d4 <c4 c5> ~ g4 g4 f4 f4 <e4 ~> d4 ~ c4 c4 g4 <g4 g4> a4 a4 <g4 b4 g5> ~ f4 f4 e4 e4 d4 d4 <c4 c5> ~ e4 ~ ab4 ~ g4 ~")
+    .sound("sine")
+    .gain(0.13)
+    .pan(sine.range(0.16,0.83).slow(24.3))
+    .room(0.98).size(1.0)
+    .lpf(sine.range(90, 1750).slow(33))
+    .tremolo(0.17).tremolosync(7.34)
+    .delay(0.57)
+    .delayfeedback(0.90)
+    .detune(sine.range(-13,15).slow(21.8))
+    .ring(0.11).ringf(76)
+    .degradeBy(0.21)
+    .every(8,x=>x.rev())
+    .sometimesBy(0.27, x=>x.hpf(2100))
+    .every(5, x=>x.palindrome())
+    .sometimesBy(0.17, x=>x.lpf(300))
+    .release(1.51)
+    .slow(0.91),
+
+  // Triangle overlay, breathier, fragments ripple and dissolve
+  note("c5 ~ [g5 ~] ab5 <g5 ~ b5> ~ [f5 ~] <e5 d5> <c6 ~> ~ <e5 g5 ab5> ~ <bb5 ~ c6> ~ ~")
+    .sound("triangle")
+    .gain(0.048)
+    .pan(sine.range(0.14,0.95).slow(21.6))
+    .room(0.81).size(0.97)
+    .lpf(670)
+    .delay(0.33)
+    .delayfeedback(0.34)
+    .degradeBy(0.24)
+    .sometimes(x=>x.rev())
+    .sometimesBy(0.19, x=>x.hpf(1400))
+    .every(7, x=>x.gain(0.085).lpf(209))
+    .release(0.71),
+
+  // Supersaw shimmer, spectral leaps more rare, a little glassier, wider
+  note("g6 ~ <d5 ~> [f5 b4] ~ <a5 g5> [~ e5] <ab5 f5> ~ [e6 ~] <d5 b5>").sound("supersaw")
+    .gain(0.012)
+    .pan(sine.range(0.11,0.91).slow(21.8))
+    .lpf(3130)
+    .delay(0.22)
+    .delayfeedback(0.21)
+    .room(0.73).size(0.97)
+    .degradeBy(0.27)
+    .sometimesBy(0.21, x=>x.octave("<4 5 6 7>".slow(13.7)))
+    .attack(0.23)
+    .release(0.34)
+    .every(9, x=>x.cutoff(7200))
+    .every(16, x=>x.crush(9))
+])
+.slow(1.62)
+
+// Slow sine echoes, motif ghost, shimmer rising gently, now even farther between, fading
+$: note("e5 ~ [d5 ~ g5] ~ [g5 ~ d6] ~ c6 ~ g5 ~ [bb5 ~ eb5] ~ ab5 ~ f5 ~")
+    .sound("sine")
+    .gain(0.025)
+    .pan(sine.range(0.13,0.92).slow(41.7))
+    .delay(0.91)
+    .delayfeedback(0.99)
+    .room(1.00).size(1.00)
+    .lpf(870)
+    .release(1.13)
+    .degradeBy(0.31)
+    .every(3, x=>x.rev())
+    .every(5, x=>x.gain(0.034).room(0.88))
+    .slow(33.7)
+
+// Piano harmony: hazier, still rare, left more, even deeper, reflection fragments
+$: stack([
+  note("<c3 g3 e4> ~ ~ <ab3 eb4 bg3> <f3 d4 a3> ~ ~ <eb3 bb3 g3> <c4 a4 f4> ~ <g4 e4 b4> <a3 f4 c4> ~ ~ <e3 eb4> ~")
+    .sound("piano")
+    .gain(0.022)
+    .hold(8.1)
+    .sustain(0.04)
+    .room(1).size(1)
+    .lpf(sine.range(115, 310).slow(36.2))
+    .detune(sine.range(-23,20).slow(17.7))
+    .slow(25)
+    .every(4, x=>x.hold(7.4).drive(0.23))
+    .sometimesBy(0.22, x=>x.palindrome())
+    .every(6, x=>x.lpf(130))
+    .pan(0.17),
+
+  note("<c4 e4 g4> ~ ~ <g4 bb4 d5> <e4 g4 c5> ~ ~ <bb3 eb4 g4> ~ <c5 d5 g4> ~ ~ e5 ~")
+    .sound("piano")
+    .gain(0.011)
+    .hold(5.46)
+    .sustain(0.035)
+    .room(0.97).size(0.99)
+    .detune(-22)
+    .every(2, x=>x.rev())
+    .slow(33.7)
+    .sometimesBy(0.13, x=>x.pan(0.84))
+])
+
+// Bass: vowels wide as night, almost underwater, even fewer notes, resonance subtle, sometimes breathing in pairs
+$: note("c2 ~ ~ ~ g2 ~ ~ ab1 ~ ~ ab1 ~ ~ ~ f2 ~ g1 ~ [e1 ~] ~ ~ ~ ~ ~ ~")
+  .sound("sine")
+  .gain(0.013)
+  .attack(0.022).decay(0.29).release(4.7)
+  .vowel("<o a u i e>".slow(83))
+  .room(0.81).size(1)
+  .lpf(sine.range(9, 29).slow(39))
+  .slide(7.1)
+  .delay(0.08)
+  .delayfeedback(0.10)
+  .sometimesBy(0.15, x=>x.drive(0.69))
+  .sometimesBy(0.13, x=>x.transpose("<-12 0 0 7 -5>".slow(39)))
+  .rarely(x=>x.octave(2))
+  .every(20, x=>x.distort(0.37))
+  .degradeBy(0.25)
+  .slow(19.5)
+
+// Percussion: even more fragmentary, wind as time, more silent spaces, vanishing on occasion
+$: stack([
+  s("bd ~ ~ ~ ~").gain(0.0028).room(0.08).degradeBy(0.996)
+    .every(25, x=>x.delay(0.62).delayfeedback(0.15))
+    .sometimesBy(0.33, x=>x.crush(7)),
+  s("~ [cp ~] ~ ~ [~ sn] ~ ~").gain(0.0016).room(0.11)
+    .degradeBy(0.999)
+    .every(9,x=>x.rev())
+    .every(19, x=>x.delay(0.19).delayfeedback(0.19)),
+  s("[hh ~ [oh ~] ~] [~ ~] [~ <oh ~>] ~ ~").gain(0.0026).room(0.13).crush(17)
+    .pan(sine.range(0.07,0.98).slow(25.9))
+    .degradeBy(0.99)
+    .every(13,x=>x.rev())
+    .sometimesBy(0.15, x=>x.delay(0.18)),
+  s("~ ~ cp ~ <rim ~> ~ ~ [cp ~] ~ [~ rim] ~ ~").gain(0.0012).room(0.09)
+    .degradeBy(0.9995)
+    .every(23, x=>x.echo(2, 0.19, 0.17))
+    .sometimesBy(0.4,x=>x.crush(11))
+])
+.slow(18.4)

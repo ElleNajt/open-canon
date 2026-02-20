@@ -1,0 +1,47 @@
+setcps(98/60/4)
+
+stack(
+  s("bd*2 ~ [sn cp], bd ~ sn bd, hh*16, euclid(9,16):oh ~ oh")
+    .gain(0.5).room(0.4).pan(0.2).swing(sine.range(0.04,0.1).slow(16))
+    .compressor()
+    .off(0.125, rev())
+    .every(16, "~?").sometimesBy(0.15, p=>p.rev()),
+  s("~ cp*2 ~ [cp hh], hh*4 ~ cp hh*2")
+    .gain(0.3).pan(0.75).room(0.3).degradeBy(0.2),
+  note("c2*3 eb2 c2 [g2 bb2], f2 ab2 [c3 g2]")
+    .sound("square").cut(1)
+    .lpf(420).lpq(8)
+    .attack(0.01).decay(0.22).sustain(0.4).release(0.3)
+    .slide(0.04).distort(0.1)
+    .room(0.45).pan(0.25),
+  note("c2 e2 g2 bb2, f2 ab2 c3 ~, g2 bb2 d3 ~, f2 a2 c3 ~")
+    .sound("pulse")
+    .detune(20)
+    .gain(0.38).lpf(1000).lpq(5)
+    .phaser(0.4).phaserdepth(0.5)
+    .attack(0.02).hold(0.1).decay(0.3).sustain(0.5).release(0.65)
+    .every(8, rev())
+    .room(0.75).pan(0.4),
+  note("c4 g4 bb4 ~, [g4 f4 eb4] d4, c4 g4 f4 eb4, d4 c4 bb3 g3")
+    .sound("triangle")
+    .attack(0.015).decay(0.15).sustain(0.3).release(0.55)
+    .lpf(perlin.range(700,3200).slow(10).mul(0.7).add(800))
+    .lpq(4.5)
+    .delay(0.25).dfb(0.45)
+    .leslie(0.3)
+    .room(0.85).pan(0.65),
+  note("~ bb5 d6 f6 ~, ~ g6 f6 ~ d6").sometimesBy(0.2, "~")
+    .sound("supersaw")
+    .detune(16)
+    .gain(0.35).lpf(2200).hpf(650)
+    .tremolo(0.5).tremolosync(3.5)
+    .fmi(2).fmenv(0.9).ring(0.35)
+    .every(12, p=>p.transpose(-7))
+    .echo(3, 0.12, 0.5)
+    .room(0.65).pan(0.85),
+  note("c1*4 eb1*3 g1*4 bb1*2")
+    .sound("sine").lpf(450).lpq(3)
+    .gain(0.18).slow(4)
+    .attack(0.5).decay(0.7).sustain(0.8).release(1.4)
+    .room(0.98).pan(rand.range(0.05,0.95))
+)

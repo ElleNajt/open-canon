@@ -1,0 +1,88 @@
+// BWV 1087 Canon 3 Evolved
+
+// Baroque style voices
+let upperVoice = x => x
+  .sound("supersaw")
+  .gain(0.24)
+  .attack(0.01)
+  .decay(0.12)
+  .sustain(0.42)
+  .release(0.48)
+  .lpf(sine.range(850,4100).slow(20))
+  .lpq(cosine.range(3,12).slow(28))
+  .hpf(200)
+  .room(0.24)
+  .delay(0.14)
+  .tremolo(0.12)
+  .tremolosync(4.5)
+  .penv(0.06)
+  .slide(0.015)
+  .vowel("a e i o".slow(4))
+  .leslie(0.4)
+
+let lowerVoice = x => x
+  .sound("pulse")
+  .gain(0.32)
+  .decay(0.12)
+  .sustain(0.48)
+  .detune(4)
+  .lpf(tri.range(750,2800).slow(18))
+  .room(0.3)
+  .delay(0.1)
+  .phaser(0.28)
+  .phaserdepth(0.45)
+  .phasersweep(0.25)
+  .fm(0.25)
+  .fmenv(0.16)
+  .ring(0.15)
+
+let bassVoice = x => x
+  .sound("sine")
+  .gain(0.42)
+  .lpf(sine.range(320,1050).slow(14))
+  .hpf(40)
+  .attack(0.035)
+  .decay(0.28)
+  .sustain(0.52)
+  .release(0.7)
+  .room(0.34)
+  .detune(-4)
+  .tremolo(0.12)
+  .tremolosync(4)
+
+setcps(0.54)
+
+// Track 1: Upper
+$: note("~!32 d5 ~!6 e5 ~!6 fs5 ~!6 g5 ~!6 b5 ~!6 a5 ~!6 g5 ~!6 d6 ~!6 d5 ~!6 e5 ~!6 fs5 ~!6 g5 ~!6 b5 ~!6 a5 ~!6 g5 ~!6 [d6 eb6 c6 b5]")
+  .slow(208/8/4)
+  .apply(upperVoice)
+  .pan(perlin.range(0.28,0.58).slow(24))
+  .detune(perlin.range(-16,18).slow(14))
+  .every(20, x => x.transpose(12).detune(rand.range(-12,12)))
+  .sometimes(x => x.rev())
+
+// Track 2: Lower (offset evolution)
+$: note("~!4 [g5 b5] ~!6 fs5 ~!6 e5 ~!6 d5 ~!6 b4 ~!6 c5 ~!6 d5 ~!6 g4 ~!4 [g5 b5] ~!6 fs5 ~!6 e5 ~!6 d5 ~!6 b4 ~!6 c5 ~!6 d5 ~!6 [g4 a4]")
+  .slow(208/8/4)
+  .apply(lowerVoice)
+  .pan(perlin.range(0.52,0.82).slow(24))
+  .off(1/8, x => x.rev().pan(perlin.range(0.42,0.72).slow(24)))
+  .every(14, x => x.transpose(7))
+
+// Track 3: Bass
+$: note("d2~ [fs2 g2]~ [a2 b2]~ [g2 fs2 d3]~ [g2 fs2]~ d2~ [e2 d2 c2]~ [b1 a1 g1]")
+  .slow(65/8/4)
+  .apply(bassVoice)
+  .pan(sine.range(0.32,0.68).slow(24))
+  .every(5, x => x.transpose(7))
+  .degradeBy(0.08)
+
+// Track 4: Subtle continuo rhythm
+$: s("bd ~ [cp rim] ~ [hh*2 oh]").euclid(5,16).slow(1.9)
+  .gain(0.14)
+  .room(0.12)
+  .lpf(900)
+  .hpf(240)
+  .pan(sine.range(0.38,0.62).slow(16))
+  .sometimes(x => x.speed(0.9))
+  .sometimes(x => x.speed(1.1))

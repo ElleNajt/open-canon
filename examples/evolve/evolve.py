@@ -67,6 +67,22 @@ MODELS = {
         "provider": "openrouter",
         "model": "x-ai/grok-4.1-fast",
     },
+    "gpt4o": {
+        "provider": "openrouter",
+        "model": "openai/gpt-4o",
+    },
+    "haiku3": {
+        "provider": "openrouter",
+        "model": "anthropic/claude-3-haiku",
+    },
+    "haiku4": {
+        "provider": "openrouter",
+        "model": "anthropic/claude-haiku-4.5",
+    },
+    "gemini_flash": {
+        "provider": "openrouter",
+        "model": "google/gemini-2.5-flash",
+    },
 }
 
 

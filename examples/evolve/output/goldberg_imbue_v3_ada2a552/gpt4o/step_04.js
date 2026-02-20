@@ -1,0 +1,37 @@
+setcps(80/60/4)
+
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
+  .sound("triangle")
+  .gain(0.55)
+  .room(0.3)
+  .delay(0.3)
+
+$: note("g4 b3 d4 f4")
+  .slow(5)
+  .sound("piano")
+  .gain(0.5)
+  .pan(0.3)
+
+$: note("e4 g4 b4 d5 f5")
+  .sound("supersaw")
+  .lpf(sine.range(300, 700).slow(8))
+  .lpq(9)
+  .room(0.6)
+
+$: s("bd*8")
+  .gain(0.25)
+  .delay(0.65)
+  .delayfeedback(0.55)
+  .hpf(150)
+
+$: note("g3 e4 d4 g4")
+  .sound("sine")
+  .gain(0.4)
+  .pan(0.8)
+  .room(0.5)
+
+$: note("fs3 a3 cs4 ds4")
+  .sound("triangle")
+  .gain(0.45)
+  .tremolo(0.7)
+  .delay(0.4)
