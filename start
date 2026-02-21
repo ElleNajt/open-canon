@@ -5,6 +5,17 @@ cd "$(dirname "$0")"
 
 STRUDEL_REPO="https://codeberg.org/ElleNajt/strudel.git"
 
+# Check prerequisites
+for cmd in git python3 pnpm; do
+    if ! command -v "$cmd" &>/dev/null; then
+        echo "Error: $cmd is required but not installed."
+        case "$cmd" in
+        pnpm) echo "Install with: npm install -g pnpm  (or: curl -fsSL https://get.pnpm.io/install.sh | sh -)" ;;
+        esac
+        exit 1
+    fi
+done
+
 # Clone strudel fork if needed
 if [ ! -d "strudel" ]; then
     echo "Cloning strudel fork..."
