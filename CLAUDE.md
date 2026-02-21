@@ -22,8 +22,23 @@ The converter uses `note()` for pitches and outputs Strudel-compatible JavaScrip
 
 ## Setup
 
-The user runs `./start` which:
-1. Clones the Strudel fork and builds static files
+Prerequisites: `git`, `python3`, and `node`/`pnpm` (for first-time frontend build only).
+
+```bash
+# 1. Install pnpm if you don't have it (no npm required)
+curl -fsSL https://get.pnpm.io/install.sh | sh -
+
+# 2. Create a .env file with your Anthropic API key
+echo "ANTHROPIC_API_KEY=your-key-here" > .env
+
+# 3. Run
+./start
+```
+
+The start script handles everything else (cloning Strudel, building the frontend, setting up a Python venv). Once `server/static/` is built, pnpm/node are no longer needed.
+
+What `./start` does:
+1. Builds Strudel frontend static files (first run only, requires pnpm)
 2. Starts a FastAPI server (serves frontend + WebSocket + API + shabda TTS)
 3. Opens the browser on localhost
 

@@ -6,25 +6,12 @@ cd "$(dirname "$0")"
 STRUDEL_REPO="https://codeberg.org/ElleNajt/strudel.git"
 
 # Check prerequisites
-for cmd in git python3 pnpm; do
+for cmd in git python3; do
     if ! command -v "$cmd" &>/dev/null; then
         echo "Error: $cmd is required but not installed."
-        case "$cmd" in
-        pnpm) echo "Install with: npm install -g pnpm  (or: curl -fsSL https://get.pnpm.io/install.sh | sh -)" ;;
-        esac
         exit 1
     fi
 done
-
-# Clone strudel fork if needed
-if [ ! -d "strudel" ]; then
-    echo "Cloning strudel fork..."
-    git clone "$STRUDEL_REPO" strudel
-    cd strudel
-    echo "Installing dependencies..."
-    pnpm install
-    cd ..
-fi
 
 HOST="127.0.0.1"
 
@@ -33,6 +20,28 @@ PORT=$(python3 -c "import socket; s=socket.socket(); s.bind(('',0)); print(s.get
 
 # Build Strudel static files if needed
 if [ ! -d "server/static" ]; then
+    # pnpm is only needed for building the frontend
+    if ! command -v pnpm &>/dev/null; then
+        echo "pnpm not found — installing via standalone installer..."
+        curl -fsSL https://get.pnpm.io/install.sh | sh -
+        export PNPM_HOME="${PNPM_HOME:-$HOME/.local/share/pnpm}"
+        export PATH="$PNPM_HOME:$PATH"
+        if ! command -v pnpm &>/dev/null; then
+            echo "Error: pnpm installation failed. Install manually: https://pnpm.io/installation"
+            exit 1
+        fi
+    fi
+
+    # Clone strudel fork if needed
+    if [ ! -d "strudel" ]; then
+        echo "Cloning strudel fork..."
+        git clone "$STRUDEL_REPO" strudel
+        cd strudel
+        echo "Installing dependencies..."
+        pnpm install
+        cd ..
+    fi
+
     echo "Building Strudel frontend..."
     cd strudel/website
     SITE_URL="http://$HOST:$PORT/" pnpm run build
