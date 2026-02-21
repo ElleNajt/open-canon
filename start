@@ -3,7 +3,7 @@
 set -e
 cd "$(dirname "$0")"
 
-STRUDEL_REPO="git@codeberg.org:ElleNajt/strudel.git"
+STRUDEL_REPO="https://codeberg.org/ElleNajt/strudel.git"
 
 # Clone strudel fork if needed
 if [ ! -d "strudel" ]; then
