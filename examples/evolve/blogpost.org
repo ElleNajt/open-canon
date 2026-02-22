@@ -37,12 +37,13 @@ The code is open source, and it should be easy to run your own musical experimen
 ** My favorites:
 
 I think Gemini's compositions are consistently the most interesting. So skip there if that's what you're here for:
-It's hard to pick.
+It's hard to pick, here are some. 
 
-Here's one that's cool:
+Run 1, step 25: {{{strudel(goldberg_imbue_fb0bde27,gemini,25)}}}
 
-TODO Run 1 Gemini step 25 . Step 10 from run 2. 
-Run 4 step 10 is recognizably goldberg, but twisted in a fascinating way. 
+Step 10 from run 2: {{{strudel(goldberg_imbue_v2_ada2a552,gemini,10)}}}
+
+Run 4 step 10 is recognizably Goldberg, but twisted in a fascinating way: {{{strudel(goldberg_imbue_r4_ada2a552,gemini,10)}}}
 
 
 ** The scaffold: 

@@ -132,18 +132,10 @@ def main():
         # Strip *Run N:* prefix since iframe replaces the whole line
         iframe_text = MACRO_RE.sub(expand_macro_iframe, text)
 
-        # Keep *Run N:* on its own line above the #+begin_export html block
+        # Put #+begin_export html on its own line when preceded by text
         iframe_text = re.sub(
-            r"^(\*Run \d+:\*) (#\+begin_export html)",
+            r"^(.+) (#\+begin_export html)",
             r"\1\n\2",
-            iframe_text,
-            flags=re.MULTILINE,
-        )
-
-        # Put export blocks on their own line when inline in list items
-        iframe_text = re.sub(
-            r"^(- .+): (#\+begin_export html)",
-            r"\1:\n\2",
             iframe_text,
             flags=re.MULTILINE,
         )
