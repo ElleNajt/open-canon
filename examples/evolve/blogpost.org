@@ -34,16 +34,13 @@ We discover that, loosely speaking, Claude writes ambient music, Grok writes har
 
 The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. 
 
-** My favorites:
+** Some noteable compositions:
 
-I think Gemini's compositions are consistently the most interesting. So skip there if that's what you're here for:
-It's hard to pick, here are some. 
+Step 10 from run 2:
+{{{strudel(goldberg_imbue_v2_ada2a552,gemini,10)}}}
 
-Run 1, step 25: {{{strudel(goldberg_imbue_fb0bde27,gemini,25)}}}
-
-Step 10 from run 2: {{{strudel(goldberg_imbue_v2_ada2a552,gemini,10)}}}
-
-Run 4 step 10 is recognizably Goldberg, but twisted in a fascinating way: {{{strudel(goldberg_imbue_r4_ada2a552,gemini,10)}}}
+Run 4 step 15 is recognizably Goldberg, but twisted in a fascinating way:
+{{{strudel(goldberg_imbue_r4_ada2a552,gemini,15)}}}
 
 
 ** The scaffold: 

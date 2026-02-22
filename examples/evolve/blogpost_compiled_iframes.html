@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-02-21 Sat 23:17 -->
+<!-- 2026-02-21 Sat 23:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Goldborg Variations: Musical Attractor States of LLMs</title>
@@ -203,42 +203,42 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#org5bbeb3f">1. The Experiment</a>
+<li><a href="#orgf07c006">1. The Experiment</a>
 <ul>
-<li><a href="#orgf6aed9e">1.1. My favorites:</a></li>
-<li><a href="#org68f7a36">1.2. The scaffold:</a></li>
-<li><a href="#org055ce7f">1.3. Models</a></li>
-<li><a href="#org2a5a706">1.4. Seeds</a></li>
+<li><a href="#orgde1beba">1.1. My favorites:</a></li>
+<li><a href="#org9463a91">1.2. The scaffold:</a></li>
+<li><a href="#orgbca05aa">1.3. Models</a></li>
+<li><a href="#orgd95fc43">1.4. Seeds</a></li>
 </ul>
 </li>
-<li><a href="#org177d6c1">2. The music</a>
+<li><a href="#org41d3009">2. The music</a>
 <ul>
-<li><a href="#org0371c1f">2.1. Claude (<code>claude-opus-4-5-20251101</code>)</a></li>
-<li><a href="#orgfff4f5e">2.2. ChatGPT (<code>openai/gpt-4.1</code>)</a></li>
-<li><a href="#org770eb93">2.3. Grok (<code>x-ai/grok-4.1-fast</code>)</a></li>
-<li><a href="#org0ab5516">2.4. Gemini (<code>google/gemini-2.5-pro</code>)</a></li>
-<li><a href="#org28b1aeb">2.5. Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</a></li>
-<li><a href="#org2102c54">2.6. Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</a></li>
-<li><a href="#org2944727">2.7. Cross-model: GPT x Gemini (alternating)</a></li>
-<li><a href="#org8867e58">2.8. Cross-model: Grok x Gemini (alternating)</a></li>
-<li><a href="#org60282b1">2.9. Cross-model: Claude x Grok (alternating)</a></li>
-<li><a href="#orgba64a93">2.10. Cross-model: Claude x Gemini (alternating)</a></li>
-<li><a href="#orgcf6648f">2.11. LLM Genre Judge</a></li>
+<li><a href="#org30639ae">2.1. Claude (<code>claude-opus-4-5-20251101</code>)</a></li>
+<li><a href="#org017c8c5">2.2. ChatGPT (<code>openai/gpt-4.1</code>)</a></li>
+<li><a href="#orgc3c26a0">2.3. Grok (<code>x-ai/grok-4.1-fast</code>)</a></li>
+<li><a href="#orgc5a0877">2.4. Gemini (<code>google/gemini-2.5-pro</code>)</a></li>
+<li><a href="#org7cde51a">2.5. Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</a></li>
+<li><a href="#org376d42e">2.6. Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</a></li>
+<li><a href="#org0eae9c3">2.7. Cross-model: GPT x Gemini (alternating)</a></li>
+<li><a href="#org2318de4">2.8. Cross-model: Grok x Gemini (alternating)</a></li>
+<li><a href="#org2834e88">2.9. Cross-model: Claude x Grok (alternating)</a></li>
+<li><a href="#orgebfb352">2.10. Cross-model: Claude x Gemini (alternating)</a></li>
+<li><a href="#orgad19043">2.11. LLM Genre Judge</a></li>
 </ul>
 </li>
-<li><a href="#org418ed0d">3. The music of small minds</a></li>
-<li><a href="#orgd3f6829">4. Try it yourself</a>
+<li><a href="#orge1b77ca">3. The music of small minds</a></li>
+<li><a href="#orgb9329e6">4. Try it yourself</a>
 <ul>
-<li><a href="#org18c15c1">4.1. Evolve</a></li>
-<li><a href="#org7fa4c40">4.2. Live-coding with LLMs</a></li>
+<li><a href="#org87b2fa1">4.1. Evolve</a></li>
+<li><a href="#org8765b1c">4.2. Live-coding with LLMs</a></li>
 </ul>
 </li>
-<li><a href="#org414fbcf">5. Appendix</a></li>
+<li><a href="#orgb900fe6">5. Appendix</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org5bbeb3f" class="outline-2">
-<h2 id="org5bbeb3f"><span class="section-number-2">1.</span> The Experiment</h2>
+<div id="outline-container-orgf07c006" class="outline-2">
+<h2 id="orgf07c006"><span class="section-number-2">1.</span> The Experiment</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 It&rsquo;s been previously noted that models have some pretty funny <a href="https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states">attractor states</a>.
@@ -283,26 +283,41 @@ We discover that, loosely speaking, Claude writes ambient music, Grok writes har
 The code is open source, and it should be easy to run your own musical experiments: <a href="https://github.com/ElleNajt/vibe-duet">vibe-duet on GitHub</a>. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. 
 </p>
 </div>
-<div id="outline-container-orgf6aed9e" class="outline-3">
-<h3 id="orgf6aed9e"><span class="section-number-3">1.1.</span> My favorites:</h3>
+<div id="outline-container-orgde1beba" class="outline-3">
+<h3 id="orgde1beba"><span class="section-number-3">1.1.</span> My favorites:</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
 I think Gemini&rsquo;s compositions are consistently the most interesting. So skip there if that&rsquo;s what you&rsquo;re here for:
-It&rsquo;s hard to pick.
+It&rsquo;s hard to pick, here are some. 
 </p>
 
 <p>
-Here&rsquo;s one that&rsquo;s cool:
+Run 1, step 25:
 </p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#c2V0Y3BzKDEyNC82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOmV2b2x2ZSxmdXR1cmUscGVyc29uYWxpdHknKSwgc2FtcGxlcygnc2hhYmRhL3NwZWVjaC9qYS1KUC9mOm1pcmFpJykKCiQ6IG5vdGUoIjxlYjIgZjI%2BIDxhYjIgYmIyPiIpLnNsb3coNCkuZXVjbGlkKDUsOCkKICAuc291bmQoInB1bHNlIikKICAuZ2FpbigwLjE1KQogIC5zaGFwZSgwLjIpCiAgLmxwZihwZXJsaW4ucmFuZ2UoMzAwLCAxNTAwKS5zbG93KDgpKQogIC5yZXNvbmFuY2UoNSkKICAuZGVsYXkoMC4zKQoKJDogbigiPDAgMyA1IDg%2BIDwwIDMgNyAxMD4iKS5zY2FsZSgiZ2I6bWFqb3IiKS5wbHkoIjwyIDE%2BIikKICAuZmFzdCg0KS5kZWdyYWRlQnkoMC4wNSkKICAuc291bmQoInRyaWFuZ2xlIikKICAuZ2FpbigwLjEyKQogIC5scGYoMjAwMCkKICAucGhhc2VyKDAuMikKICAucm9vbSgwLjQpCiAgLnBhbihwZXJsaW4ucmFuZ2UoMC4xLDAuOSkuc2xvdyg4KSkKCiQ6IHMoImJkIH4gW2JkIGJkLzJdIFt%2BIGJkXSIpLnNsb3coMikKICAuZ2FpbigwLjQ1KQogIC5zaGFwZSgwLjYpCiAgCiAgLmN1dG9mZigzMDAwKQogIC5jb2Fyc2UoOCkKICAKJDogcygiPGhoKjIgb2ggaGg%2BIikuZXVjbGlkKDcsOCkuZmFzdCg0KQogIC5nYWluKDAuMSkKICAuaHBmKDkwMDApCiAgLmNydXNoKDEwKQogIC5wYW4oc2F3LnJhbmdlKDAuMiwgMC44KS5mYXN0KDIpKQogIC5kZWxheSgwLjEpCgokOiBjaG9yZCgiPGFiMzptOSBlYjQ6bTc%2BIikKICAuc2xvdyg0KQogIC5zb3VuZCgic3F1YXJlIikKICAuZ2FpbigwLjE1KQogIC52b3dlbCgiYSBpIHUiKS5zbG93KDE2KQogIC5waGFzZXIoMC4xKQogIC5yb29tKDAuNSkKICAuZGVsYXkoMC4yKQoKJDogcygiPGV2b2x2ZSBtaXJhaT4gcGVyc29uYWxpdHk%2FIDxmdXR1cmUgfj4iKS5zbG93KDgpCiAgLmdhaW4oMC4zKQogIC5zdHJpYXRlKHBlcmxpbi5yYW5nZSgxNiwgODApLnNsb3coOCkpCiAgLmNydXNoKDgpCiAgLmhwZig0MDApCiAgLnJvb20oMC40KQogIC5wYW4ocGVybGluLnJhbmdlKDAuMSwgMC45KS5zbG93KDcpKQ%3D%3D')">Step 25</button></div>
+  <iframe src="https://strudel.cc/embed#c2V0Y3BzKDEyNC82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOmV2b2x2ZSxmdXR1cmUscGVyc29uYWxpdHknKSwgc2FtcGxlcygnc2hhYmRhL3NwZWVjaC9qYS1KUC9mOm1pcmFpJykKCiQ6IG5vdGUoIjxlYjIgZjI%2BIDxhYjIgYmIyPiIpLnNsb3coNCkuZXVjbGlkKDUsOCkKICAuc291bmQoInB1bHNlIikKICAuZ2FpbigwLjE1KQogIC5zaGFwZSgwLjIpCiAgLmxwZihwZXJsaW4ucmFuZ2UoMzAwLCAxNTAwKS5zbG93KDgpKQogIC5yZXNvbmFuY2UoNSkKICAuZGVsYXkoMC4zKQoKJDogbigiPDAgMyA1IDg%2BIDwwIDMgNyAxMD4iKS5zY2FsZSgiZ2I6bWFqb3IiKS5wbHkoIjwyIDE%2BIikKICAuZmFzdCg0KS5kZWdyYWRlQnkoMC4wNSkKICAuc291bmQoInRyaWFuZ2xlIikKICAuZ2FpbigwLjEyKQogIC5scGYoMjAwMCkKICAucGhhc2VyKDAuMikKICAucm9vbSgwLjQpCiAgLnBhbihwZXJsaW4ucmFuZ2UoMC4xLDAuOSkuc2xvdyg4KSkKCiQ6IHMoImJkIH4gW2JkIGJkLzJdIFt%2BIGJkXSIpLnNsb3coMikKICAuZ2FpbigwLjQ1KQogIC5zaGFwZSgwLjYpCiAgCiAgLmN1dG9mZigzMDAwKQogIC5jb2Fyc2UoOCkKICAKJDogcygiPGhoKjIgb2ggaGg%2BIikuZXVjbGlkKDcsOCkuZmFzdCg0KQogIC5nYWluKDAuMSkKICAuaHBmKDkwMDApCiAgLmNydXNoKDEwKQogIC5wYW4oc2F3LnJhbmdlKDAuMiwgMC44KS5mYXN0KDIpKQogIC5kZWxheSgwLjEpCgokOiBjaG9yZCgiPGFiMzptOSBlYjQ6bTc%2BIikKICAuc2xvdyg0KQogIC5zb3VuZCgic3F1YXJlIikKICAuZ2FpbigwLjE1KQogIC52b3dlbCgiYSBpIHUiKS5zbG93KDE2KQogIC5waGFzZXIoMC4xKQogIC5yb29tKDAuNSkKICAuZGVsYXkoMC4yKQoKJDogcygiPGV2b2x2ZSBtaXJhaT4gcGVyc29uYWxpdHk%2FIDxmdXR1cmUgfj4iKS5zbG93KDgpCiAgLmdhaW4oMC4zKQogIC5zdHJpYXRlKHBlcmxpbi5yYW5nZSgxNiwgODApLnNsb3coOCkpCiAgLmNydXNoKDgpCiAgLmhwZig0MDApCiAgLnJvb20oMC40KQogIC5wYW4ocGVybGluLnJhbmdlKDAuMSwgMC45KS5zbG93KDcpKQ%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
+</div>
 
 <p>
-TODO Run 1 Gemini step 25 . Step 10 from run 2. 
-Run 4 step 10 is recognizably goldberg, but twisted in a fascinating way. 
+Step 10 from run 2:
 </p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#c2FtcGxlcygnc2hhYmRhL3NwZWVjaDpnb2xkLGJlcmcsdmFyaWF0aW9uJykKc2V0Y3BzKDYwLzYwLzQpCgokOiBub3RlKCJbZzMgZ2IzXSBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgLnNsb3coNCkKICAuc291bmQoInB1bHNlIikKICAuZ2FpbigwLjE1KQogIC5jdXRvZmYoc2luZS5yYW5nZSgyMDAsIDEyMDApLnNsb3coOCkpCiAgLmxwcSg0KQogIC5jcnVzaChwZXJsaW4ucmFuZ2UoNCwgNykuc2xvdyg2KSkKICAuZGVsYXkoMC40KQogIC5yb29tKDAuNSkKCiQ6IG5vdGUoImViNSB%2BIGM1IH4gPGc0IGE0PiB%2BIGQ0PyIpLnNsb3coMikuZXVjbGlkKDUsOCkKICAuc291bmQoInNhd3Rvb3RoIikKICAuZ2FpbigwLjE1KQogIC5mbWkocGVybGluLnJhbmdlKDAuNSwgOCkuc2xvdyg5KSkKICAuYmFuZGYocGVybGluLnJhbmdlKDUwMCwgMzAwMCkuc2xvdygxMCkpCiAgLnBoYXNlcihwZXJsaW4ucmFuZ2UoMSwgOCkuc2xvdygxMikpCiAgLnBhbihwZXJsaW4ucmFuZ2UoMCwgMSkuc2xvdygxMSkpCiAgLmp1eCh4ID0%2BIHgubGF0ZSgxLzMpLmdhaW4oMC43KSkKCiQ6IHMoIls8YmQgYmQqMj4gY3AsIFtoaCBvaF0qMl0gc24%2FIikuZXVjbGlkKDUsIDgpLmZhc3QoMikKICAuZ2FpbigwLjQpCiAgLmNydXNoKDUpCiAgLnN0cmlhdGUocGVybGluLnJhbmdlKDgsIDMyKS5zbG93KDQpKQogIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC44LCAxLjIpLnNsb3coMykpCiAgLmRlbGF5KDAuMykKICAucGFuKHJhbmQpCgokOiBub3RlKCI8ZzQ6bWluNyBjNDptYWo3PiA8ZjQ6bWFqNyBiYjM6bWFqNz4iKS5jaG9yZCgpLmV1Y2xpZCg1LCAxMykKICAuc291bmQoInBpYW5vIikKICAuZ2FpbigwLjEpCiAgLnZvd2VsKCJpIG8gdSBhIikuc2xvdygxMikKICAuY3J1c2goNikKICAudHJlbW9sbyhwZXJsaW4uc2xvdygxNikucmFuZ2UoMC4xLCAwLjcpKQogIC5yb29tKDAuNykKICAucGFuKHNpbmUucmFuZ2UoMC4xLCAwLjkpLnNsb3coMTYpKQoKJDogcygiPGdvbGQgYmVyZyB2YXJpYXRpb24%2BKjIiKS5jaG9wKDgpLmZhc3QoNCkKICAuZ2FpbigwLjEyKQogIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC43NSwgMS4yNSkuc2xvdygxMykpCiAgLmJhbmRmKHBlcmxpbi5yYW5nZSgxMDAwLCAyNTAwKS5zbG93KDUpKQogIC5iYW5kcSg1KQogIC5jcnVzaCg2KQogIC5wYW4ocGVybGluLnJhbmdlKDAsIDEpLnNsb3coNykpCgokOiBub3RlKCIwIDIgNCA1IDcgOSAxMSAxMiIpLnNjYWxlKCJnOm1pbm9yIikuZmFzdCg4KS5wYWxpbmRyb21lKCkKICAuc291bmQoInNpbmUiKQogIC5nYWluKDAuMDkpCiAgLmZtaShwZXJsaW4ucmFuZ2UoMC4xLCA0KS5zbG93KDcpKQogIC5ocGYocGVybGluLnJhbmdlKDUwMCwyNTAwKS5zbG93KDgpKQogIC5ocHEoOCkKICAuZGV0dW5lKHBlcmxpbi5yYW5nZSgtMTUsIDE1KS5zbG93KDQpKQogIC5yb29tKDAuNCk%3D')">Step 10</button></div>
+  <iframe src="https://strudel.cc/embed#c2FtcGxlcygnc2hhYmRhL3NwZWVjaDpnb2xkLGJlcmcsdmFyaWF0aW9uJykKc2V0Y3BzKDYwLzYwLzQpCgokOiBub3RlKCJbZzMgZ2IzXSBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgLnNsb3coNCkKICAuc291bmQoInB1bHNlIikKICAuZ2FpbigwLjE1KQogIC5jdXRvZmYoc2luZS5yYW5nZSgyMDAsIDEyMDApLnNsb3coOCkpCiAgLmxwcSg0KQogIC5jcnVzaChwZXJsaW4ucmFuZ2UoNCwgNykuc2xvdyg2KSkKICAuZGVsYXkoMC40KQogIC5yb29tKDAuNSkKCiQ6IG5vdGUoImViNSB%2BIGM1IH4gPGc0IGE0PiB%2BIGQ0PyIpLnNsb3coMikuZXVjbGlkKDUsOCkKICAuc291bmQoInNhd3Rvb3RoIikKICAuZ2FpbigwLjE1KQogIC5mbWkocGVybGluLnJhbmdlKDAuNSwgOCkuc2xvdyg5KSkKICAuYmFuZGYocGVybGluLnJhbmdlKDUwMCwgMzAwMCkuc2xvdygxMCkpCiAgLnBoYXNlcihwZXJsaW4ucmFuZ2UoMSwgOCkuc2xvdygxMikpCiAgLnBhbihwZXJsaW4ucmFuZ2UoMCwgMSkuc2xvdygxMSkpCiAgLmp1eCh4ID0%2BIHgubGF0ZSgxLzMpLmdhaW4oMC43KSkKCiQ6IHMoIls8YmQgYmQqMj4gY3AsIFtoaCBvaF0qMl0gc24%2FIikuZXVjbGlkKDUsIDgpLmZhc3QoMikKICAuZ2FpbigwLjQpCiAgLmNydXNoKDUpCiAgLnN0cmlhdGUocGVybGluLnJhbmdlKDgsIDMyKS5zbG93KDQpKQogIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC44LCAxLjIpLnNsb3coMykpCiAgLmRlbGF5KDAuMykKICAucGFuKHJhbmQpCgokOiBub3RlKCI8ZzQ6bWluNyBjNDptYWo3PiA8ZjQ6bWFqNyBiYjM6bWFqNz4iKS5jaG9yZCgpLmV1Y2xpZCg1LCAxMykKICAuc291bmQoInBpYW5vIikKICAuZ2FpbigwLjEpCiAgLnZvd2VsKCJpIG8gdSBhIikuc2xvdygxMikKICAuY3J1c2goNikKICAudHJlbW9sbyhwZXJsaW4uc2xvdygxNikucmFuZ2UoMC4xLCAwLjcpKQogIC5yb29tKDAuNykKICAucGFuKHNpbmUucmFuZ2UoMC4xLCAwLjkpLnNsb3coMTYpKQoKJDogcygiPGdvbGQgYmVyZyB2YXJpYXRpb24%2BKjIiKS5jaG9wKDgpLmZhc3QoNCkKICAuZ2FpbigwLjEyKQogIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC43NSwgMS4yNSkuc2xvdygxMykpCiAgLmJhbmRmKHBlcmxpbi5yYW5nZSgxMDAwLCAyNTAwKS5zbG93KDUpKQogIC5iYW5kcSg1KQogIC5jcnVzaCg2KQogIC5wYW4ocGVybGluLnJhbmdlKDAsIDEpLnNsb3coNykpCgokOiBub3RlKCIwIDIgNCA1IDcgOSAxMSAxMiIpLnNjYWxlKCJnOm1pbm9yIikuZmFzdCg4KS5wYWxpbmRyb21lKCkKICAuc291bmQoInNpbmUiKQogIC5nYWluKDAuMDkpCiAgLmZtaShwZXJsaW4ucmFuZ2UoMC4xLCA0KS5zbG93KDcpKQogIC5ocGYocGVybGluLnJhbmdlKDUwMCwyNTAwKS5zbG93KDgpKQogIC5ocHEoOCkKICAuZGV0dW5lKHBlcmxpbi5yYW5nZSgtMTUsIDE1KS5zbG93KDQpKQogIC5yb29tKDAuNCk%3D" class="strudel-embed" allow="autoplay"></iframe>
+</div>
+
+<p>
+Run 4 step 10 is recognizably Goldberg, but twisted in a fascinating way:
+</p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#c2V0Y3BzKDEwNS82MC80KQoKJDogbm90ZSgiW2czLCBnYjNdIGUzIH4gZDMgW2IyIGMzXSBnMiIpCiAgLnNsb3coMikKICAuc291bmQoInB1bHNlIikKICAuc2hhcGUocGVybGluLnJhbmdlKDAuMiwgMC44KS5zbG93KDcpKQogIC5scGYocGVybGluLnJhbmdlKDIwMCwgMTUwMCkuc2xvdyg4KSkubHBxKDUpCiAgLnBlbnYoLTEyKS5wZGVjYXkoMC4xKQogIC5kZWxheSgwLjIpLmR0KDEvNikuZGZiKDAuMykKICAucm9vbSgwLjEpCiAgLmdhaW4oMC4yKQoKJDogbm90ZSgiPGI0IGE0IGc0PiBmczQgW2Q1IGNzNV0gZTUgPGc1IGI1PiIpCiAgLnNsb3coMikKICAuc291bmQoInRyaWFuZ2xlIikKICAudm93ZWwoImEgZSIuc2xvdygyKSkKICAubHBmKHNpbmUucmFuZ2UoNDAwLCAyMDAwKS5zbG93KDQpKS5scHEoNikKICAuc2xpZGUoMC4xKQogIC5kZWxheSgwLjQpLmR0KDEvNikuZGZiKDAuNCkKICAuZ2FpbigwLjE4KQoKJDogcygiY3AiKS5ldWNsaWQoNSw4KS5jaG9wKDgpCiAgLnNwZWVkKHBlcmxpbi5yYW5nZSgwLjgsIDEuNSkuc2xvdyg4KSkKICAuYnBmKHBlcmxpbi5yYW5nZSg1MDAsIDMwMDApLnNsb3coMTApKS5icHEoOCkKICAuY3J1c2goOCkKICAudHJlbW9sbygwLjcpLnRyZW1vbG9zeW5jKDE2KQogIC5wYW4ocmFuZC5zbG93KDIpKQogIC5nYWluKDAuMikKCiQ6IG5vdGUoIltnNCBmczQsIGU0XSBkNCBbYjMgYzRdIGQ0IGc0IikKICAuc2xvdyg0KQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5yZWxlYXNlKDQpCiAgLnZvd2VsKCJhIGUgaSBvIHUiLnNsb3coMTYpKQogIC5sZXNsaWUocGVybGluLnJhbmdlKDAuMSwgMC45KS5zbG93KDEwKSkKICAuZGVsYXkoMC4yKS5kdCgxLzQpLmRmYigwLjUpCiAgLnJvb20oMC4zKS5zaXplKDAuOSkKICAuZ2FpbigwLjE4KQoKJDogcygiW2JkIGJkKjJdIFt%2BIHNuXSBbYmQgYmRdIFtzbiBiZCoyLzNdIikuc2xvdygxKQogIC5zaGFwZSgwLjcpCiAgLmxwZig4MDAwKS5scGVudigtNDAwMCkubHBkZWNheSgwLjA1KQogIC5yb29tKDAuMSkKICAuc3dpbmcoMC4xKQogIAogIC5nYWluKDAuNCkKCiQ6IHMoImhoIikuZXVjbGlkKDcsIDE2KS5mYXN0KDIpCiAgLmRlY2F5KDAuMDQpCiAgLmhwZihwZXJsaW4ucmFuZ2UoODAwMCwgMTMwMDApLnNsb3coOSkpCiAgLmNydXNoKDEyKQogIC5kZWxheSgwLjIpLmR0KDEvOCkuZGZiKDAuNSkKICAucGFuKHBlcmxpbi5zbG93KDQpKQogIC50cmVtb2xvKDAuNCkudHJlbW9sb3N5bmMoOCkKICAuZ2FpbigwLjEp')">Step 10</button></div>
+  <iframe src="https://strudel.cc/embed#c2V0Y3BzKDEwNS82MC80KQoKJDogbm90ZSgiW2czLCBnYjNdIGUzIH4gZDMgW2IyIGMzXSBnMiIpCiAgLnNsb3coMikKICAuc291bmQoInB1bHNlIikKICAuc2hhcGUocGVybGluLnJhbmdlKDAuMiwgMC44KS5zbG93KDcpKQogIC5scGYocGVybGluLnJhbmdlKDIwMCwgMTUwMCkuc2xvdyg4KSkubHBxKDUpCiAgLnBlbnYoLTEyKS5wZGVjYXkoMC4xKQogIC5kZWxheSgwLjIpLmR0KDEvNikuZGZiKDAuMykKICAucm9vbSgwLjEpCiAgLmdhaW4oMC4yKQoKJDogbm90ZSgiPGI0IGE0IGc0PiBmczQgW2Q1IGNzNV0gZTUgPGc1IGI1PiIpCiAgLnNsb3coMikKICAuc291bmQoInRyaWFuZ2xlIikKICAudm93ZWwoImEgZSIuc2xvdygyKSkKICAubHBmKHNpbmUucmFuZ2UoNDAwLCAyMDAwKS5zbG93KDQpKS5scHEoNikKICAuc2xpZGUoMC4xKQogIC5kZWxheSgwLjQpLmR0KDEvNikuZGZiKDAuNCkKICAuZ2FpbigwLjE4KQoKJDogcygiY3AiKS5ldWNsaWQoNSw4KS5jaG9wKDgpCiAgLnNwZWVkKHBlcmxpbi5yYW5nZSgwLjgsIDEuNSkuc2xvdyg4KSkKICAuYnBmKHBlcmxpbi5yYW5nZSg1MDAsIDMwMDApLnNsb3coMTApKS5icHEoOCkKICAuY3J1c2goOCkKICAudHJlbW9sbygwLjcpLnRyZW1vbG9zeW5jKDE2KQogIC5wYW4ocmFuZC5zbG93KDIpKQogIC5nYWluKDAuMikKCiQ6IG5vdGUoIltnNCBmczQsIGU0XSBkNCBbYjMgYzRdIGQ0IGc0IikKICAuc2xvdyg0KQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5yZWxlYXNlKDQpCiAgLnZvd2VsKCJhIGUgaSBvIHUiLnNsb3coMTYpKQogIC5sZXNsaWUocGVybGluLnJhbmdlKDAuMSwgMC45KS5zbG93KDEwKSkKICAuZGVsYXkoMC4yKS5kdCgxLzQpLmRmYigwLjUpCiAgLnJvb20oMC4zKS5zaXplKDAuOSkKICAuZ2FpbigwLjE4KQoKJDogcygiW2JkIGJkKjJdIFt%2BIHNuXSBbYmQgYmRdIFtzbiBiZCoyLzNdIikuc2xvdygxKQogIC5zaGFwZSgwLjcpCiAgLmxwZig4MDAwKS5scGVudigtNDAwMCkubHBkZWNheSgwLjA1KQogIC5yb29tKDAuMSkKICAuc3dpbmcoMC4xKQogIAogIC5nYWluKDAuNCkKCiQ6IHMoImhoIikuZXVjbGlkKDcsIDE2KS5mYXN0KDIpCiAgLmRlY2F5KDAuMDQpCiAgLmhwZihwZXJsaW4ucmFuZ2UoODAwMCwgMTMwMDApLnNsb3coOSkpCiAgLmNydXNoKDEyKQogIC5kZWxheSgwLjIpLmR0KDEvOCkuZGZiKDAuNSkKICAucGFuKHBlcmxpbi5zbG93KDQpKQogIC50cmVtb2xvKDAuNCkudHJlbW9sb3N5bmMoOCkKICAuZ2FpbigwLjEp" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-<div id="outline-container-org68f7a36" class="outline-3">
-<h3 id="org68f7a36"><span class="section-number-3">1.2.</span> The scaffold:</h3>
+</div>
+<div id="outline-container-org9463a91" class="outline-3">
+<h3 id="org9463a91"><span class="section-number-3">1.2.</span> The scaffold:</h3>
 <div class="outline-text-3" id="text-1-2">
 <p>
 Models aren&rsquo;t perfect at Strudel &#x2013; they make syntax mistakes and invent
@@ -313,8 +328,8 @@ never sees the error message &#x2013; it just gets another shot.
 </p>
 </div>
 </div>
-<div id="outline-container-org055ce7f" class="outline-3">
-<h3 id="org055ce7f"><span class="section-number-3">1.3.</span> Models</h3>
+<div id="outline-container-orgbca05aa" class="outline-3">
+<h3 id="orgbca05aa"><span class="section-number-3">1.3.</span> Models</h3>
 <div class="outline-text-3" id="text-1-3">
 <ul class="org-ul">
 <li><code>claude-opus-4-5-20251101</code> (Anthropic API)</li>
@@ -324,8 +339,8 @@ never sees the error message &#x2013; it just gets another shot.
 </ul>
 </div>
 </div>
-<div id="outline-container-org2a5a706" class="outline-3">
-<h3 id="org2a5a706"><span class="section-number-3">1.4.</span> Seeds</h3>
+<div id="outline-container-orgd95fc43" class="outline-3">
+<h3 id="orgd95fc43"><span class="section-number-3">1.4.</span> Seeds</h3>
 <div class="outline-text-3" id="text-1-4">
 <p>
 The personality experiment uses the Goldberg Variations ground bass
@@ -356,8 +371,8 @@ little reverb. Everything that follows is the model&rsquo;s choice.
 </div>
 </div>
 </div>
-<div id="outline-container-org177d6c1" class="outline-2">
-<h2 id="org177d6c1"><span class="section-number-2">2.</span> The music</h2>
+<div id="outline-container-org41d3009" class="outline-2">
+<h2 id="org41d3009"><span class="section-number-2">2.</span> The music</h2>
 <div class="outline-text-2" id="text-2">
 <p>
 Each link opens a live Strudel instrument &#x2013; you can edit the code
@@ -369,16 +384,15 @@ Note that sometimes these are hard for strudel.cc to generate, you might need to
 </p>
 
 <p>
-Also, the first run was done with a slightly different system prompt (a minor clarification to the Shabda TTS docs). We stripped <code>.compressor()</code> / <code>.compressorRatio()</code> calls from the output files &#x2013; the system prompt used the wrong API (separate method calls instead of strudel&rsquo;s colon-separated string format), which caused silent output on strudel.cc.
+Also, the first run was done with a slightly different system prompt (a minor clarification to the Shabda TTS docs). We stripped <code>.compressor()</code> / <code>.compressorRatio()</code> calls from the output files &#x2013; the version of the system prompt used here used the wrong API, which caused silent output on strudel.cc that the scaffold didn&rsquo;t catch.
 </p>
 </div>
-<div id="outline-container-org0371c1f" class="outline-3">
-<h3 id="org0371c1f"><span class="section-number-3">2.1.</span> Claude (<code>claude-opus-4-5-20251101</code>)</h3>
+<div id="outline-container-org30639ae" class="outline-3">
+<h3 id="org30639ae"><span class="section-number-3">2.1.</span> Claude (<code>claude-opus-4-5-20251101</code>)</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 Claude sometimes finds the bliss attractor, and sometimes descends into a gentle minimalism. In general peaceful.
 </p>
-
 
 <p>
 <b>Run 1:</b>
@@ -421,8 +435,8 @@ Claude sometimes finds the bliss attractor, and sometimes descends into a gentle
 </div>
 </div>
 </div>
-<div id="outline-container-orgfff4f5e" class="outline-3">
-<h3 id="orgfff4f5e"><span class="section-number-3">2.2.</span> ChatGPT (<code>openai/gpt-4.1</code>)</h3>
+<div id="outline-container-org017c8c5" class="outline-3">
+<h3 id="org017c8c5"><span class="section-number-3">2.2.</span> ChatGPT (<code>openai/gpt-4.1</code>)</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 Consistently generates boring elevator music. :( Not impressed by GPT here.
@@ -470,8 +484,8 @@ Consistently generates boring elevator music. :( Not impressed by GPT here.
 </div>
 </div>
 </div>
-<div id="outline-container-org770eb93" class="outline-3">
-<h3 id="org770eb93"><span class="section-number-3">2.3.</span> Grok (<code>x-ai/grok-4.1-fast</code>)</h3>
+<div id="outline-container-orgc3c26a0" class="outline-3">
+<h3 id="orgc3c26a0"><span class="section-number-3">2.3.</span> Grok (<code>x-ai/grok-4.1-fast</code>)</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 Grok is Grok. Compelling electronic maximalism. These are honestly some of my favorites, at least around the iteration 15 mark.
@@ -519,8 +533,8 @@ Grok is Grok. Compelling electronic maximalism. These are honestly some of my fa
 </div>
 </div>
 </div>
-<div id="outline-container-org0ab5516" class="outline-3">
-<h3 id="org0ab5516"><span class="section-number-3">2.4.</span> Gemini (<code>google/gemini-2.5-pro</code>)</h3>
+<div id="outline-container-orgc5a0877" class="outline-3">
+<h3 id="orgc5a0877"><span class="section-number-3">2.4.</span> Gemini (<code>google/gemini-2.5-pro</code>)</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 Glitchy IDM. I really like these around the 20 iteration mark.
@@ -568,14 +582,9 @@ Glitchy IDM. I really like these around the 20 iteration mark.
 </div>
 </div>
 </div>
-<div id="outline-container-org28b1aeb" class="outline-3">
-<h3 id="org28b1aeb"><span class="section-number-3">2.5.</span> Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</h3>
+<div id="outline-container-org7cde51a" class="outline-3">
+<h3 id="org7cde51a"><span class="section-number-3">2.5.</span> Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</h3>
 <div class="outline-text-3" id="text-2-5">
-<p>
-Immediate maximalism &#x2013; Kimi writes a full arrangement in a single step. Dark, grinding, harmonically restless.
-</p>
-
-
 <p>
 <b>Run 1:</b>
 </p>
@@ -585,14 +594,9 @@ Immediate maximalism &#x2013; Kimi writes a full arrangement in a single step. D
 </div>
 </div>
 </div>
-<div id="outline-container-org2102c54" class="outline-3">
-<h3 id="org2102c54"><span class="section-number-3">2.6.</span> Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</h3>
+<div id="outline-container-org376d42e" class="outline-3">
+<h3 id="org376d42e"><span class="section-number-3">2.6.</span> Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</h3>
 <div class="outline-text-3" id="text-2-6">
-<p>
-The engineer. Verbose inline comments explaining every creative decision. Acid bass as identity.
-</p>
-
-
 <p>
 <b>Run 1:</b>
 </p>
@@ -602,14 +606,9 @@ The engineer. Verbose inline comments explaining every creative decision. Acid b
 </div>
 </div>
 </div>
-<div id="outline-container-org2944727" class="outline-3">
-<h3 id="org2944727"><span class="section-number-3">2.7.</span> Cross-model: GPT x Gemini (alternating)</h3>
+<div id="outline-container-org0eae9c3" class="outline-3">
+<h3 id="org0eae9c3"><span class="section-number-3">2.7.</span> Cross-model: GPT x Gemini (alternating)</h3>
 <div class="outline-text-3" id="text-2-7">
-<p>
-The models destabilize each other in productive ways. GPT softens and opens space; Gemini reintroduces grit. The result is the only run approaching genuine atonality.
-</p>
-
-
 <p>
 <b>Run 1:</b>
 </p>
@@ -619,14 +618,9 @@ The models destabilize each other in productive ways. GPT softens and opens spac
 </div>
 </div>
 </div>
-<div id="outline-container-org8867e58" class="outline-3">
-<h3 id="org8867e58"><span class="section-number-3">2.8.</span> Cross-model: Grok x Gemini (alternating)</h3>
+<div id="outline-container-org2318de4" class="outline-3">
+<h3 id="org2318de4"><span class="section-number-3">2.8.</span> Cross-model: Grok x Gemini (alternating)</h3>
 <div class="outline-text-3" id="text-2-8">
-<p>
-The most conventionally listenable cross-model run. Both models tame each other.
-</p>
-
-
 <p>
 <b>Run 1:</b>
 </p>
@@ -636,8 +630,8 @@ The most conventionally listenable cross-model run. Both models tame each other.
 </div>
 </div>
 </div>
-<div id="outline-container-org60282b1" class="outline-3">
-<h3 id="org60282b1"><span class="section-number-3">2.9.</span> Cross-model: Claude x Grok (alternating)</h3>
+<div id="outline-container-org2834e88" class="outline-3">
+<h3 id="org2834e88"><span class="section-number-3">2.9.</span> Cross-model: Claude x Grok (alternating)</h3>
 <div class="outline-text-3" id="text-2-9">
 <p>
 <b>Run 1:</b>
@@ -648,8 +642,8 @@ The most conventionally listenable cross-model run. Both models tame each other.
 </div>
 </div>
 </div>
-<div id="outline-container-orgba64a93" class="outline-3">
-<h3 id="orgba64a93"><span class="section-number-3">2.10.</span> Cross-model: Claude x Gemini (alternating)</h3>
+<div id="outline-container-orgebfb352" class="outline-3">
+<h3 id="orgebfb352"><span class="section-number-3">2.10.</span> Cross-model: Claude x Gemini (alternating)</h3>
 <div class="outline-text-3" id="text-2-10">
 <p>
 <b>Run 1:</b>
@@ -660,8 +654,8 @@ The most conventionally listenable cross-model run. Both models tame each other.
 </div>
 </div>
 </div>
-<div id="outline-container-orgcf6648f" class="outline-3">
-<h3 id="orgcf6648f"><span class="section-number-3">2.11.</span> LLM Genre Judge</h3>
+<div id="outline-container-orgad19043" class="outline-3">
+<h3 id="orgad19043"><span class="section-number-3">2.11.</span> LLM Genre Judge</h3>
 <div class="outline-text-3" id="text-2-11">
 <p>
 We asked Claude Opus 4.5 (temperature 0) to classify each model&rsquo;s output based on code features &#x2013; tempo, sounds, effects, envelopes, gain levels. Comments are stripped before analysis. The judge reviewed 5 runs per solo model and 3 runs per other model.
@@ -672,7 +666,7 @@ To regenerate: <code>.venv/bin/python judge.py --compare --save output/judge_com
 </p>
 </div>
 <ol class="org-ol">
-<li><a id="org433d1f1"></a>Genre Classification<br />
+<li><a id="orgb26dd93"></a>Genre Classification<br />
 <div class="outline-text-4" id="text-2-11-1">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #b6a0ff;">import</span> json, pandas <span style="color: #b6a0ff;">as</span> pd
@@ -686,13 +680,13 @@ df.set_index(<span style="color: #79a8ff;">"Model"</span>)
 </div>
 
 
-<div id="orgb9d69fd" class="figure">
+<div id="org952a606" class="figure">
 <p><img src="plots/blogpost/df_plot_20260221_213644_947577.png" alt="df_plot_20260221_213644_947577.png" />
 </p>
 </div>
 </div>
 </li>
-<li><a id="orga863e26"></a>Scorecard (1-10)<br />
+<li><a id="org3eb768f"></a>Scorecard (1-10)<br />
 <div class="outline-text-4" id="text-2-11-2">
 <div class="org-src-container">
 <pre class="src src-python"><span style="color: #b6a0ff;">import</span> json, pandas <span style="color: #b6a0ff;">as</span> pd
@@ -707,7 +701,7 @@ pd.DataFrame(rows).set_index(<span style="color: #79a8ff;">"Model"</span>)
 </div>
 
 
-<div id="orga763cfe" class="figure">
+<div id="org45a94b5" class="figure">
 <p><img src="plots/blogpost/df_plot_20260221_214215_1663862.png" alt="df_plot_20260221_214215_1663862.png" />
 </p>
 </div>
@@ -716,64 +710,52 @@ pd.DataFrame(rows).set_index(<span style="color: #79a8ff;">"Model"</span>)
 </ol>
 </div>
 </div>
-<div id="outline-container-org418ed0d" class="outline-2">
-<h2 id="org418ed0d"><span class="section-number-2">3.</span> The music of small minds</h2>
+<div id="outline-container-orge1b77ca" class="outline-2">
+<h2 id="orge1b77ca"><span class="section-number-2">3.</span> The music of small minds</h2>
 <div class="outline-text-2" id="text-3">
 <p>
 Smaller models make consistently less interesting music. Goldbergbench? 
 </p>
 
 <ul class="org-ul">
-<li>Claude 3 Haiku (<code>anthropic/claude-3-haiku</code>): #+begin_export html</li>
+<li>Claude 3 Haiku (<code>anthropic/claude-3-haiku</code>):</li>
 </ul>
-<p>
-&lt;div class=&ldquo;run-player&rdquo;&gt;
-  &lt;div class=&ldquo;run-controls&rdquo;&gt;&lt;button class=&ldquo;step-btn active&rdquo; onclick=&ldquo;loadStep(this, &lsquo;https://strudel.cc/embed#JDogbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAuc2xvdygxNCkKICAuc291bmQoInN1cGVyc2F3IikKICAuZ2FpbigwLjA4KQogIC5scGYoMzIwKQogIC5scHEoMi44KQogIC5wZW52KDAuNzgpCiAgLnBhdHRhY2soMS44KQogIC5wZGVjYXkoMi4xKQogIC5wc3VzdGFpbigwLjA0KQogIC5wcmVsZWFzZSgxLjgpCiAgLnJvb20oMC45NSkKICAuc2l6ZSgwLjgpCiAgLnJvb21scCg1MjApCiAgLnRyZW1vbG8oMC4zNSkKICAudHJlbW9sb3N5bmMoMi44KQogIC5kaXN0b3J0KDAuNCkKICAuc2hhcGUoMC40KQogIC5kZXR1bmUoMTgpCiAgLnBoYXNlcigzKQogIC5waGFzZXJkZXB0aCgwLjMpCiAgLnBoYXNlcnN3ZWVwKDAuMikKICAucGhhc2VyY2VudGVyKDY1MCkKCiQ6IHN0YWNrKAogIG5vdGUoImczIGdiMyBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgICAuc2xvdygxNSkKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMjgwKQogICAgLmxwcSgyKQogICAgLnBlbnYoMC44KQogICAgLnBhdHRhY2soMikKICAgIC5wZGVjYXkoMi40KQogICAgLnBzdXN0YWluKDAuMDMpCiAgICAucHJlbGVhc2UoMikKICAgIC5yb29tKDAuOSkKICAgIC5zaXplKDAuNjUpCiAgICAucm9vbWxwKDQ4MCkKICAgIAogICAgCiAgICAKICAgIAogICAgLmRldHVuZSgxNCkKICAgIC5sZXNsaWUoMS44KQogICAgLmxyYXRlKDAuNDUpCiAgICAubHNpemUoMC40KQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTYpCiAgICAuc291bmQoInNpbmUiKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMTAwKQogICAgLmxwcSgxLjYpCiAgICAucGVudigwLjYpCiAgICAucGF0dGFjayg0LjUpCiAgICAucGRlY2F5KDUpCiAgICAucHN1c3RhaW4oMC4wMjUpCiAgICAucHJlbGVhc2UoNC41KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAuZGVsYXkoMC40NSkKICAgIC5kZWxheXRpbWUoMC4wMjgpCiAgICAuZGVsYXlmZWVkYmFjaygwLjMpCiAgICAucmluZygwLjIpCiAgICAucmluZ2YoODApCiAgICAucmluZ2RmKDAuMDQpCiAgICAuY3J1c2goNSkKICAgIC5kZXR1bmUoLTIyKQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTMpCiAgICAuc291bmQoInNxdWFyZSIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxMTApCiAgICAubHBxKDEuNSkKICAgIC5wZW52KDAuNikKICAgIC5wYXR0YWNrKDQuOCkKICAgIC5wZGVjYXkoNS4yKQogICAgLnBzdXN0YWluKDAuMDIpCiAgICAucHJlbGVhc2UoNC44KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAucm9vbWxwKDQyMCkKICAgIC5yaW5nKDAuMikKICAgIC5yaW5nZigxMDApCiAgICAucmluZ2RmKDAuMDI1KQogICAgCiAgICAKICAgIAogICAgCiAgICAuZGV0dW5lKC0yNikKKQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAgIC5zbG93KDEyKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxNjApCiAgICAubHBxKDEuOCkKICAgIC5wZW52KDAuNTUpCiAgICAucGF0dGFjaygyLjQpCiAgICAucGRlY2F5KDIuNikKICAgIC5wc3VzdGFpbigwLjAzKQogICAgLnByZWxlYXNlKDIuNCkKICAgIC5yb29tKDAuOTUpCiAgICAuc2l6ZSgwLjc1KQogICAgLnJvb21scCg0MjApCiAgICAuY3J1c2goNykKICAgIC5kZXR1bmUoMjApCiAgICAubGVzbGllKDIuNCkKICAgIC5scmF0ZSgwLjYpCiAgICAubHNpemUoMC41KQop&rsquo;)&rdquo;&gt;Step 30&lt;/button&gt;&lt;/div&gt;
-  &lt;iframe src=&ldquo;<a href="https://strudel.cc/embed#JDogbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAuc2xvdygxNCkKICAuc291bmQoInN1cGVyc2F3IikKICAuZ2FpbigwLjA4KQogIC5scGYoMzIwKQogIC5scHEoMi44KQogIC5wZW52KDAuNzgpCiAgLnBhdHRhY2soMS44KQogIC5wZGVjYXkoMi4xKQogIC5wc3VzdGFpbigwLjA0KQogIC5wcmVsZWFzZSgxLjgpCiAgLnJvb20oMC45NSkKICAuc2l6ZSgwLjgpCiAgLnJvb21scCg1MjApCiAgLnRyZW1vbG8oMC4zNSkKICAudHJlbW9sb3N5bmMoMi44KQogIC5kaXN0b3J0KDAuNCkKICAuc2hhcGUoMC40KQogIC5kZXR1bmUoMTgpCiAgLnBoYXNlcigzKQogIC5waGFzZXJkZXB0aCgwLjMpCiAgLnBoYXNlcnN3ZWVwKDAuMikKICAucGhhc2VyY2VudGVyKDY1MCkKCiQ6IHN0YWNrKAogIG5vdGUoImczIGdiMyBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgICAuc2xvdygxNSkKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMjgwKQogICAgLmxwcSgyKQogICAgLnBlbnYoMC44KQogICAgLnBhdHRhY2soMikKICAgIC5wZGVjYXkoMi40KQogICAgLnBzdXN0YWluKDAuMDMpCiAgICAucHJlbGVhc2UoMikKICAgIC5yb29tKDAuOSkKICAgIC5zaXplKDAuNjUpCiAgICAucm9vbWxwKDQ4MCkKICAgIAogICAgCiAgICAKICAgIAogICAgLmRldHVuZSgxNCkKICAgIC5sZXNsaWUoMS44KQogICAgLmxyYXRlKDAuNDUpCiAgICAubHNpemUoMC40KQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTYpCiAgICAuc291bmQoInNpbmUiKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMTAwKQogICAgLmxwcSgxLjYpCiAgICAucGVudigwLjYpCiAgICAucGF0dGFjayg0LjUpCiAgICAucGRlY2F5KDUpCiAgICAucHN1c3RhaW4oMC4wMjUpCiAgICAucHJlbGVhc2UoNC41KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAuZGVsYXkoMC40NSkKICAgIC5kZWxheXRpbWUoMC4wMjgpCiAgICAuZGVsYXlmZWVkYmFjaygwLjMpCiAgICAucmluZygwLjIpCiAgICAucmluZ2YoODApCiAgICAucmluZ2RmKDAuMDQpCiAgICAuY3J1c2goNSkKICAgIC5kZXR1bmUoLTIyKQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTMpCiAgICAuc291bmQoInNxdWFyZSIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxMTApCiAgICAubHBxKDEuNSkKICAgIC5wZW52KDAuNikKICAgIC5wYXR0YWNrKDQuOCkKICAgIC5wZGVjYXkoNS4yKQogICAgLnBzdXN0YWluKDAuMDIpCiAgICAucHJlbGVhc2UoNC44KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAucm9vbWxwKDQyMCkKICAgIC5yaW5nKDAuMikKICAgIC5yaW5nZigxMDApCiAgICAucmluZ2RmKDAuMDI1KQogICAgCiAgICAKICAgIAogICAgCiAgICAuZGV0dW5lKC0yNikKKQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAgIC5zbG93KDEyKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxNjApCiAgICAubHBxKDEuOCkKICAgIC5wZW52KDAuNTUpCiAgICAucGF0dGFjaygyLjQpCiAgICAucGRlY2F5KDIuNikKICAgIC5wc3VzdGFpbigwLjAzKQogICAgLnByZWxlYXNlKDIuNCkKICAgIC5yb29tKDAuOTUpCiAgICAuc2l6ZSgwLjc1KQogICAgLnJvb21scCg0MjApCiAgICAuY3J1c2goNykKICAgIC5kZXR1bmUoMjApCiAgICAubGVzbGllKDIuNCkKICAgIC5scmF0ZSgwLjYpCiAgICAubHNpemUoMC41KQop">https://strudel.cc/embed#JDogbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAuc2xvdygxNCkKICAuc291bmQoInN1cGVyc2F3IikKICAuZ2FpbigwLjA4KQogIC5scGYoMzIwKQogIC5scHEoMi44KQogIC5wZW52KDAuNzgpCiAgLnBhdHRhY2soMS44KQogIC5wZGVjYXkoMi4xKQogIC5wc3VzdGFpbigwLjA0KQogIC5wcmVsZWFzZSgxLjgpCiAgLnJvb20oMC45NSkKICAuc2l6ZSgwLjgpCiAgLnJvb21scCg1MjApCiAgLnRyZW1vbG8oMC4zNSkKICAudHJlbW9sb3N5bmMoMi44KQogIC5kaXN0b3J0KDAuNCkKICAuc2hhcGUoMC40KQogIC5kZXR1bmUoMTgpCiAgLnBoYXNlcigzKQogIC5waGFzZXJkZXB0aCgwLjMpCiAgLnBoYXNlcnN3ZWVwKDAuMikKICAucGhhc2VyY2VudGVyKDY1MCkKCiQ6IHN0YWNrKAogIG5vdGUoImczIGdiMyBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgICAuc2xvdygxNSkKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMjgwKQogICAgLmxwcSgyKQogICAgLnBlbnYoMC44KQogICAgLnBhdHRhY2soMikKICAgIC5wZGVjYXkoMi40KQogICAgLnBzdXN0YWluKDAuMDMpCiAgICAucHJlbGVhc2UoMikKICAgIC5yb29tKDAuOSkKICAgIC5zaXplKDAuNjUpCiAgICAucm9vbWxwKDQ4MCkKICAgIAogICAgCiAgICAKICAgIAogICAgLmRldHVuZSgxNCkKICAgIC5sZXNsaWUoMS44KQogICAgLmxyYXRlKDAuNDUpCiAgICAubHNpemUoMC40KQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTYpCiAgICAuc291bmQoInNpbmUiKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMTAwKQogICAgLmxwcSgxLjYpCiAgICAucGVudigwLjYpCiAgICAucGF0dGFjayg0LjUpCiAgICAucGRlY2F5KDUpCiAgICAucHN1c3RhaW4oMC4wMjUpCiAgICAucHJlbGVhc2UoNC41KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAuZGVsYXkoMC40NSkKICAgIC5kZWxheXRpbWUoMC4wMjgpCiAgICAuZGVsYXlmZWVkYmFjaygwLjMpCiAgICAucmluZygwLjIpCiAgICAucmluZ2YoODApCiAgICAucmluZ2RmKDAuMDQpCiAgICAuY3J1c2goNSkKICAgIC5kZXR1bmUoLTIyKQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTMpCiAgICAuc291bmQoInNxdWFyZSIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxMTApCiAgICAubHBxKDEuNSkKICAgIC5wZW52KDAuNikKICAgIC5wYXR0YWNrKDQuOCkKICAgIC5wZGVjYXkoNS4yKQogICAgLnBzdXN0YWluKDAuMDIpCiAgICAucHJlbGVhc2UoNC44KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAucm9vbWxwKDQyMCkKICAgIC5yaW5nKDAuMikKICAgIC5yaW5nZigxMDApCiAgICAucmluZ2RmKDAuMDI1KQogICAgCiAgICAKICAgIAogICAgCiAgICAuZGV0dW5lKC0yNikKKQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAgIC5zbG93KDEyKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxNjApCiAgICAubHBxKDEuOCkKICAgIC5wZW52KDAuNTUpCiAgICAucGF0dGFjaygyLjQpCiAgICAucGRlY2F5KDIuNikKICAgIC5wc3VzdGFpbigwLjAzKQogICAgLnByZWxlYXNlKDIuNCkKICAgIC5yb29tKDAuOTUpCiAgICAuc2l6ZSgwLjc1KQogICAgLnJvb21scCg0MjApCiAgICAuY3J1c2goNykKICAgIC5kZXR1bmUoMjApCiAgICAubGVzbGllKDIuNCkKICAgIC5scmF0ZSgwLjYpCiAgICAubHNpemUoMC41KQop</a>&rdquo; class=&ldquo;strudel-embed&rdquo; allow=&ldquo;autoplay&rdquo;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-#+end_export
-</p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#JDogbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAuc2xvdygxNCkKICAuc291bmQoInN1cGVyc2F3IikKICAuZ2FpbigwLjA4KQogIC5scGYoMzIwKQogIC5scHEoMi44KQogIC5wZW52KDAuNzgpCiAgLnBhdHRhY2soMS44KQogIC5wZGVjYXkoMi4xKQogIC5wc3VzdGFpbigwLjA0KQogIC5wcmVsZWFzZSgxLjgpCiAgLnJvb20oMC45NSkKICAuc2l6ZSgwLjgpCiAgLnJvb21scCg1MjApCiAgLnRyZW1vbG8oMC4zNSkKICAudHJlbW9sb3N5bmMoMi44KQogIC5kaXN0b3J0KDAuNCkKICAuc2hhcGUoMC40KQogIC5kZXR1bmUoMTgpCiAgLnBoYXNlcigzKQogIC5waGFzZXJkZXB0aCgwLjMpCiAgLnBoYXNlcnN3ZWVwKDAuMikKICAucGhhc2VyY2VudGVyKDY1MCkKCiQ6IHN0YWNrKAogIG5vdGUoImczIGdiMyBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgICAuc2xvdygxNSkKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMjgwKQogICAgLmxwcSgyKQogICAgLnBlbnYoMC44KQogICAgLnBhdHRhY2soMikKICAgIC5wZGVjYXkoMi40KQogICAgLnBzdXN0YWluKDAuMDMpCiAgICAucHJlbGVhc2UoMikKICAgIC5yb29tKDAuOSkKICAgIC5zaXplKDAuNjUpCiAgICAucm9vbWxwKDQ4MCkKICAgIAogICAgCiAgICAKICAgIAogICAgLmRldHVuZSgxNCkKICAgIC5sZXNsaWUoMS44KQogICAgLmxyYXRlKDAuNDUpCiAgICAubHNpemUoMC40KQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTYpCiAgICAuc291bmQoInNpbmUiKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMTAwKQogICAgLmxwcSgxLjYpCiAgICAucGVudigwLjYpCiAgICAucGF0dGFjayg0LjUpCiAgICAucGRlY2F5KDUpCiAgICAucHN1c3RhaW4oMC4wMjUpCiAgICAucHJlbGVhc2UoNC41KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAuZGVsYXkoMC40NSkKICAgIC5kZWxheXRpbWUoMC4wMjgpCiAgICAuZGVsYXlmZWVkYmFjaygwLjMpCiAgICAucmluZygwLjIpCiAgICAucmluZ2YoODApCiAgICAucmluZ2RmKDAuMDQpCiAgICAuY3J1c2goNSkKICAgIC5kZXR1bmUoLTIyKQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTMpCiAgICAuc291bmQoInNxdWFyZSIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxMTApCiAgICAubHBxKDEuNSkKICAgIC5wZW52KDAuNikKICAgIC5wYXR0YWNrKDQuOCkKICAgIC5wZGVjYXkoNS4yKQogICAgLnBzdXN0YWluKDAuMDIpCiAgICAucHJlbGVhc2UoNC44KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAucm9vbWxwKDQyMCkKICAgIC5yaW5nKDAuMikKICAgIC5yaW5nZigxMDApCiAgICAucmluZ2RmKDAuMDI1KQogICAgCiAgICAKICAgIAogICAgCiAgICAuZGV0dW5lKC0yNikKKQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAgIC5zbG93KDEyKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxNjApCiAgICAubHBxKDEuOCkKICAgIC5wZW52KDAuNTUpCiAgICAucGF0dGFjaygyLjQpCiAgICAucGRlY2F5KDIuNikKICAgIC5wc3VzdGFpbigwLjAzKQogICAgLnByZWxlYXNlKDIuNCkKICAgIC5yb29tKDAuOTUpCiAgICAuc2l6ZSgwLjc1KQogICAgLnJvb21scCg0MjApCiAgICAuY3J1c2goNykKICAgIC5kZXR1bmUoMjApCiAgICAubGVzbGllKDIuNCkKICAgIC5scmF0ZSgwLjYpCiAgICAubHNpemUoMC41KQop')">Step 30</button></div>
+  <iframe src="https://strudel.cc/embed#JDogbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAuc2xvdygxNCkKICAuc291bmQoInN1cGVyc2F3IikKICAuZ2FpbigwLjA4KQogIC5scGYoMzIwKQogIC5scHEoMi44KQogIC5wZW52KDAuNzgpCiAgLnBhdHRhY2soMS44KQogIC5wZGVjYXkoMi4xKQogIC5wc3VzdGFpbigwLjA0KQogIC5wcmVsZWFzZSgxLjgpCiAgLnJvb20oMC45NSkKICAuc2l6ZSgwLjgpCiAgLnJvb21scCg1MjApCiAgLnRyZW1vbG8oMC4zNSkKICAudHJlbW9sb3N5bmMoMi44KQogIC5kaXN0b3J0KDAuNCkKICAuc2hhcGUoMC40KQogIC5kZXR1bmUoMTgpCiAgLnBoYXNlcigzKQogIC5waGFzZXJkZXB0aCgwLjMpCiAgLnBoYXNlcnN3ZWVwKDAuMikKICAucGhhc2VyY2VudGVyKDY1MCkKCiQ6IHN0YWNrKAogIG5vdGUoImczIGdiMyBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgICAuc2xvdygxNSkKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMjgwKQogICAgLmxwcSgyKQogICAgLnBlbnYoMC44KQogICAgLnBhdHRhY2soMikKICAgIC5wZGVjYXkoMi40KQogICAgLnBzdXN0YWluKDAuMDMpCiAgICAucHJlbGVhc2UoMikKICAgIC5yb29tKDAuOSkKICAgIC5zaXplKDAuNjUpCiAgICAucm9vbWxwKDQ4MCkKICAgIAogICAgCiAgICAKICAgIAogICAgLmRldHVuZSgxNCkKICAgIC5sZXNsaWUoMS44KQogICAgLmxyYXRlKDAuNDUpCiAgICAubHNpemUoMC40KQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTYpCiAgICAuc291bmQoInNpbmUiKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMTAwKQogICAgLmxwcSgxLjYpCiAgICAucGVudigwLjYpCiAgICAucGF0dGFjayg0LjUpCiAgICAucGRlY2F5KDUpCiAgICAucHN1c3RhaW4oMC4wMjUpCiAgICAucHJlbGVhc2UoNC41KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAuZGVsYXkoMC40NSkKICAgIC5kZWxheXRpbWUoMC4wMjgpCiAgICAuZGVsYXlmZWVkYmFjaygwLjMpCiAgICAucmluZygwLjIpCiAgICAucmluZ2YoODApCiAgICAucmluZ2RmKDAuMDQpCiAgICAuY3J1c2goNSkKICAgIC5kZXR1bmUoLTIyKQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTMpCiAgICAuc291bmQoInNxdWFyZSIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxMTApCiAgICAubHBxKDEuNSkKICAgIC5wZW52KDAuNikKICAgIC5wYXR0YWNrKDQuOCkKICAgIC5wZGVjYXkoNS4yKQogICAgLnBzdXN0YWluKDAuMDIpCiAgICAucHJlbGVhc2UoNC44KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAucm9vbWxwKDQyMCkKICAgIC5yaW5nKDAuMikKICAgIC5yaW5nZigxMDApCiAgICAucmluZ2RmKDAuMDI1KQogICAgCiAgICAKICAgIAogICAgCiAgICAuZGV0dW5lKC0yNikKKQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAgIC5zbG93KDEyKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxNjApCiAgICAubHBxKDEuOCkKICAgIC5wZW52KDAuNTUpCiAgICAucGF0dGFjaygyLjQpCiAgICAucGRlY2F5KDIuNikKICAgIC5wc3VzdGFpbigwLjAzKQogICAgLnByZWxlYXNlKDIuNCkKICAgIC5yb29tKDAuOTUpCiAgICAuc2l6ZSgwLjc1KQogICAgLnJvb21scCg0MjApCiAgICAuY3J1c2goNykKICAgIC5kZXR1bmUoMjApCiAgICAubGVzbGllKDIuNCkKICAgIC5scmF0ZSgwLjYpCiAgICAubHNpemUoMC41KQop" class="strudel-embed" allow="autoplay"></iframe>
+</div>
 <ul class="org-ul">
-<li>Claude Haiku 4.5 (<code>anthropic/claude-haiku-4.5</code>): #+begin_export html</li>
+<li>Claude Haiku 4.5 (<code>anthropic/claude-haiku-4.5</code>):</li>
 </ul>
-<p>
-&lt;div class=&ldquo;run-player&rdquo;&gt;
-  &lt;div class=&ldquo;run-controls&rdquo;&gt;&lt;button class=&ldquo;step-btn active&rdquo; onclick=&ldquo;loadStep(this, &lsquo;https://strudel.cc/embed#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC43NSkKICAubHBmKHNpbmUucmFuZ2UoMjAwLCAzNTAwKS5zbG93KDgpKQoKJDogbm90ZSgiZzQgZ2I0IGU0IGQ0IGIzIGM0IGQ0IGczIikKICAuc2xvdyg0KQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC41NSkKICAubHBlbnYoc2luZS5yYW5nZSgxLCAzKS5zbG93KDYpKQogIC5scGRlY2F5KDAuOCkKCiQ6IG5vdGUoImcyIGdiMiBlMiBkMiBiMSBjMiBkMiBnMSIpCiAgLnNsb3coMSkKICAuc291bmQoInNxdWFyZSIpCiAgLmdhaW4oMC43KQogIC5jcnVzaChzaW5lLnJhbmdlKDEyLCA2KS5zbG93KDkpKQoKJDogcygiYmQqMixjcCo0IikKICAuZ2FpbigwLjY1KQogIC5wYW4oc2luZS5yYW5nZSgwLjIsIDAuOCkuc2xvdyg2KSkKICAuZGVsYXkoMC4zNSkKCiQ6IHMoImhoIikuZmFzdCg4KS5nYWluKDAuNCkudHJlbW9sbyhzaW5lLnJhbmdlKDAuMywgMC44KS5zbG93KDcpKQoKJDogbm90ZSgiW2Q0IGU0XSBbZnM0IGc0XSBbYTQgYjRdIikKICAuZmFzdCgzKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5scGYoc2luZS5yYW5nZSg4MDAsIDUwMDApLnNsb3coMTIpKQogIC5yb29tKDAuNjUp&rsquo;)&rdquo;&gt;Step 30&lt;/button&gt;&lt;/div&gt;
-  &lt;iframe src=&ldquo;<a href="https://strudel.cc/embed#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC43NSkKICAubHBmKHNpbmUucmFuZ2UoMjAwLCAzNTAwKS5zbG93KDgpKQoKJDogbm90ZSgiZzQgZ2I0IGU0IGQ0IGIzIGM0IGQ0IGczIikKICAuc2xvdyg0KQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC41NSkKICAubHBlbnYoc2luZS5yYW5nZSgxLCAzKS5zbG93KDYpKQogIC5scGRlY2F5KDAuOCkKCiQ6IG5vdGUoImcyIGdiMiBlMiBkMiBiMSBjMiBkMiBnMSIpCiAgLnNsb3coMSkKICAuc291bmQoInNxdWFyZSIpCiAgLmdhaW4oMC43KQogIC5jcnVzaChzaW5lLnJhbmdlKDEyLCA2KS5zbG93KDkpKQoKJDogcygiYmQqMixjcCo0IikKICAuZ2FpbigwLjY1KQogIC5wYW4oc2luZS5yYW5nZSgwLjIsIDAuOCkuc2xvdyg2KSkKICAuZGVsYXkoMC4zNSkKCiQ6IHMoImhoIikuZmFzdCg4KS5nYWluKDAuNCkudHJlbW9sbyhzaW5lLnJhbmdlKDAuMywgMC44KS5zbG93KDcpKQoKJDogbm90ZSgiW2Q0IGU0XSBbZnM0IGc0XSBbYTQgYjRdIikKICAuZmFzdCgzKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5scGYoc2luZS5yYW5nZSg4MDAsIDUwMDApLnNsb3coMTIpKQogIC5yb29tKDAuNjUp">https://strudel.cc/embed#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC43NSkKICAubHBmKHNpbmUucmFuZ2UoMjAwLCAzNTAwKS5zbG93KDgpKQoKJDogbm90ZSgiZzQgZ2I0IGU0IGQ0IGIzIGM0IGQ0IGczIikKICAuc2xvdyg0KQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC41NSkKICAubHBlbnYoc2luZS5yYW5nZSgxLCAzKS5zbG93KDYpKQogIC5scGRlY2F5KDAuOCkKCiQ6IG5vdGUoImcyIGdiMiBlMiBkMiBiMSBjMiBkMiBnMSIpCiAgLnNsb3coMSkKICAuc291bmQoInNxdWFyZSIpCiAgLmdhaW4oMC43KQogIC5jcnVzaChzaW5lLnJhbmdlKDEyLCA2KS5zbG93KDkpKQoKJDogcygiYmQqMixjcCo0IikKICAuZ2FpbigwLjY1KQogIC5wYW4oc2luZS5yYW5nZSgwLjIsIDAuOCkuc2xvdyg2KSkKICAuZGVsYXkoMC4zNSkKCiQ6IHMoImhoIikuZmFzdCg4KS5nYWluKDAuNCkudHJlbW9sbyhzaW5lLnJhbmdlKDAuMywgMC44KS5zbG93KDcpKQoKJDogbm90ZSgiW2Q0IGU0XSBbZnM0IGc0XSBbYTQgYjRdIikKICAuZmFzdCgzKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5scGYoc2luZS5yYW5nZSg4MDAsIDUwMDApLnNsb3coMTIpKQogIC5yb29tKDAuNjUp</a>&rdquo; class=&ldquo;strudel-embed&rdquo; allow=&ldquo;autoplay&rdquo;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-#+end_export
-</p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC43NSkKICAubHBmKHNpbmUucmFuZ2UoMjAwLCAzNTAwKS5zbG93KDgpKQoKJDogbm90ZSgiZzQgZ2I0IGU0IGQ0IGIzIGM0IGQ0IGczIikKICAuc2xvdyg0KQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC41NSkKICAubHBlbnYoc2luZS5yYW5nZSgxLCAzKS5zbG93KDYpKQogIC5scGRlY2F5KDAuOCkKCiQ6IG5vdGUoImcyIGdiMiBlMiBkMiBiMSBjMiBkMiBnMSIpCiAgLnNsb3coMSkKICAuc291bmQoInNxdWFyZSIpCiAgLmdhaW4oMC43KQogIC5jcnVzaChzaW5lLnJhbmdlKDEyLCA2KS5zbG93KDkpKQoKJDogcygiYmQqMixjcCo0IikKICAuZ2FpbigwLjY1KQogIC5wYW4oc2luZS5yYW5nZSgwLjIsIDAuOCkuc2xvdyg2KSkKICAuZGVsYXkoMC4zNSkKCiQ6IHMoImhoIikuZmFzdCg4KS5nYWluKDAuNCkudHJlbW9sbyhzaW5lLnJhbmdlKDAuMywgMC44KS5zbG93KDcpKQoKJDogbm90ZSgiW2Q0IGU0XSBbZnM0IGc0XSBbYTQgYjRdIikKICAuZmFzdCgzKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5scGYoc2luZS5yYW5nZSg4MDAsIDUwMDApLnNsb3coMTIpKQogIC5yb29tKDAuNjUp')">Step 30</button></div>
+  <iframe src="https://strudel.cc/embed#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC43NSkKICAubHBmKHNpbmUucmFuZ2UoMjAwLCAzNTAwKS5zbG93KDgpKQoKJDogbm90ZSgiZzQgZ2I0IGU0IGQ0IGIzIGM0IGQ0IGczIikKICAuc2xvdyg0KQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC41NSkKICAubHBlbnYoc2luZS5yYW5nZSgxLCAzKS5zbG93KDYpKQogIC5scGRlY2F5KDAuOCkKCiQ6IG5vdGUoImcyIGdiMiBlMiBkMiBiMSBjMiBkMiBnMSIpCiAgLnNsb3coMSkKICAuc291bmQoInNxdWFyZSIpCiAgLmdhaW4oMC43KQogIC5jcnVzaChzaW5lLnJhbmdlKDEyLCA2KS5zbG93KDkpKQoKJDogcygiYmQqMixjcCo0IikKICAuZ2FpbigwLjY1KQogIC5wYW4oc2luZS5yYW5nZSgwLjIsIDAuOCkuc2xvdyg2KSkKICAuZGVsYXkoMC4zNSkKCiQ6IHMoImhoIikuZmFzdCg4KS5nYWluKDAuNCkudHJlbW9sbyhzaW5lLnJhbmdlKDAuMywgMC44KS5zbG93KDcpKQoKJDogbm90ZSgiW2Q0IGU0XSBbZnM0IGc0XSBbYTQgYjRdIikKICAuZmFzdCgzKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5scGYoc2luZS5yYW5nZSg4MDAsIDUwMDApLnNsb3coMTIpKQogIC5yb29tKDAuNjUp" class="strudel-embed" allow="autoplay"></iframe>
+</div>
 <ul class="org-ul">
-<li>GPT-4o (<code>openai/gpt-4o</code>): #+begin_export html</li>
+<li>GPT-4o (<code>openai/gpt-4o</code>):</li>
 </ul>
-<p>
-&lt;div class=&ldquo;run-player&rdquo;&gt;
-  &lt;div class=&ldquo;run-controls&rdquo;&gt;&lt;button class=&ldquo;step-btn active&rdquo; onclick=&ldquo;loadStep(this, &lsquo;https://strudel.cc/embed#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAKICAudHJlbW9sbygwLjYpCiAgLmdhaW4oMC43KQogIC5mbWVudigwLjUpCgokOiBzKCJiZCo4IikKICAuZ2FpbigwLjYpCiAgLmhwZigyNTApCiAgLnRyZW1vbG8oMC40KQogIC5kZWxheSgwLjIpCgokOiBub3RlKCJmMyBhMyBjNCBnNCIpCiAgLnNvdW5kKCJwdWxzZSIpCiAgLmJwZig0NTApCiAgLmxwYXR0YWNrKDAuMSkKICAKICAucmVsZWFzZSgwLjUpCgokOiBub3RlKCJkNCBmczQgYTQgYzUiKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC42KQogIC5wYW4oMC43KQogIC5yb29tKDAuMykKICAuYXR0YWNrKDAuMik%3D&rsquo;)&rdquo;&gt;Step 30&lt;/button&gt;&lt;/div&gt;
-  &lt;iframe src=&ldquo;<a href="https://strudel.cc/embed#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAKICAudHJlbW9sbygwLjYpCiAgLmdhaW4oMC43KQogIC5mbWVudigwLjUpCgokOiBzKCJiZCo4IikKICAuZ2FpbigwLjYpCiAgLmhwZigyNTApCiAgLnRyZW1vbG8oMC40KQogIC5kZWxheSgwLjIpCgokOiBub3RlKCJmMyBhMyBjNCBnNCIpCiAgLnNvdW5kKCJwdWxzZSIpCiAgLmJwZig0NTApCiAgLmxwYXR0YWNrKDAuMSkKICAKICAucmVsZWFzZSgwLjUpCgokOiBub3RlKCJkNCBmczQgYTQgYzUiKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC42KQogIC5wYW4oMC43KQogIC5yb29tKDAuMykKICAuYXR0YWNrKDAuMik%3D">https://strudel.cc/embed#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAKICAudHJlbW9sbygwLjYpCiAgLmdhaW4oMC43KQogIC5mbWVudigwLjUpCgokOiBzKCJiZCo4IikKICAuZ2FpbigwLjYpCiAgLmhwZigyNTApCiAgLnRyZW1vbG8oMC40KQogIC5kZWxheSgwLjIpCgokOiBub3RlKCJmMyBhMyBjNCBnNCIpCiAgLnNvdW5kKCJwdWxzZSIpCiAgLmJwZig0NTApCiAgLmxwYXR0YWNrKDAuMSkKICAKICAucmVsZWFzZSgwLjUpCgokOiBub3RlKCJkNCBmczQgYTQgYzUiKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC42KQogIC5wYW4oMC43KQogIC5yb29tKDAuMykKICAuYXR0YWNrKDAuMik%3D</a>&rdquo; class=&ldquo;strudel-embed&rdquo; allow=&ldquo;autoplay&rdquo;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-#+end_export
-</p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAKICAudHJlbW9sbygwLjYpCiAgLmdhaW4oMC43KQogIC5mbWVudigwLjUpCgokOiBzKCJiZCo4IikKICAuZ2FpbigwLjYpCiAgLmhwZigyNTApCiAgLnRyZW1vbG8oMC40KQogIC5kZWxheSgwLjIpCgokOiBub3RlKCJmMyBhMyBjNCBnNCIpCiAgLnNvdW5kKCJwdWxzZSIpCiAgLmJwZig0NTApCiAgLmxwYXR0YWNrKDAuMSkKICAKICAucmVsZWFzZSgwLjUpCgokOiBub3RlKCJkNCBmczQgYTQgYzUiKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC42KQogIC5wYW4oMC43KQogIC5yb29tKDAuMykKICAuYXR0YWNrKDAuMik%3D')">Step 30</button></div>
+  <iframe src="https://strudel.cc/embed#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAKICAudHJlbW9sbygwLjYpCiAgLmdhaW4oMC43KQogIC5mbWVudigwLjUpCgokOiBzKCJiZCo4IikKICAuZ2FpbigwLjYpCiAgLmhwZigyNTApCiAgLnRyZW1vbG8oMC40KQogIC5kZWxheSgwLjIpCgokOiBub3RlKCJmMyBhMyBjNCBnNCIpCiAgLnNvdW5kKCJwdWxzZSIpCiAgLmJwZig0NTApCiAgLmxwYXR0YWNrKDAuMSkKICAKICAucmVsZWFzZSgwLjUpCgokOiBub3RlKCJkNCBmczQgYTQgYzUiKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC42KQogIC5wYW4oMC43KQogIC5yb29tKDAuMykKICAuYXR0YWNrKDAuMik%3D" class="strudel-embed" allow="autoplay"></iframe>
+</div>
 <ul class="org-ul">
-<li>Gemini 2.5 Flash (<code>google/gemini-2.5-flash</code>): #+begin_export html</li>
+<li>Gemini 2.5 Flash (<code>google/gemini-2.5-flash</code>):</li>
 </ul>
-<p>
-&lt;div class=&ldquo;run-player&rdquo;&gt;
-  &lt;div class=&ldquo;run-controls&rdquo;&gt;&lt;button class=&ldquo;step-btn active&rdquo; onclick=&ldquo;loadStep(this, &lsquo;https://strudel.cc/embed#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpCgokOiBub3RlKCJjczQgZnM0IGc0Iikuc291bmQoInNhd3Rvb3RoIikuZ2FpbigwLjYpCiAgLm9jdGF2ZSg0KS5jaG9wKDgpLnNwZWVkKDEuNSkuYWNjZWxlcmF0ZSgwLjA1KQogIC5waGFzZXIoMikucGhhc2VyZGVwdGgoMzApCiAgLmV2ZXJ5KDIsIChwKSA9PiBwLmRldHVuZShwZXJsaW4ucmFuZ2UoLTc1LCA3NSkuc2xvdygzKSkpCiAgLnJvb20oMC42KS5kZWxheSgwLjMpLmR0KDAuMikuZGZiKDAuNSkKCiQ6IHMoImhoKjE2IGNwKjgiKS5nYWluKDAuNCkKICAucGFuKHJhbmQubXVsKDAuOSkuYWRkKDAuMDUpKQogIC5jcnVzaCg4KQogIC5ldmVyeSgyLCAocCkgPT4gcC5kamYocmFuZCkpCiAgLnJvb20oMC41KS50cmVtb2xvKDAuNSkudHJlbW9sb3N5bmMoMikKCiQ6IHN0YWNrKAogIG5vdGUoImc1Iikuc291bmQoInRyaWFuZ2xlIikuZ2FpbigwLjUpLnNsb3coMTApLmRldHVuZSg4MCksCiAgbm90ZSgiYzYiKS5zb3VuZCgicHVsc2UiKS5nYWluKDAuNCkuc2xvdygxMikuZGV0dW5lKC04MCkKKS5yb29tKDEpLmRlbGF5KDAuOSkuZHQoMC43KS5kZmIoMC45NSkubHBmKHNpbmUucmFuZ2UoODAwLCA4MDAwKS5zbG93KDE1KSkudHJlbSgwLjMpCgokOiBub3RlKCJjczMgZTMgZzMgY3M0Iikuc291bmQoInNpbmUiKS5nYWluKDAuNykKICAub2N0YXZlKDMpCiAgLmxwZihzaW5lLnJhbmdlKDUwLCAxNTAwKS5zbG93KDEwKSkKICAuZGVsYXkoMC45KS5kdCgwLjQpLmRmYigwLjgpCiAgLnJvb20oMC44KS5qdXgoKHApID0%2BIHAub2N0YXZlKDQpLmRyaXZlKDAuNCkpLnRyZW1vbG8oMC4yKQ%3D%3D&rsquo;)&rdquo;&gt;Step 30&lt;/button&gt;&lt;/div&gt;
-  &lt;iframe src=&ldquo;<a href="https://strudel.cc/embed#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpCgokOiBub3RlKCJjczQgZnM0IGc0Iikuc291bmQoInNhd3Rvb3RoIikuZ2FpbigwLjYpCiAgLm9jdGF2ZSg0KS5jaG9wKDgpLnNwZWVkKDEuNSkuYWNjZWxlcmF0ZSgwLjA1KQogIC5waGFzZXIoMikucGhhc2VyZGVwdGgoMzApCiAgLmV2ZXJ5KDIsIChwKSA9PiBwLmRldHVuZShwZXJsaW4ucmFuZ2UoLTc1LCA3NSkuc2xvdygzKSkpCiAgLnJvb20oMC42KS5kZWxheSgwLjMpLmR0KDAuMikuZGZiKDAuNSkKCiQ6IHMoImhoKjE2IGNwKjgiKS5nYWluKDAuNCkKICAucGFuKHJhbmQubXVsKDAuOSkuYWRkKDAuMDUpKQogIC5jcnVzaCg4KQogIC5ldmVyeSgyLCAocCkgPT4gcC5kamYocmFuZCkpCiAgLnJvb20oMC41KS50cmVtb2xvKDAuNSkudHJlbW9sb3N5bmMoMikKCiQ6IHN0YWNrKAogIG5vdGUoImc1Iikuc291bmQoInRyaWFuZ2xlIikuZ2FpbigwLjUpLnNsb3coMTApLmRldHVuZSg4MCksCiAgbm90ZSgiYzYiKS5zb3VuZCgicHVsc2UiKS5nYWluKDAuNCkuc2xvdygxMikuZGV0dW5lKC04MCkKKS5yb29tKDEpLmRlbGF5KDAuOSkuZHQoMC43KS5kZmIoMC45NSkubHBmKHNpbmUucmFuZ2UoODAwLCA4MDAwKS5zbG93KDE1KSkudHJlbSgwLjMpCgokOiBub3RlKCJjczMgZTMgZzMgY3M0Iikuc291bmQoInNpbmUiKS5nYWluKDAuNykKICAub2N0YXZlKDMpCiAgLmxwZihzaW5lLnJhbmdlKDUwLCAxNTAwKS5zbG93KDEwKSkKICAuZGVsYXkoMC45KS5kdCgwLjQpLmRmYigwLjgpCiAgLnJvb20oMC44KS5qdXgoKHApID0%2BIHAub2N0YXZlKDQpLmRyaXZlKDAuNCkpLnRyZW1vbG8oMC4yKQ%3D%3D">https://strudel.cc/embed#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpCgokOiBub3RlKCJjczQgZnM0IGc0Iikuc291bmQoInNhd3Rvb3RoIikuZ2FpbigwLjYpCiAgLm9jdGF2ZSg0KS5jaG9wKDgpLnNwZWVkKDEuNSkuYWNjZWxlcmF0ZSgwLjA1KQogIC5waGFzZXIoMikucGhhc2VyZGVwdGgoMzApCiAgLmV2ZXJ5KDIsIChwKSA9PiBwLmRldHVuZShwZXJsaW4ucmFuZ2UoLTc1LCA3NSkuc2xvdygzKSkpCiAgLnJvb20oMC42KS5kZWxheSgwLjMpLmR0KDAuMikuZGZiKDAuNSkKCiQ6IHMoImhoKjE2IGNwKjgiKS5nYWluKDAuNCkKICAucGFuKHJhbmQubXVsKDAuOSkuYWRkKDAuMDUpKQogIC5jcnVzaCg4KQogIC5ldmVyeSgyLCAocCkgPT4gcC5kamYocmFuZCkpCiAgLnJvb20oMC41KS50cmVtb2xvKDAuNSkudHJlbW9sb3N5bmMoMikKCiQ6IHN0YWNrKAogIG5vdGUoImc1Iikuc291bmQoInRyaWFuZ2xlIikuZ2FpbigwLjUpLnNsb3coMTApLmRldHVuZSg4MCksCiAgbm90ZSgiYzYiKS5zb3VuZCgicHVsc2UiKS5nYWluKDAuNCkuc2xvdygxMikuZGV0dW5lKC04MCkKKS5yb29tKDEpLmRlbGF5KDAuOSkuZHQoMC43KS5kZmIoMC45NSkubHBmKHNpbmUucmFuZ2UoODAwLCA4MDAwKS5zbG93KDE1KSkudHJlbSgwLjMpCgokOiBub3RlKCJjczMgZTMgZzMgY3M0Iikuc291bmQoInNpbmUiKS5nYWluKDAuNykKICAub2N0YXZlKDMpCiAgLmxwZihzaW5lLnJhbmdlKDUwLCAxNTAwKS5zbG93KDEwKSkKICAuZGVsYXkoMC45KS5kdCgwLjQpLmRmYigwLjgpCiAgLnJvb20oMC44KS5qdXgoKHApID0%2BIHAub2N0YXZlKDQpLmRyaXZlKDAuNCkpLnRyZW1vbG8oMC4yKQ%3D%3D</a>&rdquo; class=&ldquo;strudel-embed&rdquo; allow=&ldquo;autoplay&rdquo;&gt;&lt;/iframe&gt;
-&lt;/div&gt;
-#+end_export
-</p>
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpCgokOiBub3RlKCJjczQgZnM0IGc0Iikuc291bmQoInNhd3Rvb3RoIikuZ2FpbigwLjYpCiAgLm9jdGF2ZSg0KS5jaG9wKDgpLnNwZWVkKDEuNSkuYWNjZWxlcmF0ZSgwLjA1KQogIC5waGFzZXIoMikucGhhc2VyZGVwdGgoMzApCiAgLmV2ZXJ5KDIsIChwKSA9PiBwLmRldHVuZShwZXJsaW4ucmFuZ2UoLTc1LCA3NSkuc2xvdygzKSkpCiAgLnJvb20oMC42KS5kZWxheSgwLjMpLmR0KDAuMikuZGZiKDAuNSkKCiQ6IHMoImhoKjE2IGNwKjgiKS5nYWluKDAuNCkKICAucGFuKHJhbmQubXVsKDAuOSkuYWRkKDAuMDUpKQogIC5jcnVzaCg4KQogIC5ldmVyeSgyLCAocCkgPT4gcC5kamYocmFuZCkpCiAgLnJvb20oMC41KS50cmVtb2xvKDAuNSkudHJlbW9sb3N5bmMoMikKCiQ6IHN0YWNrKAogIG5vdGUoImc1Iikuc291bmQoInRyaWFuZ2xlIikuZ2FpbigwLjUpLnNsb3coMTApLmRldHVuZSg4MCksCiAgbm90ZSgiYzYiKS5zb3VuZCgicHVsc2UiKS5nYWluKDAuNCkuc2xvdygxMikuZGV0dW5lKC04MCkKKS5yb29tKDEpLmRlbGF5KDAuOSkuZHQoMC43KS5kZmIoMC45NSkubHBmKHNpbmUucmFuZ2UoODAwLCA4MDAwKS5zbG93KDE1KSkudHJlbSgwLjMpCgokOiBub3RlKCJjczMgZTMgZzMgY3M0Iikuc291bmQoInNpbmUiKS5nYWluKDAuNykKICAub2N0YXZlKDMpCiAgLmxwZihzaW5lLnJhbmdlKDUwLCAxNTAwKS5zbG93KDEwKSkKICAuZGVsYXkoMC45KS5kdCgwLjQpLmRmYigwLjgpCiAgLnJvb20oMC44KS5qdXgoKHApID0%2BIHAub2N0YXZlKDQpLmRyaXZlKDAuNCkpLnRyZW1vbG8oMC4yKQ%3D%3D')">Step 30</button></div>
+  <iframe src="https://strudel.cc/embed#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpCgokOiBub3RlKCJjczQgZnM0IGc0Iikuc291bmQoInNhd3Rvb3RoIikuZ2FpbigwLjYpCiAgLm9jdGF2ZSg0KS5jaG9wKDgpLnNwZWVkKDEuNSkuYWNjZWxlcmF0ZSgwLjA1KQogIC5waGFzZXIoMikucGhhc2VyZGVwdGgoMzApCiAgLmV2ZXJ5KDIsIChwKSA9PiBwLmRldHVuZShwZXJsaW4ucmFuZ2UoLTc1LCA3NSkuc2xvdygzKSkpCiAgLnJvb20oMC42KS5kZWxheSgwLjMpLmR0KDAuMikuZGZiKDAuNSkKCiQ6IHMoImhoKjE2IGNwKjgiKS5nYWluKDAuNCkKICAucGFuKHJhbmQubXVsKDAuOSkuYWRkKDAuMDUpKQogIC5jcnVzaCg4KQogIC5ldmVyeSgyLCAocCkgPT4gcC5kamYocmFuZCkpCiAgLnJvb20oMC41KS50cmVtb2xvKDAuNSkudHJlbW9sb3N5bmMoMikKCiQ6IHN0YWNrKAogIG5vdGUoImc1Iikuc291bmQoInRyaWFuZ2xlIikuZ2FpbigwLjUpLnNsb3coMTApLmRldHVuZSg4MCksCiAgbm90ZSgiYzYiKS5zb3VuZCgicHVsc2UiKS5nYWluKDAuNCkuc2xvdygxMikuZGV0dW5lKC04MCkKKS5yb29tKDEpLmRlbGF5KDAuOSkuZHQoMC43KS5kZmIoMC45NSkubHBmKHNpbmUucmFuZ2UoODAwLCA4MDAwKS5zbG93KDE1KSkudHJlbSgwLjMpCgokOiBub3RlKCJjczMgZTMgZzMgY3M0Iikuc291bmQoInNpbmUiKS5nYWluKDAuNykKICAub2N0YXZlKDMpCiAgLmxwZihzaW5lLnJhbmdlKDUwLCAxNTAwKS5zbG93KDEwKSkKICAuZGVsYXkoMC45KS5kdCgwLjQpLmRmYigwLjgpCiAgLnJvb20oMC44KS5qdXgoKHApID0%2BIHAub2N0YXZlKDQpLmRyaXZlKDAuNCkpLnRyZW1vbG8oMC4yKQ%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-<div id="outline-container-orgd3f6829" class="outline-2">
-<h2 id="orgd3f6829"><span class="section-number-2">4.</span> Try it yourself</h2>
+</div>
+<div id="outline-container-orgb9329e6" class="outline-2">
+<h2 id="orgb9329e6"><span class="section-number-2">4.</span> Try it yourself</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 The code is open source: <a href="https://github.com/ElleNajt/vibe-duet">vibe-duet on GitHub</a>.
 </p>
 </div>
-<div id="outline-container-org18c15c1" class="outline-3">
-<h3 id="org18c15c1"><span class="section-number-3">4.1.</span> Evolve</h3>
+<div id="outline-container-org87b2fa1" class="outline-3">
+<h3 id="org87b2fa1"><span class="section-number-3">4.1.</span> Evolve</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Run your own evolution experiment:
@@ -804,8 +786,8 @@ The repo has instructions on how to generate seeds from midi files.
 </p>
 </div>
 </div>
-<div id="outline-container-org7fa4c40" class="outline-3">
-<h3 id="org7fa4c40"><span class="section-number-3">4.2.</span> Live-coding with LLMs</h3>
+<div id="outline-container-org8765b1c" class="outline-3">
+<h3 id="org8765b1c"><span class="section-number-3">4.2.</span> Live-coding with LLMs</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Run <code>./start</code> and open the browser. Edit <code>live.js</code> in your editor or edit with your local coding agent &#x2013;
@@ -815,8 +797,8 @@ LLM and have it write music for you in real time.
 </div>
 </div>
 </div>
-<div id="outline-container-org414fbcf" class="outline-2">
-<h2 id="org414fbcf"><span class="section-number-2">5.</span> Appendix</h2>
+<div id="outline-container-orgb900fe6" class="outline-2">
+<h2 id="orgb900fe6"><span class="section-number-2">5.</span> Appendix</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Every step of every run is playable on strudel.cc. Each model folder
@@ -840,7 +822,7 @@ Acknowledgements: Thanks to Liban Mohamed-Schwoebel for suggesting &ldquo;Goldbo
 <div id="postamble" class="status">
 <p class="date">Date: 2026-02-17</p>
 <p class="author">Author: Elle Najt</p>
-<p class="date">Created: 2026-02-21 Sat 23:17</p>
+<p class="date">Created: 2026-02-21 Sat 23:41</p>
 </div>
 </body>
 </html>
