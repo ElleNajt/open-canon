@@ -23,7 +23,7 @@ $: s("bd*2 [~ bd] bd?").slow(2)
   .gain(0.5)
   .drive(0.4)
   .lpf(4000)
-  .compressor()
+  
   
 $: s("hh*8").euclid(11,16).fast(2)
   .jux(x => x.s("oh").speed(perlin.range(0.8, 1.2)).gain(0.1))

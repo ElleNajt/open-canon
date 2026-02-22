@@ -40,10 +40,10 @@ $: stack(
     .room(0.85)
     .size(0.55)
     .roomlp(440)
-    .compressor()
-    .compressorRatio(2.5)
-    .compressorAttack(0.03)
-    .compressorRelease(0.06)
+    
+    
+    
+    
     .detune(16)
     .leslie(1.5)
     .lrate(0.4)
@@ -92,10 +92,10 @@ $: stack(
     .ring(0.25)
     .ringf(105)
     .ringdf(0.03)
-    .compressor()
-    .compressorRatio(2.8)
-    .compressorAttack(0.04)
-    .compressorRelease(0.07)
+    
+    
+    
+    
     .detune(-30)
 )
 

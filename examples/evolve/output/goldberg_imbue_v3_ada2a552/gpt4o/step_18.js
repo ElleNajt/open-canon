@@ -31,7 +31,7 @@ $: note("f3 a3 c4 g4 d4")
   .pan(0.2)
   .bpf(450)
   .bpq(8)
-  .compressor()
+  
 
 $: note("e3 a3 e4")
   .sound("triangle")

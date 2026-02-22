@@ -32,7 +32,7 @@ Mini-notation: [] subdivide, <> alternate, * repeat, / slow, , polyrhythm, ? ran
 
 ### Gain & Dynamics
 .gain(0-1), .velocity(0-1), .postgain(n)
-.compressor(), .compressorKnee(n), .compressorRatio(n), .compressorAttack(s), .compressorRelease(s)
+.compressor("threshold:ratio:knee:attack:release") — dynamics compressor, all params in one colon-separated string
 
 ### Reverb
 .room(0-1) — reverb send amount

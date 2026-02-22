@@ -38,7 +38,7 @@ $: stack(
   .lpf(1500).lpq(2)
   .shape(0.3)
   .distort(0.1)
-  .compressor()
+  
   .room(0.2)
   .gain(0.6)
 

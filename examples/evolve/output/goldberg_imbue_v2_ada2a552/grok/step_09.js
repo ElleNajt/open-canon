@@ -9,7 +9,7 @@ $: stack(
   s("hh*2 [oh rd]?").euclid(11,16).gain(0.28).degradeBy(0.38),
   s("cp ~ [cp cp]").every(4, x=>x.rev()),
   s("[mt*2 ht lt]").fast(1.9).gain(0.32)
-).gain(0.56).room(0.26).pan(saw.range(0.15,0.85).slow(3.2)).swing(0.185).compressor()
+).gain(0.56).room(0.26).pan(saw.range(0.15,0.85).slow(3.2)).swing(0.185)
 
 $: n("0 [2 4 7] [3 5] [7 5 3] ~ [0 3 7 2]").scale("G:minor").slow(1.4).sound("piano").gain(0.41).phaser(sine.range(0.22,0.58).slow(4.5)).detune(sine.range(-16,16).slow(6.8))
 

@@ -32,7 +32,7 @@ $: stack(
   .swing(0.7)
   .degradeBy(0.2)
   .sometimesBy(0.25,rev)
-  .compressor()
+  
 
 $: stack(
   s("goldberg_variations*2")

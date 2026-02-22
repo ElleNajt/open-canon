@@ -21,7 +21,7 @@ $: n("<0 4 7 11> <0 5 7 12>").scale("Eb:minor")
 $: s("bd [~ bd] bd [bd bd/2]").slow(2)
   .gain(0.4)
   .shape(0.6)
-  .compressor()
+  
   .cutoff(3000)
   .room(0.1)
   

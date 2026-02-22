@@ -68,10 +68,10 @@ $: stack(
     .ring(0.6)
     .ringf(150)
     .ringdf(0.7)
-    .compressor()
-    .compressorRatio(2.5)
-    .compressorAttack(0.025)
-    .compressorRelease(0.25)
+    
+    
+    
+    
 )
 
 $: stack(

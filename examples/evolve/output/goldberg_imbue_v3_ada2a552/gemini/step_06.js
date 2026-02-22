@@ -28,7 +28,7 @@ $: note("g2 e2 d2 c2").euclid(5, 8)
   .sound("supersaw")
   .lpf(sine.range(300, 1500).slow(8)).lpq(5)
   .drive(0.4)
-  .compressor()
+  
   .pan(saw.range(0.3, 0.7).slow(6))
   .room(0.2)
   .gain(0.25)
@@ -40,7 +40,7 @@ $: stack(
   .crush(10)
   .lpf(8000).lpq(2)
   .drive(0.3)
-  .compressor()
+  
   .room(0.1)
   .gain(0.6)
 

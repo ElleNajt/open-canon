@@ -25,7 +25,7 @@ $: stack(
     s("[hh*3, oh]").degradeBy(0.1).bpf(8000).bpq(3)
   ).slow(2)
   .distort(sine.range(0.1, 0.5).slow(8))
-  .compressor(ratio=7)
+  
   .lpf(16000)
   .gain(0.9)
 

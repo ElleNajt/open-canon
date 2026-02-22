@@ -30,7 +30,7 @@ $: stack(
 ).room(0.82)
   .swing(0.42)
   .degradeBy(0.22)
-  .compressor()
+  
 
 $: stack(
   s("goldberg_variations")

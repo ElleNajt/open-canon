@@ -36,7 +36,7 @@ $: s("[bd bd] [sn cp?] bd sn?").fast(2)
   .shape(0.4)
   .lpf(8000).hpf(60)
   .bandf(perlin.range(200, 8000).slow(16)).bandq(5)
-  .compressor().compressorRatio(8)
+  
   .room(0.1)
   .gain(0.65)
 

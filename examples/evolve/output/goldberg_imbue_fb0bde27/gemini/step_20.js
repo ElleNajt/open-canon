@@ -26,7 +26,7 @@ $: s("bd*2 [bd, <bd ~>]").euclid(5,8)
   .drive(0.7)
   .crush(5)
   .lpf(4000)
-  .compressor()
+  
   .room(0.1)
 
 $: s("[hh*2, hh hh?]*2").every(8, s => s.s("oh"))

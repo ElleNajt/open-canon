@@ -22,7 +22,7 @@ $: s("bd ~ [~ bd] bd?").slow(2)
   .drive(0.4)
   .cutoff(6000)
   .decay(0.1)
-  .compressor()
+  
 
 $: s("<hh*3 oh>").fast(4).degradeBy(0.1)
   .gain(0.1)

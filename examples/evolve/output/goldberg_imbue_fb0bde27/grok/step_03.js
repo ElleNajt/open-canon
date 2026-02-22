@@ -21,7 +21,7 @@ $: stack(
   s("hh*16,cp").hpf(5000).gain(0.25)
 ).room(0.5)
   .swing(0.15)
-  .compressor()
+  
 
 $: note("g4 fs4 e4 d4 bb3 c4 d4 fs3")
   .slow(2)

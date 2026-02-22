@@ -31,7 +31,7 @@ $: note("g3 e4 d4 g4")
   .gain(0.5)
   .pan(0.75)
   .delay(0.5)
-  .compressor()
+  
 
 $: note("f3 a3 c4 g4 d4")
   .sound("pulse")

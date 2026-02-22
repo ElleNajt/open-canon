@@ -36,7 +36,7 @@ $: s("[bd, sn] [bd, hh*2] sn? [bd, cp]").fast(2).every(4, rev)
   .shape(0.4)
   .lpf(8000).hpf(60)
   .coarse(perlin.range(1, 20).slow(8))
-  .compressor().compressorRatio(8)
+  
   .room(0.1)
   .gain(0.6)
 

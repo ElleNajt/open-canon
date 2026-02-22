@@ -42,7 +42,7 @@ $: stack(
   .lpf(9000)
   .crush(6)
   .drive(0.4)
-  .compressor().compressorRatio(10)
+  
   .gain(0.7)
 
 $: stack(

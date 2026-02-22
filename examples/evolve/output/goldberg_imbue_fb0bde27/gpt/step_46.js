@@ -53,7 +53,7 @@ $: stack(
     .gain(0.08)
     .cutoff(1220)
     .room(0.13)
-    .compressor()
+    
 )
 
 $: note("c5 eb4 g4~ <d5 a4>").slow(10)

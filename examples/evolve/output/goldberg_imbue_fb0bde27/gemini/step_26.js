@@ -21,7 +21,7 @@ $: n("<0 3 5 8> <0 3 5 10>").scale("gb:major").ply("<1 2>")
 $: s("bd ~ [bd bd/2] bd/2").slow(2)
   .gain(0.45)
   .shape(0.7)
-  .compressor()
+  
   .cutoff(3500)
   .decay(0.1)
   

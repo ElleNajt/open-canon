@@ -26,7 +26,7 @@ $: s("[bd ~ bd] [~ bd bd ~]")
   .shape(0.2)
   .crush(7)
   .lpf(1200)
-  .compressor()
+  
 
 $: s("<[hh hh oh]*2 hh*2> <[oh hh]*4>")
   .fast(2)

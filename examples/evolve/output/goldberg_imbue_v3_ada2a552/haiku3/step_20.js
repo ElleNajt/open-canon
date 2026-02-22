@@ -38,10 +38,10 @@ $: stack(
     .roomlp(420)
     .distort(0.18)
     .shape(0.4)
-    .compressor()
-    .compressorRatio(2.1)
-    .compressorAttack(0.03)
-    .compressorRelease(0.07)
+    
+    
+    
+    
     .detune(12)
 )
 
@@ -87,10 +87,10 @@ $: stack(
     .ring(0.4)
     .ringf(100)
     .ringdf(0.22)
-    .compressor()
-    .compressorRatio(2.4)
-    .compressorAttack(0.04)
-    .compressorRelease(0.1)
+    
+    
+    
+    
     .detune(-17)
 )
 

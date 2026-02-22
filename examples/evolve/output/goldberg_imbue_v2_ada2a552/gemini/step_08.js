@@ -26,7 +26,7 @@ $: s("bd sn:2").euclid(3, 8).fast(2)
   .hpf(400)
   .distort(0.2)
   .delay(0.3)
-  .compressor()
+  
   .pan(perlin.range(0.2, 0.8).slow(12))
 
 $: note("g4:min7 c5:maj7").chord().euclid(5, 13)

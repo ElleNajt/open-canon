@@ -30,7 +30,7 @@ $: s("[bd, sn [~ sn?]] <bd bd*2> [sn, cp]").fast(2).every(3, rev)
   .drive(0.3).shape(0.3)
   .djf(perlin.range(0, 0.4).slow(16))
   .crush(perlin.range(8,16).slow(12).round())
-  .compressor().compressorRatio(10)
+  
   .gain(0.6)
 
 $: s("[hh, oh]*4 [~, <hh hh*2>]").fast(4).degradeBy(0.2)

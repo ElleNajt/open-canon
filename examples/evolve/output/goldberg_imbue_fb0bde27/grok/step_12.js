@@ -22,7 +22,7 @@ $: stack(
 ).room(0.5)
   .swing(0.4)
   .degradeBy(0.2)
-  .compressor()
+  
   .every(8, rev)
 
 $: note("g4 [fs4 e4 d4 c4] [bb3 c4 eb4] [d4 g3 fs3 eb3]")

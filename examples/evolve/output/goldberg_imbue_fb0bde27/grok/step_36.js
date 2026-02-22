@@ -34,7 +34,7 @@ $: stack(
 ).room(0.8)
   .swing(perlin.range(0.6,0.7))
   .sometimesBy(0.3,rev)
-  .compressor()
+  
   .delay(0.25)
 
 $: stack(

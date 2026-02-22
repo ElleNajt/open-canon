@@ -41,10 +41,10 @@ $: stack(
     .phaserdepth(0.5)
     .phasersweep(0.4)
     .phasercenter(790)
-    .compressor()
-    .compressorRatio(2)
-    .compressorAttack(0.03)
-    .compressorRelease(0.1)
+    
+    
+    
+    
 )
 
 $: stack(
@@ -88,10 +88,10 @@ $: stack(
     .ring(0.6)
     .ringf(140)
     .ringdf(0.5)
-    .compressor()
-    .compressorRatio(2.5)
-    .compressorAttack(0.04)
-    .compressorRelease(0.15)
+    
+    
+    
+    
 )
 
 $: stack(

@@ -34,7 +34,7 @@ $: stack(
     s("bd*4").slow(2),
     s("[~ sn] [~ [sn sn]]").slow(2).sometimesBy(0.3, x => x.s("[~ mt]"))
   )
-  .compressor()
+  
   .drive(0.6)
   .coarse(8)
   .gain(0.7)

@@ -37,7 +37,7 @@ $: stack(
     s("~ sn").ply(2).euclid(5,13).late(0.5)
   )
   .coarse(6)
-  .compressor()
+  
   .bpf(2000).bpq(2)
   .gain(0.6)
 

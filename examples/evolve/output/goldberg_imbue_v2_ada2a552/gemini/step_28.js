@@ -25,7 +25,7 @@ $: stack(
     s("hh*8").degradeBy(0.2).hpf(9000).hpq(5)
   ).slow(2)
   .distort(0.2)
-  .compressor(ratio=8)
+  
   .gain(0.95)
 
 $: note("<f3:m9 c4:m7 g3:sus2 gb3:maj7>").chord().slow(16)

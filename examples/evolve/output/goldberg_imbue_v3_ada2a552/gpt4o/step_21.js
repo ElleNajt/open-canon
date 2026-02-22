@@ -17,7 +17,7 @@ $: note("e4 g4 b4 cs5 f5")
   .lpf(cosine.range(150, 900).slow(4))
   .lpq(8)
   .delay(0.1)
-  .compressor()
+  
 
 $: s("bd*8")
   .gain(0.55)

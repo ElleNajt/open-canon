@@ -13,7 +13,7 @@ $: note("a4 b3 d4 f4")
 
 $: note("e4 g4 b4 cs5 f5")
   .sound("supersaw")
-  .compressor()
+  
   .tremolo(0.6)
   .gain(0.8)
   .fmenv(0.6)
@@ -29,5 +29,5 @@ $: note("f3 a3 c4 g4")
   .sound("pulse")
   .bpf(500)
   .lpattack(0.15)
-  .compressor()
+  
   .room(0.4)

@@ -35,7 +35,7 @@ $: stack(
   .gain(0.6)
   .drive(0.3)
   .crush(6)
-  .compressorRatio(10)
+  
 
 $: s("hh*16")
   .degradeBy(0.2)

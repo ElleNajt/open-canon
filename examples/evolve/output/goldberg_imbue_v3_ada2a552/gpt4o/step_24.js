@@ -16,7 +16,7 @@ $: note("e4 g4 b4 cs5 f5")
   .sound("supersaw")
   .lpf(cosine.range(150, 900).slow(4))
   .delay(0.1)
-  .compressor()
+  
   .tremolo(0.5)
 
 $: s("bd*8")

@@ -31,7 +31,7 @@ $: chord("g2:m bb1:maj7 eb2:maj7 f2:m7")
 $: s("bd [sn cp?] bd sn").fast(2)
   .hpf(50).crush(8)
   .bandf(perlin.range(100, 10000).slow(12)).bandq(3)
-  .compressor().compressorRatio(10)
+  
   .room(0.2)
   .gain(0.7)
 

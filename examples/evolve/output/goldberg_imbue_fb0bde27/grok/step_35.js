@@ -33,7 +33,7 @@ $: stack(
 ).room(0.8)
   .swing(0.65)
   .sometimesBy(0.3,rev)
-  .compressor()
+  
   .delay(0.25)
 
 $: stack(

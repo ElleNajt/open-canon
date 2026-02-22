@@ -31,7 +31,7 @@ $: stack(
     s("bd*2 [bd bd]").slow(2),
     s("[~ sn]/2 <~ cp>").sometimes(rev)
   )
-  .compressor()
+  
   .drive(0.7)
   .shape(0.5)
   .lpf(3000)

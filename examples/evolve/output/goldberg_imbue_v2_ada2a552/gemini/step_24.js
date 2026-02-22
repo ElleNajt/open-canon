@@ -22,7 +22,7 @@ $: stack(
     s("hh*16").degradeBy(0.25).hpf(8000).gain(0.4)
   ).djf(tri.slow(8))
   .distort(0.1).room(0.3)
-  .compressor()
+  
   .gain(0.8)
 
 $: note("<c3:min7 g3:m7 ab3:maj7>").chord().slow(16)

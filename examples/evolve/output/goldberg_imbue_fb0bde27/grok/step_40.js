@@ -31,7 +31,7 @@ $: stack(
   s("~sn*2,cp*3,~sn,rim*3,cp").euclid(11,16).gain(0.92),
   s("hh*8,~oh*4,rim*4,cp*3,hh").crush(perlin.range(3,12)).hpf(2800).distort(0.2).gain(0.7)
 ).room(0.85)
-  .compressor()
+  
   .swing(sine.range(0.55,0.85))
   .sometimesBy(0.25,rev)
   .delay(0.3)

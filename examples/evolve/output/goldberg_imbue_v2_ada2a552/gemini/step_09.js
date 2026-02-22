@@ -24,7 +24,7 @@ $: s("[bd cp, hh*2] sn?").euclid(5, 8).fast(2)
   .gain(0.3)
   .crush(4)
   .delay(0.3)
-  .compressor()
+  
   .pan(rand)
   .postgain(1.2)
 

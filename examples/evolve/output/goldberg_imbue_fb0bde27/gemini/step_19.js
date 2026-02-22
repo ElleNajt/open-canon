@@ -27,7 +27,7 @@ $: s("bd*2 [bd, <bd ~>]").euclid(5,8)
   .shape(0.7)
   .hpf(50)
   .crush(6)
-  .compressor()
+  
 
 $: s("hh*8").every(4, s => s.s("oh"))
   .jux(x => x.rev().s("cp").fast(4).crush(5).gain(0.4))

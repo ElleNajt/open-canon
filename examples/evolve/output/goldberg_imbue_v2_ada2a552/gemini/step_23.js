@@ -23,7 +23,7 @@ $: stack(
     s("hh*8").every(4, rev).hpf(8000).gain(0.4)
   ).vowel("a e i o u".slow(4))
   .distort(0.2).room(0.2)
-  .compressor()
+  
   .gain(0.8)
 
 $: note("<c3:min9 g3:sus4 eb3:maj7>").chord().slow(16)

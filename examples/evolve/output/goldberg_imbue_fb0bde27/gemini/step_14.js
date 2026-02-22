@@ -23,7 +23,7 @@ $: n("<0 7 10 12> <3 5 8 15>")
 
 $: s("bd [~ bd] bd [bd bd/2]")
   .gain(0.9)
-  .compressor()
+  
   .shape(0.4)
   .distort(0.2)
   .coarse(8)

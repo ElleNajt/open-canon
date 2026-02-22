@@ -26,7 +26,7 @@ $: note("g2 eb2 f2 c2").euclid(3, 8)
   .sound("supersaw")
   .lpf(saw.range(400, 2000).slow(8)).lpq(5)
   .shape(0.4)
-  .compressor()
+  
   .room(0.3)
   .gain(0.25)
   
@@ -36,7 +36,7 @@ $: stack(
   )
   .bpf(400).bpq(3)
   .distort(0.1)
-  .compressor()
+  
   .gain(0.6)
 
 $: s("<hh*3 oh hh*2 oh*2>*2")

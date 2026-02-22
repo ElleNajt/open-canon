@@ -40,7 +40,7 @@ $: stack(
   .shape(0.2)
   .bpf(300).bpq(4)
   .distort(0.2)
-  .compressor()
+  
   .room(0.1)
   .gain(0.55)
 

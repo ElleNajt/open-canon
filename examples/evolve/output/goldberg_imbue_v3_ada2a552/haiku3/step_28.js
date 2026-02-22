@@ -36,10 +36,10 @@ $: stack(
     .room(0.8)
     .size(0.6)
     .roomlp(460)
-    .compressor()
-    .compressorRatio(2.3)
-    .compressorAttack(0.035)
-    .compressorRelease(0.065)
+    
+    
+    
+    
     .detune(14)
     .phaser(3)
     .phaserdepth(0.3)
@@ -89,10 +89,10 @@ $: stack(
     .ring(0.22)
     .ringf(110)
     .ringdf(0.04)
-    .compressor()
-    .compressorRatio(2.6)
-    .compressorAttack(0.045)
-    .compressorRelease(0.075)
+    
+    
+    
+    
     .detune(-28)
 )
 

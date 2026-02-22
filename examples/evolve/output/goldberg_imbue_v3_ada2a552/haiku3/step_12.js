@@ -36,10 +36,10 @@ $: stack(
     .roomlp(460)
     .distort(0.18)
     .shape(0.4)
-    .compressor()
-    .compressorRatio(2.3)
-    .compressorAttack(0.04)
-    .compressorRelease(0.14)
+    
+    
+    
+    
 )
 
 $: stack(
@@ -83,10 +83,10 @@ $: stack(
     .ring(0.6)
     .ringf(140)
     .ringdf(0.6)
-    .compressor()
-    .compressorRatio(2.4)
-    .compressorAttack(0.05)
-    .compressorRelease(0.15)
+    
+    
+    
+    
 )
 
 $: stack(

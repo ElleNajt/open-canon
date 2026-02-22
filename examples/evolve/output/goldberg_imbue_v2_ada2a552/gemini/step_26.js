@@ -23,7 +23,7 @@ $: stack(
     s("[hh,oh]*8").degradeBy(0.2).bpf(7000).bpq(2)
   ).slow(2)
   .distort(perlin.range(0.1, 0.6).slow(8))
-  .compressor(ratio=6).room(0.15)
+  .room(0.15)
   .gain(0.9)
 
 $: note("<f3:m7 c3:m7 g3:sus4 ab3:maj7>").chord().slow(16)

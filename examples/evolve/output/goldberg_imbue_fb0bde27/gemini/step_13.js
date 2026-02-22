@@ -22,7 +22,7 @@ $: n("<0 5 12 10> <3 7 15 8>")
 
 $: s("bd ~ [~ bd] [bd bd? bd?]")
   .gain(0.9)
-  .compressor()
+  
   .shape(0.5)
   .coarse(6)
   .hpf(50)

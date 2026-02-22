@@ -26,7 +26,7 @@ $: s("bd [bd/2 [bd bd]] bd [bd bd/2]?")
   .drive(0.6)
   .hpf(40)
   .crush(7)
-  .compressor()
+  
 
 $: s("hh*4 [oh [hh hh]/2]")
   .jux(x => x.rev().fast(2).gain(0.6).striate(8))

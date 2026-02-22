@@ -40,7 +40,7 @@ $: stack(
   )
   .distort(0.4)
   .crush(6)
-  .compressor().compressorRatio(10)
+  
   .gain(0.85)
 
 $: stack(

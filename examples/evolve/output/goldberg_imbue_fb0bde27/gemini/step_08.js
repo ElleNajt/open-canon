@@ -26,7 +26,7 @@ $: s("[bd ~ bd bd?]*2")
   .hpf(40)
   .crush(7)
   .lpf(1200)
-  .compressor()
+  
 
 $: s("<hh*8 oh*2?>").euclid(7, 8)
   .fast(2)

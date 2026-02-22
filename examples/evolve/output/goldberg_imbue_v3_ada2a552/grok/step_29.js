@@ -33,7 +33,7 @@ $: stack(
 .delay(0.78)
 .swing(0.34)
 .juxBy(-0.42, rev)
-.compressor()
+
 
 $: note("ab1 [c2 eb2 g2] [d3 f3 ab3] [eb4 g4 bb4 c5 eb5]")
   .slow(2.92)

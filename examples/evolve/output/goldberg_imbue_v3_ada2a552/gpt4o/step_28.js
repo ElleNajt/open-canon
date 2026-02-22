@@ -15,7 +15,7 @@ $: note("a4 b3 d4 f4")
 $: note("e4 g4 b4 cs5 f5")
   .sound("supersaw")
   .lpf(cosine.range(120, 800).slow(6))
-  .compressor()
+  
   .tremolo(0.6)
   .gain(0.7)
 
@@ -29,5 +29,5 @@ $: note("f3 a3 c4 g4")
   .sound("pulse")
   .bpf(450)
   .bpq(6)
-  .compressor()
+  
   .release(0.5)

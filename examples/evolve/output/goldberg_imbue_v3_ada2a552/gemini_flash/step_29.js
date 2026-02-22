@@ -12,7 +12,7 @@ $: s("bd*2 sn:2 cp*0.75").gain(0.9)
   .crush(6)
   .delay(0.7).dt(0.3).dfb(0.85) // Longer delay
   .lpf(square.range(150, 2000).slow(12)) // Higher frequency range
-  .room(0.7).drive(0.6).compressor() // Added compressor for punch
+  .room(0.7).drive(0.6) // Added compressor for punch
 
 $: note("cs4 fs4 g4").sound("sawtooth").gain(0.6) // Added a richer chord
   .octave(4).chop(8).speed(1.5).accelerate(0.05) // Faster, more chopped
@@ -35,4 +35,4 @@ $: note("cs3 e3 g3 cs4").sound("sine").gain(0.7) // Changed to sine for smoother
   .octave(3)
   .lpf(sine.range(50, 1500).slow(10)) // Broader filter sweep
   .delay(0.9).dt(0.4).dfb(0.8) // Longer delay
-  .room(0.8).jux((p) => p.octave(4).drive(0.4)).compressor().tremolo(0.2) // Increased drive on jux, added tremolo
+  .room(0.8).jux((p) => p.octave(4).drive(0.4)).tremolo(0.2) // Increased drive on jux, added tremolo

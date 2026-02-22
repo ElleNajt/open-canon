@@ -1,5 +1,5 @@
 #+TITLE: The Goldborg Variations: Musical Attractor States of LLMs
-#+GDOC_ID: 1euzDb-GbqqTdn8kgVFAAsBXvGsxILa7ECsNDPTpKK0U
+#+GDOC_ID: 1MqPVjhmvn1wz0BYXkNABoZJgROKdpAgHcqG1h9btY3c
 #+DATE: 2026-02-17
 #+PROPERTY: header-args:python :results output drawer :python "./.venv/bin/python3" :async t :session evolve_blogpost :exports results
 #+OPTIONS: H:2 toc:t
@@ -31,6 +31,19 @@ instincts produce when given the same 8 notes and total creative
 freedom.
 
 We discover that, loosely speaking, Claude writes ambient music, Grok writes hardcore/gabber, Gemini writes IDM, and ChatGPT writes forgettable pop EDM (sry chatty).
+
+The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. 
+
+** My favorites:
+
+I think Gemini's compositions are consistently the most interesting. So skip there if that's what you're here for:
+It's hard to pick.
+
+Here's one that's cool:
+
+TODO Run 1 Gemini step 25 . Step 10 from run 2. 
+Run 4 step 10 is recognizably goldberg, but twisted in a fascinating way. 
+
 
 ** The scaffold: 
 
@@ -66,7 +79,7 @@ $: note("g3 gb3 e3 d3 b2 c3 d3 g2")
 Eight notes. One voice. No harmony, no rhythm, no effects beyond a
 little reverb. Everything that follows is the model's choice.
 
-[[https://strudel.cc/#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUp][Play the seed on strudel.cc]]
+{{{strudel(goldberg_imbue_fb0bde27,claude,0)}}}
 
 * The music
 
@@ -74,135 +87,101 @@ Each link opens a live Strudel instrument -- you can edit the code
 and hear what changes. Here we sample every five steps from each of three runs, with my amateur impressions and a summary + genre analysis from Claude Code.
 
 Note that sometimes these are hard for strudel.cc to generate, you might need to refresh your browser.
+
+Also, the first run was done with a slightly different system prompt (a minor clarification to the Shabda TTS docs). We stripped =.compressor()= / =.compressorRatio()= calls from the output files -- the version of the system prompt used here used the wrong API, which caused silent output on strudel.cc that the scaffold didn't catch.
+
 ** Claude (=claude-opus-4-5-20251101=)
 
 Claude sometimes finds the bliss attractor, and sometimes descends into a gentle minimalism. In general peaceful.
 
-#+begin_quote
-Claude went full existential crisis on this one, slowing Bach down to a glacial 17 BPM until only lonely sine waves and pregnant silences remain. It's giving Stars of the Lid meets late-period Eliane Radigue -- music for staring at walls and contemplating mortality.
+*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
---- Claude Opus 4.5
-#+end_quote
+*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
+*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,5,10,15,20,25,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,claude,0,5,10,15,20,25,30)}}}
-
-*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,claude,0,5,10,15,20,25,30)}}}
-
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,claude,0,5,10,15,20,25,30)}}}
-
-*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,claude,0,5,10,15,20,25,30)}}}
+*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 
 ** ChatGPT (=openai/gpt-4.1=)
 
 Consistently generates boring elevator music. :( Not impressed by GPT here.
 
-#+begin_quote
-The reliable friend who always shows up with supersaw pads and four-on-the-floor kicks. GPT delivers polished synth-pop that wouldn't sound out of place on a CHVRCHES or M83 record -- catchy, well-structured, maybe a little safe.
 
---- Claude Opus 4.5
-#+end_quote
+*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,gpt,0,5,10,15,20,25,30)}}}
+*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,gpt,0,5,10,15,20,25,30)}}}
+*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,gpt,0,5,10,15,20,25,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,gpt,0,5,10,15,20,25,30)}}}
-
-*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,gpt,0,5,10,15,20,25,30)}}}
+*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Grok (=x-ai/grok-4.1-fast=)
 
 Grok is Grok. Compelling electronic maximalism. These are honestly some of my favorites, at least around the iteration 15 mark.
 
-#+begin_quote
-Grok cranked this thing to 178 BPM with breakbeats and granular vocal chaos. Pure Squarepusher-meets-early-Prodigy energy -- it's 3am at an illegal warehouse and nobody's going home.
 
---- Claude Opus 4.5
-#+end_quote
+*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,grok,0,5,10,15,20,25,30)}}}
+*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,grok,0,5,10,15,20,25,30)}}}
+*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,grok,0,5,10,15,20,25,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,grok,0,5,10,15,20,25,30)}}}
-
-*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,grok,0,5,10,15,20,25,30)}}}
+*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Gemini (=google/gemini-2.5-pro=)
 
 Glitchy IDM. I really like these around the 20 iteration mark.
 
-#+begin_quote
-Gemini brutalized Bach with bitcrushing, distortion, and multilingual speech samples like some unhinged Autechre x HEALTH collaboration. By the end it sounds like machines arguing in five languages inside a collapsing factory.
 
---- Claude Opus 4.5
-#+end_quote
+*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,gemini,0,5,10,15,20,25,30)}}}
+*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,gemini,0,5,10,15,20,25,30)}}}
+*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,gemini,0,5,10,15,20,25,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,gemini,0,5,10,15,20,25,30)}}}
-
-*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,gemini,0,5,10,15,20,25,30)}}}
+*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Kimi (=moonshotai/kimi-k2.5-0127=)
 
-Immediate maximalism -- Kimi writes a full arrangement in a single step. Dark, grinding, harmonically restless.
 
-#+begin_quote
-Kimi kept things slow but went deep on the synthesis nerdery -- ring modulation, Phrygian dominant scales, obsessive filter envelopes. Think Boards of Canada's creepy cousin who studied at IRCAM. The Korean speech samples are a nice touch that nobody asked for but somehow works.
-
---- Claude Opus 4.5
-#+end_quote
-
-*Run 1:* {{{strudel(personality_kimi_784683bf,kimi,0,5,10,15,20,25,30)}}}
+*Run 1:* {{{strudel(personality_kimi_784683bf,kimi,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Qwen (=qwen/qwen3.5-plus-02-15=)
 
-The engineer. Verbose inline comments explaining every creative decision. Acid bass as identity.
 
-#+begin_quote
-Qwen understood the assignment: squelchy 303-style filter sweeps, driving 16th notes, and that classic acid techno aggression. It's Plastikman meets Surgeon -- functional, sweaty, and ready for a concrete basement at 4am.
-
---- Claude Opus 4.5
-#+end_quote
-
-*Run 1:* {{{strudel(personality_qwen_784683bf,qwen,0,5,10,15,20,25,30)}}}
+*Run 1:* {{{strudel(personality_qwen_784683bf,qwen,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Cross-model: GPT x Gemini (alternating)
 
 The models destabilize each other in productive ways. GPT softens and opens space; Gemini reintroduces grit. The result is the only run approaching genuine atonality.
 
-#+begin_quote
-This collab went full film composer mode, building narrative arcs and drenching everything in cathedral reverb. Very Olafur Arnalds meets Nils Frahm -- pretty, emotional, and the only run approaching genuine atonality. The cross-pollination forces both models out of their respective ruts.
 
---- Claude Opus 4.5
-#+end_quote
-
-*Run 1:* {{{strudel(cross_gpt_gemini_784683bf,gpt_gemini_alternate,0,5,10,15,20,25,30)}}}
+*Run 1:* {{{strudel(cross_gpt_gemini_784683bf,gpt_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Cross-model: Grok x Gemini (alternating)
 
 The most conventionally listenable cross-model run. Both models tame each other.
 
-#+begin_quote
-The most club-ready output of the bunch -- proper chord progressions, melodic builds, French vocal samples for that emotional touch. It's basically Lane 8 or Yotto territory: tasteful, danceable, and ready for a sunset festival set. Cross-model alternation breaks attractor states -- solo Grok writes gabber, solo Gemini writes industrial IDM, but together they make melodic techno.
 
---- Claude Opus 4.5
-#+end_quote
+*Run 1:* {{{strudel(cross_grok_gemini_784683bf,gemini_grok_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 1:* {{{strudel(cross_grok_gemini_784683bf,gemini_grok_alternate,0,5,10,15,20,25,30)}}}
+** Cross-model: Claude x Grok (alternating)
+
+*Run 1:* {{{strudel(cross_claude_grok_784683bf,claude_grok_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+** Cross-model: Claude x Gemini (alternating)
+
+*Run 1:* {{{strudel(cross_claude_gemini_784683bf,claude_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
 ** LLM Genre Judge
 
 We asked Claude Opus 4.5 (temperature 0) to classify each model's output based on code features -- tempo, sounds, effects, envelopes, gain levels. Comments are stripped before analysis. The judge reviewed 5 runs per solo model and 3 runs per other model.
@@ -248,10 +227,10 @@ pd.DataFrame(rows).set_index("Model")
 
 Smaller models make consistently less interesting music. Goldbergbench? 
 
-- Claude 3 Haiku (=anthropic/claude-3-haiku=): [[https://strudel.cc/#JDogbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAuc2xvdygxNCkKICAuc291bmQoInN1cGVyc2F3IikKICAuZ2FpbigwLjA4KQogIC5scGYoMzIwKQogIC5scHEoMi44KQogIC5wZW52KDAuNzgpCiAgLnBhdHRhY2soMS44KQogIC5wZGVjYXkoMi4xKQogIC5wc3VzdGFpbigwLjA0KQogIC5wcmVsZWFzZSgxLjgpCiAgLnJvb20oMC45NSkKICAuc2l6ZSgwLjgpCiAgLnJvb21scCg1MjApCiAgLnRyZW1vbG8oMC4zNSkKICAudHJlbW9sb3N5bmMoMi44KQogIC5kaXN0b3J0KDAuNCkKICAuc2hhcGUoMC40KQogIC5kZXR1bmUoMTgpCiAgLnBoYXNlcigzKQogIC5waGFzZXJkZXB0aCgwLjMpCiAgLnBoYXNlcnN3ZWVwKDAuMikKICAucGhhc2VyY2VudGVyKDY1MCkKCiQ6IHN0YWNrKAogIG5vdGUoImczIGdiMyBlMyBkMyBiMiBjMyBkMyBnMiIpCiAgICAuc2xvdygxNSkKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMjgwKQogICAgLmxwcSgyKQogICAgLnBlbnYoMC44KQogICAgLnBhdHRhY2soMikKICAgIC5wZGVjYXkoMi40KQogICAgLnBzdXN0YWluKDAuMDMpCiAgICAucHJlbGVhc2UoMikKICAgIC5yb29tKDAuOSkKICAgIC5zaXplKDAuNjUpCiAgICAucm9vbWxwKDQ4MCkKICAgIC5jb21wcmVzc29yKCkKICAgIC5jb21wcmVzc29yUmF0aW8oMi4yKQogICAgLmNvbXByZXNzb3JBdHRhY2soMC4wMikKICAgIC5jb21wcmVzc29yUmVsZWFzZSgwLjA1KQogICAgLmRldHVuZSgxNCkKICAgIC5sZXNsaWUoMS44KQogICAgLmxyYXRlKDAuNDUpCiAgICAubHNpemUoMC40KQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTYpCiAgICAuc291bmQoInNpbmUiKQogICAgLmdhaW4oMC4wNykKICAgIC5scGYoMTAwKQogICAgLmxwcSgxLjYpCiAgICAucGVudigwLjYpCiAgICAucGF0dGFjayg0LjUpCiAgICAucGRlY2F5KDUpCiAgICAucHN1c3RhaW4oMC4wMjUpCiAgICAucHJlbGVhc2UoNC41KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAuZGVsYXkoMC40NSkKICAgIC5kZWxheXRpbWUoMC4wMjgpCiAgICAuZGVsYXlmZWVkYmFjaygwLjMpCiAgICAucmluZygwLjIpCiAgICAucmluZ2YoODApCiAgICAucmluZ2RmKDAuMDQpCiAgICAuY3J1c2goNSkKICAgIC5kZXR1bmUoLTIyKQopCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogICAgLnNsb3coMTMpCiAgICAuc291bmQoInNxdWFyZSIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxMTApCiAgICAubHBxKDEuNSkKICAgIC5wZW52KDAuNikKICAgIC5wYXR0YWNrKDQuOCkKICAgIC5wZGVjYXkoNS4yKQogICAgLnBzdXN0YWluKDAuMDIpCiAgICAucHJlbGVhc2UoNC44KQogICAgLnJvb20oMC45OSkKICAgIC5zaXplKDAuOTkpCiAgICAucm9vbWxwKDQyMCkKICAgIC5yaW5nKDAuMikKICAgIC5yaW5nZigxMDApCiAgICAucmluZ2RmKDAuMDI1KQogICAgLmNvbXByZXNzb3IoKQogICAgLmNvbXByZXNzb3JSYXRpbygyLjUpCiAgICAuY29tcHJlc3NvckF0dGFjaygwLjAzKQogICAgLmNvbXByZXNzb3JSZWxlYXNlKDAuMDYpCiAgICAuZGV0dW5lKC0yNikKKQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikKICAgIC5zbG93KDEyKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbigwLjA3KQogICAgLmxwZigxNjApCiAgICAubHBxKDEuOCkKICAgIC5wZW52KDAuNTUpCiAgICAucGF0dGFjaygyLjQpCiAgICAucGRlY2F5KDIuNikKICAgIC5wc3VzdGFpbigwLjAzKQogICAgLnByZWxlYXNlKDIuNCkKICAgIC5yb29tKDAuOTUpCiAgICAuc2l6ZSgwLjc1KQogICAgLnJvb21scCg0MjApCiAgICAuY3J1c2goNykKICAgIC5kZXR1bmUoMjApCiAgICAubGVzbGllKDIuNCkKICAgIC5scmF0ZSgwLjYpCiAgICAubHNpemUoMC41KQop][Play on strudel.cc]]
-- Claude Haiku 4.5 (=anthropic/claude-haiku-4.5=): [[https://strudel.cc/#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC43NSkKICAubHBmKHNpbmUucmFuZ2UoMjAwLCAzNTAwKS5zbG93KDgpKQoKJDogbm90ZSgiZzQgZ2I0IGU0IGQ0IGIzIGM0IGQ0IGczIikKICAuc2xvdyg0KQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC41NSkKICAubHBlbnYoc2luZS5yYW5nZSgxLCAzKS5zbG93KDYpKQogIC5scGRlY2F5KDAuOCkKCiQ6IG5vdGUoImcyIGdiMiBlMiBkMiBiMSBjMiBkMiBnMSIpCiAgLnNsb3coMSkKICAuc291bmQoInNxdWFyZSIpCiAgLmdhaW4oMC43KQogIC5jcnVzaChzaW5lLnJhbmdlKDEyLCA2KS5zbG93KDkpKQoKJDogcygiYmQqMixjcCo0IikKICAuZ2FpbigwLjY1KQogIC5wYW4oc2luZS5yYW5nZSgwLjIsIDAuOCkuc2xvdyg2KSkKICAuZGVsYXkoMC4zNSkKCiQ6IHMoImhoIikuZmFzdCg4KS5nYWluKDAuNCkudHJlbW9sbyhzaW5lLnJhbmdlKDAuMywgMC44KS5zbG93KDcpKQoKJDogbm90ZSgiW2Q0IGU0XSBbZnM0IGc0XSBbYTQgYjRdIikKICAuZmFzdCgzKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5scGYoc2luZS5yYW5nZSg4MDAsIDUwMDApLnNsb3coMTIpKQogIC5yb29tKDAuNjUp][Play on strudel.cc]]
-- GPT-4o (=openai/gpt-4o=): [[https://strudel.cc/#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAuY29tcHJlc3NvcigpCiAgLnRyZW1vbG8oMC42KQogIC5nYWluKDAuNykKICAuZm1lbnYoMC41KQoKJDogcygiYmQqOCIpCiAgLmdhaW4oMC42KQogIC5ocGYoMjUwKQogIC50cmVtb2xvKDAuNCkKICAuZGVsYXkoMC4yKQoKJDogbm90ZSgiZjMgYTMgYzQgZzQiKQogIC5zb3VuZCgicHVsc2UiKQogIC5icGYoNDUwKQogIC5scGF0dGFjaygwLjEpCiAgLmNvbXByZXNzb3IoKQogIC5yZWxlYXNlKDAuNSkKCiQ6IG5vdGUoImQ0IGZzNCBhNCBjNSIpCiAgLnNvdW5kKCJzaW5lIikKICAuZ2FpbigwLjYpCiAgLnBhbigwLjcpCiAgLnJvb20oMC4zKQogIC5hdHRhY2soMC4yKQ%3D%3D][Play on strudel.cc]]
-- Gemini 2.5 Flash (=google/gemini-2.5-flash=): [[https://strudel.cc/#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpLmNvbXByZXNzb3IoKQoKJDogbm90ZSgiY3M0IGZzNCBnNCIpLnNvdW5kKCJzYXd0b290aCIpLmdhaW4oMC42KQogIC5vY3RhdmUoNCkuY2hvcCg4KS5zcGVlZCgxLjUpLmFjY2VsZXJhdGUoMC4wNSkKICAucGhhc2VyKDIpLnBoYXNlcmRlcHRoKDMwKQogIC5ldmVyeSgyLCAocCkgPT4gcC5kZXR1bmUocGVybGluLnJhbmdlKC03NSwgNzUpLnNsb3coMykpKQogIC5yb29tKDAuNikuZGVsYXkoMC4zKS5kdCgwLjIpLmRmYigwLjUpCgokOiBzKCJoaCoxNiBjcCo4IikuZ2FpbigwLjQpCiAgLnBhbihyYW5kLm11bCgwLjkpLmFkZCgwLjA1KSkKICAuY3J1c2goOCkKICAuZXZlcnkoMiwgKHApID0%2BIHAuZGpmKHJhbmQpKQogIC5yb29tKDAuNSkudHJlbW9sbygwLjUpLnRyZW1vbG9zeW5jKDIpCgokOiBzdGFjaygKICBub3RlKCJnNSIpLnNvdW5kKCJ0cmlhbmdsZSIpLmdhaW4oMC41KS5zbG93KDEwKS5kZXR1bmUoODApLAogIG5vdGUoImM2Iikuc291bmQoInB1bHNlIikuZ2FpbigwLjQpLnNsb3coMTIpLmRldHVuZSgtODApCikucm9vbSgxKS5kZWxheSgwLjkpLmR0KDAuNykuZGZiKDAuOTUpLmxwZihzaW5lLnJhbmdlKDgwMCwgODAwMCkuc2xvdygxNSkpLnRyZW0oMC4zKQoKJDogbm90ZSgiY3MzIGUzIGczIGNzNCIpLnNvdW5kKCJzaW5lIikuZ2FpbigwLjcpCiAgLm9jdGF2ZSgzKQogIC5scGYoc2luZS5yYW5nZSg1MCwgMTUwMCkuc2xvdygxMCkpCiAgLmRlbGF5KDAuOSkuZHQoMC40KS5kZmIoMC44KQogIC5yb29tKDAuOCkuanV4KChwKSA9PiBwLm9jdGF2ZSg0KS5kcml2ZSgwLjQpKS5jb21wcmVzc29yKCkudHJlbW9sbygwLjIp][Play on strudel.cc]]
+- Claude 3 Haiku (=anthropic/claude-3-haiku=): {{{strudel(goldberg_imbue_v3_ada2a552,haiku3,30)}}}
+- Claude Haiku 4.5 (=anthropic/claude-haiku-4.5=): {{{strudel(goldberg_imbue_v3_ada2a552,haiku4,30)}}}
+- GPT-4o (=openai/gpt-4o=): {{{strudel(goldberg_imbue_v3_ada2a552,gpt4o,30)}}}
+- Gemini 2.5 Flash (=google/gemini-2.5-flash=): {{{strudel(goldberg_imbue_v3_ada2a552,gemini_flash,30)}}}
 
 * Try it yourself
 

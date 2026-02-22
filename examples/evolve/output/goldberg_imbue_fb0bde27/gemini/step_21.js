@@ -27,7 +27,7 @@ $: s("bd*4")
   .crush(6)
   .shape(0.2)
   .lpf(3000)
-  .compressor()
+  
 
 $: s("hh*8").euclid(7,16).fast(2)
   .jux(x => x.s("cr").speed(2).degradeBy(0.5).gain(0.2))
