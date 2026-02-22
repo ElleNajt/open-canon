@@ -57,7 +57,7 @@ MODELS = {
     },
     "gpt": {
         "provider": "openrouter",
-        "model": "openai/gpt-4.1",
+        "model": "openai/gpt-5.2",
     },
     "gemini": {
         "provider": "openrouter",
