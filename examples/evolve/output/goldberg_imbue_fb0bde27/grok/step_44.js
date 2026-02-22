@@ -1,0 +1,71 @@
+samples('shabda/speech:goldberg_variations,bach,johann,variation,fugue')
+setcps(158/60/4)
+
+$: stack(
+  note("gs3:minor [ab3 fs3 f3 d3 bb3 c4:minor] [c4 eb4:maj a4 g4 fs4 b3] [ds4 g4 fs4 e4]")
+    .slow(perlin.range(1.5,7.5))
+    .sound("supersaw")
+    .lpf(perlin.range(100,5000).slow(3))
+    .gain(0.75)
+    .crush(perlin.range(4,10)),
+  note("gs4 [g4 fs4 f4 d4 bb3 a3 eb4:maj] [f4 gs4 a4 b4 c5 gs4:minor] [g3 f3 e3 ds3]")
+    .slow(perlin.range(1.8,6))
+    .sound("pulse")
+    .gain(0.72)
+    .lpf(saw.range(120,6500).slow(3))
+    .crush(saw.range(5,12))
+).juxBy(sine.range(0.4,0.85),rev)
+  .room(0.7)
+  .every(7,x=>x.palindrome().transpose(rand.range(-3,3)))
+  .degradeBy(0.22)
+  .compressor("-18:4.2:0.3:0.01:0.15")
+
+$: note("gs1 [e2 a1 gs1 f1] [d1 f1 ds1 b0 gs0] [f0 a0 gs0 e0 ds1]")
+  .slow(perlin.range(3,8))
+  .sound("sawtooth")
+  .gain(0.82)
+  .fmi(perlin.range(12,48).slow(4))
+  .leslie(sine.range(0.3,1).slow(6))
+
+$: stack(
+  s("bd*3,~bd,bd*4,~lt,bd").euclid(12,16).gain(0.9),
+  s("~sn*2,cp*3,~sn,rim*4,cp").euclid(9,16).gain(0.86),
+  s("hh*8,~oh*4,rim*4,cp*4,hh").crush(perlin.range(5,12)).hpf(2800).distort(0.28).gain(0.66)
+).room(0.8)
+  .swing(sine.range(0.72,0.82))
+  .sometimesBy(0.28,rev)
+  .delay(0.4)
+  .compressor("-20:4.5:0.3:0.01:0.12")
+
+$: stack(
+  s("fugue*4,variation*2")
+    .slow(perlin.range(2,12))
+    .chop(rand.range(24,48))
+    .speed(perlin.range(0.75,1.4).slow(4))
+    .lpf(cosine.range(80,4000).slow(8))
+    .gain(0.65),
+  s("bach*2,johann*4,fugue,variation*2")
+    .chop(perlin.range(24,48))
+    .speed(tri.range(0.6,1.6))
+    .vowel("a o u e i")
+    .stretch(perlin.range(0.9,1.5))
+    .gain(0.6)
+).phaser(rand.range(0.3,1.3).slow(3))
+  .pan(sine.range(0.1,0.9).slow(4))
+  .room(0.8)
+  .echo(6,0.1,0.4)
+  .degradeBy(0.15)
+
+$: s("variation*3,fugue*5,bach*2,johann")
+  .chop(rand.range(20,52))
+  .slow(perlin.range(2.5,12))
+  .speed(saw.range(0.7,1.4))
+  .gain(0.65)
+  .phaser(perlin.range(0.2,1.3).slow(4))
+
+$: note("g2 [ab2 ds3 gs3 bb3:minor] [bb3 eb2 gs2 ab2 ds3] [fs3 ds2 f2 ab2 c3 d3 fs3 g3] ~ [eb2 bb2 ds3 fs3]")
+  .slow(perlin.range(2,8))
+  .sound("piano")
+  .lpf(perlin.range(120,2800).slow(3))
+  .gain(0.75)
+  .tremolo(perlin.range(2,10).slow(3))

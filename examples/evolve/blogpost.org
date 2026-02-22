@@ -11,7 +11,7 @@ It's been previously noted that models have some pretty funny [[https://www.less
 
 Here we give four frontier LLMs the same seed -- a piece of music written in
 Strudel (a live-coding language for music) -- and ask them to repeatedly
-"evolve" it. Each model runs independently for 100 steps, receiving its
+"evolve" it. Each model runs independently, receiving its
 own previous output each time. The prompt:
 
 #+begin_quote
@@ -39,7 +39,7 @@ The code is open source, and it should be easy to run your own musical experimen
 *** Gemini
 
 - Step 24 from run 1:
-{{{strudel(goldberg_imbue_v1_ada2a552,gemini,24)}}}
+{{{strudel(goldberg_imbue_fb0bde27,gemini,24)}}}
 
 - Run 4 step 15 is recognizably Goldberg, but twisted in a fascinating way:
 {{{strudel(goldberg_imbue_r4_ada2a552,gemini,15)}}}
@@ -94,15 +94,15 @@ Also, the first run was done with a slightly different system prompt (a minor cl
 
 Claude sometimes finds the bliss attractor, and sometimes descends into a gentle minimalism. In general peaceful.
 
-*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
 
 ** ChatGPT (=openai/gpt-4.1=)
@@ -125,15 +125,15 @@ Consistently generates boring elevator music. :( Not impressed by GPT here.
 Grok is Grok. Compelling electronic maximalism. These are honestly some of my favorites, at least around the iteration 15 mark.
 
 
-*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 1:* {{{strudel(goldberg_imbue_fb0bde27,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 2:* {{{strudel(goldberg_imbue_v2_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
-*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
 ** Gemini (=google/gemini-2.5-pro=)
 
@@ -146,7 +146,7 @@ Glitchy IDM. I really like these around the 20 iteration mark.
 
 *Run 3:* {{{strudel(goldberg_imbue_v3_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 4:* {{{strudel(goldberg_imbue_r4_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
 *Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
@@ -267,4 +267,4 @@ has a =links.md= with URLs for all steps:
 
 Related work: [[https://sara-fish.github.io/llm-musical-self-expression/][an experiment on frontier LLMs generating classical music]]
 
-Acknowledgements: Thanks to Liban Mohamed-Schwoebel for suggesting "Goldborg."
+Acknowledgements: Thanks to Liban, Arya Jakkli, and Jason Brown for review.

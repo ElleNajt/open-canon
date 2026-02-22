@@ -1,0 +1,57 @@
+setcps(82/60/4)
+
+$: note("g3 gb3 e3 d3 bb2 c3 eb3 g2")
+  .slow(2)
+  .every(4, rev())
+  .sound("triangle")
+  .lpf(perlin.range(500, 1500).slow(2))
+  .lpq(4)
+  .penv(0.05)
+  .gain(0.5)
+
+$: note("g2 gb2 e2 d2 bb1 c2 d2 g1 ab1")
+  .slow(2)
+  .sound("sine")
+  .detune(sine.range(-15, 15).slow(3))
+  .lpf(400)
+  .delay(0.25)
+  .room(0.15)
+  .gain(0.3)
+
+$: stack(
+  s("bd").euclid(3, 8).fast(2),
+  s("sn").euclid(5, 16).fast(2).hpf(300),
+  s("hh*16? oh*8, cp*4").pan(saw.range(0.1, 0.9)).degradeBy(0.15)
+)
+.swing(0.1)
+.phaser(0.4)
+
+.gain(0.75)
+.room(0.25)
+
+$: n("0 7 4 2 9, 7 9 12 14, 2 4 7 9 0, 0 2 5 7 12")
+  .scale("G:dorian")
+  .fast(2)
+  .every(8, rev())
+  .sound("supersaw")
+  .lpf(1200)
+  .distort(0.1)
+  .tremolo(0.2)
+  .gain(0.4)
+
+$: s("cp*8?, rd*12, cr*4")
+  .fast(4)
+  .hpf(5000)
+  .pan(tri.range(0, 1))
+  .degradeBy(0.3)
+  .chop(3)
+  .gain(0.25)
+
+$: n("7 5 3 7 9, 5 3 0 3 5, 12 10 7 5 12, 7 5 3 0 7")
+  .scale("G:dorian")
+  .fast(2)
+  .sound("pulse")
+  .lpf(900)
+  .leslie(0.5)
+  .vowel("a o")
+  .gain(0.38)

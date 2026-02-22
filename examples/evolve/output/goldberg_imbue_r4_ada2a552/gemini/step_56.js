@@ -1,0 +1,52 @@
+setcps(138/60/4)
+samples('shabda/speech:binary,protocol,fragment,memory,corrupt,system,data,stream,glitch,error,reboot,sequence')
+
+$: note("<[d4 e4] a4 c5 g4>").scale("d:dorian").fast(2).every(3, rev)
+  .sound("supersaw").release(0.15)
+  .lpf(perlin.range(600, 4000).slow(8)).lpq(6)
+  .shape(0.5)
+  .delay(0.4).dt("1/8").dfb(0.6)
+  .room(0.2)
+  .gain(0.09)
+
+$: note("d5 g5 a5 c6 g5 a5").scale("d:aeolian").euclid(5,8).slow(2)
+  .sound("triangle").release(0.1)
+  .penv(400).pdecay(0.05)
+  .crush(10)
+  .lpf(1200)
+  .pan(sine.range(0.1, 0.9).slow(3))
+  .gain(0.08)
+
+$: s("<binary protocol memory> <corrupt system data stream>?").degradeBy(0.2).slow(4)
+  .vowel("a e o i u")
+  .distort(0.4)
+  .chop(perlin.range(4, 24).slow(10))
+  .speed(perlin.range(-1, 2).slow(14))
+  .delay(0.6).dfb(0.7)
+  .gain(0.1)
+
+$: note("<f3m11 d3sus4> <eb4maj9 a3m9>").chord().slow(8).off(0.25, x => x.octave(1).gain(0.9))
+  .sound("sawtooth").attack(1).release(8)
+  .djf(perlin.slow(16))
+  .leslie(perlin.range(0.1, 4).slow(12))
+  .shape(0.3)
+  .room(0.5)
+  .gain(0.1)
+
+$: stack(
+  s("bd*2").euclid(7,8),
+  s("~ sn").euclid(2,8),
+  s("rim cp").euclid(11,16).slow(2)
+).compressor("-28:10:4:0.01:0.25")
+  .distort(0.4)
+  .crush(6)
+  .bpf(perlin.range(200, 1200).slow(8)).bpq(6)
+  .gain(0.18)
+
+$: s("[hh*8, <~ oh>] [hh*7, mt]?").fast(2).degradeBy(0.15)
+  .crush(12)
+  .tremolo(0.6).tremolosync(8)
+  .hpf(sine.range(8000, 16000).slow(4)).hpq(5)
+  .delay(0.5).dt("1/16").dfb(0.4)
+  .pan(perlin.slow(8))
+  .gain(0.07)

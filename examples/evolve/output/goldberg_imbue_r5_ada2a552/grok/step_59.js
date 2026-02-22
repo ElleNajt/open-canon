@@ -1,0 +1,57 @@
+setcps(150/60/4)
+samples('shabda/speech:tidal_cycles,strudel,realtime,code_as_you_think,live,code,groove')
+
+$: n("[0*4 [2 7 9 14 ~]*2 [11 16 12 0]*3]").euclid(5,16)
+  .slow(4)
+  .every(8, x => x.rev().add(12))
+  .scale("G:mixolydian")
+  .sound("supersaw")
+  .lpf(sine.range(400,12000).slow(4))
+  .room(0.85)
+  .gain(0.8)
+
+$: n("[2*4 ~ [9 4 11 7 14]*2 ~]").euclid(7,16)
+  .slow(2.5)
+  .jux(rev)
+  .scale("G:mixolydian")
+  .sound("pulse")
+  .lpf(perlin.range(150,9000).slow(3))
+  .room(0.75)
+  .gain(0.75)
+
+$: stack(
+  s("bd*4 [~ bd*3] bd*2 ~").euclid(7,16).fast(1.7),
+  s("[sn*2 ~ cp cp] [~ sn*3 cp]").euclid(5,16).fast(3.2).hpf(1800),
+  s("hh*12? [oh*8 ~ oh*16]").pan(saw.range(0,1).fast(7)).degradeBy(0.3),
+  s("[~ lt*3 [ht mt*2]]").slow(1.3)
+)
+.swing(0.4)
+.room(0.85)
+.gain(0.9)
+
+$: n("[[~ [0 4 7 9 11]]*3 [12 14 16 ~]*3 ~ [2*4 ~]]").euclid(7,16)
+  .scale("G:mixolydian")
+  .add(-12)
+  .fast(3.2)
+  .sound("triangle")
+  .hpf(300)
+  .room(0.8)
+  .gain(0.7)
+
+$: s("[[strudel*3 live code_as_you_think] [~ tidal_cycles*2 realtime groove] [strudel*4 ~ live*3 code]]")
+  .slow(1.3)
+  .sometimesBy(0.45, rev)
+  .every(4, x=>x.ply(3).fast(1.8))
+  .chop(24)
+  .speed(tri.range(0.85,1.35).slow(2.5))
+  .room(0.95)
+  .gain(0.9)
+
+$: n("[[12 9*2 14 16 ~]*2 [2 5 7 11 0]*2 ~] [4*3 [0 2 7 9]*2 ~ ~]")
+  .scale("G:mixolydian")
+  .fast(2.8)
+  .every(4, x => x.rev().add(-7))
+  .sound("sine")
+  .lpf(cosine.range(350,11000).slow(6))
+  .room(0.9)
+  .gain(0.8)

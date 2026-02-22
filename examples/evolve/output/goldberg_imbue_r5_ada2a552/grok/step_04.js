@@ -1,0 +1,52 @@
+setcps(80/60/4)
+
+$: note("g3 gb3 e3 d3 bb2 c3 d3 g2")
+  .slow(2)
+  .every(4, rev())
+  .sound("triangle")
+  .lpf(perlin.range(600, 1200))
+  .lpq(3)
+  .gain(0.55)
+
+$: note("g2 gb2 e2 d2 bb1 c2 d2 g1")
+  .slow(2)
+  .sound("sine")
+  .detune(sine.range(-20, 20).slow(4))
+  .lpf(350)
+  .delay(0.2)
+  .gain(0.28)
+
+$: stack(
+  s("bd").euclid(5,16),
+  s("sn").euclid(3,16).fast(2).hpf(250),
+  s("hh*8? oh*4").pan(rand.range(0.2,0.8)).degradeBy(0.2)
+)
+.swing(0.08)
+.phaser(0.3)
+.gain(0.7)
+.room(0.2)
+
+$: n("0 7 4 2, 7 9 12 14, 2 4 7 9, 0 2 5 7")
+  .scale("G:dorian")
+  .fast(2)
+  .every(8, rev())
+  .sound("supersaw")
+  .lpf(1400)
+  .distort(0.08)
+  .gain(0.42)
+
+$: s("cp*4?, rd*6")
+  .fast(4)
+  .hpf(4500)
+  .pan(saw.range(0,1))
+  .degradeBy(0.25)
+  .gain(0.22)
+
+$: n("7 5 3 7, 5 3 0 3, 12 10 7 5, 7 5 3 0")
+  .scale("G:dorian")
+  .fast(2)
+  .sound("pulse")
+  .lpf(1000)
+  .leslie(0.4)
+  .sometimes(rev())
+  .gain(0.35)

@@ -1,0 +1,42 @@
+setcps(100/60/4)
+
+$: note("[g3 [gb3 e3]] ~ d3 b2 c3 d3 g2")
+  .slow(2)
+  .sound("sawtooth")
+  .lpf(sine.range(200, 800).slow(8)).lpq(5)
+  .delay(0.5).delaytime(1.5)
+  .gain(0.2)
+
+$: note("<b4 a4> g4 fs4 <d5 cs5 e5> g5")
+  .slow(2)
+  .sound("sine")
+  .fm(perlin.range(0.5, 4).slow(12))
+  .phaser(sine.range(0.2, 5).slow(7))
+  .room(0.3).size(0.9)
+  .gain(0.25)
+
+$: s("<cp ~ [cp cp] cp? >*2")
+  .shape(0.3)
+  .crush(8)
+  .jux(x => x.distort(0.7).speed(2))
+  .gain(0.2)
+
+$: note("[g4 gb4] e4 d4 [b3 c4] d4 g3")
+  .slow(4)
+  .sound("supersaw")
+  .release(2)
+  .lpf(sine.range(500, 2000).slow(16))
+  .off(0.01, x => x.detune(10))
+  .gain(0.1)
+
+$: s("bd sn bd [sn sn?]")
+  .shape(0.4)
+  .crush(7)
+  
+  .gain(0.5)
+
+$: s("hh").euclid(5, 8).fast(2)
+  .hpf(7000).hresonance(4)
+  .delay(0.3).delaytime(0.75)
+  .swing(0.1)
+  .gain(0.1)

@@ -1,0 +1,50 @@
+setcps(148/60/4)
+samples('shabda/speech:groove,pulse,evolve,grok,mutate,change,strudel,livecode')
+
+$: note("[eb1 [ab1 bb1 cs2] db2]*2 [c2 eb2 [g2 bb2] c3 ab3] [d3 f3 [ab3 c4] [eb4 g4 bb4]]").scale("Eb:minor").transpose(perlin.range(-7,19).slow(5))
+  .slow(perlin.range(1.2,4.5))
+  .sound("sawtooth")
+  .lpf(sine.range(150,14000).slow(4))
+  .fmi(perlin.range(4,15).slow(3))
+  .gain(perlin.range(0.6,1.2)).pan(sine.range(0,1).slow(4.5))
+  .distort(perlin.range(0,0.35).slow(7))
+
+$: note("eb2 [ab2 [c3 eb3] g3] [bb3 c4 eb4] [g4 bb4 d5]").transpose(sine.range(-7,16).slow(6.5))
+  .every(4, x=>x.sometimesBy(0.35, rev))
+  .slow(perlin.range(1.3,4))
+  .sound("square")
+  .lpf(perlin.range(200,10000).slow(2.5)).gain(perlin.range(0.5,1.1)).detune(sine.range(-45,60).slow(4.8))
+  .shape(sine.range(0.2,0.6))
+
+$: note("g2 [c3 eb3 [g3 bb3]] [d4 f4 ab4] [c4 eb4 g4 [bb4 d5]]").slow(perlin.range(1.5,4.5))
+  .sound("supersaw")
+  .lpf(saw.range(120,16000).slow(2.8))
+  .detune(sine.range(-55,70).slow(4)).gain(perlin.range(0.6,1.25))
+  .leslie(perlin.range(0.3,0.9).slow(3.5))
+  .tremolo(perlin.range(0.2,0.5).slow(6))
+
+$: stack(
+  s("bd*4, bd ~ bd*2").euclid(11,16).slow(perlin.range(1.4,2.8)).gain(1.2).pan(0.3),
+  s("[sn cp ~ sn]").euclid(13,16).slow(perlin.range(1.6,3.2)).gain(1.05).pan(sine.range(0.2,0.8)),
+  s("hh*16? [oh*4 ~ hh*8 lt*2]").fast(perlin.range(3.5,11)).gain(0.85).hpf(5000).pan(cosine.range(0.1,0.9).slow(3.5))
+).crush(perlin.range(9,15).slow(2.5))
+  .room(0.5)
+  .delay(0.4)
+  .dt(perlin.range(0.25,0.45).slow(3))
+  .swing(perlin.range(0.3,0.55).slow(9))
+  .juxBy(sine.range(-0.3,0.3).slow(4), rev)
+
+$: note("ab1 [c2 eb2 [g2 bb2 c3]] [d3 f3 ab3 [c4 eb4]] [g4 bb4 d5]").every(8, x=>x.transpose(rand.range(-5,12)))
+  .slow(perlin.range(1.4,4.5))
+  .sound("piano")
+  .lpf(perlin.range(100,11000).slow(3.8))
+  .fmi(saw.range(2.5,14).slow(4))
+  .gain(perlin.range(0.6,1.2))
+  .phaser(sine.range(0.2,0.7))
+
+$: s("[strudel*4 livecode*2] [groove*3 pulse evolve] [grok*2 mutate change] [evolve*4 grok ~] [livecode groove*2 strudel ~ pulse]").sometimesBy(0.25, rev).degradeBy(0.12)
+  .speed(perlin.range(0.7,1.7).slow(4.5))
+  .chop(perlin.range(12,28).slow(5))
+  .gain(perlin.range(0.8,1.4))
+  .pan(sine.range(0.1,0.9).slow(3))
+  .vowel("a e i o u".slow(3))

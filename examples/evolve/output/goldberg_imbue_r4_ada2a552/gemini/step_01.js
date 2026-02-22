@@ -1,0 +1,25 @@
+setcps(72/60/4)
+
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
+  .slow(2)
+  .sound("pulse")
+  .lpf(400).lpq(2)
+  .gain(0.3).pan(0.35)
+
+$: note("b4 a4 g4 fs4 d5 e5 fs5 g5")
+  .slow(2)
+  .sound("sine")
+  .gain(0.3).pan(0.65)
+  .delay(0.4).delaytime(0.75)
+
+$: s("cp").slow(4)
+  .striate(16)
+  .hpf(1000)
+  .room(0.6)
+  .gain(0.2)
+
+$: note("g4 gb4 e4 d4 b3 c4 d4 g3")
+  .slow(2)
+  .sound("supersaw")
+  .release(4).gain(0.15)
+  .lpf(sine.range(500, 2000).slow(16)).lpq(3)

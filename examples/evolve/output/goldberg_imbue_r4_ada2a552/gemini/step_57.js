@@ -1,0 +1,50 @@
+setcps(140/60/4)
+samples('shabda/speech:binary,protocol,fragment,memory,corrupt,system,data,stream,glitch,error,reboot,sequence')
+
+$: note("<d4 [d4 f4] a4 c5 g4>").scale("d:minor").fast(2).every(4, palindrome)
+  .sound("supersaw").release(0.15)
+  .crush(8)
+  .lpf(perlin.range(500, 3000).slow(8)).lpq(7)
+  .delay(0.5).dt("1/6").dfb(0.5)
+  .room(0.3)
+  .gain(0.09)
+
+$: note("d5 f5 a5 c6").scale("d:minor").euclid(5,8).slow(2)
+  .sound("square").release(0.1)
+  .penv(300).pdecay(0.04)
+  .distort(0.2)
+  .lpf(1500)
+  .pan(sine.range(0.2, 0.8).slow(8))
+  .gain(0.08)
+
+$: s("<glitch error> <reboot sequence>?").degradeBy(0.1).slow(4)
+  .ringf(sine.range(20, 200).slow(6))
+  .crush(8)
+  .speed(perlin.range(-0.5, 1.5).slow(12))
+  .delay(0.4).dfb(0.8)
+  .gain(0.1)
+
+$: note("<gs3maj7 cs4maj7> <ds3m9 fs3maj7>").chord().slow(8).off(0.125, x => x.octave(1).gain(0.8))
+  .sound("sine").attack(1).release(8)
+  .fm(perlin.range(0.5, 2).slow(16)).fmh(2)
+  .phaser(perlin.range(0.1, 5).slow(12))
+  .room(0.6)
+  .gain(0.1)
+
+$: stack(
+  s("bd").euclid(5,8),
+  s("~ sn").euclid(2,8),
+  s("cb").euclid(3,8).slow(2)
+).compressor("-28:10:4:0.01:0.25")
+  .distort(0.3)
+  .crush(6)
+  .bpf(perlin.range(300, 1500).slow(10)).bpq(7)
+  .gain(0.15)
+
+$: s("[hh*8, <~ oh>]").fast(2)
+  .crush(10)
+  .shape(0.4)
+  .hpf(sine.range(6000, 12000).slow(4)).hpq(4)
+  .delay(0.3).dt("1/16").dfb(0.5)
+  .pan(perlin.slow(6))
+  .gain(0.07)

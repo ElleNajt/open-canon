@@ -1,0 +1,51 @@
+setcps(138/60/4)
+samples('shabda/speech:binary,protocol,fragment,memory,corrupt,system,data,stream,glitch,error,reboot,sequence')
+
+$: note("<d4 [e4 g4.g4]? a4> <c5 g5 a5 ~>").scale("d:dorian").slow(2).every(4, ply(2))
+  .sound("supersaw").release(0.2)
+  .lpf(perlin.range(400, 5000).slow(6)).lpq(8)
+  .shape(0.6)
+  .delay(0.4).dt("1/8").dfb(0.6)
+  .room(0.3)
+  .gain(0.09)
+
+$: note("<g5 [~ d5] a5,c5> <[g5.g5 c5]? [a4 d5]?>").scale("d:aeolian").slow(4).every(4, rev)
+  .sound("square").release(0.1)
+  .penv(800).pdecay(0.1)
+  .lpf(800).lpenv(2000).lpdecay(0.01).lpq(7)
+  .pan(sine.range(0.2, 0.8).slow(2))
+  .delay(0.2).dt("3/8").dfb(0.5)
+  .gain(0.08)
+
+$: s("<[glitch error] [data data]?> <[stream system] [corrupt fragment]>?").every(3, rev).slow(8)
+  .chop(perlin.range(8, 32).slow(12))
+  .speed(perlin.range(-1.5, 1.5).slow(16))
+  .phaser(perlin.range(0.1, 8).slow(14))
+  .delay(0.5).dt("3/16").dfb(0.8)
+  .gain(0.11)
+
+$: note("<f3m11 d3sus4> <eb4maj9 a3m9>").chord().slow(8).release(8).off(0.25, x => x.octave(1).gain(0.9))
+  .sound("piano")
+  .lpf(saw.range(400, 3500).slow(8)).lpq(4)
+  .tremolo(perlin.range(0, 0.4).slow(12))
+  .delay(0.4).dt("3/8").dfb(0.65)
+  .room(0.6)
+  .gain(0.1)
+
+$: stack(
+  s("bd").euclid(5, 8),
+  s("~ sn cp").euclid(3, 8).slow(2),
+  s("rim").euclid(7,16).slow(2)
+).every(4, rev)
+  .compressor("-28:10:4:0.01:0.25")
+  .distort(0.3).crush(8)
+  .lpf(perlin.range(800, 6000).slow(6)).lpq(5)
+  .room(0.3)
+  .gain(0.18)
+
+$: s("<[hh*4, oh/2] [hh*3, mt*2]?> <cr cp>?").degradeBy(0.1)
+  .shape(0.5).phaser(4)
+  .hpf(saw.range(7000, 15000).slow(6)).hpq(8)
+  .delay(0.5).dt("3/16").dfb(0.6)
+  .pan(perlin.slow(6))
+  .gain(0.07)

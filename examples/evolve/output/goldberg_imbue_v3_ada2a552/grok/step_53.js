@@ -1,0 +1,52 @@
+setcps(162/60/4)
+samples('shabda/speech:groove,pulse,evolve,grok,mutate,change,strudel,livecode')
+
+$: note("[eb1 ab1 bb1 cs2]*2 [c2 eb2 g2 bb2 c3 eb3] [ab2 d3 f3 ab3 c4 eb4 g4]").transpose(perlin.range(-7,15).slow(12))
+  .slow(perlin.range(1.5,6.5))
+  .sound("sine")
+  .lpf(sine.range(80,12000).slow(4))
+  .fmi(perlin.range(1,10).slow(3))
+  .gain(perlin.range(0.5,1.3))
+  .coarse(perlin.range(4,12).slow(5))
+
+$: note("eb2 ab2 [c3 eb3 g3] [bb3 c4 eb4 g4 bb4]").transpose(sine.range(-5,10).slow(10))
+  .sometimesBy(0.25, x=>x.rev())
+  .slow(perlin.range(1.5,4))
+  .sound("square")
+  .lpf(perlin.range(200,9000).slow(2.5))
+  .detune(sine.range(-20,40).slow(8))
+  .ring(perlin.range(0.3,0.6).slow(3))
+  .phaser(perlin.range(0.2,0.6).slow(4))
+
+$: note("g2 c3 [eb3 g3 bb3] [c4 eb4 g4 bb4 d5]").slow(perlin.range(1,6.5))
+  .sound("supersaw")
+  .lpf(saw.range(150,20000).slow(5))
+  .detune(sine.range(-50,50).slow(4))
+  .triode(perlin.range(0.1,0.5).slow(6))
+  .gain(perlin.range(0.4,1.2))
+
+$: stack(
+  s("bd*4 [bd ~ bd]").euclid(5,16).slow(perlin.range(1.2,4)).gain(1.3).pan(0.3),
+  s("[sn cp ~ sn]").euclid(7,16).slow(perlin.range(1.3,5)).gain(0.85).pan(sine.range(0.3,0.9)),
+  s("hh*8? [~ oh*4 hh*4]").fast(perlin.range(4,14)).gain(0.75).hpf(5000).pan(cosine.range(0.1,0.9).slow(6)).crush(perlin.range(6,12).slow(10))
+).room(0.6)
+.delay(0.35)
+.delaytime(0.25)
+.swing(perlin.range(0.15,0.6).slow(12))
+.juxBy(sine.range(-0.4,0.1).slow(4), rev)
+.compressor("-18:4:0.3:0.02:0.2")
+
+$: note("ab1 c2 [eb2 g2 bb2] [d3 f3 ab3 c4 eb4 g4]").every(12, x=>x.transpose(rand.range(-4,12)))
+  .slow(perlin.range(1.2,5.5))
+  .sound("triangle")
+  .fmi(saw.range(1,9).slow(4))
+  .lpf(perlin.range(100,12000).slow(4))
+  .detune(sine.range(-20,45).slow(7))
+  .tremolo(perlin.range(0.2,0.5).slow(5))
+
+$: s("[strudel*2 grok*4?] [livecode*2 groove pulse] [evolve*2 mutate change grok] ~ [pulse evolve*3 grok]").sometimesBy(0.3, rev)
+  .gain(perlin.range(0.7,1.4))
+  .speed(perlin.range(0.5,1.8).slow(8))
+  .chop(perlin.range(8,20).slow(6))
+  .hpf(perlin.range(150,800))
+  .vowel("a e i o u".slow(3))

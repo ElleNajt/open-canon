@@ -1,0 +1,52 @@
+setcps(150/60/4)
+samples('shabda/speech:groove,pulse,evolve,grok,mutate,change,strudel,livecode')
+
+$: note("[eb1 ab1 bb1 cs2]*2 [c2 eb2 g2 bb2 c3 eb3] [ab2 d3 f3 ab3 c4 eb4 g4]").scale("Eb:minor").transpose(perlin.range(-5,12).slow(8))
+  .slow(perlin.range(1.8,5.8))
+  .sound("pulse")
+  .lpf(sine.range(100,14000).slow(3))
+  .fmi(perlin.range(2,12).slow(4))
+  .gain(perlin.range(0.6,1.2))
+  .delay(0.2)
+
+$: note("eb2 ab2 [c3 eb3 g3] [bb3 c4 eb4 g4 bb4]").transpose(sine.range(-7,12).slow(12))
+  .sometimesBy(0.3, x=>x.rev())
+  .slow(perlin.range(1.2,3.8))
+  .sound("square")
+  .lpf(perlin.range(250,10000).slow(3))
+  .detune(sine.range(-30,50).slow(6))
+  .ring(perlin.range(0.4,0.7).slow(4))
+  .phaser(perlin.range(0.3,0.7).slow(3))
+
+$: note("g2 c3 [eb3 g3 bb3] [c4 eb4 g4 bb4 d5]").slow(perlin.range(1.2,5.8))
+  .sound("supersaw")
+  .lpf(saw.range(200,18000).slow(4))
+  .detune(sine.range(-60,60).slow(5))
+  .triode(perlin.range(0.2,0.6).slow(5))
+  .gain(perlin.range(0.5,1.1)).room(0.3)
+
+$: stack(
+  s("bd*4 [~ bd bd]").euclid(6,16).slow(perlin.range(1.1,3.5)).gain(1.2).pan(0.2),
+  s("[sn ~ cp]").euclid(8,16).slow(perlin.range(1.4,4.5)).gain(0.9).pan(sine.range(0.2,0.8)),
+  s("hh*16? [oh ~ hh*8]").fast(perlin.range(3,12)).gain(0.8).hpf(4500).pan(cosine.range(0.2,0.8).slow(5)).crush(perlin.range(5,11).slow(8))
+).room(0.5)
+.delay(0.4)
+.delaytime(0.3)
+.swing(perlin.range(0.2,0.5).slow(10))
+.juxBy(sine.range(-0.3,0.2).slow(3), rev)
+.compressor("-20:5:0.4:0.03:0.25")
+
+$: note("ab1 c2 [eb2 g2 bb2] [d3 f3 ab3 c4 eb4 g4]").every(10, x=>x.transpose(rand.range(-5,10)))
+  .slow(perlin.range(1.5,4.8))
+  .sound("triangle")
+  .fmi(saw.range(1.5,10).slow(3))
+  .lpf(perlin.range(150,11000).slow(5))
+  .detune(sine.range(-25,40).slow(8))
+  .tremolo(perlin.range(0.3,0.6).slow(4))
+
+$: s("grok*2 [strudel*3 livecode?] [groove pulse evolve] [mutate*2 change ~ grok] [pulse*4? evolve]").sometimesBy(0.25, rev).degradeBy(0.15)
+  .gain(perlin.range(0.8,1.3))
+  .speed(perlin.range(0.6,1.7).slow(6))
+  .chop(perlin.range(10,24).slow(5))
+  .hpf(perlin.range(200,900))
+  .stretch(perlin.range(0.8,1.4).slow(7))

@@ -1,0 +1,57 @@
+setcps(128/60/4)
+samples('shabda/speech:goldberg,cosmic,whisper,glitch,groove,evolve')
+
+$: note("[c4 eb4 f4 a4]*2 [fs4 bb4 c5 eb5 fs5] [f5 c6 eb6 g6 bb6 ~]")
+  .slow(4)
+  .sound("sawtooth")
+  .lpf(sine.range(250,4800).slow(2.9))
+  .detune(perlin.range(-22,32).slow(4.1))
+  .room(0.4)
+  .gain(0.5)
+
+$: note("ab1 [c2 eb2 g2]*2 [fs1 b1 c2 eb3 fs3] [ab2 c3 eb3 g3 ~]")
+  .slow(4)
+  .sound("supersaw")
+  .fm(saw.range(0.4,3.8).slow(2.1))
+  .leslie(cosine.range(0.4,0.9).slow(3.4))
+  .delay(0.25)
+  .room(0.28)
+  .gain(0.45)
+
+$: note("eb5 [g5 bb5 db6]*2 [eb6 g6 bb6 db7] , db6 [eb7 g7 bb7 db8] [eb8 g8 bb8 db9]")
+  .slow(1.9)
+  .sound("pulse")
+  .detune(rand.range(-45,62).slow(3.2))
+  .phaser(0.32)
+  .lpq(1.8)
+  .every(6,rev)
+  .gain(0.55)
+
+$: stack(
+  s("bd ~ [bd bd]").euclid(12,16),
+  s("~ sn [cp ~ sn]").euclid(10,16).fast(1.6),
+  s("[hh*5 ~ oh*4 ~]").sometimes(rev).degradeBy(0.28)
+)
+  .slow(2.3)
+  .swing(0.72)
+  .crush(0.32)
+  
+  .room(0.22)
+  .gain(0.65)
+
+$: s("~ [hh*18 oh cp] , [cp*7 hh*8 oh*4 cp*3]")
+  .fast(4.1)
+  .jux(rev)
+  .delay(0.42)
+  .hpf(sine.range(650,5200).slow(3.1))
+  .tremolo(0.4)
+  .gain(0.42)
+
+$: s("[goldberg cosmic*2] [whisper glitch groove*3] , [evolve*5 goldberg*2 cosmic] [whisper*2 glitch groove evolve goldberg cosmic]")
+  .slow(2.8)
+  .speed(rand.range(0.52,1.82).slow(3.7))
+  .chop(cosine.range(10,30))
+  .pan(rand.range(0.15,0.9))
+  .tremolo(0.48)
+  .distort(0.22)
+  .gain(0.52)
