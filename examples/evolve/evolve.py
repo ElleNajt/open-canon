@@ -83,6 +83,14 @@ MODELS = {
         "provider": "openrouter",
         "model": "google/gemini-2.5-flash",
     },
+    "kimi": {
+        "provider": "openrouter",
+        "model": "moonshotai/kimi-k2.5-0127",
+    },
+    "qwen": {
+        "provider": "openrouter",
+        "model": "qwen/qwen3.5-plus-02-15",
+    },
 }
 
 
@@ -282,6 +290,139 @@ async def evolve_model(
     print(f"[{name}] Complete! Steps saved to {model_dir}/")
 
 
+async def evolve_alternating(
+    models: dict,
+    output_dir: str,
+    seed: str,
+    steps: int,
+    resume: bool,
+    iteration_prompt: str = DEFAULT_ITERATION_PROMPT,
+    pin_original: bool = False,
+    milestone_interval: int = 0,
+    recent_count: int = 0,
+):
+    """Evolve by alternating between models each step."""
+    model_names = list(models.keys())
+    dir_name = "_".join(model_names) + "_alternate"
+    model_dir = os.path.join(output_dir, dir_name)
+    os.makedirs(model_dir, exist_ok=True)
+
+    if resume:
+        start_step, code = find_latest_step(model_dir, seed)
+    else:
+        start_step, code = 0, seed
+
+    if start_step == 0:
+        with open(os.path.join(model_dir, "step_00.js"), "w") as f:
+            f.write(code)
+
+    if start_step >= steps:
+        print(f"[alternate] Already at step {start_step}, nothing to do")
+        return
+
+    if start_step > 0:
+        print(f"[alternate] Resuming from step {start_step}")
+
+    # Load history if resuming
+    milestones = {}
+    recent = []
+    if start_step > 0:
+        for f in sorted(os.listdir(model_dir)):
+            if f.startswith("step_") and f.endswith(".js"):
+                n = int(f.replace("step_", "").replace(".js", ""))
+                if n > 0 and n <= start_step:
+                    with open(os.path.join(model_dir, f)) as fh:
+                        step_code = fh.read()
+                    if milestone_interval > 0 and n % milestone_interval == 0:
+                        milestones[n] = step_code
+                    if recent_count > 0:
+                        recent.append((n, step_code))
+                        recent = recent[-recent_count:]
+
+    for step in range(start_step + 1, steps + 1):
+        # Cycle through models
+        model_name = model_names[(step - 1) % len(model_names)]
+        config = models[model_name]
+
+        parts = []
+        if pin_original:
+            parts.append(f"Original theme:\n{seed}")
+        if milestones:
+            parts.append("Previous variations:")
+            for ms_step in sorted(milestones):
+                parts.append(f"--- Step {ms_step} ---\n{milestones[ms_step]}")
+        if recent:
+            parts.append("Recent steps:")
+            for rs_step, rs_code in recent:
+                parts.append(f"--- Step {rs_step} ---\n{rs_code}")
+        parts.append(f"Current code:\n{code}")
+        parts.append(f"Request: {iteration_prompt}")
+        user_msg = "\n\n".join(parts)
+
+        print(f"[alternate/{model_name}] Step {step}/{steps}...", flush=True)
+        t0 = time.time()
+
+        new_code = await call_model(config, SYSTEM_PROMPT, user_msg)
+
+        # Reject if output collapsed
+        if len(new_code) < len(code) * 0.2:
+            print(
+                f"[alternate/{model_name}] Step {step} collapsed ({len(new_code)} chars vs {len(code)}), keeping previous code",
+                flush=True,
+            )
+            with open(os.path.join(model_dir, f"step_{step:02d}.js"), "w") as f:
+                f.write(code)
+            with open(os.path.join(model_dir, f"step_{step:02d}.model"), "w") as f:
+                f.write(model_name)
+            continue
+
+        # Validate syntax and retry
+        error = validate_syntax(new_code)
+        if error:
+            for attempt in range(MAX_FIX_ATTEMPTS):
+                print(
+                    f"[alternate/{model_name}] Step {step} syntax error: {error} (retry {attempt + 1}/{MAX_FIX_ATTEMPTS})",
+                    flush=True,
+                )
+                new_code = await call_model(config, SYSTEM_PROMPT, user_msg)
+                if len(new_code) < len(code) * 0.2:
+                    continue
+                error = validate_syntax(new_code)
+                if not error:
+                    break
+
+        if error:
+            print(
+                f"[alternate/{model_name}] Step {step} STILL failing after {MAX_FIX_ATTEMPTS} retries, keeping previous code",
+                flush=True,
+            )
+            with open(os.path.join(model_dir, f"step_{step:02d}.js"), "w") as f:
+                f.write(code)
+            with open(os.path.join(model_dir, f"step_{step:02d}.model"), "w") as f:
+                f.write(model_name)
+            continue
+
+        code = new_code
+        elapsed = time.time() - t0
+        print(
+            f"[alternate/{model_name}] Step {step} done ({elapsed:.1f}s, {len(code)} chars)",
+            flush=True,
+        )
+
+        with open(os.path.join(model_dir, f"step_{step:02d}.js"), "w") as f:
+            f.write(code)
+        with open(os.path.join(model_dir, f"step_{step:02d}.model"), "w") as f:
+            f.write(model_name)
+
+        if milestone_interval > 0 and step % milestone_interval == 0:
+            milestones[step] = code
+        if recent_count > 0:
+            recent.append((step, code))
+            recent = recent[-recent_count:]
+
+    print(f"[alternate] Complete! Steps saved to {model_dir}/")
+
+
 def load_seed(seed_arg: str | None) -> str:
     if seed_arg is None:
         return DEFAULT_SEED
@@ -335,6 +476,11 @@ async def main():
         metavar="M",
         help="Include the last M steps in the prompt as recent history (e.g. --recent 3)",
     )
+    parser.add_argument(
+        "--alternate",
+        action="store_true",
+        help="Alternate between models each step instead of evolving independently",
+    )
     args = parser.parse_args()
 
     if args.dir:
@@ -352,9 +498,11 @@ async def main():
         steps = args.steps if args.steps != 100 else saved.get("steps", 100)
         experiment_name = os.path.basename(output_dir)
         args.resume = True
+        if not args.alternate:
+            args.alternate = saved.get("alternate", False)
         if args.models:
-            selected = {m.strip() for m in args.models.split(",")}
-            models = {k: v for k, v in MODELS.items() if k in selected}
+            selected = [m.strip() for m in args.models.split(",")]
+            models = {k: MODELS[k] for k in selected if k in MODELS}
         else:
             models = {k: MODELS[k] for k in saved.get("models", {}) if k in MODELS}
     else:
@@ -367,8 +515,8 @@ async def main():
         os.makedirs(output_dir, exist_ok=True)
 
         if args.models:
-            selected = {m.strip() for m in args.models.split(",")}
-            models = {k: v for k, v in MODELS.items() if k in selected}
+            selected = [m.strip() for m in args.models.split(",")]
+            models = {k: MODELS[k] for k in selected if k in MODELS}
         else:
             models = MODELS
 
@@ -382,6 +530,7 @@ async def main():
             "steps": steps,
             "models": {k: v["model"] for k, v in models.items()},
             "system_prompt": SYSTEM_PROMPT,
+            "alternate": args.alternate,
         }
         if not os.path.exists(config_path):
             with open(config_path, "w") as f:
@@ -391,15 +540,15 @@ async def main():
     print(f"Experiment: {experiment_name}")
     print(f"Prompt: {iteration_prompt}")
     print(f"Steps: {steps}")
+    print(f"Mode: {'alternate' if args.alternate else 'independent'}")
     print(f"Models: {', '.join(models.keys())}")
     print(f"Seed: {seed[:80]}{'...' if len(seed) > 80 else ''}")
     print(f"Output: {output_dir}")
     print()
 
-    tasks = [
-        evolve_model(
-            name,
-            cfg,
+    if args.alternate:
+        await evolve_alternating(
+            models,
             output_dir,
             seed,
             steps,
@@ -409,13 +558,27 @@ async def main():
             milestone_interval=args.milestones,
             recent_count=args.recent,
         )
-        for name, cfg in models.items()
-    ]
-    results = await asyncio.gather(*tasks, return_exceptions=True)
+    else:
+        tasks = [
+            evolve_model(
+                name,
+                cfg,
+                output_dir,
+                seed,
+                steps,
+                args.resume,
+                iteration_prompt=iteration_prompt,
+                pin_original=args.pin_original,
+                milestone_interval=args.milestones,
+                recent_count=args.recent,
+            )
+            for name, cfg in models.items()
+        ]
+        results = await asyncio.gather(*tasks, return_exceptions=True)
 
-    for (name, _), result in zip(models.items(), results):
-        if isinstance(result, Exception):
-            print(f"[{name}] FAILED: {result}")
+        for (name, _), result in zip(models.items(), results):
+            if isinstance(result, Exception):
+                print(f"[{name}] FAILED: {result}")
 
     print(f"\nDone! Results in {output_dir}")
 
