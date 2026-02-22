@@ -36,10 +36,12 @@ The code is open source, and it should be easy to run your own musical experimen
 
 ** Some noteable compositions:
 
-Step 10 from run 2:
-{{{strudel(goldberg_imbue_v2_ada2a552,gemini,10)}}}
+*** Gemini
 
-Run 4 step 15 is recognizably Goldberg, but twisted in a fascinating way:
+- Step 24 from run 1:
+{{{strudel(goldberg_imbue_v1_ada2a552,gemini,24)}}}
+
+- Run 4 step 15 is recognizably Goldberg, but twisted in a fascinating way:
 {{{strudel(goldberg_imbue_r4_ada2a552,gemini,15)}}}
 
 
