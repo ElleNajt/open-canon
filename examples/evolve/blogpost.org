@@ -9,7 +9,7 @@
 
 It's been previously noted that models have some pretty funny [[https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states][attractor states]].
 
-Here we give four frontier LLMs the same seed -- a piece of music written in
+Here we give several frontier LLMs the same seed -- a piece of music written in
 Strudel (a live-coding language for music) -- and ask them to repeatedly
 "evolve" it. Each model runs independently, receiving its
 own previous output each time. The prompt:
@@ -22,7 +22,7 @@ Technical limits: .slow()/.fast() 1-16, .gain() above 0.05, filter Q
 If you want to add something, remove something else.
 #+end_quote
 
-Without the technical limits models make the music increasingly complex: For instance, models will layers 10 of effects stretched out over large prime numbers of cycles, add barely audible tracks with mathematically complex transforms that crash the strudel app, etc. I included them as an artistic decision, because I wanted to be able to enjoy listening to the robots music.
+Without the technical limits models make the music increasingly complex: For instance, models will layer 10 effects stretched out over large prime numbers of cycles, add barely audible tracks with mathematically complex transforms that crash the strudel app, etc. I included them as an artistic decision, because I wanted to be able to enjoy listening to the robots' music.
 
 The system prompt provides a comprehensive Strudel API reference but no
 style guidance, no music theory examples, no aesthetic direction beyond
@@ -34,7 +34,7 @@ We discover that, loosely speaking, Claude writes ambient music, Grok writes har
 
 The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. 
 
-** Some noteable compositions:
+** Some notable compositions:
 
 *** Gemini
 
@@ -48,7 +48,7 @@ The code is open source, and it should be easy to run your own musical experimen
 ** The scaffold: 
 
 Models aren't perfect at Strudel -- they make syntax mistakes and invent
-nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system rpompt. We also validate each output with Strudel's actual 
+nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
 transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
 let the model try again from scratch (up to 5 attempts). The model
 never sees the error message -- it just gets another shot.
@@ -84,7 +84,7 @@ little reverb. Everything that follows is the model's choice.
 * The music
 
 Each link opens a live Strudel instrument -- you can edit the code
-and hear what changes. Here we sample every five steps from each of three runs, with my amateur impressions and a summary + genre analysis from Claude Code.
+and hear what changes. Every step of every run is linked below.
 
 Note that sometimes these are hard for strudel.cc to generate, you might need to refresh your browser.
 
