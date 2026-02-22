@@ -140,6 +140,14 @@ def main():
             flags=re.MULTILINE,
         )
 
+        # Put export blocks on their own line when inline in list items
+        iframe_text = re.sub(
+            r"^(- .+): (#\+begin_export html)",
+            r"\1:\n\2",
+            iframe_text,
+            flags=re.MULTILINE,
+        )
+
         # Insert CSS/JS preamble after the last #+OPTIONS line
         insert_pos = 0
         for m in re.finditer(r"^#\+\w+:.*$", iframe_text, re.MULTILINE):
