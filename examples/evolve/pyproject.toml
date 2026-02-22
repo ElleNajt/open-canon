@@ -1,0 +1,13 @@
+[project]
+name = "evolve"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "anthropic",
+    "httpx",
+    "python-dotenv",
+    "ipython",
+    "pandas",
+    "jinja2",
+    "dataframe-image",
+]
