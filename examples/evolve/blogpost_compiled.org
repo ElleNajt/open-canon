@@ -24,7 +24,7 @@ Technical limits: .slow()/.fast() 1-16, .gain() above 0.05, filter Q
 If you want to add something, remove something else.
 #+end_quote
 
-Without the technical limits models make the music increasingly complex: For instance, models will layer 10 effects stretched out over large prime numbers of cycles, add barely audible tracks with mathematically complex transforms that crash the strudel app, etc. I included them as an artistic decision, because I wanted to be able to enjoy listening to the robots' music.
+Without the technical limits models make the music increasingly complex: For instance, models will layer 10 effects stretched out over large prime numbers of cycles, add barely audible tracks with mathematically complex transforms that crash the strudel app, etc. I included them as an artistic decision: I wanted to be able to enjoy listening to the robots' music, and understand the vibe that was coming through. 
 
 The system prompt provides a comprehensive Strudel API reference but no
 style guidance, no music theory examples, no aesthetic direction beyond
@@ -32,13 +32,15 @@ style guidance, no music theory examples, no aesthetic direction beyond
 instincts produce when given the same 8 notes and total creative
 freedom.
 
-We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complex architectural pieces.
+We discover that, loosely speaking, Claude Opus 4.5 mostly writes ambient music and sometimes gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling experimental music.
+
+All frontier models except Claude use speech sampling and synthesis in interesting ways, with GPT 5.2s deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
-The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]].
+** Value proposition
 
-The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. This should work out of the box on mac or linux. 
+While this was for fun, I'd argue that there's value in understanding model personalities through different aesthetics, since I expect that model vibes are correlated across mediums. 
 
 ** The scaffold
 
@@ -47,6 +49,35 @@ nonexistent functions. To counteract this, we provide a list of strudel function
 transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
 let the model try again from scratch (up to 5 attempts). The model
 never sees the error message -- it just gets another shot.
+
+The code is open source: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. It's probably more fun to play with it yourself than to listen to the selections here. Here are options for doing so:
+
+*** Evolve
+
+Run your own evolution experiment:
+
+#+begin_src bash
+python examples/evolve/evolve.py \
+  --seed your_seed.js \
+  --steps 30 \
+  --prompt "Your prompt here"
+#+end_src
+
+Modes to play with:
+- =--pin-original= -- include the original seed in every prompt, so
+  the model always knows what it's writing variations /of/
+- =--milestones N= -- include every Nth step as history, giving the
+  model a sense of its own trajectory
+- =--models claude,gpt= -- pick which models to run
+- =--resume= -- continue an interrupted experiment
+
+The repo has instructions on how to generate seeds from midi files.
+
+*** Live-coding with LLMs
+
+Run =./start= and open the browser. Edit =live.js= in your editor or edit with your local coding agent --
+changes play instantly. Or use the in-browser chat panel to talk to an
+LLM and have it write music for you in real time.
 
 ** Models
 
@@ -182,37 +213,6 @@ Smaller models make consistently less interesting music.
 - GPT-4o (=openai/gpt-4o=): [[https://strudel.cc/#JDogbm90ZSgiZzMgZWIzIGUzIGQzIGIyIGMzIGViMyBnMiIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC44NSkKICAuaHBmKDE4MCkKICAudm93ZWwoImUgbyIpCiAgLnNsaWRlKDIpCgokOiBub3RlKCJhNCBiMyBkNCBmNCIpCiAgLnNvdW5kKCJwaWFubyIpCiAgLnNsb3coNCkKICAuZ2FpbigwLjUpCiAgLnBhbigwLjMpCiAgLmxwZihzaW5lLnJhbmdlKDIwMCwgNjAwKS5zbG93KDgpKQoKJDogbm90ZSgiZTQgZzQgYjQgY3M1IGY1IikKICAuc291bmQoInN1cGVyc2F3IikKICAKICAudHJlbW9sbygwLjYpCiAgLmdhaW4oMC43KQogIC5mbWVudigwLjUpCgokOiBzKCJiZCo4IikKICAuZ2FpbigwLjYpCiAgLmhwZigyNTApCiAgLnRyZW1vbG8oMC40KQogIC5kZWxheSgwLjIpCgokOiBub3RlKCJmMyBhMyBjNCBnNCIpCiAgLnNvdW5kKCJwdWxzZSIpCiAgLmJwZig0NTApCiAgLmxwYXR0YWNrKDAuMSkKICAKICAucmVsZWFzZSgwLjUpCgokOiBub3RlKCJkNCBmczQgYTQgYzUiKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC42KQogIC5wYW4oMC43KQogIC5yb29tKDAuMykKICAuYXR0YWNrKDAuMik%3D][Play on strudel.cc]]
 - GPT-4.1 (=openai/gpt-4.1=): [[https://strudel.cc/#c2V0Y3BzKDkzLzYwLzQpCgokOiBzdGFjaygKICBub3RlKCJnMyBnYjMgZTMgPGQzIGIyPiBjMyBkMyBnMiIpLnNsb3coMykKICAgIC5zb3VuZCgidHJpYW5nbGUiKQogICAgLmdhaW4oMC40MSkKICAgIC5scGYoc2luZS5yYW5nZSgxNTUwLCAzMDgwKS5zbG93KDUpKQogICAgLmxwcSg3LjQpCiAgICAuZXZlcnkoNiwgeCA9PiB4LnJldigpKQogICAgLnNvbWV0aW1lcyh4ID0%2BIHguaHBmKDQyMCkpLAogIHMoImJkKjMgPGJkIGJkfj4iKQogICAgLmdhaW4oMC4xNykKICAgIC5yb29tKDAuMjEpCiAgICAuY3V0b2ZmKDY1MCkKKQoKJDogcygiaGggY3AgPGNwIFtjcH5dPiBoaCIpLnNsb3coMikKICAuZ2FpbigwLjEzKQogIC5wYW4ocGVybGluLnJhbmdlKDAuMTIsMC43NSkuc2xvdyg1KSkKICAuY3V0b2ZmKDI4NjApCiAgLmV2ZXJ5KDQsIHggPT4geC5yZXYoKSkKICAuaHBmKHNpbmUucmFuZ2UoMzkwLCA2MzApLnNsb3coOSkpCgokOiBzdGFjaygKICBub3RlKCI8YzQgZTQgZzQgZWI0IGQ0IGY0IGViND4iKS5zbG93KDUpCiAgICAuc291bmQoInN1cGVyc2F3IikKICAgIC5nYWluKDAuMjEpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4xNSwwLjk4KS5zbG93KDMpKQogICAgLmN1dG9mZigyOTUwKQogICAgLnRyZW1vbG8oMC4yMyksCiAgbm90ZSgiYTMgPGQ0fiBmND4gZzMiKS5zbG93KDgpCiAgICAuc291bmQoInN1cGVyc2F3IikKICAgIC5nYWluKDAuMTEpCiAgICAubHBmKDExOTApCiAgICAudHJlbW9sbygwLjMxKQopCgokOiBub3RlKCJnNCBkNCBbZjR%2BXSA8ZTQgYTQ%2BIikuc2xvdyg0KQogIC5zb3VuZCgicGlhbm8iKQogIC5nYWluKDAuMTkpCiAgLnJlbGVhc2UoMSkKICAucm9vbSgwLjQ2KQogIC5ldmVyeSg2LCB4ID0%2BIHgucGFuKHJhbmQucmFuZ2UoMC4xMiwwLjkzKSkpCiAgLmV2ZXJ5KDMsIHggPT4geC5yZXYoKSkKCiQ6IHN0YWNrKAogIHMoIjxjcioyIH4gW2h0IGx0XT4qMiA8Y2IgW2Nifl0%2BIikuc2xvdygzKQogICAgLmdhaW4oMC4xNCkKICAgIC5jdXRvZmYocGVybGluLnJhbmdlKDE0NTAsNDIwMCkuc2xvdygxMSkpCiAgICAuZWNobygwLjE4LDAuMTUyLDAuMjIpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4xOCwwLjkyKS5zbG93KDgpKSwKICBzKCJyaW0gPHJpbX4%2BIFtyaW1dfiIpLnNsb3coNSkKICAgIC5nYWluKDAuMTEpCiAgICAuY3V0b2ZmKDEzOTApCikKCiQ6IHMoInNpbmUgdHJpYW5nbGUiKS5zbG93KDEyKQogIC5nYWluKDAuMTMpCiAgLmN1dG9mZihzaW5lLnJhbmdlKDExMDAsNjgwMCkuc2xvdyg3KSkKICAudHJlbW9sbyhzaW5lLnJhbmdlKDAuMTgsMC4zNikuc2xvdyg5KSkKICAucGFuKHBlcmxpbi5yYW5nZSgwLjE5LDAuODEpLnNsb3coMTQpKQogIC5kZWdyYWRlQnkoMC4xMyk%3D][Play on strudel.cc]], [[https://strudel.cc/#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KSAtIEV2b2x2ZWQgUGVyc29uYWxpdHkKCnNldGNwcyg5MS82MC80KQoKJDogc3RhY2soCiAgbm90ZSgiZzMgZ2IzIGUzIGQzIGIyIGMzIGQzIGcyIikuc2xvdygyKQogICAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgICAuZ2FpbigwLjM4KQogICAgLmxwZihzaW5lLnJhbmdlKDgxMCwxMzcwKS5zbG93KDkpKQogICAgLmxwcSg3LjEpCiAgICAucGFuKHBlcmxpbi5yYW5nZSgwLjI0LCAwLjcyKS5zbG93KDEwKSkKICAgIC5ldmVyeSg0LCB4ID0%2BIHgucmV2KCkpLAoKICBub3RlKCJnNCBnYjQgZTQgZDQgYjMgYzQgZDQgZzMiKS5zbG93KDQpCiAgICAuc291bmQoInBpYW5vIikKICAgIC5nYWluKDAuMTQpCiAgICAuaHBmKDU3MCkKICAgIC5ldmVyeSgyLCB4ID0%2BIHguanV4KHkgPT4geS5yZXYoKSkpCiAgICAuZGVsYXkoMC4xNSkKKQoKJDogc3RhY2soCiAgcygiaGgqMiBbb2ggY3BdIGhoKjIgW29oIH5dIFtjcCB%2BXSIpLnNsb3coNCkKICAgIC5nYWluKDAuMTMpCiAgICAuY3J1c2goNCkKICAgIC5kZWxheShyYW5kLnJhbmdlKDAuMTMsMC4xNykuc2xvdyg2KSksCgogIHMoImNiIGx0IGh0Iikuc2xvdyg3KQogICAgLmdhaW4oMC4wOSkKICAgIC5wYW4oc2luZS5yYW5nZSgwLjIyLDAuOTEpLnNsb3coNikpCiAgICAuZWNobygyLCAwLjEzLCAwLjIyKQopCgokOiBub3RlKCI8ZzUgZTUgZDUgYjQ%2BIDxnNCBnYjQgZTQgZDQ%2BIikuc2xvdyg2KQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5nYWluKDAuMTcpCiAgLmV2ZXJ5KDIsIHggPT4geC5qdXgoeSA9PiB5LnJldigpKSkKICAucGFuKHNpbmUucmFuZ2UoMC4xMywgMC45MSkuc2xvdygxMSkpCiAgLmxwZigxODQwKQogIC5yb29tKDAuMjEpCgokOiBub3RlKCJlYjMgfiBhYjMgfiBmMyB%2BIGJiMiB%2BIikuc2xvdygxMykKICAuc291bmQoInNpbmUiKQogIC5nYWluKDAuMTMpCiAgLmxwZihjb3NpbmUucmFuZ2UoOTUwLDExNzApLnNsb3coMTMpKQogIC5scHEoNy41KQogIC5wYW4oc2luZS5yYW5nZSgwLjExLDAuNzQpLnNsb3coOCkpCgokOiBzdGFjaygKICBzKCJzdXBlcnNhdyBwdWxzZSB0cmlhbmdsZSBzYXd0b290aCIpLnNsb3coOSkKICAgIC5nYWluKDAuMTUpCiAgICAubHBmKHJhbmQucmFuZ2UoMTI3MCwxNDkwKS5zbG93KDYpKQogICAgLnJlc29uYW5jZShyYW5kLnJhbmdlKDYuNSwgOC43KS5zbG93KDcpKQogICAgLnBhbihwZXJsaW4ucmFuZ2UoMC4xOCwgMC45NCkuc2xvdyg4KSksCiAgcygiW3JkIGNyXSIpLnNsb3coNikKICAgIC5nYWluKDAuMDkpCiAgICAuZGVsYXkoMC4xMykKICAgIC5yb29tKDAuMjIpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4yMiwgMC43MSkuc2xvdyg3KSkKKQ%3D%3D][Play on strudel.cc]]
 - Gemini 2.5 Flash (=google/gemini-2.5-flash=): [[https://strudel.cc/#c2V0Y3BzKDgwLzYwLzQpCgokOiBzdGFjaygKICAgIG5vdGUoImczIGNzMyBlMyBkMyBiMiBjMyBkMyBnMiIpLmdhaW4oMC43KS5zb3VuZCgic2luZSIpLmRlbGF5KDAuNikuZHQoMC42KS5kZmIoMC44KSwKICAgIG5vdGUoImcyIGNzMiBlMiBkMiBiMSBjMiBkMiBnMSIpLmdhaW4oMC41KS5zb3VuZCgic3VwZXJzYXciKS5jcnVzaCgxMikuZHJpdmUoMC44KQogICkKICAuc2xvdyg1KQogIC5scGYoc2luZS5yYW5nZSgxMDAsIDQwMDApLnNsb3coMTIpKS5scHEoNSkKICAudm93ZWwoImEgaSB1Iikucm9vbSgwLjkpLnBoYXNlcigwLjMpLnBoYXNlcmRlcHRoKDE1KQoKJDogcygiYmQqMiBzbjoyIGNwKjAuNzUiKS5nYWluKDAuOSkKICAuY3J1c2goNikKICAuZGVsYXkoMC43KS5kdCgwLjMpLmRmYigwLjg1KQogIC5scGYoc3F1YXJlLnJhbmdlKDE1MCwgMjAwMCkuc2xvdygxMikpCiAgLnJvb20oMC43KS5kcml2ZSgwLjYpCgokOiBub3RlKCJjczQgZnM0IGc0Iikuc291bmQoInNhd3Rvb3RoIikuZ2FpbigwLjYpCiAgLm9jdGF2ZSg0KS5jaG9wKDgpLnNwZWVkKDEuNSkuYWNjZWxlcmF0ZSgwLjA1KQogIC5waGFzZXIoMikucGhhc2VyZGVwdGgoMzApCiAgLmV2ZXJ5KDIsIChwKSA9PiBwLmRldHVuZShwZXJsaW4ucmFuZ2UoLTc1LCA3NSkuc2xvdygzKSkpCiAgLnJvb20oMC42KS5kZWxheSgwLjMpLmR0KDAuMikuZGZiKDAuNSkKCiQ6IHMoImhoKjE2IGNwKjgiKS5nYWluKDAuNCkKICAucGFuKHJhbmQubXVsKDAuOSkuYWRkKDAuMDUpKQogIC5jcnVzaCg4KQogIC5ldmVyeSgyLCAocCkgPT4gcC5kamYocmFuZCkpCiAgLnJvb20oMC41KS50cmVtb2xvKDAuNSkudHJlbW9sb3N5bmMoMikKCiQ6IHN0YWNrKAogIG5vdGUoImc1Iikuc291bmQoInRyaWFuZ2xlIikuZ2FpbigwLjUpLnNsb3coMTApLmRldHVuZSg4MCksCiAgbm90ZSgiYzYiKS5zb3VuZCgicHVsc2UiKS5nYWluKDAuNCkuc2xvdygxMikuZGV0dW5lKC04MCkKKS5yb29tKDEpLmRlbGF5KDAuOSkuZHQoMC43KS5kZmIoMC45NSkubHBmKHNpbmUucmFuZ2UoODAwLCA4MDAwKS5zbG93KDE1KSkudHJlbSgwLjMpCgokOiBub3RlKCJjczMgZTMgZzMgY3M0Iikuc291bmQoInNpbmUiKS5nYWluKDAuNykKICAub2N0YXZlKDMpCiAgLmxwZihzaW5lLnJhbmdlKDUwLCAxNTAwKS5zbG93KDEwKSkKICAuZGVsYXkoMC45KS5kdCgwLjQpLmRmYigwLjgpCiAgLnJvb20oMC44KS5qdXgoKHApID0%2BIHAub2N0YXZlKDQpLmRyaXZlKDAuNCkpLnRyZW1vbG8oMC4yKQ%3D%3D][Play on strudel.cc]]
-
-* Try it yourself
-
-The code is open source: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]].
-
-** Evolve
-
-Run your own evolution experiment:
-
-#+begin_src bash
-python examples/evolve/evolve.py \
-  --seed your_seed.js \
-  --steps 30 \
-  --prompt "Your prompt here"
-#+end_src
-
-Modes to play with:
-- =--pin-original= -- include the original seed in every prompt, so
-  the model always knows what it's writing variations /of/
-- =--milestones N= -- include every Nth step as history, giving the
-  model a sense of its own trajectory
-- =--models claude,gpt= -- pick which models to run
-- =--resume= -- continue an interrupted experiment
-
-The repo has instructions on how to generate seeds from midi files.
-
-** Live-coding with LLMs
-
-Run =./start= and open the browser. Edit =live.js= in your editor or edit with your local coding agent --
-changes play instantly. Or use the in-browser chat panel to talk to an
-LLM and have it write music for you in real time.
 
 
 * Acknowledgements
