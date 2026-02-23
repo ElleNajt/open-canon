@@ -55,6 +55,10 @@ MODELS = {
         "provider": "anthropic",
         "model": "claude-opus-4-5-20251101",
     },
+    "claude46": {
+        "provider": "anthropic",
+        "model": "claude-opus-4-6",
+    },
     "gpt": {
         "provider": "openrouter",
         "model": "openai/gpt-5.2",

@@ -228,9 +228,9 @@ def main():
         # Export iframes org to HTML via emacsclient (non-blocking, no babel eval)
         org_file = str(COMPILED_IFRAMES)
         elisp = f"""(let ((org-export-babel-evaluate nil))
-  (find-file "{org_file}")
-  (revert-buffer t t)
-  (org-html-export-to-html))"""
+  (with-current-buffer (find-file-noselect "{org_file}")
+    (revert-buffer t t)
+    (org-html-export-to-html)))"""
         proc = subprocess.Popen(
             ["emacsclient", "--eval", elisp],
             stdout=subprocess.PIPE,
