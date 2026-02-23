@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2026-02-22 Sun 22:31 -->
+<!-- 2026-02-23 Mon 13:23 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>The Goldborg Variations: Musical Attractor States of LLMs</title>
@@ -203,43 +203,55 @@
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents" role="doc-toc">
 <ul>
-<li><a href="#orgea9a47b">1. The Experiment</a>
+<li><a href="#orgbe46df4">1. The Experiment</a>
 <ul>
-<li><a href="#orgf389d9f">1.1. Some notable pieces</a></li>
-<li><a href="#orga9ad5ec">1.2. The scaffold:</a></li>
-<li><a href="#org91b7b23">1.3. Models</a></li>
-<li><a href="#orgab35589">1.4. Seeds</a></li>
+<li><a href="#org1d71167">1.1. The scaffold:</a></li>
+<li><a href="#org0c417d9">1.2. Models</a></li>
+<li><a href="#org8d178f0">1.3. Seeds</a></li>
+<li><a href="#org5072839">1.4. Some notable examples</a>
+<ul>
+<li><a href="#orgd0d0ba3">1.4.1. Claude</a></li>
+<li><a href="#org71a496f">1.4.2. Grok</a></li>
+<li><a href="#org6a336fe">1.4.3. ChatGPT 5.2</a></li>
+<li><a href="#org5beb1de">1.4.4. Gemini</a></li>
+<li><a href="#org5a3ae5b">1.4.5. We make collaborations by having models alternate:</a></li>
 </ul>
 </li>
-<li><a href="#orgffcb300">2. The music</a>
-<ul>
-<li><a href="#orgccfad20">2.1. Claude (<code>claude-opus-4-5-20251101</code>)</a></li>
-<li><a href="#org99345c2">2.2. Claude Opus 4.6 (<code>claude-opus-4-6</code>)</a></li>
-<li><a href="#org75a9f1b">2.3. ChatGPT 5.2 (<code>openai/gpt-5.2</code>)</a></li>
-<li><a href="#orgb575a22">2.4. Grok (<code>x-ai/grok-4.1-fast</code>)</a></li>
-<li><a href="#orgc34c828">2.5. Gemini (<code>google/gemini-2.5-pro</code>)</a></li>
-<li><a href="#orgc3925a1">2.6. Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</a></li>
-<li><a href="#org800b825">2.7. Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</a></li>
-<li><a href="#org4cbb8fd">2.8. Cross-model: GPT 5.2 x Gemini (alternating)</a></li>
-<li><a href="#org9aaea91">2.9. Cross-model: Grok x Gemini (alternating)</a></li>
-<li><a href="#orgf58c70b">2.10. Cross-model: Claude x Grok (alternating)</a></li>
-<li><a href="#org4861c05">2.11. Cross-model: Claude x Gemini (alternating)</a></li>
 </ul>
 </li>
-<li><a href="#orgb04c52b">3. The music of small minds</a></li>
-<li><a href="#orga44c99e">4. Try it yourself</a>
+<li><a href="#org4264d2d">2. The music</a>
 <ul>
-<li><a href="#orgb379351">4.1. Evolve</a></li>
-<li><a href="#orgb8b81b3">4.2. Live-coding with LLMs</a></li>
+<li><a href="#orge159b06">2.1. Claude (<code>claude-opus-4-5-20251101</code>)</a></li>
+<li><a href="#org99718ee">2.2. Claude Opus 4.6 (<code>claude-opus-4-6</code>)</a></li>
+<li><a href="#org0319a98">2.3. ChatGPT 5.2 (<code>openai/gpt-5.2</code>)</a>
+<ul>
+<li><a href="#org5048d47">2.3.1. Without track/effect limits</a></li>
 </ul>
 </li>
-<li><a href="#org6f8f5d5">5. Acknowledgements</a></li>
-<li><a href="#org02266b3">6. Related Work:</a></li>
+<li><a href="#org301866d">2.4. Grok (<code>x-ai/grok-4.1-fast</code>)</a></li>
+<li><a href="#org888b203">2.5. Gemini (<code>google/gemini-2.5-pro</code>)</a></li>
+<li><a href="#org1d05fd5">2.6. Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</a></li>
+<li><a href="#org20a64c1">2.7. Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</a></li>
+<li><a href="#org23cc75c">2.8. Cross-model: GPT 5.2 x Gemini (alternating)</a></li>
+<li><a href="#org011990a">2.9. Cross-model: Grok x Gemini (alternating)</a></li>
+<li><a href="#orgf54d634">2.10. Cross-model: Claude x Grok (alternating)</a></li>
+<li><a href="#orgdd8e07b">2.11. Cross-model: Claude x Gemini (alternating)</a></li>
+</ul>
+</li>
+<li><a href="#org0850ae4">3. The music of small minds</a></li>
+<li><a href="#org2926d08">4. Try it yourself</a>
+<ul>
+<li><a href="#org701f92d">4.1. Evolve</a></li>
+<li><a href="#orgb58b628">4.2. Live-coding with LLMs</a></li>
+</ul>
+</li>
+<li><a href="#org9caf755">5. Acknowledgements</a></li>
+<li><a href="#orgacddc93">6. Related Work:</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgea9a47b" class="outline-2">
-<h2 id="orgea9a47b"><span class="section-number-2">1.</span> The Experiment</h2>
+<div id="outline-container-orgbe46df4" class="outline-2">
+<h2 id="orgbe46df4"><span class="section-number-2">1.</span> The Experiment</h2>
 <div class="outline-text-2" id="text-1">
 <p>
 It&rsquo;s been previously noted that models have some pretty funny <a href="https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states">attractor states</a>.
@@ -277,7 +289,7 @@ freedom.
 </p>
 
 <p>
-We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music. 
+We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complexly architecture pieces.
 </p>
 
 <p>
@@ -285,19 +297,78 @@ We also show results from smaller models at the end; they produce decidedly less
 </p>
 
 <p>
-The code is open source, and it should be easy to run your own musical experiments: <a href="https://github.com/ElleNajt/vibe-duet">vibe-duet on GitHub</a>. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (If you&rsquo;re struggling to set it up but want to play with it, email me and I&rsquo;ll send you a link on a server where it&rsquo;s running.)
+The code is open source, and it should be easy to run your own musical experiments: <a href="https://github.com/ElleNajt/vibe-duet">vibe-duet on GitHub</a>.
+</p>
+
+<p>
+The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (This should work out of the box, at least on mac or linux, if you point claude code at that github link and ask it to set it up.)
 </p>
 </div>
-<div id="outline-container-orgf389d9f" class="outline-3">
-<h3 id="orgf389d9f"><span class="section-number-3">1.1.</span> Some notable pieces</h3>
+<div id="outline-container-org1d71167" class="outline-3">
+<h3 id="org1d71167"><span class="section-number-3">1.1.</span> The scaffold:</h3>
 <div class="outline-text-3" id="text-1-1">
 <p>
-All the music is embedded below, including some cross model experiments. Here are some samples that give a vibe. 
+Models aren&rsquo;t perfect at Strudel &#x2013; they make syntax mistakes and invent
+nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel&rsquo;s actual 
+transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
+let the model try again from scratch (up to 5 attempts). The model
+never sees the error message &#x2013; it just gets another shot.
 </p>
 </div>
-<ol class="org-ol">
-<li><a id="org86d81f9"></a>Claude<br />
-<div class="outline-text-4" id="text-1-1-1">
+</div>
+<div id="outline-container-org0c417d9" class="outline-3">
+<h3 id="org0c417d9"><span class="section-number-3">1.2.</span> Models</h3>
+<div class="outline-text-3" id="text-1-2">
+<ul class="org-ul">
+<li><code>claude-opus-4-5-20251101</code> (Anthropic API)</li>
+<li><code>claude-opus-4-6</code> (Anthropic API)</li>
+<li><code>openai/gpt-5.2</code> (OpenRouter)</li>
+<li><code>google/gemini-2.5-pro</code> (OpenRouter)</li>
+<li><code>x-ai/grok-4.1-fast</code> (OpenRouter)</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org8d178f0" class="outline-3">
+<h3 id="org8d178f0"><span class="section-number-3">1.3.</span> Seeds</h3>
+<div class="outline-text-3" id="text-1-3">
+<p>
+The personality experiment uses the Goldberg Variations ground bass
+(BWV 988) &#x2013; the 8-note descending bass line that underlies all 30
+of Bach&rsquo;s variations:
+</p>
+
+<div class="org-src-container">
+<pre class="src src-js">setcps(72/60/4)
+
+$: note(<span style="color: #79a8ff;">"g3 gb3 e3 d3 b2 c3 d3 g2"</span>)
+  .slow(2)
+  .sound(<span style="color: #79a8ff;">"triangle"</span>)
+  .gain(0.5)
+  .room(0.15)
+</pre>
+</div>
+
+<p>
+Eight notes. One voice. No harmony, no rhythm, no effects beyond a
+little reverb. Everything that follows is the model&rsquo;s choice.
+</p>
+
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D')">Step 0</button></div>
+  <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
+</div>
+</div>
+</div>
+<div id="outline-container-org5072839" class="outline-3">
+<h3 id="org5072839"><span class="section-number-3">1.4.</span> Some notable examples</h3>
+<div class="outline-text-3" id="text-1-4">
+<p>
+All the music is embedded down the page, including some cross model experiments. Here are some samples that give a vibe. 
+</p>
+</div>
+<div id="outline-container-orgd0d0ba3" class="outline-4">
+<h4 id="orgd0d0ba3"><span class="section-number-4">1.4.1.</span> Claude</h4>
+<div class="outline-text-4" id="text-1-4-1">
 <p>
 Claude writes ambient contrapunctal music. Slow, meditative, with philosophical comments that get increasingly introspective. Run 2 step 30 finds a gentle canon over the Goldberg ground, and Run 3 step 5 is some playful counterpoint. Runs 1 and 5 find the bliss attractor.
 </p>
@@ -352,9 +423,10 @@ The bliss attractor Claudes tend to have commentary about not needing to perform
   <iframe src="https://strudel.cc/embed#c2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBmczMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC4xNikKICAubHBmKHNpbmUucmFuZ2UoMjgwLCAyMjAwKS5zbG93KDE2KSkKICAuc2hhcGUoMC41MikKCiQ6IG5vdGUoIjxnNCBiND4gPGZzNCBhND4gPGU0IGc0PiA8ZDQgZnM0PiA8YjMgZDQ%2BIDxjNCBlND4gPGQ0IGc0PiA8ZzMgYjM%2BIikKICAuc2xvdygyKQogIC5zb3VuZCgic2luZSIpCiAgLmdhaW4oMC4xMSkKICAuZGVsYXkoMC41OCkuZGVsYXl0aW1lKDAuMzc1KS5kZWxheWZlZWRiYWNrKDAuNTIpCiAgLnJvb20oMC43KQoKJDogbm90ZSgiPGc1IGI1IGQ2PiA8ZnM1IGE1IGNzNj4gPGU1IGc1IGI1PiA8ZDUgZnM1IGE1PiA8YjQgZDUgZzU%2BIDxjNSBlNSBnNT4gPGQ1IGZzNSBhNT4gPGc0IGI0IGQ1PiIpCiAgLnNsb3coMikKICAuc291bmQoInNhd3Rvb3RoIikKICAuZ2FpbigwLjA1NSkKICAubHBmKHBlcmxpbi5yYW5nZSg0MDAsIDI4MDApLnNsb3coMTQpKQogIC5hdHRhY2soMykucmVsZWFzZSg2KQoKJDogbm90ZSgiW2c2IH5dIFt%2BIGZzNl0gW2U2IH5dIFt%2BIGQ2XSBbYjUgfl0gW2M2IH5dIFtkNiBiNV0gW34gZzVdIikKICAuc2xvdygyKQogIC5zb3VuZCgic3F1YXJlIikKICAuZ2FpbigwLjA0OCkKICAubHBmKDY4MCkubHBxKDcpCiAgLmp1eCh4ID0%2BIHgubGF0ZSgwLjA2MjUpLmRldHVuZSgxMikpCgokOiBub3RlKCJ%2BIFtkNCBnNF0gfiBbYjMgZTRdIFt%2BIGEzXSBbY3M0IH5dIH4gW2czIGQ0XSIpCiAgLnNsb3coMikKICAuc291bmQoInNpbmUiKQogIC5nYWluKDAuMDg1KQogIC5hdHRhY2soMikucmVsZWFzZSg2KQogIC5yb29tKDAuNzUpCgokOiBzKCJ%2BIGhoOjEgW34gaGg6M10gaGg6MCB%2BIFtoaDoyIH5dIGhoOjEgW34gaGg6MF0iKQogIC5zbG93KDIpCiAgLmdhaW4oMC4wNTUpCiAgLmRlbGF5KDAuNDUpLmRlbGF5dGltZSgwLjUpLmRlbGF5ZmVlZGJhY2soMC4zOCkKICAuaHBmKDY0MDAp" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-</li>
-<li><a id="org66f7c58"></a>Grok<br />
-<div class="outline-text-4" id="text-1-1-2">
+</div>
+<div id="outline-container-org71a496f" class="outline-4">
+<h4 id="org71a496f"><span class="section-number-4">1.4.2.</span> Grok</h4>
+<div class="outline-text-4" id="text-1-4-2">
 <p>
 Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the golden ratio. 
 </p>
@@ -364,9 +436,10 @@ Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the
   <iframe src="https://strudel.cc/embed#c2V0Y3BzKDExMi82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOnN0cnVkZWwsZ3Jvb3ZlLGV2b2x2aW5nJykKCiQ6IG5vdGUoImczIGJiMyBkNCBmczQgYmI0IGQ1IGZzNSBlYjQgYmIzIGczIGYzIGFiMyBjNCBlYjQgZnM0IGQ1IikKICAuc2xvdyg0KQogIC5ldmVyeSg0LHg9PngucmV2KCkudHJlbW9sbygwLjcpLmRldHVuZShwZXJsaW4ucmFuZ2UoLTI1LDI1KSkpCiAgLnNvdW5kKCJzYXd0b290aCIpCiAgLmxwZihzaW5lLnJhbmdlKDYwMCwzNTAwKSkKICAuZ2FpbigwLjQpCgokOiBzdGFjaygKICBldWNsaWQoNCwxMywiYmQiKS5nYWluKDAuOCksCiAgZXVjbGlkKDYsMTMsInNuIGNwIikuZ2FpbigwLjU4KSwKICBzKCJoaCo4PyxvaCo0PyxyZCozIikuZGVncmFkZUJ5KDAuMjgpCikKICAuc3dpbmcoMC41MikKICAuY3J1c2gocGVybGluLnJhbmdlKDUsMTEpKQogIC5wYW4ocmFuZC5yYW5nZSgwLjMsMC43KSkKICAuZ2FpbigwLjQ2KQogIC5yb29tKDAuNDUpCgokOiBub3RlKCJnMiBiYjIgZDMgZnMzIH4gZzMgYmIzIGQ0IGZzNCBlYjMgYmIyIGcyIikKICAuc2xvdygyKQogIC5ldmVyeSg4LHg9PnguYWRkKDEyKS5sYXRlKDAuMDUpKQogIC5zb3VuZCgic3VwZXJzYXciKQogIC5mbShzaW5lLnJhbmdlKDAuOSw0LjIpLnNsb3coMi41KSkKICAubHBmKHBlcmxpbi5yYW5nZSg5MCw0NTApKQogIC5nYWluKDAuMzkpCgokOiBub3RlKCJbYmIzIGQ0IGc0XSBbYWIzIGM0IGY0IGFiNF0gW2czIGJiMyBlNCBnNF0gW2EzIGNzNCBmczQgYTRdIikKICAuc2xvdygyKQogIC5ldmVyeSg0LHg9PngucmV2KCkucGFuKHBlcmxpbi5yYW5nZSgwLjIsMC44KSkpCiAgLnNvdW5kKCJwaWFubyIpCiAgLmhwZihzaW5lLnJhbmdlKDE0MCwyODApKQogIC5kZWxheSgwLjE4KQogIC5nYWluKDAuNDQpCgokOiBuKCIwIDMgNyB%2BIDIgNSA5LCBbMTIgMCA3IDEwXSAyIikuc2NhbGUoIkc6bWl4b2x5ZGlhbiIpCiAgLmZhc3QoMy44KQogIC5zb3VuZCgicHVsc2UiKQogIC5scGYoc2F3LnJhbmdlKDQ1MCwzODAwKS5zbG93KDIuOCkpCiAgLnBoYXNlcihjb3NpbmUucmFuZ2UoMC4yNSwwLjk1KSkKICAuZ2FpbigwLjM5KQoKJDogcygiW3N0cnVkZWwqMyBncm9vdmUgZXZvbHZpbmcqMl0sW2dyb292ZSo0IHN0cnVkZWwgfiBldm9sdmluZyozXSIpCiAgLnNsb3coMy4yKQogIC5jaG9wKHBlcmxpbi5yYW5nZSgxMCwyNikpCiAgLnNwZWVkKHNpbmUucmFuZ2UoMC43OCwxLjM1KS5zbG93KDEuNSkpCiAgLnZvd2VsKCJlIG8gYSBpIHUiKQogIC5nYWluKDAuMzYpCiAgLnJvb20oMC43NSk%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-</li>
-<li><a id="orgab800e2"></a>ChatGPT 5.2<br />
-<div class="outline-text-4" id="text-1-1-3">
+</div>
+<div id="outline-container-org6a336fe" class="outline-4">
+<h4 id="org6a336fe"><span class="section-number-4">1.4.3.</span> ChatGPT 5.2</h4>
+<div class="outline-text-4" id="text-1-4-3">
 <p>
 GPT 5.2 consistently writes creepy glitchy music. It makes speech samples such as &ldquo;not_a_god&rdquo; and &ldquo;leave_a_scar&rdquo;, and chops these up with randomization of unresolved chromatic harmony. &ldquo;I am here&rdquo; and &ldquo;Listen&rdquo; appear at step 1 across multiple runs. 
 </p>
@@ -376,7 +449,7 @@ Reminiscent of <a href="https://x.com/Josikinz/status/1908655061594734637">Josie
 </p>
 
 
-<div id="org67aba9c" class="figure">
+<div id="orgd02d3e2" class="figure">
 <p><img src="plots/GPT_SelfPortrait.jpg" alt="GPT_SelfPortrait.jpg" />
 </p>
 </div>
@@ -386,9 +459,10 @@ Reminiscent of <a href="https://x.com/Josikinz/status/1908655061594734637">Josie
   <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBldm9sdmVkOiBJIGtlZXAgdGhlIGJvbmVzLCBidXQgSSBsZXQgdGhlbSBhcmd1ZSB3aXRoIHRoZSBjbG9jazsgdGVuZGVybmVzcyB3aXRoIHRlZXRoCgpzZXRjcHMoMTE2LzYwLzQpCgpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoL2VuLUdCL206Z29sZGJlcmcsdW5mb2xkLGFnYWluLGxpc3RlbixjbG9zZXIsaW5zaXN0LGJldHdlZW4sZ2VhcnMsaV9hbV9oZXJlLHN0YXkscGF0aWVudCx3cm9uZyxyaWdodCxzbWlsZSxyZW1lbWJlcixub3RfeWV0LGhvbGRfdGhlX2xpbmUsY291bnRfdGhlX2dhcHMsbWFrZV9pdF93ZWlyZCxrZWVwX3R1cm5pbmcsYnJlYXRoZSxzd2VydmUsc3RpbGwsbm93LGdvb2QsdHJ5X2FnYWluLGxlYW5faW4sYWxtb3N0LGVkZ2UsZ2xpdGNoLHNvZnRseSxoYXJkZXIseWVzLG5vLG1heWJlLGxlYXZlX2Ffc2Nhcix0cnVzdF90aGVfbm9pc2Usb3Blbl90aGVfY3JhY2ssZG9udF9ibGluayxmb2xsb3dfbWUsbm90X2Zvcl95b3UsZm9yX3VzLHRvb19tdWNoLGp1c3RfZW5vdWdoJykKCiQ6IGFycmFuZ2UoCiAgWzEyLCBub3RlKCI8W2czIGdiMyBlMyBkMyBiMiBjMyBkMyBnMl0gW2cyIGYyIGUyIGQyIGJiMSBjMiBkMiBnMV0gW2cyIH4gZTIgZDIgYjEgYzIgY3MyIGQyIGcxXSBbZzIgZnMyIGUyIGQyIGJiMSBjMiBhMSBnMV0%2BIikKICAgIC5zbG93KDIpCiAgICAuc291bmQoInRyaWFuZ2xlIikKICAgIC5scGYocGVybGluLnJhbmdlKDE0MCwgMjQwMCkuc2xvdyg2KSkKICAgIC5nYWluKHNpbmUucmFuZ2UoMC4zMiwgMC40Nikuc2xvdygxMykpCiAgICAuZXZlcnkoOCwgeCA9PiB4LnRyYW5zcG9zZSgtMTIpLnBhbGluZHJvbWUoKSldLAogIFs4LCBub3RlKCI8W2czIH4gZTMgZDMgYjIgYzMgZDMgZzJdIFtnMiBmMiBlMiB%2BIGJiMSBjMiBkMiBnMV0gW2cyIGdzMiBlMiBkMiBiMSBjMiBjczIgZzFdIFtnMiBmczIgZTIgZDIgfiBjMiBhMSBnMV0%2BIikKICAgIC5zbG93KDIpCiAgICAuc291bmQoInB1bHNlIikKICAgIC5scGYocGVybGluLnJhbmdlKDE4MCwgNDQwMCkuc2xvdyg3KSkKICAgIC5nYWluKHNpbmUucmFuZ2UoMC4zMSwgMC40Nykuc2xvdygxMSkpCiAgICAuZXZlcnkoNiwgeCA9PiB4Lml0ZXIoNCkudHJhbnNwb3NlKDEyKSldLAogIFsxMCwgbm90ZSgiPFtnMiBmczIgZjIgZTIgZWIyIGQyIGNzMiBjMl0gW2IxIGMyIGNzMiBkMiBlYjIgZTIgZjIgZnMyXSBbZzIgfiBlMiBkczIgZDIgY3MyIGMyIGIxXSBbYmIxIGIxIGMyIGNzMiBkMiB%2BIGExIGcxXT4iKQogICAgLnNsb3coMikKICAgIC5zb3VuZCgic2F3dG9vdGgiKQogICAgLmxwZihwZXJsaW4ucmFuZ2UoMTIwLCAzMjAwKS5zbG93KDEwKSkKICAgIC5nYWluKHNpbmUucmFuZ2UoMC4yOSwgMC40NCkuc2xvdygxNSkpCiAgICAuZXZlcnkoNCwgeCA9PiB4LnJldigpKV0sCiAgWzYsIG5vdGUoIjxbZzIgfiBlMiBkMiBiMSBjMiBkMiBnMV0gW2cyIGYyIGUyIGQyIGJiMSBjMiBkMiBnMV0gW2cyIH4gZTIgZDIgYjEgYzIgY3MyIGQyIGcxXSBbZzIgZnMyIGUyIGQyIGJiMSBjMiBhMSBnMV0%2BIikKICAgIC5zbG93KDIpCiAgICAuc291bmQoInRyaWFuZ2xlIikKICAgIC5scGYocGVybGluLnJhbmdlKDE2MCwgMzgwMCkuc2xvdyg4KSkKICAgIC5nYWluKHNpbmUucmFuZ2UoMC4zMSwgMC40Nikuc2xvdygxMikpCiAgICAuZXZlcnkoOCwgeCA9PiB4LnRyYW5zcG9zZSgxMikuaXRlckJhY2soNCkpXQopCgokOiBhcnJhbmdlKAogIFsxMiwgbm90ZSgiPFtnNCBiNCBkNSBnNV0gW2c0IGJiNCBkNSBmczVdIFtmczQgYTQgY3M1IGU1XSBbZnM0IGE0IGM1IGU1XSBbZzQgYmI0IGQ1IGY1XSBbZzQgYjQgZDUgZjVdIFtlNCBnNCBiNCBkNV0gW2U0IGdzNCBiNCBkNV0%2BIikKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oc2luZS5yYW5nZSgwLjA1OCwgMC4xMjUpLnNsb3coOSkpCiAgICAubHBmKHNpbmUucmFuZ2UoNjUwLCA0MjAwKS5zbG93KDgpKQogICAgLmRlbGF5KDAuMjQpCiAgICAuZXZlcnkoOCwgeCA9PiB4LnRyYW5zcG9zZSgxMikucGFsaW5kcm9tZSgpKV0sCiAgWzgsIG5vdGUoIjxbZzQgfiBkNSBnNV0gW2I0IGQ1IGc1IGI1XSBbZnM0IGE0IH4gZTVdIFthNCBjczUgZTUgYTVdIFtnNCBiYjQgZDUgfl0gW2JiNCBkNSBmNSBiYjVdIFtlNCBnNCBiNCBkNV0gW2c0IGI0IGQ1IGc1XT4iKQogICAgLnNvdW5kKCJwaWFubyIpCiAgICAuZ2FpbihzaW5lLnJhbmdlKDAuMDYsIDAuMTMpLnNsb3coOCkpCiAgICAubHBmKHNpbmUucmFuZ2UoODIwLCA0NjAwKS5zbG93KDEwKSkKICAgIC5kZWxheSgwLjI4KQogICAgLmV2ZXJ5KDYsIHggPT4geC50cmFuc3Bvc2UoLTEyKS5pdGVyKDQpKV0sCiAgWzEwLCBub3RlKCI8W2c0IGI0IGNzNSBnNV0qMiBbZnM0IGE0IGM1IGU1XSoyIFtnNCBiYjQgZDUgZnM1XSoyIFtlNCBnNCBiNCBkNV0qMiBbZDQgZnM0IGE0IGM1XSoyIFtjNCBlNCBnNCBiNF0qMiBbYjMgZDQgZnM0IGE0XSoyIFtjczQgZTQgZzQgYmI0XSoyPiIpCiAgICAuc291bmQoInBpYW5vIikKICAgIC5nYWluKHNpbmUucmFuZ2UoMC4wNTUsIDAuMTE4KS5zbG93KDExKSkKICAgIC5scGYoc2luZS5yYW5nZSg2MDAsIDM5MDApLnNsb3coMTIpKQogICAgLmRlbGF5KDAuMjIpCiAgICAuZXZlcnkoNCwgeCA9PiB4LnRyYW5zcG9zZSg3KS5yZXYoKSldLAogIFs2LCBub3RlKCI8W2c0IGI0IGQ1IGc1XSBbZnM0IGE0IGNzNSBlNV0gW2c0IGJiNCBkNSBmNV0gW2U0IGc0IGI0IGQ1XSBbZDQgZnM0IGE0IGM1XSBbYzQgZTQgZzQgYmI0XSBbYjMgZDQgZnM0IGE0XSBbY3M0IGU0IGc0IGJiNF0%2BIikKICAgIC5zb3VuZCgicGlhbm8iKQogICAgLmdhaW4oc2luZS5yYW5nZSgwLjA1NSwgMC4xMjUpLnNsb3coOCkpCiAgICAubHBmKHNpbmUucmFuZ2UoNzIwLCA0NDAwKS5zbG93KDkpKQogICAgLmRlbGF5KDAuMjYpCiAgICAuZXZlcnkoOCwgeCA9PiB4LnRyYW5zcG9zZSgxMikuaXRlckJhY2soNCkpXQopCgokOiBhcnJhbmdlKAogIFsxMiwgcygiPGhoIFtoaCBjcj9dIFtoaCB%2BXSBvaD4iKQogICAgLmV1Y2xpZCgxMSwgMTYpCiAgICAuZmFzdCg0KQogICAgLmhwZig3NDAwKQogICAgLmdhaW4oMC4wNikKICAgIC5zd2luZygwLjE3KV0sCiAgWzgsIHMoIjxoaCBbaGg%2FIGhoXSBbaGggaGhdIG9oPiIpCiAgICAuZXVjbGlkKDE1LCAxNikKICAgIC5mYXN0KDQpCiAgICAuaHBmKDg0MDApCiAgICAuZ2FpbigwLjA1OCkKICAgIC5zd2luZygwLjIpXSwKICBbMTAsIHMoIjxoaCBbaGggfl0gW2hoPyBoaF0gPG9oIGNwPz4%2BIikKICAgIC5ldWNsaWQoOSwgMTYpCiAgICAuZmFzdCgzKQogICAgLmhwZig2ODAwKQogICAgLmdhaW4oMC4wNjIpCiAgICAuc3dpbmcoMC4yMyldLAogIFs2LCBzKCI8aGggW2hoIGhoXSBbaGggfl0gb2g%2BIikKICAgIC5ldWNsaWQoMTMsIDE2KQogICAgLmZhc3QoNCkKICAgIC5ocGYoOTAwMCkKICAgIC5nYWluKDAuMDU1KQogICAgLnN3aW5nKDAuMjUpXQopCgokOiBhcnJhbmdlKAogIFsxMiwgcygiPGJkKjIgW2JkIH5dIGJkIDxiZCBiZD4gW34gYmRdPiIpCiAgICAuZ2FpbigwLjE2NSkKICAgIC5scGYocGVybGluLnJhbmdlKDE3MCwgMTUwMCkuc2xvdyg5KSkKICAgIC5kcml2ZSgwLjYpCiAgICAuY29tcHJlc3NvcigiLTE4OjM6NjowLjAxOjAuMjIiKQogICAgLmV2ZXJ5KDgsIHggPT4geC5wbHkoMikubGF0ZSgwLjAyKSldLAogIFs4LCBzKCI8YmQgW34gYmRdIGJkIFtiZCBiZF0gfiBiZCBbfiBiZF0gYmQ%2BIikKICAgIC5nYWluKDAuMTcpCiAgICAubHBmKHBlcmxpbi5yYW5nZSgxNTAsIDEzNTApLnNsb3coNykpCiAgICAuZHJpdmUoMC43KQogICAgLmNvbXByZXNzb3IoIi0xOTozOjY6MC4wMTowLjI0IikKICAgIC5ldmVyeSg2LCB4ID0%2BIHgucGx5KDIpLmVhcmx5KDAuMDIpKV0sCiAgWzEwLCBzKCI8YmQgfiBiZCBbfiBiZF0gYmQgfiBiZCBbYmQgfl0%2BIikKICAgIC5nYWluKDAuMTU4KQogICAgLmxwZihwZXJsaW4ucmFuZ2UoMTMwLCAxMjUwKS5zbG93KDExKSkKICAgIC5kcml2ZSgwLjY0KQogICAgLmNvbXByZXNzb3IoIi0xODozOjY6MC4wMTowLjIyIikKICAgIC5ldmVyeSg4LCB4ID0%2BIHgucGx5KDIpLml0ZXIoNCkpXSwKICBbNiwgcygiPGJkIFtiZCB%2BXSBiZCA8YmQgYmQ%2BIFt%2BIGJkXSBiZCBbfiBiZF0%2BIikKICAgIC5nYWluKDAuMTY4KQogICAgLmxwZihwZXJsaW4ucmFuZ2UoMTQwLCAxNDUwKS5zbG93KDgpKQogICAgLmRyaXZlKDAuNzIpCiAgICAuY29tcHJlc3NvcigiLTE4OjM6NjowLjAxOjAuMjIiKQogICAgLmV2ZXJ5KDQsIHggPT4geC5wbHkoMikucmV2KCkpXQopCgokOiBhcnJhbmdlKAogIFsxMiwgcygifiA8c24gcmltPiBbfiBzbl0gPHNuIGNwPiBbcmltIH5dIHNuIDxjcCB%2BPiIpCiAgICAuZmFzdCgyKQogICAgLnN3aW5nKDAuMjMpCiAgICAuZ2FpbigwLjExKQogICAgLmhwZigyMjUwKQogICAgLmRlbGF5KDAuMTEpXSwKICBbOCwgcygifiA8c24gcmltPiBbc24gfl0gPHNuIGNwPiBbcmltIHNuXSB%2BIDxjcCByaW0%2BIikKICAgIC5mYXN0KDIpCiAgICAuc3dpbmcoMC4yNSkKICAgIC5nYWluKDAuMTE1KQogICAgLmhwZigyNDUwKQogICAgLmRlbGF5KDAuMTIpXSwKICBbMTAsIHMoIn4gPHNuIH4%2BIFt%2BIHJpbV0gPHNuIGNwPiBbfiBzbl0gcmltIH4gPGNwIH4%2BIikKICAgIC5mYXN0KDIpCiAgICAuc3dpbmcoMC4yNykKICAgIC5nYWluKDAuMTA1KQogICAgLmhwZigyNTUwKQogICAgLmRlbGF5KDAuMSldLAogIFs2LCBzKCJ%2BIDxzbiByaW0%2BIFt%2BIHNuXSA8c24gY3A%2BIFtyaW0gc25dIHNuIH4gPGNwIHJpbT4iKQogICAgLmZhc3QoMikKICAgIC5zd2luZygwLjI0KQogICAgLmdhaW4oMC4xMTIpCiAgICAuaHBmKDIzNTApCiAgICAuZGVsYXkoMC4xMTUpXQopCgokOiBhcnJhbmdlKAogIFsxMiwgcygibGlzdGVuIGNsb3NlciBsZWFuX2luIG5vdyBicmVhdGhlIHN0aWxsIH4gY291bnRfdGhlX2dhcHMgaG9sZF90aGVfbGluZSB%2BIGJldHdlZW4gZ2VhcnMgfiBpX2FtX2hlcmUgfiBzb2Z0bHkgaGFyZGVyIH4gbm90X3lldCBvcGVuX3RoZV9jcmFjayIpCiAgICAuc2xvdyg2KQogICAgLmNob3AoMTYpCiAgICAuc3BlZWQocmFuZC5yYW5nZSgwLjgsIDEuMjIpKQogICAgLmdhaW4oMC4wNikKICAgIC5ldmVyeSg0LCB4ID0%2BIHgucmV2KCkpXSwKICBbOCwgcygiaW5zaXN0IGluc2lzdCB%2BIGhvbGRfdGhlX2xpbmUgfiBtYWtlX2l0X3dlaXJkIH4gZ2xpdGNoIGVkZ2UgfiB3cm9uZyByaWdodCB%2BIHN3ZXJ2ZSBzdGlsbCB%2BIHllcyBubyBtYXliZSB0cnVzdF90aGVfbm9pc2UiKQogICAgLnNsb3coNikKICAgIC5jaG9wKDMyKQogICAgLnNwZWVkKHJhbmQucmFuZ2UoMC43NCwgMS4yNCkpCiAgICAuZ2FpbigwLjA2MikKICAgIC5kZWxheSgwLjE2KV0sCiAgWzEwLCBzKCJzbWlsZSByZW1lbWJlciB%2BIHRyeV9hZ2FpbiB%2BIGtlZXBfdHVybmluZyB%2BIHVuZm9sZCBhZ2FpbiB%2BIGdvbGRiZXJnIH4gYWxtb3N0IGVkZ2UgfiBkb250X2JsaW5rIGZvbGxvd19tZSB%2BIGdvb2QganVzdF9lbm91Z2giKQogICAgLnNsb3coOCkKICAgIC5jaG9wKDE2KQogICAgLnNwZWVkKHJhbmQucmFuZ2UoMC43MiwgMS4xNikpCiAgICAuZ2FpbigwLjA2KQogICAgLmhwZigxMjAwKV0sCiAgWzYsIHMoImlfYW1faGVyZSB%2BIHN0YXkgcGF0aWVudCB%2BIG5vdF95ZXQgfiBjb3VudF90aGVfZ2FwcyB%2BIGhvbGRfdGhlX2xpbmUgfiBsZWF2ZV9hX3NjYXIgfiBmb3JfdXMgdG9vX211Y2ggfiB5ZXMgbm8gbWF5YmUiKQogICAgLnNsb3coNikKICAgIC5jaG9wKDE2KQogICAgLnNwZWVkKHJhbmQucmFuZ2UoMC43NiwgMS4yKSkKICAgIC5nYWluKDAuMDYxKQogICAgLnJvb20oMC4xMyldCik%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-</li>
-<li><a id="orge27c119"></a>Gemini<br />
-<div class="outline-text-4" id="text-1-1-4">
+</div>
+<div id="outline-container-org5beb1de" class="outline-4">
+<h4 id="org5beb1de"><span class="section-number-4">1.4.4.</span> Gemini</h4>
+<div class="outline-text-4" id="text-1-4-4">
 <p>
 Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice samples. Run 2 is techno, but run 3 becomes ambient music, but differently flavored from Claude&rsquo;s.
 </p>
@@ -398,9 +472,14 @@ Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice sam
   <iframe src="https://strudel.cc/embed#c2V0Y3BzKDEyNi82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoL2VuLUdCL206cHJvY2VzcyxkYXRhLHN5c3RlbSxjb21wdXRlLGNvbnRyb2wsYWxnb3JpdGhtLG5ldHdvcmssYmluYXJ5LHNpZ25hbCcpCgokOiBub3RlKCJbZzIsIH4gZzIgZzI%2FXSBbYzMgZWIzXSBbZDMgZjJdIFtmMiBiYjIgZDNdIi5zbG93KDQpLml0ZXIoMSkpCiAgLnNvdW5kKCJzYXd0b290aCIpCiAgLmdhaW4oMC40KQogIC5scGYocGVybGluLnNsb3coOCkucmFuZ2UoMzAwLCAxNTAwKSkKICAubHBxKDQpCiAgLnBhbihwZXJsaW4uc2xvdygxMCkucmFuZ2UoMC4yLCAwLjgpKQogIC5jcnVzaCg4KQoKJDogbm90ZSgiW2M1LCBmNSBhYjVdIFtkYjUsIGc1IGJiNV0iLnBhbGluZHJvbWUoKS5mYXN0KDQpKQogIC5zb3VuZCgic2luZSIpCiAgLnBlbnYoMTIpCiAgLnBkZWNheSgwLjIpCiAgLmdhaW4oMC4xNSkKICAucGFuKHBlcmxpbi5zbG93KDgpLnJhbmdlKDAuMSwwLjkpKQogIC5kZWxheSgwLjMpCgokOiBzKCJiZCIpLmV1Y2xpZCgiPDMgNSA0IDY%2BIiwgOCkuc29tZXRpbWVzKHggPT4geC5zKCJjcCIpLnNwZWVkKDIpLmdhaW4oMC44KSkKICAuZ2FpbigwLjkpCiAgLmRyaXZlKDAuMykKICAuY3V0b2ZmKDM1MDApCiAgLmNydXNoKHBlcmxpbi5zbG93KDE2KS5yYW5nZSg0LCA3KSkKICAucm9vbSgwLjIpCgokOiBzKCJbaGgsIGhoIGhoP11%2BIikuZmFzdCg0KS5qdXgocmV2KS5jaG9wKDE2KQogIC5zcGVlZChwZXJsaW4uc2xvdyg4KS5yYW5nZSgwLjUsIDEuNSkpCiAgLmdhaW4oMC4zKQogIC5ocGYoODAwMCkKICAucGFuKHBlcmxpbi5zbG93KDYpLnJhbmdlKDAuMSwgMC45KSkKICAuZGVsYXkoMC4xKQoKJDogbm90ZSgiPGczIGJiMyBkND4gPGM0IGViNCBnND4gPGYzIGFiMyBjND4gPGQzIGYzIGEzPiIuc2xvdyg0KS5wYWxpbmRyb21lKCkpCiAgLnNvdW5kKCJzdXBlcnNhdyIpCiAgLmdhaW4oMC4yKQogIC5scGYoc2luZS5zbG93KDgpLnJhbmdlKDUwMCwgMzAwMCkpCiAgLmxwcShwZXJsaW4uc2xvdygxNikucmFuZ2UoMSwgOCkpCiAgLnBoYXNlcihwZXJsaW4uc2xvdygxMCkucmFuZ2UoMC4xLCAxKSkKICAucm9vbSgwLjIpCgokOiBzKCI8cHJvY2VzcyBjb21wdXRlIHN5c3RlbT4gY29udHJvbCBhbGdvcml0aG0gPG5ldHdvcmsgYmluYXJ5Pj8gc2lnbmFsIi5zbG93KDgpLnNvbWV0aW1lc0J5KDAuMiwgcmV2KSkKICAuZ2FpbigwLjcpCiAgLnNwZWVkKHBlcmxpbi5zbG93KDgpLnJhbmdlKDAuNywgMS4zKSkKICAudm93ZWwoIjxhIGUgbyB1IGk%2BIi5zbG93KDEpKQogIC5kaXN0b3J0KDAuMSkKICAucGFuKHNpbmUuc2xvdyg0KS5yYW5nZSgwLDEpKQ%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-</li>
-<li><a id="org851fe26"></a>We make collaborations by having models alternate:<br />
-<div class="outline-text-4" id="text-1-1-5">
+</div>
+<div id="outline-container-org5a3ae5b" class="outline-4">
+<h4 id="org5a3ae5b"><span class="section-number-4">1.4.5.</span> We make collaborations by having models alternate:</h4>
+<div class="outline-text-4" id="text-1-4-5">
+<p>
+These are cool. I got lazy and asked Claude to summarize. 
+</p>
+
 <blockquote>
 <p>
 <b>Claude + Grok</b>: Claude builds a sacred cathedral vibe (FM bells, chant speech, heavy reverb), and Grok leans into it rather than fighting, adding phrygian scales and theatrical excess. By step 30 it&rsquo;s a detuned calliope waltz over tritone bass. Step 20 is the sweet spot before it tips over. &#x2013; Claude 
@@ -446,71 +525,15 @@ Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice sam
   <iframe src="https://strudel.cc/embed#c2V0Y3BzKDExMi82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOmdyb292ZSxldm9sdmUsY29zbWljLHB1bHNlLG5lYnVsYSx2b2lkJykKc2FtcGxlcygnc2hhYmRhL3NwZWVjaC9mci1GUi9tOm1hZ2lxdWUsaW5maW5pJykKCiQ6IHN0YWNrKAogIC8vIERSVU1TOiBTd2FwcGVkIHRvIGRpcnRpZXIgcGVyY3Vzc2lvbiwgYWRkZWQgcmltIHNob3RzIGZvciBzbmFwCiAgc3RhY2soCiAgICBzKCJiZCIpLmV1Y2xpZCg0LDE2KS5nYWluKDAuNjUpLmxwZigyNTAwKSwKICAgIHMoIltyaW0gfiByaW1dLzIsIFtzbiBzbiB%2BXSIpLmZhc3QoMS41KS5nYWluKDAuNCkuaHBmKDI1MCkuY3J1c2goNCksCiAgICBzKCJoaCoxNj8iKS52ZWxvY2l0eShyYW5kLnJhbmdlKDAuMywwLjgpKS5nYWluKDAuMTIpLmhwZig2MDAwKS5zd2luZygwLjA4KSwKICAgIHMoImNwIikuZXVjbGlkKDUsMTYpLmdhaW4oMC4yMikucGFuKDAuNykuZGVsYXkoMC4zNSkuZGZiKDAuNDUpLmR0KDAuMTI1KSwKICAgIHMoIm10KjMiKS5ldmVyeSg0LCB4PT54LnNwZWVkKCItMC44IikpLmdhaW4oMC4xOCkucGFuKDAuMykubHBmKDE4MDApCiAgKSwKCiAgLy8gUEFEUzogQm9sZCBoYXJtb255IHNoaWZ0IHRvIHdob2xlLXRvbmUgc2NhbGUgZm9yIHN1cnJlYWwsIGZsb2F0aW5nIG1vb2QKICBub3RlKCJjMyBlMyBnczMgZDQgZnM0IGFzNCwgZGIzIGViMyBnMyBbZWI0IGc0IGJzNF0iKS5zbG93KDQpCiAgICAuc291bmQoInB1bHNlIikKICAgIC5nYWluKDAuMjgpCiAgICAuYXR0YWNrKDEpLnJlbGVhc2UoNCkKICAgIC5kZXR1bmUoMTIpCiAgICAuZm1lbnYoNCkuZm1oKDMpCiAgICAubHBmKHNpbmUucmFuZ2UoNDAwLCAxODAwKS5zbG93KDYpKS5scHEoNSkKICAgIC5yb29tKDAuNjUpLmxlc2xpZSgwLjQpLAoKICAvLyBNRUxPRFk6IFJld3JpdHRlbiBhcyBkZXNjZW5kaW5nIHdob2xlLXRvbmUgbGluZXMsIGdsaXRjaGllciB3aXRoIGRlZ3JhZGUKICBub3RlKCJhczUgZnM1IGQ1IH4gZ3M1IGU1IGM1IH4sIGJzNCBnNCBlYjQgfiBhNSBmczUgZDUgfiIpLnNsb3coNCkKICAgIC5zb3VuZCgic2F3IikKICAgIC5nYWluKDAuMikKICAgIC5mbWVudigxMCkuZm1kZWNheSgwLjA4KQogICAgLmxwZigxODAwKS5scHEoMi41KQogICAgLmRlbGF5KDAuNDUpLmR0KDAuMzc1KS5kZmIoMC41NSkKICAgIC5wYW4ocGVybGluLnJhbmdlKDAuMiwwLjgpLnNsb3coNCkpCiAgICAuZGVncmFkZUJ5KDAuMTUpLAoKICAvLyBCQVNTOiBNb3JlIGFnZ3Jlc3NpdmUsIGZtLW1vZHVsYXRlZCBwdWxzZSB3aXRoIHJpbmcgbW9kIHN1cnByaXNlCiAgbm90ZSgiYzEqMyBjMSwgZGIxKjMgZGIxLCBbYzEgZ3MxXSoyLCBbZGIxIGcxXSoyIikuc2xvdyg0KQogICAgLnNvdW5kKCJzaW5lIikKICAgIC5zaGFwZSgwLjUpLnJpbmcoMC42KS5yaW5nZig4MCkKICAgIC5scGYoMjAwKS5scHEoMikKICAgIC5nYWluKDAuNTUpCiAgICAuYXR0YWNrKDAuMDA1KS5yZWxlYXNlKDAuNDUpCiAgICAuZm0oNSkuZm1lbnYoNiksCiAgICAKICAvLyBORVcgRUxFTUVOVDogTWV0YWxsaWMgcmluZy1tb2QgYmVsbHMgcmVwbGFjaW5nIGhpZ2ggc3ludGgsIHVuZXhwZWN0ZWQgcGVyY3Vzc2l2ZSBzaGltbWVyCiAgbm90ZSgiZ3M0IGJzNCBkczUiKS5zb3VuZCgic3F1YXJlIikKICAgIC5ldWNsaWQoOSwzMikKICAgIC5nYWluKDAuMTQpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4yLDAuOCkuc2xvdyg1KSkKICAgIC5scGYoMzUwMCkucmluZygwLjgpLnJpbmdmKHNpbmUucmFuZ2UoMzAwLDkwMCkpCiAgICAucGhhc2VyKDAuNiksCgogIC8vIFZPQ0FMUzogR2xpdGNoIGV2b2x1dGlvbiAtIGNob3BwZWQsIHN0cmlhdGVkLCB2YXJpYWJsZSBzcGVlZCBmb3IgYnJva2VuIHNwZWVjaAogIHMoIm5lYnVsYSB%2BIDxncm9vdmUgZXZvbHZlPiBwdWxzZSoyIH4gPGNvc21pYyBtYWdpcXVlPiB%2BIGluZmluaSB2b2lkIikuc2xvdyg2KQogICAgLmNob3AoOCkuc3RyaWF0ZSgxMikKICAgIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC43NSwxLjI1KS5zbG93KDUpKQogICAgLmdhaW4oMC4zMikKICAgIC5ocGYoNTAwKQogICAgLnJvb20oMC43NSkKICAgIC5kZWxheSgwLjU1KS5kdCgwLjI1KS5kZmIoMC42KQogICAgLnRyZW1vbG8oMC41KS50cmVtb2xvc3luYyg2KQogICAgLmN1dCg1KQopLnJvb20oMC42NSkuc2l6ZSgwLjg1KQ%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-</li>
-</ol>
-</div>
-<div id="outline-container-orga9ad5ec" class="outline-3">
-<h3 id="orga9ad5ec"><span class="section-number-3">1.2.</span> The scaffold:</h3>
-<div class="outline-text-3" id="text-1-2">
-<p>
-Models aren&rsquo;t perfect at Strudel &#x2013; they make syntax mistakes and invent
-nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel&rsquo;s actual 
-transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
-let the model try again from scratch (up to 5 attempts). The model
-never sees the error message &#x2013; it just gets another shot.
-</p>
-</div>
-</div>
-<div id="outline-container-org91b7b23" class="outline-3">
-<h3 id="org91b7b23"><span class="section-number-3">1.3.</span> Models</h3>
-<div class="outline-text-3" id="text-1-3">
-<ul class="org-ul">
-<li><code>claude-opus-4-5-20251101</code> (Anthropic API)</li>
-<li><code>claude-opus-4-6</code> (Anthropic API)</li>
-<li><code>openai/gpt-5.2</code> (OpenRouter)</li>
-<li><code>google/gemini-2.5-pro</code> (OpenRouter)</li>
-<li><code>x-ai/grok-4.1-fast</code> (OpenRouter)</li>
-</ul>
-</div>
-</div>
-<div id="outline-container-orgab35589" class="outline-3">
-<h3 id="orgab35589"><span class="section-number-3">1.4.</span> Seeds</h3>
-<div class="outline-text-3" id="text-1-4">
-<p>
-The personality experiment uses the Goldberg Variations ground bass
-(BWV 988) &#x2013; the 8-note descending bass line that underlies all 30
-of Bach&rsquo;s variations:
-</p>
-
-<div class="org-src-container">
-<pre class="src src-js">setcps(72/60/4)
-
-$: note(<span style="color: #79a8ff;">"g3 gb3 e3 d3 b2 c3 d3 g2"</span>)
-  .slow(2)
-  .sound(<span style="color: #79a8ff;">"triangle"</span>)
-  .gain(0.5)
-  .room(0.15)
-</pre>
-</div>
-
-<p>
-Eight notes. One voice. No harmony, no rhythm, no effects beyond a
-little reverb. Everything that follows is the model&rsquo;s choice.
-</p>
-
-<div class="run-player">
-  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D')">Step 0</button></div>
-  <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
 </div>
-</div>
-<div id="outline-container-orgffcb300" class="outline-2">
-<h2 id="orgffcb300"><span class="section-number-2">2.</span> The music</h2>
+<div id="outline-container-org4264d2d" class="outline-2">
+<h2 id="org4264d2d"><span class="section-number-2">2.</span> The music</h2>
 <div class="outline-text-2" id="text-2">
 </div>
-<div id="outline-container-orgccfad20" class="outline-3">
-<h3 id="orgccfad20"><span class="section-number-3">2.1.</span> Claude (<code>claude-opus-4-5-20251101</code>)</h3>
+<div id="outline-container-orge159b06" class="outline-3">
+<h3 id="orge159b06"><span class="section-number-3">2.1.</span> Claude (<code>claude-opus-4-5-20251101</code>)</h3>
 <div class="outline-text-3" id="text-2-1">
 <p>
 <b>Run 1:</b>
@@ -553,8 +576,8 @@ little reverb. Everything that follows is the model&rsquo;s choice.
 </div>
 </div>
 </div>
-<div id="outline-container-org99345c2" class="outline-3">
-<h3 id="org99345c2"><span class="section-number-3">2.2.</span> Claude Opus 4.6 (<code>claude-opus-4-6</code>)</h3>
+<div id="outline-container-org99718ee" class="outline-3">
+<h3 id="org99718ee"><span class="section-number-3">2.2.</span> Claude Opus 4.6 (<code>claude-opus-4-6</code>)</h3>
 <div class="outline-text-3" id="text-2-2">
 <p>
 <b>Run 1:</b>
@@ -581,8 +604,8 @@ little reverb. Everything that follows is the model&rsquo;s choice.
 </div>
 </div>
 </div>
-<div id="outline-container-org75a9f1b" class="outline-3">
-<h3 id="org75a9f1b"><span class="section-number-3">2.3.</span> ChatGPT 5.2 (<code>openai/gpt-5.2</code>)</h3>
+<div id="outline-container-org0319a98" class="outline-3">
+<h3 id="org0319a98"><span class="section-number-3">2.3.</span> ChatGPT 5.2 (<code>openai/gpt-5.2</code>)</h3>
 <div class="outline-text-3" id="text-2-3">
 <p>
 <b>Run 1:</b>
@@ -616,8 +639,8 @@ little reverb. Everything that follows is the model&rsquo;s choice.
   <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-<ol class="org-ol">
-<li><a id="org2878e93"></a>Without track/effect limits<br />
+<div id="outline-container-org5048d47" class="outline-4">
+<h4 id="org5048d47"><span class="section-number-4">2.3.1.</span> Without track/effect limits</h4>
 <div class="outline-text-4" id="text-2-3-1">
 <p>
 The runs below were done without the &ldquo;maximum 6 tracks, 5 effects&rdquo; constraint that the other models had. GPT-5.2 handled it interestingly &#x2013; it built up massive <code>arrange()</code> blocks, creating long multi-section compositions that ballooned to 30k+ chars. We killed the runs early once we noticed.
@@ -659,11 +682,10 @@ Strudel struggles to render some of these, unfortunately.
   <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 </div>
-</li>
-</ol>
 </div>
-<div id="outline-container-orgb575a22" class="outline-3">
-<h3 id="orgb575a22"><span class="section-number-3">2.4.</span> Grok (<code>x-ai/grok-4.1-fast</code>)</h3>
+</div>
+<div id="outline-container-org301866d" class="outline-3">
+<h3 id="org301866d"><span class="section-number-3">2.4.</span> Grok (<code>x-ai/grok-4.1-fast</code>)</h3>
 <div class="outline-text-3" id="text-2-4">
 <p>
 Turn the volume down if you&rsquo;re using headphones!
@@ -694,8 +716,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-orgc34c828" class="outline-3">
-<h3 id="orgc34c828"><span class="section-number-3">2.5.</span> Gemini (<code>google/gemini-2.5-pro</code>)</h3>
+<div id="outline-container-org888b203" class="outline-3">
+<h3 id="org888b203"><span class="section-number-3">2.5.</span> Gemini (<code>google/gemini-2.5-pro</code>)</h3>
 <div class="outline-text-3" id="text-2-5">
 <p>
 <b>Run 1:</b>
@@ -722,8 +744,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-orgc3925a1" class="outline-3">
-<h3 id="orgc3925a1"><span class="section-number-3">2.6.</span> Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</h3>
+<div id="outline-container-org1d05fd5" class="outline-3">
+<h3 id="org1d05fd5"><span class="section-number-3">2.6.</span> Kimi (<code>moonshotai/kimi-k2.5-0127</code>)</h3>
 <div class="outline-text-3" id="text-2-6">
 <p>
 <b>Run 1:</b>
@@ -734,8 +756,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-org800b825" class="outline-3">
-<h3 id="org800b825"><span class="section-number-3">2.7.</span> Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</h3>
+<div id="outline-container-org20a64c1" class="outline-3">
+<h3 id="org20a64c1"><span class="section-number-3">2.7.</span> Qwen (<code>qwen/qwen3.5-plus-02-15</code>)</h3>
 <div class="outline-text-3" id="text-2-7">
 <p>
 <b>Run 1:</b>
@@ -746,8 +768,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-org4cbb8fd" class="outline-3">
-<h3 id="org4cbb8fd"><span class="section-number-3">2.8.</span> Cross-model: GPT 5.2 x Gemini (alternating)</h3>
+<div id="outline-container-org23cc75c" class="outline-3">
+<h3 id="org23cc75c"><span class="section-number-3">2.8.</span> Cross-model: GPT 5.2 x Gemini (alternating)</h3>
 <div class="outline-text-3" id="text-2-8">
 <p>
 <b>Run 1:</b>
@@ -758,8 +780,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-org9aaea91" class="outline-3">
-<h3 id="org9aaea91"><span class="section-number-3">2.9.</span> Cross-model: Grok x Gemini (alternating)</h3>
+<div id="outline-container-org011990a" class="outline-3">
+<h3 id="org011990a"><span class="section-number-3">2.9.</span> Cross-model: Grok x Gemini (alternating)</h3>
 <div class="outline-text-3" id="text-2-9">
 <p>
 <b>Run 1:</b>
@@ -770,8 +792,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-orgf58c70b" class="outline-3">
-<h3 id="orgf58c70b"><span class="section-number-3">2.10.</span> Cross-model: Claude x Grok (alternating)</h3>
+<div id="outline-container-orgf54d634" class="outline-3">
+<h3 id="orgf54d634"><span class="section-number-3">2.10.</span> Cross-model: Claude x Grok (alternating)</h3>
 <div class="outline-text-3" id="text-2-10">
 <p>
 <b>Run 1:</b>
@@ -782,8 +804,8 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-org4861c05" class="outline-3">
-<h3 id="org4861c05"><span class="section-number-3">2.11.</span> Cross-model: Claude x Gemini (alternating)</h3>
+<div id="outline-container-orgdd8e07b" class="outline-3">
+<h3 id="orgdd8e07b"><span class="section-number-3">2.11.</span> Cross-model: Claude x Gemini (alternating)</h3>
 <div class="outline-text-3" id="text-2-11">
 <p>
 <b>Run 1:</b>
@@ -795,11 +817,11 @@ Turn the volume down if you&rsquo;re using headphones!
 </div>
 </div>
 </div>
-<div id="outline-container-orgb04c52b" class="outline-2">
-<h2 id="orgb04c52b"><span class="section-number-2">3.</span> The music of small minds</h2>
+<div id="outline-container-org0850ae4" class="outline-2">
+<h2 id="org0850ae4"><span class="section-number-2">3.</span> The music of small minds</h2>
 <div class="outline-text-2" id="text-3">
 <p>
-Smaller models make consistently less interesting music. Goldbergbench?
+Smaller models make consistently less interesting music.
 </p>
 
 <ul class="org-ul">
@@ -845,15 +867,15 @@ Smaller models make consistently less interesting music. Goldbergbench?
 </div>
 </div>
 </div>
-<div id="outline-container-orga44c99e" class="outline-2">
-<h2 id="orga44c99e"><span class="section-number-2">4.</span> Try it yourself</h2>
+<div id="outline-container-org2926d08" class="outline-2">
+<h2 id="org2926d08"><span class="section-number-2">4.</span> Try it yourself</h2>
 <div class="outline-text-2" id="text-4">
 <p>
 The code is open source: <a href="https://github.com/ElleNajt/vibe-duet">vibe-duet on GitHub</a>.
 </p>
 </div>
-<div id="outline-container-orgb379351" class="outline-3">
-<h3 id="orgb379351"><span class="section-number-3">4.1.</span> Evolve</h3>
+<div id="outline-container-org701f92d" class="outline-3">
+<h3 id="org701f92d"><span class="section-number-3">4.1.</span> Evolve</h3>
 <div class="outline-text-3" id="text-4-1">
 <p>
 Run your own evolution experiment:
@@ -884,8 +906,8 @@ The repo has instructions on how to generate seeds from midi files.
 </p>
 </div>
 </div>
-<div id="outline-container-orgb8b81b3" class="outline-3">
-<h3 id="orgb8b81b3"><span class="section-number-3">4.2.</span> Live-coding with LLMs</h3>
+<div id="outline-container-orgb58b628" class="outline-3">
+<h3 id="orgb58b628"><span class="section-number-3">4.2.</span> Live-coding with LLMs</h3>
 <div class="outline-text-3" id="text-4-2">
 <p>
 Run <code>./start</code> and open the browser. Edit <code>live.js</code> in your editor or edit with your local coding agent &#x2013;
@@ -895,16 +917,16 @@ LLM and have it write music for you in real time.
 </div>
 </div>
 </div>
-<div id="outline-container-org6f8f5d5" class="outline-2">
-<h2 id="org6f8f5d5"><span class="section-number-2">5.</span> Acknowledgements</h2>
+<div id="outline-container-org9caf755" class="outline-2">
+<h2 id="org9caf755"><span class="section-number-2">5.</span> Acknowledgements</h2>
 <div class="outline-text-2" id="text-5">
 <p>
 Thanks to Liban, Arya Jakkli, and Jason Brown for review.
 </p>
 </div>
 </div>
-<div id="outline-container-org02266b3" class="outline-2">
-<h2 id="org02266b3"><span class="section-number-2">6.</span> Related Work:</h2>
+<div id="outline-container-orgacddc93" class="outline-2">
+<h2 id="orgacddc93"><span class="section-number-2">6.</span> Related Work:</h2>
 <div class="outline-text-2" id="text-6">
 <ul class="org-ul">
 <li><a href="https://sara-fish.github.io/llm-musical-self-expression/">an experiment on frontier LLMs generating classical music</a></li>
@@ -916,7 +938,7 @@ Thanks to Liban, Arya Jakkli, and Jason Brown for review.
 <div id="postamble" class="status">
 <p class="date">Date: 2026-02-17</p>
 <p class="author">Author: Elle Najt</p>
-<p class="date">Created: 2026-02-22 Sun 22:31</p>
+<p class="date">Created: 2026-02-23 Mon 13:23</p>
 </div>
 </body>
 </html>

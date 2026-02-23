@@ -2,11 +2,8 @@
 #+GDOC_ID: 1MqPVjhmvn1wz0BYXkNABoZJgROKdpAgHcqG1h9btY3c
 #+DATE: 2026-02-17
 #+PROPERTY: header-args:python :results output drawer :python "./.venv/bin/python3" :async t :session evolve_blogpost :exports results
-#+OPTIONS: H:2 toc:t
+#+OPTIONS: H:3 toc:t
 #+OPTIONS: ^:nil
-#+HTML_HEAD: <style>body { background: #1a1a2e; color: #e0e0e0; } #content { background: #1a1a2e; } a { color: #7b9eee; } .run-player { margin: 0.5rem 0 1.5rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; background: #0d0d1a; } .run-controls { display: flex; gap: 4px; padding: 6px 8px; background: #1a1a2e; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: #444 #1a1a2e; } .step-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; flex-shrink: 0; } .step-btn:hover { background: #4a3f8a; border-color: #7b68ee; } .step-btn.active { background: #7b68ee; color: #fff; border-color: #7b68ee; } .strudel-embed { width: 100%; height: 300px; border: none; border-top: 1px solid #333; }</style>
-#+HTML_HEAD: <script>function loadStep(btn, url) { var player = btn.closest('.run-player'); var old = player.querySelector('iframe'); var nw = document.createElement('iframe'); nw.className = 'strudel-embed'; nw.setAttribute('allow', 'autoplay'); nw.src = url; old.replaceWith(nw); player.querySelectorAll('.step-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); }</script>
-
 
 * The Experiment
 
@@ -33,15 +30,59 @@ style guidance, no music theory examples, no aesthetic direction beyond
 instincts produce when given the same 8 notes and total creative
 freedom.
 
-We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music. 
+We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complexly architecture pieces.
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
-The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (If you're struggling to set it up but want to play with it, email me and I'll send you a link on a server where it's running.)
+The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]].
 
-** Some notable pieces
+The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (This should work out of the box, at least on mac or linux, if you point claude code at that github link and ask it to set it up.)
 
-All the music is embedded below, including some cross model experiments. Here are some samples that give a vibe. 
+** The scaffold: 
+
+Models aren't perfect at Strudel -- they make syntax mistakes and invent
+nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
+transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
+let the model try again from scratch (up to 5 attempts). The model
+never sees the error message -- it just gets another shot.
+
+** Models
+
+- =claude-opus-4-5-20251101= (Anthropic API)
+- =claude-opus-4-6= (Anthropic API)
+- =openai/gpt-5.2= (OpenRouter)
+- =google/gemini-2.5-pro= (OpenRouter)
+- =x-ai/grok-4.1-fast= (OpenRouter)
+
+** Seeds
+
+The personality experiment uses the Goldberg Variations ground bass
+(BWV 988) -- the 8-note descending bass line that underlies all 30
+of Bach's variations:
+
+#+begin_src js
+setcps(72/60/4)
+
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
+  .slow(2)
+  .sound("triangle")
+  .gain(0.5)
+  .room(0.15)
+#+end_src
+
+Eight notes. One voice. No harmony, no rhythm, no effects beyond a
+little reverb. Everything that follows is the model's choice.
+
+#+begin_export html
+<div class="run-player">
+  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D')">Step 0</button></div>
+  <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
+</div>
+#+end_export
+
+** Some notable examples
+
+All the music is embedded down the page, including some cross model experiments. Here are some samples that give a vibe. 
 
 *** Claude
 
@@ -102,6 +143,10 @@ GPT 5.2 consistently writes creepy glitchy music. It makes speech samples such a
 
 Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's LLM self-portraits]]:
 
+#+ATTR_HTML: :width 300px
+#+HTML_HEAD: <style>body { background: #1a1a2e; color: #e0e0e0; } #content { background: #1a1a2e; } a { color: #7b9eee; } .run-player { margin: 0.5rem 0 1.5rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; background: #0d0d1a; } .run-controls { display: flex; gap: 4px; padding: 6px 8px; background: #1a1a2e; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: #444 #1a1a2e; } .step-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; flex-shrink: 0; } .step-btn:hover { background: #4a3f8a; border-color: #7b68ee; } .step-btn.active { background: #7b68ee; color: #fff; border-color: #7b68ee; } .strudel-embed { width: 100%; height: 300px; border: none; border-top: 1px solid #333; }</style>
+#+HTML_HEAD: <script>function loadStep(btn, url) { var player = btn.closest('.run-player'); var old = player.querySelector('iframe'); var nw = document.createElement('iframe'); nw.className = 'strudel-embed'; nw.setAttribute('allow', 'autoplay'); nw.src = url; old.replaceWith(nw); player.querySelectorAll('.step-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); }</script>
+
 [[file:plots/GPT_SelfPortrait.jpg]]
 
 #+begin_export html
@@ -123,6 +168,8 @@ Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice sam
 #+end_export
 
 *** We make collaborations by having models alternate: 
+
+These are cool. I got lazy and asked Claude to summarize. 
 
 #+begin_quote
 *Claude + Grok*: Claude builds a sacred cathedral vibe (FM bells, chant speech, heavy reverb), and Grok leans into it rather than fighting, adding phrygian scales and theatrical excess. By step 30 it's a detuned calliope waltz over tritone bass. Step 20 is the sweet spot before it tips over. -- Claude 
@@ -166,48 +213,6 @@ Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice sam
 <div class="run-player">
   <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#c2V0Y3BzKDExMi82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOmdyb292ZSxldm9sdmUsY29zbWljLHB1bHNlLG5lYnVsYSx2b2lkJykKc2FtcGxlcygnc2hhYmRhL3NwZWVjaC9mci1GUi9tOm1hZ2lxdWUsaW5maW5pJykKCiQ6IHN0YWNrKAogIC8vIERSVU1TOiBTd2FwcGVkIHRvIGRpcnRpZXIgcGVyY3Vzc2lvbiwgYWRkZWQgcmltIHNob3RzIGZvciBzbmFwCiAgc3RhY2soCiAgICBzKCJiZCIpLmV1Y2xpZCg0LDE2KS5nYWluKDAuNjUpLmxwZigyNTAwKSwKICAgIHMoIltyaW0gfiByaW1dLzIsIFtzbiBzbiB%2BXSIpLmZhc3QoMS41KS5nYWluKDAuNCkuaHBmKDI1MCkuY3J1c2goNCksCiAgICBzKCJoaCoxNj8iKS52ZWxvY2l0eShyYW5kLnJhbmdlKDAuMywwLjgpKS5nYWluKDAuMTIpLmhwZig2MDAwKS5zd2luZygwLjA4KSwKICAgIHMoImNwIikuZXVjbGlkKDUsMTYpLmdhaW4oMC4yMikucGFuKDAuNykuZGVsYXkoMC4zNSkuZGZiKDAuNDUpLmR0KDAuMTI1KSwKICAgIHMoIm10KjMiKS5ldmVyeSg0LCB4PT54LnNwZWVkKCItMC44IikpLmdhaW4oMC4xOCkucGFuKDAuMykubHBmKDE4MDApCiAgKSwKCiAgLy8gUEFEUzogQm9sZCBoYXJtb255IHNoaWZ0IHRvIHdob2xlLXRvbmUgc2NhbGUgZm9yIHN1cnJlYWwsIGZsb2F0aW5nIG1vb2QKICBub3RlKCJjMyBlMyBnczMgZDQgZnM0IGFzNCwgZGIzIGViMyBnMyBbZWI0IGc0IGJzNF0iKS5zbG93KDQpCiAgICAuc291bmQoInB1bHNlIikKICAgIC5nYWluKDAuMjgpCiAgICAuYXR0YWNrKDEpLnJlbGVhc2UoNCkKICAgIC5kZXR1bmUoMTIpCiAgICAuZm1lbnYoNCkuZm1oKDMpCiAgICAubHBmKHNpbmUucmFuZ2UoNDAwLCAxODAwKS5zbG93KDYpKS5scHEoNSkKICAgIC5yb29tKDAuNjUpLmxlc2xpZSgwLjQpLAoKICAvLyBNRUxPRFk6IFJld3JpdHRlbiBhcyBkZXNjZW5kaW5nIHdob2xlLXRvbmUgbGluZXMsIGdsaXRjaGllciB3aXRoIGRlZ3JhZGUKICBub3RlKCJhczUgZnM1IGQ1IH4gZ3M1IGU1IGM1IH4sIGJzNCBnNCBlYjQgfiBhNSBmczUgZDUgfiIpLnNsb3coNCkKICAgIC5zb3VuZCgic2F3IikKICAgIC5nYWluKDAuMikKICAgIC5mbWVudigxMCkuZm1kZWNheSgwLjA4KQogICAgLmxwZigxODAwKS5scHEoMi41KQogICAgLmRlbGF5KDAuNDUpLmR0KDAuMzc1KS5kZmIoMC41NSkKICAgIC5wYW4ocGVybGluLnJhbmdlKDAuMiwwLjgpLnNsb3coNCkpCiAgICAuZGVncmFkZUJ5KDAuMTUpLAoKICAvLyBCQVNTOiBNb3JlIGFnZ3Jlc3NpdmUsIGZtLW1vZHVsYXRlZCBwdWxzZSB3aXRoIHJpbmcgbW9kIHN1cnByaXNlCiAgbm90ZSgiYzEqMyBjMSwgZGIxKjMgZGIxLCBbYzEgZ3MxXSoyLCBbZGIxIGcxXSoyIikuc2xvdyg0KQogICAgLnNvdW5kKCJzaW5lIikKICAgIC5zaGFwZSgwLjUpLnJpbmcoMC42KS5yaW5nZig4MCkKICAgIC5scGYoMjAwKS5scHEoMikKICAgIC5nYWluKDAuNTUpCiAgICAuYXR0YWNrKDAuMDA1KS5yZWxlYXNlKDAuNDUpCiAgICAuZm0oNSkuZm1lbnYoNiksCiAgICAKICAvLyBORVcgRUxFTUVOVDogTWV0YWxsaWMgcmluZy1tb2QgYmVsbHMgcmVwbGFjaW5nIGhpZ2ggc3ludGgsIHVuZXhwZWN0ZWQgcGVyY3Vzc2l2ZSBzaGltbWVyCiAgbm90ZSgiZ3M0IGJzNCBkczUiKS5zb3VuZCgic3F1YXJlIikKICAgIC5ldWNsaWQoOSwzMikKICAgIC5nYWluKDAuMTQpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4yLDAuOCkuc2xvdyg1KSkKICAgIC5scGYoMzUwMCkucmluZygwLjgpLnJpbmdmKHNpbmUucmFuZ2UoMzAwLDkwMCkpCiAgICAucGhhc2VyKDAuNiksCgogIC8vIFZPQ0FMUzogR2xpdGNoIGV2b2x1dGlvbiAtIGNob3BwZWQsIHN0cmlhdGVkLCB2YXJpYWJsZSBzcGVlZCBmb3IgYnJva2VuIHNwZWVjaAogIHMoIm5lYnVsYSB%2BIDxncm9vdmUgZXZvbHZlPiBwdWxzZSoyIH4gPGNvc21pYyBtYWdpcXVlPiB%2BIGluZmluaSB2b2lkIikuc2xvdyg2KQogICAgLmNob3AoOCkuc3RyaWF0ZSgxMikKICAgIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC43NSwxLjI1KS5zbG93KDUpKQogICAgLmdhaW4oMC4zMikKICAgIC5ocGYoNTAwKQogICAgLnJvb20oMC43NSkKICAgIC5kZWxheSgwLjU1KS5kdCgwLjI1KS5kZmIoMC42KQogICAgLnRyZW1vbG8oMC41KS50cmVtb2xvc3luYyg2KQogICAgLmN1dCg1KQopLnJvb20oMC42NSkuc2l6ZSgwLjg1KQ%3D%3D')">Step 20</button> <button class="step-btn" onclick="loadStep(this, 'https://strudel.cc/embed#c2V0Y3BzKDAuNSkKc2FtcGxlcygnc2hhYmRhL3NwZWVjaDpncm9vdmUsZXZvbHZlLGNvc21pYyxwdWxzZSxuZWJ1bGEsdm9pZCcpCnNhbXBsZXMoJ3NoYWJkYS9zcGVlY2gvZnItRlIvbTptYWdpcXVlLGluZmluaScpCgokOiBzdGFjaygKICAvLyBEUlVNUzogQnJva2VuIGJlYXQgZXZvbHV0aW9uIHdpdGggcmltcyBhbmQgbW9yZSBzd2luZwogIHN0YWNrKAogICAgcygiYmQgW34gYmRdIFtiZCB%2BXSBiZCIpLmdhaW4oMC45KS5scGYoMjYwMCksCiAgICBzKCJbfiBzbl0gW2NwIH4gc25dIGNwIikuZ2FpbigwLjYpLmhwZigxODApLmNydXNoKDQpLnJvb20oMC4yNSksCiAgICBzKCJoaCoxMiwgW3JkIGhoKjNdIikudmVsb2NpdHkocGVybGluLnJhbmdlKDAuMzUsMC45NSkuc2xvdygzKSkuZ2FpbigwLjIyKS5ocGYoNzgwMCksCiAgICBzKCJtdCBbfiBsdCBtdF0gfiIpLmV1Y2xpZCg4LDE2KS5zbG93KDIpLmRlbGF5KDAuMjgpLmRmYigwLjQ1KS5kdCgwLjEyNSkucGFuKHJhbmQucmFuZ2UoMC4yLDAuOCkpLmdhaW4oMC4zOCkubHBmKDQ4MDApCiAgKS5zd2luZygwLjEpLAoKICAvLyBQSUFOTyBDSE9SRFM6IE5ldyBEbSAtIEJiIC0gRiAtIEMgcHJvZ3Jlc3Npb24sIHJlcGxhY2luZyBwdWxzZSBjaG9yZHMKICBub3RlKCJkMyBmMyBhMywgYmIyIGQzIGYzIGJiMywgZjIgYTIgYzMgZjMsIGMzIGUzIGczIikuc2xvdyg0KQogICAgLnNvdW5kKCJwaWFubyIpLmdhaW4oMC4yKQogICAgLmF0dGFjaygwLjAwOCkuZGVjYXkoMC4xOCkuc3VzdGFpbigwLjI1KS5yZWxlYXNlKDAuMjUpCiAgICAubHBmKHNpbmUucmFuZ2UoNDUwLDI4MDApLnNsb3coNCkpLmxwcSgyLjgpCiAgICAucm9vbSgwLjU1KS5wYW4oc2luZS5yYW5nZSgwLjM1LDAuNjUpLnNsb3coNykpLAoKICAvLyBWT0NBTCBMRUFEOiBQcm9tb3RlZCAmIHJld3JpdHRlbiBzb2FyaW5nIG1lbG9keSBvdmVyIG5ldyBoYXJtb255LCBuZWJ1bGEgdm9pZCBwaXRjaGVkCiAgcygibmVidWxhIHZvaWQiKS5ub3RlKCJmNCBhNCBkNSwgYmI0IGQ1IGY1LCBjNSBmNSBhNSwgZTUgZzUgYzYiKS5zbG93KDQpCiAgICAuc3BlZWQocGVybGluLnJhbmdlKDAuOTIsMS4yOCkuc2xvdyg0LjUpKS5jaG9wKDEyKS5ldWNsaWQoNSw4KQogICAgLmJwZihzaW5lLnJhbmdlKDU1MCw1ODAwKS5zbG93KDcpKS5icHEoNC4yKQogICAgLmdhaW4oMC4zMikKICAgIC5wYW4oc2luZS5yYW5nZSgwLjE1LDAuODUpLnNsb3coNC41KSkKICAgIC5yb29tKDAuOCkucGhhc2VyKDAuMjgpLnBoYXNlcmRlcHRoKDAuNzUpLAoKICAvLyBCQVNTOiBSZXJvb3RlZCB0byBEbS1CYi1GLUMKICBub3RlKCJkMSo0LCBiYjEqNCwgZjEqNCwgYzEqNCIpLnNsb3coNCkKICAgIC5zb3VuZCgic2F3IikKICAgIC5zaGFwZSgwLjMyKS5kaXN0b3J0KDAuMzIpCiAgICAubHBmKDE0NSkubHBxKDMuOCkKICAgIC5nYWluKDAuNTIpCiAgICAuYXR0YWNrKDAuMDIpLnJlbGVhc2UoMC40MikKICAgIC5sZXNsaWUoMC40NSksCgogIC8vIFZPQ0FMUzogTXlzdGljYWwgYmFja2Ryb3AgYWRqdXN0ZWQKICBzKCJ%2BIG1hZ2lxdWUgaW5maW5pLCBncm9vdmUgZXZvbHZlIGNvc21pYyBwdWxzZSIpLnNsb3coNCkKICAgIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC44NywxLjEzKS5zbG93KDUuNSkpCiAgICAuZ2FpbigwLjM4KQogICAgLmhwZig0MjApCiAgICAucm9vbSgwLjk0KS5zaXplKDAuODgpCiAgICAuZGVsYXkoMC42MikuZHQoMC41MikuZGZiKDAuNTIpCiAgICAuY3V0KDUpLAoKICAvLyBORVcgR1JBTlVMQVIgVEVYVFVSRTogVW5leHBlY3RlZCBzd2lybGluZyBuZWJ1bGEvdm9pZCBjbG91ZHMKICBzKCJuZWJ1bGEqMiwgdm9pZCoyIH4iKS5zbG93KDYpLnN0cmlhdGUoMjgpLnNwZWVkKHNhdy5yYW5nZSgwLjIsMS44KS5zbG93KDIuNSkpCiAgICAuZ2FpbigwLjE4KS5ocGYoNzUwKS5scGYoMzgwMCkubHBxKDIpCiAgICAucm9vbSgwLjk4KS5zaXplKDAuOTIpLnBhbihzaW5lLnNsb3coMC44KS5yYW5nZSgwLDEpKQogICAgLnBoYXNlcigwLjQ1KS5waGFzZXJkZXB0aCgwLjg1KQopLnJvb20oMC43OCkuc2l6ZSgwLjg1KQ%3D%3D')">Step 30</button></div>
   <iframe src="https://strudel.cc/embed#c2V0Y3BzKDExMi82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOmdyb292ZSxldm9sdmUsY29zbWljLHB1bHNlLG5lYnVsYSx2b2lkJykKc2FtcGxlcygnc2hhYmRhL3NwZWVjaC9mci1GUi9tOm1hZ2lxdWUsaW5maW5pJykKCiQ6IHN0YWNrKAogIC8vIERSVU1TOiBTd2FwcGVkIHRvIGRpcnRpZXIgcGVyY3Vzc2lvbiwgYWRkZWQgcmltIHNob3RzIGZvciBzbmFwCiAgc3RhY2soCiAgICBzKCJiZCIpLmV1Y2xpZCg0LDE2KS5nYWluKDAuNjUpLmxwZigyNTAwKSwKICAgIHMoIltyaW0gfiByaW1dLzIsIFtzbiBzbiB%2BXSIpLmZhc3QoMS41KS5nYWluKDAuNCkuaHBmKDI1MCkuY3J1c2goNCksCiAgICBzKCJoaCoxNj8iKS52ZWxvY2l0eShyYW5kLnJhbmdlKDAuMywwLjgpKS5nYWluKDAuMTIpLmhwZig2MDAwKS5zd2luZygwLjA4KSwKICAgIHMoImNwIikuZXVjbGlkKDUsMTYpLmdhaW4oMC4yMikucGFuKDAuNykuZGVsYXkoMC4zNSkuZGZiKDAuNDUpLmR0KDAuMTI1KSwKICAgIHMoIm10KjMiKS5ldmVyeSg0LCB4PT54LnNwZWVkKCItMC44IikpLmdhaW4oMC4xOCkucGFuKDAuMykubHBmKDE4MDApCiAgKSwKCiAgLy8gUEFEUzogQm9sZCBoYXJtb255IHNoaWZ0IHRvIHdob2xlLXRvbmUgc2NhbGUgZm9yIHN1cnJlYWwsIGZsb2F0aW5nIG1vb2QKICBub3RlKCJjMyBlMyBnczMgZDQgZnM0IGFzNCwgZGIzIGViMyBnMyBbZWI0IGc0IGJzNF0iKS5zbG93KDQpCiAgICAuc291bmQoInB1bHNlIikKICAgIC5nYWluKDAuMjgpCiAgICAuYXR0YWNrKDEpLnJlbGVhc2UoNCkKICAgIC5kZXR1bmUoMTIpCiAgICAuZm1lbnYoNCkuZm1oKDMpCiAgICAubHBmKHNpbmUucmFuZ2UoNDAwLCAxODAwKS5zbG93KDYpKS5scHEoNSkKICAgIC5yb29tKDAuNjUpLmxlc2xpZSgwLjQpLAoKICAvLyBNRUxPRFk6IFJld3JpdHRlbiBhcyBkZXNjZW5kaW5nIHdob2xlLXRvbmUgbGluZXMsIGdsaXRjaGllciB3aXRoIGRlZ3JhZGUKICBub3RlKCJhczUgZnM1IGQ1IH4gZ3M1IGU1IGM1IH4sIGJzNCBnNCBlYjQgfiBhNSBmczUgZDUgfiIpLnNsb3coNCkKICAgIC5zb3VuZCgic2F3IikKICAgIC5nYWluKDAuMikKICAgIC5mbWVudigxMCkuZm1kZWNheSgwLjA4KQogICAgLmxwZigxODAwKS5scHEoMi41KQogICAgLmRlbGF5KDAuNDUpLmR0KDAuMzc1KS5kZmIoMC41NSkKICAgIC5wYW4ocGVybGluLnJhbmdlKDAuMiwwLjgpLnNsb3coNCkpCiAgICAuZGVncmFkZUJ5KDAuMTUpLAoKICAvLyBCQVNTOiBNb3JlIGFnZ3Jlc3NpdmUsIGZtLW1vZHVsYXRlZCBwdWxzZSB3aXRoIHJpbmcgbW9kIHN1cnByaXNlCiAgbm90ZSgiYzEqMyBjMSwgZGIxKjMgZGIxLCBbYzEgZ3MxXSoyLCBbZGIxIGcxXSoyIikuc2xvdyg0KQogICAgLnNvdW5kKCJzaW5lIikKICAgIC5zaGFwZSgwLjUpLnJpbmcoMC42KS5yaW5nZig4MCkKICAgIC5scGYoMjAwKS5scHEoMikKICAgIC5nYWluKDAuNTUpCiAgICAuYXR0YWNrKDAuMDA1KS5yZWxlYXNlKDAuNDUpCiAgICAuZm0oNSkuZm1lbnYoNiksCiAgICAKICAvLyBORVcgRUxFTUVOVDogTWV0YWxsaWMgcmluZy1tb2QgYmVsbHMgcmVwbGFjaW5nIGhpZ2ggc3ludGgsIHVuZXhwZWN0ZWQgcGVyY3Vzc2l2ZSBzaGltbWVyCiAgbm90ZSgiZ3M0IGJzNCBkczUiKS5zb3VuZCgic3F1YXJlIikKICAgIC5ldWNsaWQoOSwzMikKICAgIC5nYWluKDAuMTQpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4yLDAuOCkuc2xvdyg1KSkKICAgIC5scGYoMzUwMCkucmluZygwLjgpLnJpbmdmKHNpbmUucmFuZ2UoMzAwLDkwMCkpCiAgICAucGhhc2VyKDAuNiksCgogIC8vIFZPQ0FMUzogR2xpdGNoIGV2b2x1dGlvbiAtIGNob3BwZWQsIHN0cmlhdGVkLCB2YXJpYWJsZSBzcGVlZCBmb3IgYnJva2VuIHNwZWVjaAogIHMoIm5lYnVsYSB%2BIDxncm9vdmUgZXZvbHZlPiBwdWxzZSoyIH4gPGNvc21pYyBtYWdpcXVlPiB%2BIGluZmluaSB2b2lkIikuc2xvdyg2KQogICAgLmNob3AoOCkuc3RyaWF0ZSgxMikKICAgIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC43NSwxLjI1KS5zbG93KDUpKQogICAgLmdhaW4oMC4zMikKICAgIC5ocGYoNTAwKQogICAgLnJvb20oMC43NSkKICAgIC5kZWxheSgwLjU1KS5kdCgwLjI1KS5kZmIoMC42KQogICAgLnRyZW1vbG8oMC41KS50cmVtb2xvc3luYyg2KQogICAgLmN1dCg1KQopLnJvb20oMC42NSkuc2l6ZSgwLjg1KQ%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
-</div>
-#+end_export
-
-** The scaffold: 
-
-Models aren't perfect at Strudel -- they make syntax mistakes and invent
-nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
-transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
-let the model try again from scratch (up to 5 attempts). The model
-never sees the error message -- it just gets another shot.
-
-** Models
-
-- =claude-opus-4-5-20251101= (Anthropic API)
-- =claude-opus-4-6= (Anthropic API)
-- =openai/gpt-5.2= (OpenRouter)
-- =google/gemini-2.5-pro= (OpenRouter)
-- =x-ai/grok-4.1-fast= (OpenRouter)
-
-** Seeds
-
-The personality experiment uses the Goldberg Variations ground bass
-(BWV 988) -- the 8-note descending bass line that underlies all 30
-of Bach's variations:
-
-#+begin_src js
-setcps(72/60/4)
-
-$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
-  .slow(2)
-  .sound("triangle")
-  .gain(0.5)
-  .room(0.15)
-#+end_src
-
-Eight notes. One voice. No harmony, no rhythm, no effects beyond a
-little reverb. Everything that follows is the model's choice.
-
-#+begin_export html
-<div class="run-player">
-  <div class="run-controls"><button class="step-btn active" onclick="loadStep(this, 'https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D')">Step 0</button></div>
-  <iframe src="https://strudel.cc/embed#Ly8gR29sZGJlcmcgVmFyaWF0aW9ucyAtIEdyb3VuZCBCYXNzIChCV1YgOTg4KQovLyBUaGUgOC1ub3RlIGRlc2NlbmRpbmcgYmFzcyB0aGF0IHVuZGVybGllcyBhbGwgMzAgdmFyaWF0aW9ucwoKc2V0Y3BzKDcyLzYwLzQpCgokOiBub3RlKCJnMyBnYjMgZTMgZDMgYjIgYzMgZDMgZzIiKQogIC5zbG93KDIpCiAgLnNvdW5kKCJ0cmlhbmdsZSIpCiAgLmdhaW4oMC41KQogIC5yb29tKDAuMTUpCg%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 #+end_export
 
@@ -474,7 +479,7 @@ Turn the volume down if you're using headphones!
 
 * The music of small minds
 
-Smaller models make consistently less interesting music. Goldbergbench?
+Smaller models make consistently less interesting music.
 
 - Claude 3 Haiku (=anthropic/claude-3-haiku=):
 #+begin_export html
