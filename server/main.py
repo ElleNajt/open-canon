@@ -43,13 +43,52 @@ app.add_middleware(
 anthropic_client = anthropic.AsyncAnthropic()
 OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
 
-AVAILABLE_MODELS = {
-    "claude-opus-4.5": {"provider": "anthropic", "model": "claude-opus-4-5-20251101"},
-    "gpt-5.2": {"provider": "openrouter", "model": "openai/gpt-5.2"},
-    "gemini-2.5-pro": {"provider": "openrouter", "model": "google/gemini-2.5-pro"},
-    "grok-4.1": {"provider": "openrouter", "model": "x-ai/grok-4.1-fast"},
+# Anthropic models (need special API client)
+ANTHROPIC_MODELS = {
+    "claude-haiku": "claude-haiku-4-5-20251001",
+    "claude-sonnet": "claude-sonnet-4-20250514",
+    "claude-opus-4.5": "claude-opus-4-5-20251101",
 }
-DEFAULT_MODEL = "claude-opus-4.5"
+
+# Load models config from models.json if it exists
+# Format:
+#   {
+#     "models": ["claude-haiku", "qwen/qwen3-235b-a22b", "deepseek/deepseek-chat"],
+#     "default": "qwen/qwen3-235b-a22b"
+#   }
+# Anthropic models use short names (claude-haiku, claude-sonnet, claude-opus-4.5).
+# Anything else is treated as an OpenRouter model ID and used directly.
+_models_config_path = os.path.join(
+    os.path.dirname(os.path.abspath(__file__)), "..", "models.json"
+)
+
+
+def _build_model_entry(name: str) -> dict:
+    """Turn a model name into a provider/model config entry."""
+    if name in ANTHROPIC_MODELS:
+        return {"provider": "anthropic", "model": ANTHROPIC_MODELS[name]}
+    # Anything with a slash is an OpenRouter model ID
+    if "/" in name:
+        return {"provider": "openrouter", "model": name}
+    # Bare name — assume OpenRouter, user's responsibility
+    return {"provider": "openrouter", "model": name}
+
+
+if os.path.isfile(_models_config_path):
+    with open(_models_config_path) as f:
+        _config = json.load(f)
+    _enabled = _config.get("models", [])
+    AVAILABLE_MODELS = {name: _build_model_entry(name) for name in _enabled}
+    DEFAULT_MODEL = _config.get("default", _enabled[0] if _enabled else "claude-sonnet")
+    print(
+        f"Loaded models.json: {list(AVAILABLE_MODELS.keys())} (default: {DEFAULT_MODEL})"
+    )
+else:
+    # No config — default set for local dev
+    _default_models = ["claude-sonnet", "claude-haiku", "claude-opus-4.5"]
+    AVAILABLE_MODELS = {name: _build_model_entry(name) for name in _default_models}
+    DEFAULT_MODEL = "claude-sonnet"
+    print(f"No models.json found, defaults: {list(AVAILABLE_MODELS.keys())}")
 
 # Path to live.js on disk (for editor sync)
 LIVE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "live.js")
@@ -120,16 +159,18 @@ def get_recent_fix_history(n: int = 3) -> list[dict]:
 # Track fix attempts with their diffs
 fix_history: list[dict] = []  # [{commit, diff, error, timestamp}, ...]
 
-# Rate limiting: 1000 requests per hour
-RATE_LIMIT = 1000
-RATE_WINDOW = 60 * 60  # seconds
+# Rate limiting: per-IP and global daily limits
+RATE_LIMIT_PER_IP = 100
+RATE_LIMIT_GLOBAL = 2000
+RATE_WINDOW = 24 * 60 * 60  # 24 hours
 
 # State
 current_code = '$: s("bd cp bd cp")'
 queue: list[dict] = []  # {name, prompt, timestamp}
 history: list[dict] = []  # {name, prompt, code, timestamp}
 connections: list[WebSocket] = []
-request_times: deque = deque()  # timestamps of processed requests
+request_times: deque = deque()  # global timestamps
+request_times_by_ip: dict[str, deque] = {}  # ip -> deque of timestamps
 processing = False
 processing_item: dict | None = None  # Currently processing prompt
 repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
@@ -179,7 +220,17 @@ def save_state():
 
 SYSTEM_PROMPT = """You edit Strudel live music code. Given the current code and a user request, return ONLY the updated code - no explanation, no markdown fences.
 
+CRITICAL: ONLY use the functions and parameters listed below. Do NOT invent, guess, or hallucinate any function names. If a function is not in this list, it does not exist. Using made-up functions will cause errors.
+
 Keep changes minimal and musical. Evolve slowly — change one or two things at a time, not everything. Preserve the tempo and key unless asked to change them. Keep the total code under 500 lines — remove unused or redundant tracks rather than accumulating.
+
+## Strudel Reference
+
+Structure: Every track MUST start with $: — this is required for sound to play. stack(...) combines patterns within a track. setcps(bpm/60/4) sets tempo.
+Sounds: .sound() or .s() — sawtooth, square, triangle, sine, pulse, supersaw, piano, bd, sn, hh, oh, cp, cr, rim, mt, ht, lt, cb, rd
+Notes: note("c4 e4 g4"), n("0 2 4").scale("C:minor"), freq(440)
+Sharps use "s" not "#": cs4, fs4, gs4. Flats use "b": db4, eb4, bb4.
+Mini-notation: [] subdivide, <> alternate, * repeat, / slow, , polyrhythm, ? random, : sample, ~ rest, ! replicate
 
 ## Mini-notation
 - [brackets] subdivide time: s("[bd sd] hh") plays bd and sd in first half, hh in second
@@ -226,6 +277,17 @@ Noise: white, pink, brown, crackle
 Use samples() with shabda/speech to load spoken words as samples with optional pitch shifting.
 Pitch uses Google TTS neural synthesis, so it sounds natural (no chipmunk effect).
 
+IMPORTANT: Each samples() call must use exactly ONE voice path. Commas separate words within that path, NOT different paths. Use separate samples() calls for different languages or voices.
+
+samples('shabda/speech:word1,word2,a_phrase')     // OK: multiple words, one voice
+samples('shabda/speech/fr-FR/m:magnifique')       // OK: one word, French male voice
+
+// WRONG: mixing paths in one call
+// samples('shabda/speech:hello,shabda/speech/ja-JP/f:world')
+
+Languages: en-US, en-GB, fr-FR, de-DE, es-ES, it-IT, ja-JP, ko-KR, pt-BR, ru-RU, etc.
+Gender: f (default) or m
+
 Basic usage:
   $: samples('shabda/speech:hello,world'), s("hello world")
   $: samples('shabda/speech:hello,world'), s("<hello world>")  // alternates
@@ -244,23 +306,132 @@ Pitch-aware sample names: when pitch!=0, sample names get a _p suffix (e.g. hell
 When pitch=0 or omitted, sample names are plain (e.g. hello, world).
 All standard effects (.room(), .delay(), .gain(), etc.) work on shabda samples.
 
-## Effects
-Filters: .lpf(hz), .hpf(hz), .bpf(hz), .resonance(0-1)
-Reverb: .room(0-1), .size(0-1), .roomlp(hz)
-Delay: .delay(0-1), .delaytime(0-1), .delayfeedback(0-1)
-Distortion: .distort(0-1), .crush(bits), .shape(0-1), .drive(0-1)
-Dynamics: .gain(0-1), .velocity(0-1), .compressor("threshold:ratio:knee:attack:release")
-Spatial: .pan(-1 to 1), .jux(fn) (left=original, right=fn applied)
-Modulation: .vibrato(depth), .phaser(depth), .tremolo(depth), .chorus(depth), .leslie(speed)
-Envelope: .attack(s), .decay(s), .sustain(0-1), .release(s)
+Example:
+samples('shabda/speech:the_drum,forever'), samples('shabda/speech/fr-FR/m:magnifique')
+$: s("the_drum*2").chop(16).speed(rand.range(0.85, 1.1))
+$: s("forever magnifique").slow(4).late(0.125)
 
-## Transformations
-Speed: .slow(n), .fast(n)
-Structure: .rev() (reverse), .palindrome(), .ply(n) (repeat each)
-Conditional: .every(n, fn), .sometimes(fn), .rarely(fn), .often(fn)
-Layering: .jux(rev) (left=orig, right=reversed), .off(time, fn) (delayed copy)
-Random: .degradeBy(0-1) (randomly drop events)
-Euclidean: .euclid(hits, steps) - e.g., .euclid(3,8) for 3 hits spread over 8 steps
+### Filters
+.lpf(hz) or .cutoff(hz) — lowpass filter
+.hpf(hz) or .hcutoff(hz) — highpass filter
+.bpf(hz) or .bandf(hz) — bandpass filter
+.lpq(q) or .resonance(q) — lowpass Q (0-50)
+.hpq(q) or .hresonance(q) — highpass Q
+.bpq(q) or .bandq(q) — bandpass Q
+.djf(0-1) — DJ filter (0=lowpass, 1=highpass)
+.vowel("a e i o u") — formant filter
+.ftype(n) — filter type: 0=12db, 1=ladder, 2=24db
+.fanchor(n) — filter anchor point
+
+### Filter Envelopes
+.lpenv(n), .hpenv(n), .bpenv(n) — filter envelope amount
+.lpattack(s), .lpdecay(s), .lpsustain(0-1), .lprelease(s) — lowpass envelope ADSR
+.hpattack(s), .hpdecay(s), .hpsustain(0-1), .hprelease(s) — highpass envelope ADSR
+
+### Amplitude Envelope
+.attack(s), .decay(s), .sustain(0-1), .release(s), .hold(s)
+
+### Gain & Dynamics
+.gain(0-1), .velocity(0-1), .postgain(n)
+.compressor("threshold:ratio:knee:attack:release") — dynamics compressor, all params in one colon-separated string
+
+### Reverb
+.room(0-1) — reverb send amount
+.size(0-1) or .roomsize(n) — reverb size
+.roomlp(hz) — reverb lowpass
+
+### Delay
+.delay(0-1) — delay send amount
+.delaytime(s) or .dt(s) — delay time
+.delayfeedback(0-1) or .dfb(n) — delay feedback
+
+### Distortion
+.distort(0-1) — distortion
+.crush(bits) — bitcrushing (lower = more crushed)
+.shape(0-1) — waveshaping
+.drive(0-1) — overdrive
+.coarse(n) — sample rate reduction
+.triode(n) — triode simulation
+
+### Panning & Spatial
+.pan(0-1) — stereo position (0=left, 0.5=center, 1=right)
+
+### Pitch
+.detune(cents), .octave(n)
+.slide(n), .accelerate(n)
+.penv(n) — pitch envelope amount
+.pattack(s), .pdecay(s), .psustain(0-1), .prelease(s)
+
+### FM Synthesis
+.fmi(n) or .fm(n) — FM modulation index
+.fmh(n) — FM harmonic ratio
+.fmenv(n) — FM envelope amount
+.fmattack(s), .fmdecay(s), .fmsustain(0-1), .fmrelease(s)
+
+### Tremolo (Amplitude Modulation)
+.tremolo(depth) or .trem(depth)
+.tremolosync(cycles) — tremolo speed in cycles
+.tremolodepth(n), .tremoloskew(0-1), .tremoloshape("sine tri square saw")
+
+### Phaser
+.phaser(rate) — phaser rate
+.phaserdepth(n), .phasersweep(n), .phasercenter(hz)
+
+### Leslie Rotary
+.leslie(speed), .lrate(n), .lsize(n)
+
+### Ring Modulation
+.ring(n), .ringf(hz), .ringdf(n)
+
+### Sampler Controls
+.begin(0-1), .end(0-1) — sample start/end position
+.speed(n) — playback speed (negative = reverse)
+.loop(1), .loopBegin(n), .loopEnd(n)
+.cut(n) — cut group (monophonic behavior)
+.clip(n), .legato(n) — note duration control
+.stretch(n) — time-stretch
+.chop(n) — chop sample into n pieces
+.striate(n) — granular striate
+
+### Pattern Speed
+.slow(n), .fast(n), .hurry(n)
+
+### Pattern Structure
+.rev() — reverse
+.palindrome() — forward then backward
+.ply(n) — repeat each event n times
+.iter(n), .iterBack(n) — shift pattern per cycle
+
+### Conditional
+.every(n, fn), .sometimes(fn), .rarely(fn), .often(fn)
+.sometimesBy(0-1, fn), .when(fn, fn)
+
+### Layering
+.jux(fn), .juxBy(n, fn) — left=original, right=modified
+.off(time, fn) — offset copy with modification
+.echo(n, time, feedback) — echo copies
+
+### Randomness
+.degradeBy(0-1) — randomly drop events
+
+### Euclidean
+.euclid(hits, steps) — euclidean rhythm
+
+### Time
+.early(n), .late(n), .swing(n)
+
+### Tonal
+.transpose(n), .scale("C:minor"), .chord("major minor")
+.arp("up down random") — arpeggiate chords
+.voicing() — voice chords
+
+### Value Operations
+.add(n), .sub(n), .mul(n), .div(n)
+.range(min, max) — scale 0-1 signal to range
+
+### Signals (continuous patterns)
+sine, cosine, saw, tri, square, rand, perlin — use with .range()
+Example: .lpf(sine.range(200, 4000).slow(8))
 
 ## Notes
 note("c4 e4 g4") - note names with octave (2=low bass, 4=middle, 6=high)
@@ -281,10 +452,14 @@ If there are multiple recordings with the same name, use :N to select (e.g. s("r
 Works with all effects, slicing (.chop, .slice, .loopAt), and repitching.
 The available mic recordings will be listed in the user message when present.
 
-## Structure
-$: starts each track (all play together)
-stack(...) combines patterns
-setcps(bpm/60/4) sets tempo
+### Arrangement
+arrange([cycles, pattern], ...) — play sections in sequence
+Example: arrange([8, stack(s("bd*4"), note("c4 e4 g4"))], [4, s("hh*8")])
+seqPLoop([start, stop, pattern], ...) — overlapping sections by cycle range
+
+### Orbit & Routing
+.orbit(n) — route to different effect buses (each has own reverb/delay)
+.bus(n), .channel(n)
 
 ## Hydra Visuals
 Add `await initHydra()` at the top to enable visuals. Hydra functions chain together.
@@ -325,21 +500,52 @@ async def broadcast(msg: dict):
                 connections.remove(ws)
 
 
-def get_rate_limit_info():
-    """Return (requests_used, seconds_until_reset)."""
+def get_rate_limit_info(ip: str = None):
+    """Return (global_used, ip_used, seconds_until_reset, is_limited, reason)."""
     now = time.time()
-    # Remove old timestamps
+    # Clean global timestamps
     while request_times and request_times[0] < now - RATE_WINDOW:
         request_times.popleft()
+    global_used = len(request_times)
 
-    used = len(request_times)
-    if request_times:
-        oldest = request_times[0]
-        reset_in = int((oldest + RATE_WINDOW) - now)
-    else:
-        reset_in = 0
+    # Clean per-IP timestamps
+    ip_used = 0
+    if ip and ip in request_times_by_ip:
+        ip_times = request_times_by_ip[ip]
+        while ip_times and ip_times[0] < now - RATE_WINDOW:
+            ip_times.popleft()
+        ip_used = len(ip_times)
 
-    return used, max(0, reset_in)
+    # Calculate reset time from oldest relevant timestamp
+    reset_in = 0
+    if global_used >= RATE_LIMIT_GLOBAL and request_times:
+        reset_in = max(reset_in, int((request_times[0] + RATE_WINDOW) - now))
+    if (
+        ip
+        and ip_used >= RATE_LIMIT_PER_IP
+        and ip in request_times_by_ip
+        and request_times_by_ip[ip]
+    ):
+        reset_in = max(reset_in, int((request_times_by_ip[ip][0] + RATE_WINDOW) - now))
+
+    is_limited = global_used >= RATE_LIMIT_GLOBAL or ip_used >= RATE_LIMIT_PER_IP
+    reason = None
+    if global_used >= RATE_LIMIT_GLOBAL:
+        reason = "global"
+    elif ip_used >= RATE_LIMIT_PER_IP:
+        reason = "ip"
+
+    return global_used, ip_used, max(0, reset_in), is_limited, reason
+
+
+def record_request(ip: str = None):
+    """Record a request for rate limiting."""
+    now = time.time()
+    request_times.append(now)
+    if ip:
+        if ip not in request_times_by_ip:
+            request_times_by_ip[ip] = deque()
+        request_times_by_ip[ip].append(now)
 
 
 def strip_markdown_fences(code: str) -> str:
@@ -353,15 +559,38 @@ def strip_markdown_fences(code: str) -> str:
 async def call_model(model_key: str, prompt: str, messages: list) -> str:
     """Call an LLM and return the response. Routes to Anthropic or OpenRouter."""
     config = AVAILABLE_MODELS.get(model_key, AVAILABLE_MODELS[DEFAULT_MODEL])
+    model_name = config["model"]
+    provider = config["provider"]
+    user_msg_len = sum(
+        len(m["content"])
+        if isinstance(m["content"], str)
+        else sum(
+            len(p.get("text", "")) for p in m["content"] if p.get("type") == "text"
+        )
+        for m in messages
+        if m["role"] == "user"
+    )
+    print(f"\n{'=' * 60}")
+    print(f"LLM CALL: {model_key} ({provider}/{model_name})")
+    print(f"  System prompt: {len(prompt)} chars")
+    print(f"  Messages: {len(messages)} ({user_msg_len} chars user text)")
+    t0 = time.time()
 
-    if config["provider"] == "anthropic":
+    if provider == "anthropic":
         response = await anthropic_client.messages.create(
-            model=config["model"],
+            model=model_name,
             max_tokens=16384,
             system=prompt,
             messages=messages,
         )
-        return strip_markdown_fences(response.content[0].text.strip())
+        result = strip_markdown_fences(response.content[0].text.strip())
+        elapsed = time.time() - t0
+        in_tok = response.usage.input_tokens
+        out_tok = response.usage.output_tokens
+        print(f"  Response: {len(result)} chars in {elapsed:.1f}s")
+        print(f"  Tokens: {in_tok} in / {out_tok} out")
+        print(f"{'=' * 60}\n")
+        return result
     else:
         # OpenRouter — convert Anthropic message format to OpenAI format
         openai_messages = [{"role": "system", "content": prompt}]
@@ -384,7 +613,7 @@ async def call_model(model_key: str, prompt: str, messages: list) -> str:
                     "Content-Type": "application/json",
                 },
                 json={
-                    "model": config["model"],
+                    "model": model_name,
                     "max_tokens": 16384,
                     "messages": openai_messages,
                 },
@@ -393,9 +622,17 @@ async def call_model(model_key: str, prompt: str, messages: list) -> str:
             data = response.json()
             if "error" in data:
                 raise Exception(f"OpenRouter error: {data['error']}")
-            return strip_markdown_fences(
+            result = strip_markdown_fences(
                 data["choices"][0]["message"]["content"].strip()
             )
+            elapsed = time.time() - t0
+            usage = data.get("usage", {})
+            in_tok = usage.get("prompt_tokens", "?")
+            out_tok = usage.get("completion_tokens", "?")
+            print(f"  Response: {len(result)} chars in {elapsed:.1f}s")
+            print(f"  Tokens: {in_tok} in / {out_tok} out")
+            print(f"{'=' * 60}\n")
+            return result
 
 
 def build_user_content(
@@ -460,7 +697,7 @@ async def process_item(item: dict):
         )
 
         current_code = new_code
-        request_times.append(time.time())
+        record_request(item.get("ip"))
         sync_live_file()
 
         # Commit to git and clear fix history (successful change)
@@ -478,13 +715,19 @@ async def process_item(item: dict):
         history.append(entry)
         save_state()
 
-        used, reset_in = get_rate_limit_info()
+        global_used, ip_used, reset_in, _, _ = get_rate_limit_info(item.get("ip"))
         await broadcast(
             {
                 "type": "update",
                 "entry": entry,
                 "history": history,
-                "rateLimit": {"used": used, "limit": RATE_LIMIT, "resetIn": reset_in},
+                "rateLimit": {
+                    "used": global_used,
+                    "limit": RATE_LIMIT_GLOBAL,
+                    "ipUsed": ip_used,
+                    "ipLimit": RATE_LIMIT_PER_IP,
+                    "resetIn": reset_in,
+                },
             }
         )
 
@@ -587,7 +830,7 @@ async def fix_error(error: str, broken_code: str = None):
         )
 
         current_code = new_code
-        request_times.append(time.time())
+        record_request()  # fix errors are system-initiated, no IP
         sync_live_file()
 
         entry = {
@@ -600,13 +843,17 @@ async def fix_error(error: str, broken_code: str = None):
         history.append(entry)
         save_state()
 
-        used, reset_in = get_rate_limit_info()
+        global_used, _, reset_in, _, _ = get_rate_limit_info()
         await broadcast(
             {
                 "type": "update",
                 "entry": entry,
                 "history": history,
-                "rateLimit": {"used": used, "limit": RATE_LIMIT, "resetIn": reset_in},
+                "rateLimit": {
+                    "used": global_used,
+                    "limit": RATE_LIMIT_GLOBAL,
+                    "resetIn": reset_in,
+                },
             }
         )
 
@@ -627,14 +874,25 @@ async def process_queue():
         if not queue or processing:
             continue
 
-        used, reset_in = get_rate_limit_info()
+        # Check the next item's IP for per-IP limiting
+        next_ip = queue[0].get("ip") if queue else None
+        global_used, ip_used, reset_in, is_limited, reason = get_rate_limit_info(
+            next_ip
+        )
 
-        if used >= RATE_LIMIT:
+        if is_limited:
             # Rate limited - wait and broadcast status
+            msg = (
+                "Global daily limit reached"
+                if reason == "global"
+                else "Your daily limit reached"
+            )
             await broadcast(
                 {
                     "type": "rateLimited",
                     "resetIn": reset_in,
+                    "reason": reason,
+                    "message": msg,
                     "queue": queue,
                 }
             )
@@ -711,7 +969,8 @@ async def websocket_endpoint(ws: WebSocket):
     await ws.accept()
     connections.append(ws)
 
-    used, reset_in = get_rate_limit_info()
+    client_ip = ws.client.host if ws.client else "unknown"
+    global_used, ip_used, reset_in, _, _ = get_rate_limit_info(client_ip)
 
     # Send current state
     await ws.send_text(
@@ -723,7 +982,13 @@ async def websocket_endpoint(ws: WebSocket):
                 "history": history,
                 "repeating": repeating_prompts,
                 "processing_item": processing_item,
-                "rateLimit": {"used": used, "limit": RATE_LIMIT, "resetIn": reset_in},
+                "rateLimit": {
+                    "used": global_used,
+                    "limit": RATE_LIMIT_GLOBAL,
+                    "ipUsed": ip_used,
+                    "ipLimit": RATE_LIMIT_PER_IP,
+                    "resetIn": reset_in,
+                },
             }
         )
     )
@@ -737,6 +1002,7 @@ async def websocket_endpoint(ws: WebSocket):
                     "name": data["name"],
                     "prompt": data["prompt"],
                     "model": data.get("model", DEFAULT_MODEL),
+                    "ip": client_ip,
                     "timestamp": time.time(),
                 }
                 # Include image if present
