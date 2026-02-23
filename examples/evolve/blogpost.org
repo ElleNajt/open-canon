@@ -57,7 +57,6 @@ never sees the error message -- it just gets another shot.
 
 - =claude-opus-4-5-20251101= (Anthropic API)
 - =openai/gpt-5.2= (OpenRouter)
-- =openai/gpt-4.1= (OpenRouter)
 - =google/gemini-2.5-pro= (OpenRouter)
 - =x-ai/grok-4.1-fast= (OpenRouter)
 
@@ -134,9 +133,9 @@ The runs below were done without the "maximum 6 tracks, 5 effects" constraint th
 
 *Run 4 (10 steps, unconstrained):* {{{strudel(goldberg_gpt52_run4_4aa890b0,gpt,0,1,2,3,4,5,6,7,8,9,10)}}}
 
-** ChatGPT 4.1 (=openai/gpt-4.1=)
+** ChatGPT 4.1 (=openai/gpt-4.1=, older model)
 
-I wasn't super impressed by ChatGPT
+I wasn't super impressed by ChatGPT 4.1.
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
@@ -189,7 +188,11 @@ Glitchy IDM. I really like these around the 20 iteration mark.
 
 *Run 1:* {{{strudel(personality_qwen_784683bf,qwen,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-** Cross-model: GPT x Gemini (alternating)
+** Cross-model: GPT 5.2 x Gemini (alternating)
+
+*Run 1:* {{{strudel(cross_gpt52_gemini_4aa890b0,gpt_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+** Cross-model: GPT 4.1 x Gemini (alternating, older model)
 
 *Run 1:* {{{strudel(cross_gpt_gemini_784683bf,gpt_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
