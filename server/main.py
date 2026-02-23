@@ -160,7 +160,7 @@ def get_recent_fix_history(n: int = 3) -> list[dict]:
 fix_history: list[dict] = []  # [{commit, diff, error, timestamp}, ...]
 
 # Rate limiting: per-IP and global daily limits
-RATE_LIMIT_PER_IP = 100
+RATE_LIMIT_PER_IP = None  # disabled — unreliable behind proxies
 RATE_LIMIT_GLOBAL = 2000
 RATE_WINDOW = 24 * 60 * 60  # 24 hours
 
@@ -521,18 +521,20 @@ def get_rate_limit_info(ip: str = None):
     if global_used >= RATE_LIMIT_GLOBAL and request_times:
         reset_in = max(reset_in, int((request_times[0] + RATE_WINDOW) - now))
     if (
-        ip
+        RATE_LIMIT_PER_IP is not None
+        and ip
         and ip_used >= RATE_LIMIT_PER_IP
         and ip in request_times_by_ip
         and request_times_by_ip[ip]
     ):
         reset_in = max(reset_in, int((request_times_by_ip[ip][0] + RATE_WINDOW) - now))
 
-    is_limited = global_used >= RATE_LIMIT_GLOBAL or ip_used >= RATE_LIMIT_PER_IP
+    ip_limited = RATE_LIMIT_PER_IP is not None and ip_used >= RATE_LIMIT_PER_IP
+    is_limited = global_used >= RATE_LIMIT_GLOBAL or ip_limited
     reason = None
     if global_used >= RATE_LIMIT_GLOBAL:
         reason = "global"
-    elif ip_used >= RATE_LIMIT_PER_IP:
+    elif ip_limited:
         reason = "ip"
 
     return global_used, ip_used, max(0, reset_in), is_limited, reason
