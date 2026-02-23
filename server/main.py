@@ -1159,7 +1159,9 @@ async def mic_samples_index():
 @app.get("/mic-samples/{filename}")
 async def mic_sample_file(filename: str):
     """Serve an individual mic sample."""
-    filepath = MIC_SAMPLES_DIR / filename
+    filepath = (MIC_SAMPLES_DIR / filename).resolve()
+    if not filepath.is_relative_to(MIC_SAMPLES_DIR.resolve()):
+        return JSONResponse({"error": "not found"}, status_code=404)
     if not filepath.exists() or not filepath.is_file():
         return JSONResponse({"error": "not found"}, status_code=404)
     media_types = {
