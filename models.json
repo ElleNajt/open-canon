@@ -1,13 +1,7 @@
 {
   "models": [
-    "qwen/qwen3-235b-a22b",
-    "deepseek/deepseek-chat",
-    "claude-haiku",
-    "claude-sonnet",
     "claude-opus-4.5",
-    "google/gemini-2.5-pro",
-    "openai/gpt-5.2",
-    "x-ai/grok-4.1-fast"
+    "claude-haiku"
   ],
-  "default": "qwen/qwen3-235b-a22b"
+  "default": "claude-opus-4.5"
 }

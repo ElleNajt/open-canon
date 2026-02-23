@@ -32,6 +32,11 @@ COMPILED_IFRAMES = SCRIPT_DIR / "blogpost_compiled_iframes.org"
 
 MACRO_RE = re.compile(r"\{\{\{strudel\(([^)]+)\)\}\}\}")
 PICKS_RE = re.compile(r"\{\{\{strudel_picks\(([^)]+)\)\}\}\}")
+GDOC_ONLY_RE = re.compile(r"\{\{\{gdoc_only\(([^)]+)\)\}\}\}")
+WEBPAGE_ONLY_RE = re.compile(
+    r"\{\{\{webpage_only_begin\}\}\}\n(.*?)\{\{\{webpage_only_end\}\}\}\n?",
+    re.DOTALL,
+)
 
 
 def js_to_strudel_url(js_code):
@@ -194,6 +199,8 @@ def main():
     # Always produce the links version
     compiled = MACRO_RE.sub(expand_macro_links, text)
     compiled = PICKS_RE.sub(expand_picks_links, compiled)
+    compiled = GDOC_ONLY_RE.sub(r"\1", compiled)
+    compiled = WEBPAGE_ONLY_RE.sub("", compiled)
     COMPILED.write_text(compiled)
     print(f"Compiled {n_macros} strudel macros + {n_picks} picks -> {COMPILED}")
 
@@ -202,6 +209,8 @@ def main():
         # Strip *Run N:* prefix since iframe replaces the whole line
         iframe_text = MACRO_RE.sub(expand_macro_iframe, text)
         iframe_text = PICKS_RE.sub(expand_picks_iframe, iframe_text)
+        iframe_text = GDOC_ONLY_RE.sub("", iframe_text)
+        iframe_text = WEBPAGE_ONLY_RE.sub(r"\1", iframe_text)
 
         # Put #+begin_export html on its own line when preceded by text
         iframe_text = re.sub(

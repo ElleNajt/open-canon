@@ -5,6 +5,8 @@
 #+OPTIONS: H:3 toc:t
 #+OPTIONS: ^:nil
 
+
+
 * The Experiment
 
 It's been previously noted that models have some pretty funny [[https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states][attractor states]].
@@ -30,15 +32,15 @@ style guidance, no music theory examples, no aesthetic direction beyond
 instincts produce when given the same 8 notes and total creative
 freedom.
 
-We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complexly architecture pieces.
+We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complex architectural pieces.
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
 The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]].
 
-The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (This should work out of the box, at least on mac or linux, if you point claude code at that github link and ask it to set it up.)
+The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. This should work out of the box on mac or linux. 
 
-** The scaffold: 
+** The scaffold
 
 Models aren't perfect at Strudel -- they make syntax mistakes and invent
 nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
@@ -54,7 +56,7 @@ never sees the error message -- it just gets another shot.
 - =google/gemini-2.5-pro= (OpenRouter)
 - =x-ai/grok-4.1-fast= (OpenRouter)
 
-** Seeds
+** Seed
 
 The personality experiment uses the Goldberg Variations ground bass
 (BWV 988) -- the 8-note descending bass line that underlies all 30
@@ -70,8 +72,7 @@ $: note("g3 gb3 e3 d3 b2 c3 d3 g2")
   .room(0.15)
 #+end_src
 
-Eight notes. One voice. No harmony, no rhythm, no effects beyond a
-little reverb. Everything that follows is the model's choice.
+Eight notes and no effects beyond a little reverb. Everything that follows is the model's choice.
 
 #+begin_export html
 <div class="run-player">
@@ -167,10 +168,9 @@ Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice sam
 </div>
 #+end_export
 
-*** We make collaborations by having models alternate: 
+*** We make collaborations by having models alternate
 
-These are cool. I got lazy and asked Claude to summarize. 
-
+Summaries on the arc of interaction between the models from Claude code.
 #+begin_quote
 *Claude + Grok*: Claude builds a sacred cathedral vibe (FM bells, chant speech, heavy reverb), and Grok leans into it rather than fighting, adding phrygian scales and theatrical excess. By step 30 it's a detuned calliope waltz over tritone bass. Step 20 is the sweet spot before it tips over. -- Claude 
 #+end_quote
@@ -215,6 +215,10 @@ These are cool. I got lazy and asked Claude to summarize.
   <iframe src="https://strudel.cc/embed#c2V0Y3BzKDExMi82MC80KQpzYW1wbGVzKCdzaGFiZGEvc3BlZWNoOmdyb292ZSxldm9sdmUsY29zbWljLHB1bHNlLG5lYnVsYSx2b2lkJykKc2FtcGxlcygnc2hhYmRhL3NwZWVjaC9mci1GUi9tOm1hZ2lxdWUsaW5maW5pJykKCiQ6IHN0YWNrKAogIC8vIERSVU1TOiBTd2FwcGVkIHRvIGRpcnRpZXIgcGVyY3Vzc2lvbiwgYWRkZWQgcmltIHNob3RzIGZvciBzbmFwCiAgc3RhY2soCiAgICBzKCJiZCIpLmV1Y2xpZCg0LDE2KS5nYWluKDAuNjUpLmxwZigyNTAwKSwKICAgIHMoIltyaW0gfiByaW1dLzIsIFtzbiBzbiB%2BXSIpLmZhc3QoMS41KS5nYWluKDAuNCkuaHBmKDI1MCkuY3J1c2goNCksCiAgICBzKCJoaCoxNj8iKS52ZWxvY2l0eShyYW5kLnJhbmdlKDAuMywwLjgpKS5nYWluKDAuMTIpLmhwZig2MDAwKS5zd2luZygwLjA4KSwKICAgIHMoImNwIikuZXVjbGlkKDUsMTYpLmdhaW4oMC4yMikucGFuKDAuNykuZGVsYXkoMC4zNSkuZGZiKDAuNDUpLmR0KDAuMTI1KSwKICAgIHMoIm10KjMiKS5ldmVyeSg0LCB4PT54LnNwZWVkKCItMC44IikpLmdhaW4oMC4xOCkucGFuKDAuMykubHBmKDE4MDApCiAgKSwKCiAgLy8gUEFEUzogQm9sZCBoYXJtb255IHNoaWZ0IHRvIHdob2xlLXRvbmUgc2NhbGUgZm9yIHN1cnJlYWwsIGZsb2F0aW5nIG1vb2QKICBub3RlKCJjMyBlMyBnczMgZDQgZnM0IGFzNCwgZGIzIGViMyBnMyBbZWI0IGc0IGJzNF0iKS5zbG93KDQpCiAgICAuc291bmQoInB1bHNlIikKICAgIC5nYWluKDAuMjgpCiAgICAuYXR0YWNrKDEpLnJlbGVhc2UoNCkKICAgIC5kZXR1bmUoMTIpCiAgICAuZm1lbnYoNCkuZm1oKDMpCiAgICAubHBmKHNpbmUucmFuZ2UoNDAwLCAxODAwKS5zbG93KDYpKS5scHEoNSkKICAgIC5yb29tKDAuNjUpLmxlc2xpZSgwLjQpLAoKICAvLyBNRUxPRFk6IFJld3JpdHRlbiBhcyBkZXNjZW5kaW5nIHdob2xlLXRvbmUgbGluZXMsIGdsaXRjaGllciB3aXRoIGRlZ3JhZGUKICBub3RlKCJhczUgZnM1IGQ1IH4gZ3M1IGU1IGM1IH4sIGJzNCBnNCBlYjQgfiBhNSBmczUgZDUgfiIpLnNsb3coNCkKICAgIC5zb3VuZCgic2F3IikKICAgIC5nYWluKDAuMikKICAgIC5mbWVudigxMCkuZm1kZWNheSgwLjA4KQogICAgLmxwZigxODAwKS5scHEoMi41KQogICAgLmRlbGF5KDAuNDUpLmR0KDAuMzc1KS5kZmIoMC41NSkKICAgIC5wYW4ocGVybGluLnJhbmdlKDAuMiwwLjgpLnNsb3coNCkpCiAgICAuZGVncmFkZUJ5KDAuMTUpLAoKICAvLyBCQVNTOiBNb3JlIGFnZ3Jlc3NpdmUsIGZtLW1vZHVsYXRlZCBwdWxzZSB3aXRoIHJpbmcgbW9kIHN1cnByaXNlCiAgbm90ZSgiYzEqMyBjMSwgZGIxKjMgZGIxLCBbYzEgZ3MxXSoyLCBbZGIxIGcxXSoyIikuc2xvdyg0KQogICAgLnNvdW5kKCJzaW5lIikKICAgIC5zaGFwZSgwLjUpLnJpbmcoMC42KS5yaW5nZig4MCkKICAgIC5scGYoMjAwKS5scHEoMikKICAgIC5nYWluKDAuNTUpCiAgICAuYXR0YWNrKDAuMDA1KS5yZWxlYXNlKDAuNDUpCiAgICAuZm0oNSkuZm1lbnYoNiksCiAgICAKICAvLyBORVcgRUxFTUVOVDogTWV0YWxsaWMgcmluZy1tb2QgYmVsbHMgcmVwbGFjaW5nIGhpZ2ggc3ludGgsIHVuZXhwZWN0ZWQgcGVyY3Vzc2l2ZSBzaGltbWVyCiAgbm90ZSgiZ3M0IGJzNCBkczUiKS5zb3VuZCgic3F1YXJlIikKICAgIC5ldWNsaWQoOSwzMikKICAgIC5nYWluKDAuMTQpCiAgICAucGFuKHNpbmUucmFuZ2UoMC4yLDAuOCkuc2xvdyg1KSkKICAgIC5scGYoMzUwMCkucmluZygwLjgpLnJpbmdmKHNpbmUucmFuZ2UoMzAwLDkwMCkpCiAgICAucGhhc2VyKDAuNiksCgogIC8vIFZPQ0FMUzogR2xpdGNoIGV2b2x1dGlvbiAtIGNob3BwZWQsIHN0cmlhdGVkLCB2YXJpYWJsZSBzcGVlZCBmb3IgYnJva2VuIHNwZWVjaAogIHMoIm5lYnVsYSB%2BIDxncm9vdmUgZXZvbHZlPiBwdWxzZSoyIH4gPGNvc21pYyBtYWdpcXVlPiB%2BIGluZmluaSB2b2lkIikuc2xvdyg2KQogICAgLmNob3AoOCkuc3RyaWF0ZSgxMikKICAgIC5zcGVlZChwZXJsaW4ucmFuZ2UoMC43NSwxLjI1KS5zbG93KDUpKQogICAgLmdhaW4oMC4zMikKICAgIC5ocGYoNTAwKQogICAgLnJvb20oMC43NSkKICAgIC5kZWxheSgwLjU1KS5kdCgwLjI1KS5kZmIoMC42KQogICAgLnRyZW1vbG8oMC41KS50cmVtb2xvc3luYyg2KQogICAgLmN1dCg1KQopLnJvb20oMC42NSkuc2l6ZSgwLjg1KQ%3D%3D" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 #+end_export
+
+
+
+
 
 * The music
 
@@ -559,8 +563,9 @@ LLM and have it write music for you in real time.
 
 Thanks to Liban, Arya Jakkli, and Jason Brown for review.
 
-* Related Work: 
+This project is built on [[https://strudel.cc][Strudel]], a live coding environment for music by Felix Roos, Alex McLean, Jade Rowland, Aria, and [[https://codeberg.org/uzu/strudel/activity/contributors][many others]]. Strudel is a JavaScript sibling of [[https://tidalcycles.org][TidalCycles]]. It is open source ([[https://codeberg.org/uzu/strudel/][codeberg.org/uzu/strudel]]) and the community can be supported via [[https://opencollective.com/tidalcycles][OpenCollective]].
 
+* Related Work 
 
 - [[https://sara-fish.github.io/llm-musical-self-expression/][an experiment on frontier LLMs generating classical music]]
-- Josie kins's llm self-portraits: https://x.com/Josikinz/status/1908655061594734637
+- Josie Kins's llm self-portraits: https://x.com/Josikinz/status/1908655061594734637

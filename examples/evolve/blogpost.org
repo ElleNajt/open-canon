@@ -5,6 +5,8 @@
 #+OPTIONS: H:3 toc:t
 #+OPTIONS: ^:nil
 
+{{{gdoc_only(The listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.)}}}
+
 * The Experiment
 
 It's been previously noted that models have some pretty funny [[https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states][attractor states]].
@@ -30,15 +32,15 @@ style guidance, no music theory examples, no aesthetic direction beyond
 instincts produce when given the same 8 notes and total creative
 freedom.
 
-We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complexly architecture pieces.
+We discover that, loosely speaking, Claude Opus 4.5 writes ambient music and gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling glitch music and also has a tendency to build complex architectural pieces.
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
 The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]].
 
-The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (This should work out of the box, at least on mac or linux, if you point claude code at that github link and ask it to set it up.)
+The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. This should work out of the box on mac or linux. 
 
-** The scaffold: 
+** The scaffold
 
 Models aren't perfect at Strudel -- they make syntax mistakes and invent
 nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
@@ -54,7 +56,7 @@ never sees the error message -- it just gets another shot.
 - =google/gemini-2.5-pro= (OpenRouter)
 - =x-ai/grok-4.1-fast= (OpenRouter)
 
-** Seeds
+** Seed
 
 The personality experiment uses the Goldberg Variations ground bass
 (BWV 988) -- the 8-note descending bass line that underlies all 30
@@ -70,8 +72,7 @@ $: note("g3 gb3 e3 d3 b2 c3 d3 g2")
   .room(0.15)
 #+end_src
 
-Eight notes. One voice. No harmony, no rhythm, no effects beyond a
-little reverb. Everything that follows is the model's choice.
+Eight notes and no effects beyond a little reverb. Everything that follows is the model's choice.
 
 {{{strudel(goldberg_imbue_fb0bde27,claude,0)}}}
 
@@ -139,10 +140,9 @@ Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice sam
 
 {{{strudel_picks(goldberg_imbue_gemini_redo_v2_84f7f2ef/gemini/26 Run 2 Step 26, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/20 Run 3 Step 20, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/30 Run 3 Step 30, goldberg_imbue_gemini_redo_84f7f2ef/gemini/11 Run 1 Step 11)}}}
 
-*** We make collaborations by having models alternate: 
+*** We make collaborations by having models alternate
 
-These are cool. I got lazy and asked Claude to summarize. 
-
+Summaries on the arc of interaction between the models from Claude code.
 #+begin_quote
 *Claude + Grok*: Claude builds a sacred cathedral vibe (FM bells, chant speech, heavy reverb), and Grok leans into it rather than fighting, adding phrygian scales and theatrical excess. By step 30 it's a detuned calliope waltz over tritone bass. Step 20 is the sweet spot before it tips over. -- Claude 
 #+end_quote
@@ -168,6 +168,11 @@ These are cool. I got lazy and asked Claude to summarize.
 
 {{{strudel_picks(cross_grok_gemini_784683bf/gemini_grok_alternate/20 Step 20, cross_grok_gemini_784683bf/gemini_grok_alternate/30 Step 30)}}}
 
+{{{gdoc_only(* The music)}}}
+
+{{{gdoc_only(All of the music can be listened to with embedded players at https://ellenajt.github.io/blog/goldborg-variations.html .)}}}
+
+{{{webpage_only_begin}}}
 * The music
 
 
@@ -260,6 +265,7 @@ Turn the volume down if you're using headphones!
 ** Cross-model: Claude x Gemini (alternating)
 
 *Run 1:* {{{strudel(cross_claude_gemini_784683bf,claude_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+{{{webpage_only_end}}}
 
 * The music of small minds
 
@@ -307,8 +313,9 @@ LLM and have it write music for you in real time.
 
 Thanks to Liban, Arya Jakkli, and Jason Brown for review.
 
-* Related Work: 
+This project is built on [[https://strudel.cc][Strudel]], a live coding environment for music by Felix Roos, Alex McLean, Jade Rowland, Aria, and [[https://codeberg.org/uzu/strudel/activity/contributors][many others]]. Strudel is a JavaScript sibling of [[https://tidalcycles.org][TidalCycles]]. It is open source ([[https://codeberg.org/uzu/strudel/][codeberg.org/uzu/strudel]]) and the community can be supported via [[https://opencollective.com/tidalcycles][OpenCollective]].
 
+* Related Work 
 
 - [[https://sara-fish.github.io/llm-musical-self-expression/][an experiment on frontier LLMs generating classical music]]
-- Josie kins's llm self-portraits: https://x.com/Josikinz/status/1908655061594734637
+- Josie Kins's llm self-portraits: https://x.com/Josikinz/status/1908655061594734637
