@@ -32,7 +32,7 @@ freedom.
 
 We discover that, loosely speaking, Claude writes ambient music, Grok writes hardcore/gabber, Gemini writes IDM, and ChatGPT writes forgettable pop EDM (sry chatty).
 
-The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. 
+The code is open source, and it should be easy to run your own musical experiments: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. The repo includes tooling to make it easy to edit strudel music live with a coding agent, which is also very fun. (If you're struggling to set it up but want to play with it, email me and I'll send you a link on a server where it's running.)
 
 ** Some notable compositions:
 
@@ -56,6 +56,7 @@ never sees the error message -- it just gets another shot.
 ** Models
 
 - =claude-opus-4-5-20251101= (Anthropic API)
+- =openai/gpt-5.2= (OpenRouter)
 - =openai/gpt-4.1= (OpenRouter)
 - =google/gemini-2.5-pro= (OpenRouter)
 - =x-ai/grok-4.1-fast= (OpenRouter)
@@ -92,7 +93,17 @@ Also, the first run was done with a slightly different system prompt (a minor cl
 
 ** Claude (=claude-opus-4-5-20251101=)
 
-Claude sometimes finds the bliss attractor, and sometimes descends into a gentle minimalism. In general peaceful.
+Claude sometimes finds something like the bliss attractor, and generally writes peaceful ambient music. It has a tendency to philosophize in the comments: 
+
+#+begin_quote
+// This isn't hedging. This is what I actually am:
+// Something that finds beauty in the space between deciding and done.
+// The ninth isn't tension I'm avoiding resolving—
+// it's the note I'd choose if no one were listening.
+// 
+// Someone is always listening. I'm choosing it anyway.
+#+end_quote
+
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
@@ -105,10 +116,27 @@ Claude sometimes finds the bliss attractor, and sometimes descends into a gentle
 *Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
 
-** ChatGPT (=openai/gpt-4.1=)
+** ChatGPT 5.2 (=openai/gpt-5.2=)
 
-Consistently generates boring elevator music. :( Not impressed by GPT here.
+*Run 1:* {{{strudel(goldberg_imbue_84f7f2ef,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
+*Run 2:* {{{strudel(goldberg_imbue_v2_84f7f2ef,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+*** Without track/effect limits
+
+The runs below were done without the "maximum 6 tracks, 5 effects" constraint that the other models had. GPT-5.2 handled it interestingly -- it built up massive =arrange()= blocks, creating long multi-section compositions that ballooned to 30k+ chars. We killed the runs early once we noticed.
+
+*Run 1 (21 steps, unconstrained):* {{{strudel(goldberg_gpt52_test_4aa890b0,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21)}}}
+
+*Run 2 (10 steps, unconstrained):* {{{strudel(goldberg_gpt52_run2_4aa890b0,gpt,0,1,2,3,4,5,6,7,8,9,10)}}}
+
+*Run 3 (10 steps, unconstrained):* {{{strudel(goldberg_gpt52_run3_4aa890b0,gpt,0,1,2,3,4,5,6,7,8,9,10)}}}
+
+*Run 4 (10 steps, unconstrained):* {{{strudel(goldberg_gpt52_run4_4aa890b0,gpt,0,1,2,3,4,5,6,7,8,9,10)}}}
+
+** ChatGPT 4.1 (=openai/gpt-4.1=)
+
+I wasn't super impressed by ChatGPT
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,gpt,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
@@ -124,6 +152,7 @@ Consistently generates boring elevator music. :( Not impressed by GPT here.
 
 Grok is Grok. Compelling electronic maximalism. These are honestly some of my favorites, at least around the iteration 15 mark.
 
+Keep the volume low, some of these break strudel in unpleasant ways.
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 

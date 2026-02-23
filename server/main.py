@@ -17,6 +17,7 @@ from collections import deque
 from pathlib import Path
 
 import anthropic
+import httpx
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, JSONResponse
@@ -39,7 +40,16 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = anthropic.AsyncAnthropic()
+anthropic_client = anthropic.AsyncAnthropic()
+OPENROUTER_API_KEY = os.environ.get("OPENROUTER_API_KEY")
+
+AVAILABLE_MODELS = {
+    "claude-opus-4.5": {"provider": "anthropic", "model": "claude-opus-4-5-20251101"},
+    "gpt-5.2": {"provider": "openrouter", "model": "openai/gpt-5.2"},
+    "gemini-2.5-pro": {"provider": "openrouter", "model": "google/gemini-2.5-pro"},
+    "grok-4.1": {"provider": "openrouter", "model": "x-ai/grok-4.1-fast"},
+}
+DEFAULT_MODEL = "claude-opus-4.5"
 
 # Path to live.js on disk (for editor sync)
 LIVE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "live.js")
@@ -340,15 +350,52 @@ def strip_markdown_fences(code: str) -> str:
     return code
 
 
-async def call_claude(prompt: str, messages: list) -> str:
-    """Call Claude and return the response."""
-    response = await client.messages.create(
-        model="claude-opus-4-5-20251101",
-        max_tokens=16384,
-        system=prompt,
-        messages=messages,
-    )
-    return strip_markdown_fences(response.content[0].text.strip())
+async def call_model(model_key: str, prompt: str, messages: list) -> str:
+    """Call an LLM and return the response. Routes to Anthropic or OpenRouter."""
+    config = AVAILABLE_MODELS.get(model_key, AVAILABLE_MODELS[DEFAULT_MODEL])
+
+    if config["provider"] == "anthropic":
+        response = await anthropic_client.messages.create(
+            model=config["model"],
+            max_tokens=16384,
+            system=prompt,
+            messages=messages,
+        )
+        return strip_markdown_fences(response.content[0].text.strip())
+    else:
+        # OpenRouter — convert Anthropic message format to OpenAI format
+        openai_messages = [{"role": "system", "content": prompt}]
+        for msg in messages:
+            content = msg["content"]
+            if isinstance(content, str):
+                openai_messages.append({"role": msg["role"], "content": content})
+            elif isinstance(content, list):
+                # Extract text parts (skip images for OpenRouter for now)
+                text_parts = [p["text"] for p in content if p.get("type") == "text"]
+                openai_messages.append(
+                    {"role": msg["role"], "content": "\n".join(text_parts)}
+                )
+
+        async with httpx.AsyncClient() as http_client:
+            response = await http_client.post(
+                "https://openrouter.ai/api/v1/chat/completions",
+                headers={
+                    "Authorization": f"Bearer {OPENROUTER_API_KEY}",
+                    "Content-Type": "application/json",
+                },
+                json={
+                    "model": config["model"],
+                    "max_tokens": 16384,
+                    "messages": openai_messages,
+                },
+                timeout=120,
+            )
+            data = response.json()
+            if "error" in data:
+                raise Exception(f"OpenRouter error: {data['error']}")
+            return strip_markdown_fences(
+                data["choices"][0]["message"]["content"].strip()
+            )
 
 
 def build_user_content(
@@ -405,7 +452,9 @@ async def process_item(item: dict):
             image_type=item.get("imageType"),
         )
 
-        new_code = await call_claude(
+        model_key = item.get("model", DEFAULT_MODEL)
+        new_code = await call_model(
+            model_key,
             SYSTEM_PROMPT,
             [{"role": "user", "content": content}],
         )
@@ -514,11 +563,12 @@ async def fix_error(error: str, broken_code: str = None):
             "\nFix ONLY the error while keeping the musical intent intact. Return the corrected code."
         )
 
-        new_code = await call_claude(
+        new_code = await call_model(
+            DEFAULT_MODEL,
             SYSTEM_PROMPT,
             [{"role": "user", "content": "".join(context_parts)}],
         )
-        print(f"Claude returned: {new_code[:100]}...")
+        print(f"Fix returned: {new_code[:100]}...")
 
         # Commit the fix attempt
         commit_hash = commit_code(new_code, f"Fix attempt {attempt + 1}: {error[:40]}")
@@ -686,6 +736,7 @@ async def websocket_endpoint(ws: WebSocket):
                 item = {
                     "name": data["name"],
                     "prompt": data["prompt"],
+                    "model": data.get("model", DEFAULT_MODEL),
                     "timestamp": time.time(),
                 }
                 # Include image if present
@@ -767,6 +818,15 @@ async def clear_queue_endpoint():
     queue.clear()
     await broadcast({"type": "queue", "queue": queue})
     return {"status": "ok", "queue_length": 0}
+
+
+@app.get("/models")
+async def get_models():
+    """Return available models for the frontend dropdown."""
+    return {
+        "models": list(AVAILABLE_MODELS.keys()),
+        "default": DEFAULT_MODEL,
+    }
 
 
 @app.get("/status")
