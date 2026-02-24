@@ -2,7 +2,7 @@
 #+GDOC_ID: 1MqPVjhmvn1wz0BYXkNABoZJgROKdpAgHcqG1h9btY3c
 #+DATE: 2026-02-17
 #+PROPERTY: header-args:python :results output drawer :python "./.venv/bin/python3" :async t :session evolve_blogpost :exports results
-#+OPTIONS: H:3 toc:t
+#+OPTIONS: H:5 toc:t
 #+OPTIONS: ^:nil
 
 * Notes before reading:

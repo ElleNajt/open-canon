@@ -95,23 +95,19 @@ def expand_macro_iframe(match):
     # Unique ID for this player
     player_id = f"{experiment}_{model_subdir}".replace("/", "_")
 
-    # Build step buttons and iframe
+    # Build step buttons (no iframe — shared player loads on click)
     buttons = []
     for i, (step, url) in enumerate(valid):
         embed_url = url.replace("strudel.cc/#", "strudel.cc/embed#")
-        active = " active" if i == 0 else ""
         buttons.append(
-            f'<button class="step-btn{active}" '
+            f'<button class="step-btn" '
             f"onclick=\"loadStep(this, '{embed_url}')\">"
             f"Step {step}</button>"
         )
 
-    first_embed = valid[0][1].replace("strudel.cc/#", "strudel.cc/embed#")
-
     return f"""#+begin_export html
 <div class="run-player">
   <div class="run-controls">{" ".join(buttons)}</div>
-  <iframe src="{first_embed}" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 #+end_export"""
 
@@ -166,26 +162,71 @@ def expand_picks_iframe(match):
     buttons = []
     for i, (label, url) in enumerate(valid):
         embed_url = url.replace("strudel.cc/#", "strudel.cc/embed#")
-        active = " active" if i == 0 else ""
         buttons.append(
-            f'<button class="step-btn{active}" '
+            f'<button class="step-btn" '
             f"onclick=\"loadStep(this, '{embed_url}')\">"
             f"{label}</button>"
         )
 
-    first_embed = valid[0][1].replace("strudel.cc/#", "strudel.cc/embed#")
-
     return f"""#+begin_export html
 <div class="run-player">
   <div class="run-controls">{" ".join(buttons)}</div>
-  <iframe src="{first_embed}" class="strudel-embed" allow="autoplay"></iframe>
 </div>
 #+end_export"""
 
 
-IFRAME_PREAMBLE = """#+HTML_HEAD: <style>body { background: #1a1a2e; color: #e0e0e0; } #content { background: #1a1a2e; } a { color: #7b9eee; } .run-player { margin: 0.5rem 0 1.5rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; background: #0d0d1a; } .run-controls { display: flex; gap: 4px; padding: 6px 8px; background: #1a1a2e; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: #444 #1a1a2e; } .step-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; flex-shrink: 0; } .step-btn:hover { background: #4a3f8a; border-color: #7b68ee; } .step-btn.active { background: #7b68ee; color: #fff; border-color: #7b68ee; } .strudel-embed { width: 100%; height: 300px; border: none; border-top: 1px solid #333; }</style>
-#+HTML_HEAD: <script>function loadStep(btn, url) { var player = btn.closest('.run-player'); var old = player.querySelector('iframe'); var nw = document.createElement('iframe'); nw.className = 'strudel-embed'; nw.setAttribute('allow', 'autoplay'); nw.src = url; old.replaceWith(nw); player.querySelectorAll('.step-btn').forEach(function(b) { b.classList.remove('active'); }); btn.classList.add('active'); }</script>
+IFRAME_PREAMBLE = r"""#+HTML_HEAD: <style>
+#+HTML_HEAD: body { background: #1a1a2e; color: #e0e0e0; }
+#+HTML_HEAD: #content { background: #1a1a2e; }
+#+HTML_HEAD: a { color: #7b9eee; }
+#+HTML_HEAD: .run-player { margin: 0.5rem 0 1.5rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; background: #0d0d1a; }
+#+HTML_HEAD: .run-controls { display: flex; gap: 4px; padding: 6px 8px; background: #1a1a2e; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: #444 #1a1a2e; }
+#+HTML_HEAD: .step-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; flex-shrink: 0; }
+#+HTML_HEAD: .step-btn:hover { background: #4a3f8a; border-color: #7b68ee; }
+#+HTML_HEAD: .step-btn.active { background: #7b68ee; color: #fff; border-color: #7b68ee; }
+#+HTML_HEAD: #shared-player { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #0d0d1a; border-top: 2px solid #7b68ee; display: none; }
+#+HTML_HEAD: #shared-player .player-bar { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: #1a1a2e; }
+#+HTML_HEAD: #shared-player .player-label { color: #ccc; font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#+HTML_HEAD: #shared-player .stop-btn { background: #7b68ee; border: none; color: #fff; padding: 4px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+#+HTML_HEAD: #shared-player .stop-btn:hover { background: #5a4abf; }
+#+HTML_HEAD: #shared-player iframe { width: 100%; height: 300px; border: none; }
+#+HTML_HEAD: </style>
+#+HTML_HEAD: <script>
+#+HTML_HEAD: var activeBtn = null;
+#+HTML_HEAD: function loadStep(btn, url) {
+#+HTML_HEAD:   var sp = document.getElementById('shared-player');
+#+HTML_HEAD:   var old = sp.querySelector('iframe');
+#+HTML_HEAD:   var nw = document.createElement('iframe');
+#+HTML_HEAD:   nw.setAttribute('allow', 'autoplay');
+#+HTML_HEAD:   nw.src = url;
+#+HTML_HEAD:   old.replaceWith(nw);
+#+HTML_HEAD:   var label = sp.querySelector('.player-label');
+#+HTML_HEAD:   if (activeBtn) activeBtn.classList.remove('active');
+#+HTML_HEAD:   btn.classList.add('active');
+#+HTML_HEAD:   activeBtn = btn;
+#+HTML_HEAD:   label.textContent = btn.textContent;
+#+HTML_HEAD:   sp.style.display = 'block';
+#+HTML_HEAD: }
+#+HTML_HEAD: function stopPlayer() {
+#+HTML_HEAD:   var sp = document.getElementById('shared-player');
+#+HTML_HEAD:   sp.querySelector('iframe').src = 'about:blank';
+#+HTML_HEAD:   sp.style.display = 'none';
+#+HTML_HEAD:   if (activeBtn) { activeBtn.classList.remove('active'); activeBtn = null; }
+#+HTML_HEAD: }
+#+HTML_HEAD: </script>
 
+"""
+
+IFRAME_FOOTER = """
+#+begin_export html
+<div id="shared-player">
+  <div class="player-bar">
+    <span class="player-label"></span>
+    <button class="stop-btn" onclick="stopPlayer()">Stop</button>
+  </div>
+  <iframe src="about:blank" allow="autoplay"></iframe>
+</div>
+#+end_export
 """
 
 
@@ -227,6 +268,8 @@ def main():
         iframe_text = (
             iframe_text[:insert_pos] + IFRAME_PREAMBLE + iframe_text[insert_pos:]
         )
+
+        iframe_text += IFRAME_FOOTER
 
         COMPILED_IFRAMES.write_text(iframe_text)
         print(
