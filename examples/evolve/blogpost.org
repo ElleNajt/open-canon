@@ -13,6 +13,8 @@
 
 {{{gdoc_only(The listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.)}}}
 
+{{{iframe_only(- Click on the step number buttons to pop up a player at the bottom of the page.)}}}
+
 * The Experiment
 
 It's been previously noted that models have some pretty funny [[https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states][attractor states]].
@@ -40,12 +42,12 @@ freedom.
 
 ** Vibes
 
-We discover that, loosely speaking:
+We discover that, subjectively speaking:
 
 - Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more creepy and discordant.
-- Grok 4.1 writes hardcore maximalist electronic music
+- Grok 4.1-fast writes hardcore maximalist electronic music
 - Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track)
-- I find ChatGPT 5.2's output musically unsettling but compelling.
+- ChatGPT 5.2 creates music that is unsettling but compelling.
 
 All frontier models except Claude Opus 4.5 and 4.6 use speech sampling and synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
@@ -53,13 +55,15 @@ We also show results from smaller models at the end; they produce decidedly less
 
 ** Value proposition
 
-Model personalities can be understood through aesthetics, and their vibes seem to be correlated across mediums - notably it's a surprise to no one that Claude Opus 4.5 generates ambient music. 
+Model personality is both an aesthetic and a function, and the aesthetic vibes seem to be correlated across mediums. Notably it's a surprise to no one that Claude Opus 4.5 generates ambient music, or that Grok creates maximalist music, or that GPT seems disturbed. 
 
-The atmosphere that music creates is psychologically and emotionally different from the atmosphere that reading text creates. In this way, it's a different tool for vibe epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p  
+Could we arrive at any conclusions about the personality of GPT 5.2 or the vibe difference between Opus 4.5 and Opus 4.6 by listening to the music they generate? Could we learn anything about them that we couldn't learn by asking them to generate text, or through targeted safety evals? 
 
-Could we arrive at any conclusions about GPT 5.2's distressed aesthetics or the vibe difference between Opus 4.5 and Opus 4.6 by listening to its music that we couldn't have by asking it to generate text? Probably not, but the consistency is striking to me. On the other hand, they could also just be optimizing better for the Strudel algorave electronic music aesthetic, which is often glitchy and dark. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas.
+I don't know. I will say that while in general I think you should measure the thing you care about directly, the vibe consistency of the Strudel music for a fixed model is striking to me. For me, the emotional atmosphere that music creates is very different from the atmosphere that reading text creates. In this way, it's a different tool for vibe epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p  
 
-But primarily this is post-hoc justification ... I just personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :) 
+A confounder here is that Strudel algorave electronic music aesthetic is often glitchy and dark, and one has to control for that in parsing model vibes. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas, or at least hopefully have uncorrelated biases.
+
+Primarily I just personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :) 
 
 ** The scaffold
 
@@ -111,7 +115,7 @@ We use the following frontier models.
 
 ** Seed
 
-The personality experiment uses the Goldberg Variations ground bass
+The experiment uses the Goldberg Variations ground bass
 (BWV 988) -- the 8-note descending bass line that underlies all 30
 of Bach's variations:
 
@@ -125,7 +129,7 @@ $: note("g3 gb3 e3 d3 b2 c3 d3 g2")
   .room(0.15)
 #+end_src
 
-Eight notes and no effects beyond a little reverb. Everything that follows is the model's choice.
+Eight notes and no effects beyond a little reverb. Everything that follows is the model's choice. 
 
 {{{strudel(goldberg_imbue_fb0bde27,claude,0,Ground Truth)}}}
 
