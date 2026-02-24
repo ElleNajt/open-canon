@@ -207,10 +207,10 @@ ChatGPT 5.2 consistently writes creepy glitchy music. It makes speech samples su
 
 To see how seed dependent this vibe, I include evolutions from the same drum and arpeggio seed as used with Opus above. 
 
-{{{strudel(diff_gpt_drums_84f7f2ef,gpt,10,15,20,GPT Drum Seed Run 1)}}}
-{{{strudel(diff_gpt_drums_v2_84f7f2ef,gpt,10,15,20,GPT Drum Seed Run 2)}}}
+*Drum seed Run 1:* {{{strudel(diff_gpt_drums_84f7f2ef,gpt,10,15,20,GPT Drum Seed Run 1)}}}
+*Drum seed Run 2:* {{{strudel(diff_gpt_drums_v2_84f7f2ef,gpt,10,15,20,GPT Drum Seed Run 2)}}}
 
-{{{strudel(diff_gpt_major_84f7f2ef,gpt,10,15,20,GPT C Major Seed)}}}
+*C major arpeggio seed:* {{{strudel(diff_gpt_major_84f7f2ef,gpt,10,15,20,GPT C Major Seed)}}}
 
 *** Gemini
 

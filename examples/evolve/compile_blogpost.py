@@ -233,7 +233,7 @@ IFRAME_FOOTER = """
 <div id="shared-player">
   <div class="player-bar">
     <span class="player-label"></span>
-    <button class="stop-btn" onclick="stopPlayer()">Stop</button>
+    <button class="stop-btn" onclick="stopPlayer()">Close</button>
   </div>
   <iframe src="about:blank" allow="autoplay"></iframe>
 </div>
