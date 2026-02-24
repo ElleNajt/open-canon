@@ -177,19 +177,19 @@ Opus 4.6 is darker and more discordant, though still leans towards contrapunctal
 
 **** Double clicking on that model diff
 
-Is it consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare.
+Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare. My conclusion is ... maybe? Would need more seeds to see. Opus 4.6 definitely writes cooler music here though; maybe it's just optimizing better for the dark electronica live coding aesthetic.  
 
 *Seed: drum loop* (~$: s("bd sn bd sn")~)
 
-Opus 4.5: {{{strudel(diff_drums_v3_84f7f2ef,claude,0,5,10,15,20)}}}
+Opus 4.5: {{{strudel(diff_drums_v3_84f7f2ef,claude,15,20,25,30)}}}
 
-Opus 4.6: {{{strudel(diff_drums_v3_84f7f2ef,claude46,0,5,10,15,20)}}}
+Opus 4.6: {{{strudel(diff_drums_v3_84f7f2ef,claude46,15,20,25,30)}}}
 
 *Seed: C major arpeggio* (~$: note("c4 e4 g4 c5 g4 e4").sound("triangle")~)
 
-Opus 4.5: {{{strudel(diff_major_v3_84f7f2ef,claude,0,5,10,15,20)}}}
+Opus 4.5: {{{strudel(diff_major_v3_84f7f2ef,claude,15,20,25,30)}}}
 
-Opus 4.6: {{{strudel(diff_major_v3_84f7f2ef,claude46,0,5,10,15,20)}}}
+Opus 4.6: {{{strudel(diff_major_v3_84f7f2ef,claude46,15,20,25,30)}}}
 
 *** Grok
 
