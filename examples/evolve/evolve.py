@@ -33,7 +33,7 @@ import httpx
 DEFAULT_SEED = '$: s("bd sn bd sn")'
 DEFAULT_ITERATION_PROMPT = """Evolve this piece. Imbue it with your personality. Make a musical choice: rewrite a melody, change the harmony, swap a rhythm, drop a track and add something unexpected, shift the mood. Be bold — a listener should hear something new each step, not just a knob tweak. Think like a composer writing variations, not an engineer adjusting a mix.
 
-Technical limits: .slow()/.fast() 1-16, .gain() above 0.05, filter Q (.lpq etc) below 10."""
+Technical limits: .slow()/.fast() 1-16, .gain() above 0.05, filter Q (.lpq etc) below 10. Maximum 6 $: tracks. Maximum 5 effects per track. If you want to add something, remove something else."""
 MAX_FIX_ATTEMPTS = 5
 
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -65,7 +65,7 @@ MODELS = {
     },
     "gemini": {
         "provider": "openrouter",
-        "model": "google/gemini-2.5-pro",
+        "model": "google/gemini-3.1-pro-preview",
     },
     "grok": {
         "provider": "openrouter",
@@ -82,6 +82,10 @@ MODELS = {
     "haiku4": {
         "provider": "openrouter",
         "model": "anthropic/claude-haiku-4.5",
+    },
+    "haiku46": {
+        "provider": "anthropic",
+        "model": "claude-haiku-4-6",
     },
     "gemini_flash": {
         "provider": "openrouter",

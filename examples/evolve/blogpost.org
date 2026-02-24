@@ -204,7 +204,7 @@ These slap.
 
 **** GPT 5.2 + Gemini
 
-{{{strudel_picks(cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/14 Step 14)}}}
+{{{strudel_picks(cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/8 Step 8, cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/14 Step 14)}}}
 
 **** Grok + Gemini
 
