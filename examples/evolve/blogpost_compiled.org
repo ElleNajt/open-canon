@@ -11,6 +11,8 @@
 
 - Some of the music is *intense*, especially the music from Grok. If you're using headphones, keep the volume low at first. 
 
+- This is an art project. Just jump around and listen to music, read the words if you're inclined to, and play with [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]] if you're inspired to.
+
 - Click the links to be taken to Strudel, where you can play the pieces. Alternatively, the listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.
 
 
