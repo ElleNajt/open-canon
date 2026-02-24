@@ -60,9 +60,7 @@ def read_steps(experiment, model_subdir, steps):
 
 
 def expand_macro_links(match):
-    parts = [p.strip() for p in match.group(1).split(",")]
-    experiment, model_subdir = parts[0], parts[1]
-    steps = [int(s) for s in parts[2:]]
+    experiment, model_subdir, steps, _label = _parse_strudel_args(match.group(1))
 
     step_urls = read_steps(experiment, model_subdir, steps)
     if step_urls is None:
@@ -79,10 +77,23 @@ def expand_macro_links(match):
     return " | ".join(links)
 
 
-def expand_macro_iframe(match):
-    parts = [p.strip() for p in match.group(1).split(",")]
+def _parse_strudel_args(args_str):
+    """Parse strudel macro args into (experiment, model_subdir, steps, label).
+
+    If the last arg is non-numeric, it's treated as the label.
+    """
+    parts = [p.strip() for p in args_str.split(",")]
     experiment, model_subdir = parts[0], parts[1]
-    steps = [int(s) for s in parts[2:]]
+    rest = parts[2:]
+    label = None
+    if rest and not rest[-1].isdigit():
+        label = rest.pop()
+    steps = [int(s) for s in rest]
+    return experiment, model_subdir, steps, label
+
+
+def expand_macro_iframe(match):
+    experiment, model_subdir, steps, label = _parse_strudel_args(match.group(1))
 
     step_urls = read_steps(experiment, model_subdir, steps)
     if step_urls is None:
@@ -91,9 +102,6 @@ def expand_macro_iframe(match):
     valid = [(s, u) for s, u in step_urls if u is not None]
     if not valid:
         return "[NO VALID STEPS]"
-
-    # Unique ID for this player
-    player_id = f"{experiment}_{model_subdir}".replace("/", "_")
 
     # Build step buttons (no iframe — shared player loads on click)
     buttons = []
@@ -105,7 +113,7 @@ def expand_macro_iframe(match):
             f"Step {step}</button>"
         )
 
-    label = f"{model_subdir} — {experiment}"
+    label = label or model_subdir
 
     return f"""#+begin_export html
 <div class="run-player" data-label="{label}">
