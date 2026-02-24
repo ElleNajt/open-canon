@@ -85,12 +85,12 @@ freedom.
 
 We discover that, subjectively speaking:
 
-- Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more creepy and discordant.
+- Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more interesting and discordant.
 - Grok 4.1-fast writes hardcore maximalist electronic music
 - Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track)
 - ChatGPT 5.2 creates music that is unsettling but compelling.
 
-All frontier models except Claude Opus 4.5 and 4.6 use speech sampling and synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
+All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
@@ -100,11 +100,11 @@ Model personality is both an aesthetic and a function, and the aesthetic vibes s
 
 Could we arrive at any conclusions about the personality of GPT 5.2 or the vibe difference between Opus 4.5 and Opus 4.6 by listening to the music they generate? Could we learn anything about them that we couldn't learn by asking them to generate text, or through targeted safety evals? 
 
-I don't know. I will say that while in general I think you should measure the thing you care about directly, the vibe consistency of the Strudel music for a fixed model is striking to me. For me, the emotional atmosphere that music creates is very different from the atmosphere that reading text creates. In this way, it's a different tool for vibe epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p  
+I don't know. I will say that while in general I think you should measure the thing you care about directly, the vibe consistency of the Strudel music for a fixed model is striking to me. For me, the emotional atmosphere that music creates is different from the atmosphere that reading text creates, and it provides a different tool for vibe-aesthetic-epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p  
 
-A confounder here is that Strudel algorave electronic music aesthetic is often glitchy and dark, and one has to control for that in parsing model vibes. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas, or at least hopefully have uncorrelated biases.
+A confounder here is that Strudel algorave electronic music aesthetic is often glitchy and dark, and one has to control for that in parsing model vibes. Much like that hypothesis that overrepresentation of sad-poetry in the training corpus explains away models writing sad poetry, or that the correlation between aesthetic interestingness and darkness creates an RLHF signal. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas, or at least hopefully have uncorrelated biases. I think the strongest position I'd make here is that if convergent aesthetics were correlated across many mediums and seeds, they probably mean something about a model's self-conception.
 
-Primarily I just personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :) 
+But primarily this is an art project and should be understood as such. I personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :) 
 
 ** The scaffold
 
@@ -185,7 +185,7 @@ All the music is embedded down the page, including some cross model experiments.
 *** Claude
 **** Opus 4.5
 
-Claude Opus 4.5 writes ambient contrapunctal music. Slow, meditative, with philosophical comments that get increasingly introspective. Run 2 step 30 finds a gentle canon over the Goldberg ground, and Run 3 step 5 is some playful counterpoint. Runs 1 and 5 find the bliss attractor.
+Claude Opus 4.5 writes ambient contrapunctal music. Slow, meditative, with philosophical comments that get increasingly introspective. Run 2 step 30 finds a gentle canon over the Goldberg ground, and Run 3 step 5 is some playful counterpoint. Runs 1 and 5 find the [[https://www.astralcodexten.com/p/the-claude-bliss-attractor][bliss attractor]].
 
 The bliss attractor Opus 4.5 runs tend to have commentary about not needing to perform: 
 
