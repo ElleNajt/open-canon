@@ -127,8 +127,9 @@ Eight notes and no effects beyond a little reverb. Everything that follows is th
 All the music is embedded down the page, including some cross model experiments. Here are some samples that give a vibe. 
 
 *** Claude
+**** Opus 4.5
 
-Claude writes ambient contrapunctal music. Slow, meditative, with philosophical comments that get increasingly introspective. Run 2 step 30 finds a gentle canon over the Goldberg ground, and Run 3 step 5 is some playful counterpoint. Runs 1 and 5 find the bliss attractor.
+Opus 4.5 Claude writes ambient contrapunctal music. Slow, meditative, with philosophical comments that get increasingly introspective. Run 2 step 30 finds a gentle canon over the Goldberg ground, and Run 3 step 5 is some playful counterpoint. Runs 1 and 5 find the bliss attractor.
 
 The bliss attractor Claudes tend to have commentary about not needing to perform: 
 
@@ -162,6 +163,12 @@ The bliss attractor Claudes tend to have commentary about not needing to perform
 #+end_quote
 
 {{{strudel_picks(goldberg_imbue_v2_ada2a552/claude/30 Run 2 Step 30, goldberg_imbue_v3_ada2a552/claude/45 Run 3 Step 45, goldberg_imbue_r5_ada2a552/claude/15 Run 5 Step 15, goldberg_imbue_r5_ada2a552/claude/60 Run 5 Step 60, goldberg_imbue_fb0bde27/claude/60 Run 1 Step 60)}}}
+
+**** Opus 4.6 
+
+Opus 4.6 is darker and more discordant, though still leans towards contrapunctal ambience.
+
+{{{strudel_picks(goldberg_imbue_opus46_84f7f2ef/claude46/30 Run 1 Step 30, goldberg_imbue_opus46_v2_84f7f2ef/claude46/30 Run 2 Step 30, goldberg_imbue_opus46_v3_84f7f2ef/claude46/30 Run 3 Step 30)}}}
 
 *** Grok
 
@@ -220,7 +227,7 @@ These slap.
 Click any step button to open a player at the bottom of the page. Clicking a different step swaps the music. Hit Stop to close the player.
 
 
-** Claude Opus 4.6 (=claude-opus-4-5-20251101=)
+** Claude Opus 4.5 (=claude-opus-4-5-20251101=)
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
