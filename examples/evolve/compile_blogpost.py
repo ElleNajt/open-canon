@@ -105,8 +105,10 @@ def expand_macro_iframe(match):
             f"Step {step}</button>"
         )
 
+    label = f"{model_subdir} — {experiment}"
+
     return f"""#+begin_export html
-<div class="run-player">
+<div class="run-player" data-label="{label}">
   <div class="run-controls">{" ".join(buttons)}</div>
 </div>
 #+end_export"""
@@ -204,7 +206,8 @@ IFRAME_PREAMBLE = r"""#+HTML_HEAD: <style>
 #+HTML_HEAD:   if (activeBtn) activeBtn.classList.remove('active');
 #+HTML_HEAD:   btn.classList.add('active');
 #+HTML_HEAD:   activeBtn = btn;
-#+HTML_HEAD:   label.textContent = btn.textContent;
+#+HTML_HEAD:   var ctx = btn.closest('.run-player')?.dataset?.label || '';
+#+HTML_HEAD:   label.textContent = ctx ? ctx + ' — ' + btn.textContent : btn.textContent;
 #+HTML_HEAD:   sp.style.display = 'block';
 #+HTML_HEAD: }
 #+HTML_HEAD: function stopPlayer() {
