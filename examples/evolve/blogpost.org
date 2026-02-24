@@ -40,7 +40,12 @@ freedom.
 
 ** Vibes
 
-We discover that, loosely speaking, Claude Opus 4.5 and Opus 4.6 mostly write ambient music and sometimes gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini writes IDM across both model generations (we show 2.5 Pro and 3.1 Pro, 2.5 Pro also had a nice ambient track), and ChatGPT 5.2 writes highly unsettling experimental music.
+We discover that, loosely speaking:
+
+- Claude Opus 4.5 Opus 4.6 mostly write ambient music and with sometimes gentle counterpoint, though 4.6 is distinctly more creepy and discordant.
+- Grok 4.1 writes hardcore maximalist electronic music
+- Gemini 2.5 and 3.1 Pro writes IDM across both model generations (2.5 Pro also had a nice ambient track)
+- ChatGPT 5.2 writes highly unsettling experimental music.
 
 All frontier models except Claude use speech sampling and synthesis in interesting ways, with GPT 5.2s deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
