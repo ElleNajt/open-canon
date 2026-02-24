@@ -175,6 +175,22 @@ Opus 4.6 is darker and more discordant, though still leans towards contrapunctal
 
 {{{strudel_picks(goldberg_imbue_opus46_84f7f2ef/claude46/30 Run 1 Step 30, goldberg_imbue_opus46_v2_84f7f2ef/claude46/30 Run 2 Step 30, goldberg_imbue_opus46_v3_84f7f2ef/claude46/30 Run 3 Step 30)}}}
 
+**** Double clicking on that model diff
+
+Is it consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare.
+
+*Seed: drum loop* (~$: s("bd sn bd sn")~)
+
+Opus 4.5: {{{strudel(diff_drums_v3_84f7f2ef,claude,0,5,10,15,20)}}}
+
+Opus 4.6: {{{strudel(diff_drums_v3_84f7f2ef,claude46,0,5,10,15,20)}}}
+
+*Seed: C major arpeggio* (~$: note("c4 e4 g4 c5 g4 e4").sound("triangle")~)
+
+Opus 4.5: {{{strudel(diff_major_v3_84f7f2ef,claude,0,5,10,15,20)}}}
+
+Opus 4.6: {{{strudel(diff_major_v3_84f7f2ef,claude46,0,5,10,15,20)}}}
+
 *** Grok
 
 Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the golden ratio. 
@@ -246,6 +262,18 @@ Click any step button to open a player at the bottom of the page. Clicking a dif
 *Run 2:* {{{strudel(goldberg_imbue_opus46_v2_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 *Run 3:* {{{strudel(goldberg_imbue_opus46_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+** Opus 4.5 vs 4.6: drum loop seed
+
+Opus 4.5: {{{strudel(diff_drums_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+Opus 4.6: {{{strudel(diff_drums_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+** Opus 4.5 vs 4.6: C major arpeggio seed
+
+Opus 4.5: {{{strudel(diff_major_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+Opus 4.6: {{{strudel(diff_major_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** ChatGPT 5.2 (=openai/gpt-5.2=)
 
