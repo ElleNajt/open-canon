@@ -65,15 +65,15 @@ I don't know. I will say that while in general I think you should measure the th
 
 A confounder here is that Strudel algorave electronic music aesthetic is often glitchy and dark, and one has to control for that in parsing model vibes. Much like that hypothesis that overrepresentation of sad-poetry in the training corpus explains away models writing sad poetry, or that the correlation between aesthetic interestingness and darkness creates an RLHF signal. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas, or at least hopefully have uncorrelated biases. I think the strongest position I'd make here is that if convergent aesthetics were correlated across many mediums and seeds, they probably mean something about a model's self-conception.
 
-But primarily this is an art project and should be understood as such. I personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :) 
+But primarily this is an art project. I personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :) 
 
 ** The scaffold
 
 Models aren't perfect at Strudel -- they make syntax mistakes and hallucinate
-nonexistent functions a sample libraries. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
+nonexistent functions and sample libraries. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
 transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
 let the model try again from scratch (up to 5 attempts). The model
-never sees the error message -- it just gets another shot. This required some iteration to get right, and may still be missing some things.
+never sees the error message -- it just gets another shot. This required some iteration to get right and may still be missing some things.
 
 The code is open source here [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. It's probably more fun to play with it yourself than to listen to the selections here. Here are options for doing so:
 
