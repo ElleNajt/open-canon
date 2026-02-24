@@ -97,11 +97,11 @@ Model personalities can be understood through aesthetics, and their vibes seem t
 
 The atmosphere that music creates is psychologically and emotionally different from the atmosphere that reading text creates. In this way, it's a different tool for vibe epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p  
 
-Could we arrive at any conclusions about GPT 5.2's distressed aesthetics or the vibe difference between Opus 4.5 and Opus 4.6 by listening to its music that we couldn't have by asking it to generate text? Probably not, but the consistency is striking to me. On the other hand, they could also just be optimizing better for the Strudel algorave electronic music aesthetic, which is often glitchy and dark. Midi, like in 
+Could we arrive at any conclusions about GPT 5.2's distressed aesthetics or the vibe difference between Opus 4.5 and Opus 4.6 by listening to its music that we couldn't have by asking it to generate text? Probably not, but the consistency is striking to me. On the other hand, they could also just be optimizing better for the Strudel algorave electronic music aesthetic, which is often glitchy and dark. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas.
 
-- [[https://sara-fish.github.io/llm-musical-self-expression/][an experiment on frontier LLMs generating classical music]]
+But primarily this is post-hoc. :)
 
-But primarily this is post-hoc. I just personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. I hope it also brings you joy. :) 
+I just personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. I hope it also brings you joy. :) 
 
 ** The scaffold
 
