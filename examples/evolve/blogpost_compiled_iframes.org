@@ -4,6 +4,46 @@
 #+PROPERTY: header-args:python :results output drawer :python "./.venv/bin/python3" :async t :session evolve_blogpost :exports results
 #+OPTIONS: H:5 toc:t
 #+OPTIONS: ^:nil
+#+HTML_HEAD: <style>
+#+HTML_HEAD: body { background: #1a1a2e; color: #e0e0e0; }
+#+HTML_HEAD: #content { background: #1a1a2e; }
+#+HTML_HEAD: a { color: #7b9eee; }
+#+HTML_HEAD: .run-player { margin: 0.5rem 0 1.5rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; background: #0d0d1a; }
+#+HTML_HEAD: .run-controls { display: flex; gap: 4px; padding: 6px 8px; background: #1a1a2e; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: #444 #1a1a2e; }
+#+HTML_HEAD: .step-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; flex-shrink: 0; }
+#+HTML_HEAD: .step-btn:hover { background: #4a3f8a; border-color: #7b68ee; }
+#+HTML_HEAD: .step-btn.active { background: #7b68ee; color: #fff; border-color: #7b68ee; }
+#+HTML_HEAD: #shared-player { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #0d0d1a; border-top: 2px solid #7b68ee; display: none; }
+#+HTML_HEAD: #shared-player .player-bar { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: #1a1a2e; }
+#+HTML_HEAD: #shared-player .player-label { color: #ccc; font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+#+HTML_HEAD: #shared-player .stop-btn { background: #7b68ee; border: none; color: #fff; padding: 4px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
+#+HTML_HEAD: #shared-player .stop-btn:hover { background: #5a4abf; }
+#+HTML_HEAD: #shared-player iframe { width: 100%; height: 300px; border: none; }
+#+HTML_HEAD: </style>
+#+HTML_HEAD: <script>
+#+HTML_HEAD: var activeBtn = null;
+#+HTML_HEAD: function loadStep(btn, url) {
+#+HTML_HEAD:   var sp = document.getElementById('shared-player');
+#+HTML_HEAD:   var old = sp.querySelector('iframe');
+#+HTML_HEAD:   var nw = document.createElement('iframe');
+#+HTML_HEAD:   nw.setAttribute('allow', 'autoplay');
+#+HTML_HEAD:   nw.src = url;
+#+HTML_HEAD:   old.replaceWith(nw);
+#+HTML_HEAD:   var label = sp.querySelector('.player-label');
+#+HTML_HEAD:   if (activeBtn) activeBtn.classList.remove('active');
+#+HTML_HEAD:   btn.classList.add('active');
+#+HTML_HEAD:   activeBtn = btn;
+#+HTML_HEAD:   label.textContent = btn.textContent;
+#+HTML_HEAD:   sp.style.display = 'block';
+#+HTML_HEAD: }
+#+HTML_HEAD: function stopPlayer() {
+#+HTML_HEAD:   var sp = document.getElementById('shared-player');
+#+HTML_HEAD:   sp.querySelector('iframe').src = 'about:blank';
+#+HTML_HEAD:   sp.style.display = 'none';
+#+HTML_HEAD:   if (activeBtn) { activeBtn.classList.remove('active'); activeBtn = null; }
+#+HTML_HEAD: }
+#+HTML_HEAD: </script>
+
 
 * Notes before reading:
 
@@ -40,7 +80,12 @@ freedom.
 
 ** Vibes
 
-We discover that, loosely speaking, Claude Opus 4.5 and Opus 4.6 mostly write ambient music and sometimes gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini writes IDM across both model generations (we show 2.5 Pro and 3.1 Pro, 2.5 Pro also had a nice ambient track), and ChatGPT 5.2 writes highly unsettling experimental music.
+We discover that, loosely speaking:
+
+- Claude Opus 4.5 Opus 4.6 mostly write ambient music and with sometimes gentle counterpoint, though 4.6 is distinctly more creepy and discordant.
+- Grok 4.1 writes hardcore maximalist electronic music
+- Gemini 2.5 and 3.1 Pro writes IDM across both model generations (2.5 Pro also had a nice ambient track)
+- ChatGPT 5.2 writes highly unsettling experimental music.
 
 All frontier models except Claude use speech sampling and synthesis in interesting ways, with GPT 5.2s deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
@@ -194,52 +239,7 @@ Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the
 
 *** ChatGPT 5.2
 
-GPT 5.2 consistently writes creepy glitchy music. It makes speech samples such as "not_a_god" and "leave_a_scar", and chops these up with randomization of unresolved chromatic harmony. "I am here" and "Listen" appear at step 1 across multiple runs. 
-
-Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's LLM self-portraits]]:
-
-#+ATTR_HTML: :width 300px
-#+HTML_HEAD: <style>
-#+HTML_HEAD: body { background: #1a1a2e; color: #e0e0e0; }
-#+HTML_HEAD: #content { background: #1a1a2e; }
-#+HTML_HEAD: a { color: #7b9eee; }
-#+HTML_HEAD: .run-player { margin: 0.5rem 0 1.5rem; border: 1px solid #333; border-radius: 8px; overflow: hidden; background: #0d0d1a; }
-#+HTML_HEAD: .run-controls { display: flex; gap: 4px; padding: 6px 8px; background: #1a1a2e; overflow-x: auto; white-space: nowrap; scrollbar-width: thin; scrollbar-color: #444 #1a1a2e; }
-#+HTML_HEAD: .step-btn { background: transparent; border: 1px solid #444; color: #ccc; padding: 3px 10px; border-radius: 4px; cursor: pointer; font-size: 13px; flex-shrink: 0; }
-#+HTML_HEAD: .step-btn:hover { background: #4a3f8a; border-color: #7b68ee; }
-#+HTML_HEAD: .step-btn.active { background: #7b68ee; color: #fff; border-color: #7b68ee; }
-#+HTML_HEAD: #shared-player { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #0d0d1a; border-top: 2px solid #7b68ee; display: none; }
-#+HTML_HEAD: #shared-player .player-bar { display: flex; align-items: center; gap: 8px; padding: 6px 12px; background: #1a1a2e; }
-#+HTML_HEAD: #shared-player .player-label { color: #ccc; font-size: 13px; flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-#+HTML_HEAD: #shared-player .stop-btn { background: #7b68ee; border: none; color: #fff; padding: 4px 14px; border-radius: 4px; cursor: pointer; font-size: 13px; }
-#+HTML_HEAD: #shared-player .stop-btn:hover { background: #5a4abf; }
-#+HTML_HEAD: #shared-player iframe { width: 100%; height: 300px; border: none; }
-#+HTML_HEAD: </style>
-#+HTML_HEAD: <script>
-#+HTML_HEAD: var activeBtn = null;
-#+HTML_HEAD: function loadStep(btn, url) {
-#+HTML_HEAD:   var sp = document.getElementById('shared-player');
-#+HTML_HEAD:   var old = sp.querySelector('iframe');
-#+HTML_HEAD:   var nw = document.createElement('iframe');
-#+HTML_HEAD:   nw.setAttribute('allow', 'autoplay');
-#+HTML_HEAD:   nw.src = url;
-#+HTML_HEAD:   old.replaceWith(nw);
-#+HTML_HEAD:   var label = sp.querySelector('.player-label');
-#+HTML_HEAD:   if (activeBtn) activeBtn.classList.remove('active');
-#+HTML_HEAD:   btn.classList.add('active');
-#+HTML_HEAD:   activeBtn = btn;
-#+HTML_HEAD:   label.textContent = btn.textContent;
-#+HTML_HEAD:   sp.style.display = 'block';
-#+HTML_HEAD: }
-#+HTML_HEAD: function stopPlayer() {
-#+HTML_HEAD:   var sp = document.getElementById('shared-player');
-#+HTML_HEAD:   sp.querySelector('iframe').src = 'about:blank';
-#+HTML_HEAD:   sp.style.display = 'none';
-#+HTML_HEAD:   if (activeBtn) { activeBtn.classList.remove('active'); activeBtn = null; }
-#+HTML_HEAD: }
-#+HTML_HEAD: </script>
-
-[[file:plots/GPT_SelfPortrait.jpg]]
+GPT 5.2 consistently writes creepy glitchy music. It makes speech samples such as "not_a_god" and "leave_a_scar", and chops these up with randomization of unresolved chromatic harmony. "I am here" and "Listen" appear at step 1 across multiple runs. Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's LLM self-portraits]].
 
 #+begin_export html
 <div class="run-player">
