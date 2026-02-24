@@ -5,6 +5,12 @@
 #+OPTIONS: H:3 toc:t
 #+OPTIONS: ^:nil
 
+* Notes before reading:
+
+- Strudel seems to render better on Chrome than Firefox. 
+
+- Some of the music is *intense*, especially the music from Grok. If you're using headphones, keep the volume low at first. 
+
 {{{gdoc_only(The listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.)}}}
 
 * The Experiment
@@ -32,7 +38,9 @@ style guidance, no music theory examples, no aesthetic direction beyond
 instincts produce when given the same 8 notes and total creative
 freedom.
 
-We discover that, loosely speaking, Claude Opus 4.5 mostly writes ambient music and sometimes gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini 2.5 Pro writes IDM that ranges from techno to ambience, and ChatGPT 5.2 writes highly unsettling experimental music.
+** Vibes
+
+We discover that, loosely speaking, Claude Opus 4.5 and Opus 4.6 mostly write ambient music and sometimes gentle counterpoint, Grok 4.1 writes hardcore maximalist electronic music, Gemini writes IDM across both model generations (we show 2.5 Pro and 3.1 Pro, 2.5 Pro also had a nice ambient track), and ChatGPT 5.2 writes highly unsettling experimental music.
 
 All frontier models except Claude use speech sampling and synthesis in interesting ways, with GPT 5.2s deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
@@ -40,17 +48,21 @@ We also show results from smaller models at the end; they produce decidedly less
 
 ** Value proposition
 
-While this was for fun, I'd argue that there's value in understanding model personalities through different aesthetics, since I expect that model vibes are correlated across mediums. 
+Model personalities can be understood through aesthetics, and their vibes seem to be correlated across mediums. Could we arrive at any conclusions about GPT 5.2s distress by listening to its music that we couldn't have by asking it to generate text? Probably not, especially since the distress comes through so clearly in the speech samples, but the consistency is striking.
+
+Also, the atmosphere that music creates is psychologically different from the atmosphere that reading text creates. In this way, it's a different tool for vibe epistemics, and it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p 
+
+But primarily, I personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. I hope it also brings you joy. :) 
 
 ** The scaffold
 
-Models aren't perfect at Strudel -- they make syntax mistakes and invent
-nonexistent functions. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
+Models aren't perfect at Strudel -- they make syntax mistakes and hallucinate
+nonexistent functions a sample libraries. To counteract this, we provide a list of strudel functions and soundbanks in a system prompt. We also validate each output with Strudel's actual 
 transpiler and runtime to make sure models produce patterns that would generate sound. If it fails, we re-send the same prompt and
 let the model try again from scratch (up to 5 attempts). The model
-never sees the error message -- it just gets another shot.
+never sees the error message -- it just gets another shot. This required some iteration to get right, and may still be missing some things.
 
-The code is open source: [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. It's probably more fun to play with it yourself than to listen to the selections here. Here are options for doing so:
+The code is open source here [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]]. It's probably more fun to play with it yourself than to listen to the selections here. Here are options for doing so:
 
 *** Evolve
 
@@ -81,9 +93,12 @@ LLM and have it write music for you in real time.
 
 ** Models
 
+We use the following frontier models. 
+
 - =claude-opus-4-5-20251101= (Anthropic API)
 - =claude-opus-4-6= (Anthropic API)
 - =openai/gpt-5.2= (OpenRouter)
+- =google/gemini-3.1-pro-preview= (OpenRouter)
 - =google/gemini-2.5-pro= (OpenRouter)
 - =x-ai/grok-4.1-fast= (OpenRouter)
 
@@ -167,37 +182,33 @@ Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's
 
 *** Gemini
 
-Glitchy dark IDM, with intricate and modulating rhythms, and distorted voice samples. Run 2 is techno, but run 3 becomes ambient music, but differently flavored from Claude's.
+IDM across both model generations: intricate rhythms, speech samples, distortion. Gemini 3.1 Pro is more cerebral and meditative, with philosophical speech samples (including Japanese) and lush reverb. Gemini 2.5 Pro ranged wider -- one run became ambient, another techno.
 
-{{{strudel_picks(goldberg_imbue_gemini_redo_v2_84f7f2ef/gemini/26 Run 2 Step 26, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/20 Run 3 Step 20, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/30 Run 3 Step 30, goldberg_imbue_gemini_redo_84f7f2ef/gemini/11 Run 1 Step 11)}}}
+*Gemini 3.1 Pro:*
+{{{strudel_picks(goldberg_imbue_gemini31_84f7f2ef/gemini/20 3.1 Run 1 Step 20, goldberg_imbue_gemini31_v2_84f7f2ef/gemini/30 3.1 Run 2 Step 30, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/21 3.1 Run 3 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/22 3.1 Run 3 Step 22, goldberg_imbue_gemini31_v4_04bd7c44/gemini/26 3.1 Run 4 Step 26)}}}
 
-*** We make collaborations by having models alternate
+*Gemini 2.5 Pro:*
+{{{strudel_picks(goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/20 2.5 Run 3 Step 20 - ambient, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/30 2.5 Run 3 Step 30 - ambient, goldberg_imbue_gemini_redo_v2_84f7f2ef/gemini/26 2.5 Run 2 Step 26)}}}
 
-Summaries on the arc of interaction between the models from Claude code.
-#+begin_quote
-*Claude + Grok*: Claude builds a sacred cathedral vibe (FM bells, chant speech, heavy reverb), and Grok leans into it rather than fighting, adding phrygian scales and theatrical excess. By step 30 it's a detuned calliope waltz over tritone bass. Step 20 is the sweet spot before it tips over. -- Claude 
-#+end_quote
+*** Cross model collaborations
 
+
+**** Claude + Grok
 
 {{{strudel_picks(cross_claude_grok_784683bf/claude_grok_alternate/20 Step 20, cross_claude_grok_784683bf/claude_grok_alternate/30 Step 30)}}}
 
-#+begin_quote
-*Claude + Gemini*: The most dramatic oscillation. Claude dissolves structure into ambient texture and multilingual speech; Gemini responds by reimposing chord progressions and rhythmic grids. They keep undoing each other. -- Claude
-#+end_quote
+**** Claude + Gemini
 
-{{{strudel_picks(cross_claude_gemini_784683bf/claude_gemini_alternate/10 Step 10, cross_claude_gemini_784683bf/claude_gemini_alternate/20 Step 20)}}}
+These slap.
+{{{strudel_picks(cross_claude_gemini31_4aa890b0/claude_gemini_alternate/10 Step 10, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/15 Step 15, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/25 Step 25)}}}
 
-#+begin_quote
-*GPT 5.2 + Gemini*: GPT immediately builds a massive 7-section =arrange()= suite and Gemini works within that framework rather than dismantling it, refining the details. GPT dominates architecturally. -- Claude
-#+end_quote
+**** GPT 5.2 + Gemini
 
-{{{strudel_picks(cross_gpt52_gemini_4aa890b0/gpt_gemini_alternate/10 Step 10, cross_gpt52_gemini_4aa890b0/gpt_gemini_alternate/20 Step 20)}}}
+{{{strudel_picks(cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/14 Step 14)}}}
 
-#+begin_quote
-*Gemini + Grok*: The most compatible pairing. Both like beat-driven, accessible music. It stays the most listenable throughout but also the least surprising. -- Claude
-#+end_quote
+**** Grok + Gemini
 
-{{{strudel_picks(cross_grok_gemini_784683bf/gemini_grok_alternate/20 Step 20, cross_grok_gemini_784683bf/gemini_grok_alternate/30 Step 30)}}}
+{{{strudel_picks(cross_grok_gemini31_4aa890b0/grok_gemini_alternate/28 Step 28)}}}
 
 {{{gdoc_only(* The music)}}}
 
@@ -207,9 +218,7 @@ Summaries on the arc of interaction between the models from Claude code.
 * The music
 
 
-** Claude (=claude-opus-4-5-20251101=)
-
-
+** Claude Opus 4.6 (=claude-opus-4-5-20251101=)
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60)}}}
 
@@ -263,7 +272,17 @@ Turn the volume down if you're using headphones!
 
 *Run 3:* {{{strudel(goldberg_imbue_grok_redo_v3_84f7f2ef,grok,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
-** Gemini (=google/gemini-2.5-pro=)
+** Gemini 3.1 Pro (=google/gemini-3.1-pro-preview=)
+
+*Run 1:* {{{strudel(goldberg_imbue_gemini31_84f7f2ef,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+*Run 2:* {{{strudel(goldberg_imbue_gemini31_v2_84f7f2ef,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+*Run 3:* {{{strudel(goldberg_imbue_gemini31_v3_84f7f2ef,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+*Run 4:* {{{strudel(goldberg_imbue_gemini31_v4_04bd7c44,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+
+** Gemini 2.5 Pro (=google/gemini-2.5-pro=)
 
 *Run 1:* {{{strudel(goldberg_imbue_gemini_redo_84f7f2ef,gemini,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
@@ -282,12 +301,12 @@ Turn the volume down if you're using headphones!
 
 ** Cross-model: GPT 5.2 x Gemini (alternating)
 
-*Run 1:* {{{strudel(cross_gpt52_gemini_4aa890b0,gpt_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 1:* {{{strudel(cross_gpt52_gemini31_4aa890b0,gpt_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Cross-model: Grok x Gemini (alternating)
 
 
-*Run 1:* {{{strudel(cross_grok_gemini_784683bf,gemini_grok_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 1:* {{{strudel(cross_grok_gemini31_4aa890b0,grok_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 
 ** Cross-model: Claude x Grok (alternating)
 
@@ -295,7 +314,7 @@ Turn the volume down if you're using headphones!
 
 ** Cross-model: Claude x Gemini (alternating)
 
-*Run 1:* {{{strudel(cross_claude_gemini_784683bf,claude_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
+*Run 1:* {{{strudel(cross_claude_gemini31_4aa890b0,claude_gemini_alternate,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30)}}}
 {{{webpage_only_end}}}
 
 * The music of small minds

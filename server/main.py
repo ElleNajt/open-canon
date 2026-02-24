@@ -173,6 +173,7 @@ request_times: deque = deque()  # global timestamps
 request_times_by_ip: dict[str, deque] = {}  # ip -> deque of timestamps
 processing = False
 processing_item: dict | None = None  # Currently processing prompt
+processing_task: asyncio.Task | None = None  # Cancellable task for in-flight LLM call
 repeating_prompts: list[dict] = []  # {id, name, prompt, interval, next_run}
 
 
@@ -733,6 +734,12 @@ async def process_item(item: dict):
             }
         )
 
+    except asyncio.CancelledError:
+        print("LLM request cancelled by manual edit")
+        await broadcast(
+            {"type": "error", "message": "Cancelled: manual edit took precedence"}
+        )
+
     except Exception as e:
         print(f"Error processing prompt: {e}")
         await broadcast({"type": "error", "message": str(e)})
@@ -903,12 +910,14 @@ async def process_queue():
 
         item = queue.pop(0)
         await broadcast({"type": "queue", "queue": queue})
+        processing_task = asyncio.current_task()
         await process_item(item)
+        processing_task = None
 
 
 async def watch_live_file():
-    """Poll live.js on disk for editor changes."""
-    global current_code
+    """Poll live.js on disk for editor changes. Manual edits cancel in-flight LLM calls."""
+    global current_code, processing, processing_task
     last_mtime = 0
 
     while True:
@@ -922,6 +931,10 @@ async def watch_live_file():
             with open(LIVE_FILE) as f:
                 disk_code = f.read()
             if disk_code and disk_code != current_code:
+                # Cancel in-flight LLM request — manual edits take precedence
+                if processing and processing_task and not processing_task.done():
+                    print("Manual edit detected, cancelling in-flight LLM request")
+                    processing_task.cancel()
                 current_code = disk_code
                 entry = {
                     "name": "Editor",
@@ -958,8 +971,16 @@ async def process_repeating():
 
 @app.on_event("startup")
 async def startup():
+    global current_code
     load_state()
-    sync_live_file()
+    # Prefer existing live.js over default/stored state
+    if os.path.exists(LIVE_FILE):
+        with open(LIVE_FILE) as f:
+            disk_code = f.read()
+        if disk_code.strip():
+            current_code = disk_code
+    else:
+        sync_live_file()
     asyncio.create_task(process_queue())
     asyncio.create_task(process_repeating())
     asyncio.create_task(watch_live_file())
