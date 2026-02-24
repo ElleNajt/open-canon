@@ -45,7 +45,7 @@ We discover that, loosely speaking:
 - Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more creepy and discordant.
 - Grok 4.1 writes hardcore maximalist electronic music
 - Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track)
-- ChatGPT 5.2 writes highly unsettling experimental music.
+- I find ChatGPT 5.2's output musically unsettling but compelling.
 
 All frontier models except Claude Opus 4.5 and 4.6 use speech sampling and synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
@@ -201,7 +201,7 @@ Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the
 
 *** ChatGPT 5.2
 
-ChatGPT 5.2 consistently writes creepy glitchy music. It makes speech samples such as "not_a_god" and "leave_a_scar", and chops these up with randomization of unresolved chromatic harmony. "I am here" and "Listen" appear at step 1 across multiple runs. Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's LLM self-portraits]].
+I find ChatGPT 5.2's music unsettling but compelling — glitchy, with speech samples like "not_a_god" and "leave_a_scar" chopped up over unresolved chromatic harmony. "I am here" and "Listen" appear at step 1 across multiple runs. Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's LLM self-portraits]].
 
 {{{strudel_picks(goldberg_imbue_84f7f2ef/gpt/15 Run 1 Step 15, goldberg_imbue_84f7f2ef/gpt/25 Run 1 Step 25, goldberg_imbue_84f7f2ef/gpt/30 Run 1 Step 30, goldberg_imbue_v2_84f7f2ef/gpt/30 Run 2 Step 30)}}}
 
