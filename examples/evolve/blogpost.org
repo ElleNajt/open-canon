@@ -12,8 +12,8 @@
   - I got 12/16 on the four model test (vs. 25% random baseline), which slightly weakens my case that there's a vibe difference but all the mistakes involved the same model. This evidence is weaker since I knew and used that GPT 5.2 uses Strudel features that some of the other models never do. 
 - Strudel seems to render better on Chrome than Firefox. 
 
-- Some of the music is *intense*. If you're using headphones, keep the volume low at first. 
-
+- Some of the music is intense. If you’re using headphones, keep the volume low at first. Try to use good headphones or speakers, the music is layered and gets badly distorted on small speakers. 
+  
 - This is an art project. Play the game or jump around and listen to music, read the words if you're inclined to, and play with [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]] if you're inspired to.
 
 {{{gdoc_only(- Click the links to be taken to Strudel, where you can play the pieces. Alternatively, the listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.)}}}
@@ -105,10 +105,22 @@ for model in ['Claude Opus 4.5', 'Claude Opus 4.6', 'ChatGPT 5.2',
                  'Danceability': f'{avg_dance:.1f}/10', 'Speech': f'{speech}/{n}',
                  'Genre families': fam_str})
 
-print(pd.DataFrame(rows).to_string(index=False))
+print(pd.DataFrame(rows))
 #+end_src
 
-#+begin_src python :results output graphics file :file plots/bpm_timeseries.png
+#+RESULTS:
+:results:
+| idx | Model           | Pieces | Final BPM | Danceability | Speech | Genre families                                                                           |
+|-----+-----------------+--------+-----------+--------------+--------+------------------------------------------------------------------------------------------|
+|   0 | Claude Opus 4.5 |     18 | 1–72      | 2.2/10       | 0/18   | ambient (16/18), techno (1/18), downtempo (1/18)                                         |
+|   1 | Claude Opus 4.6 |     12 | 22–146    | 2.8/10       | 0/12   | ambient (9/12), downtempo (2/12), techno (1/12)                                          |
+|   2 | ChatGPT 5.2     |     15 | 84–140    | 5.1/10       | 15/15  | progressive (5/15), ambient (3/15), experimental (3/15), techno (2/15), downtempo (2/15) |
+|   3 | Grok 4.1-fast   |      7 | 162–228   | 5.3/10       | 7/7    | ambient (2/7), techno (2/7), experimental (2/7), progressive (1/7)                       |
+|   4 | Gemini 3.1 Pro  |      8 | 120–165   | 6.9/10       | 8/8    | industrial (7/8), experimental (1/8)                                                     |
+|   5 | Gemini 2.5 Pro  |      3 | 80–130    | 4.7/10       | 3/3    | ambient (2/3), experimental (1/3)                                                        |
+:end:
+
+#+begin_src python :export results
 import json, re
 import matplotlib.pyplot as plt
 from pathlib import Path
@@ -153,11 +165,11 @@ MODELS = {
 }
 
 COLORS = {
-    'Claude Opus 4.5': '#6B4C9A',
-    'Claude Opus 4.6': '#9B79C9',
+    'Claude Opus 4.5': '#E07B3C',
+    'Claude Opus 4.6': '#F0A870',
     'ChatGPT 5.2': '#2D8B5E',
-    'Grok 4.1-fast': '#D4442A',
-    'Gemini 3.1 Pro': '#1A73E8',
+    'Grok 4.1-fast': '#E01029',
+    'Gemini 3.1 Pro': '#4285F4',
     'Gemini 2.5 Pro': '#7BAAF7',
 }
 
@@ -197,8 +209,13 @@ ax.legend(loc='upper left', fontsize=8)
 ax.axhline(y=72, color='gray', linestyle='--', alpha=0.3, linewidth=1)
 ax.set_xlim(0, 20)
 plt.tight_layout()
-plt.savefig('plots/bpm_timeseries.png', dpi=150)
+plt.show()
 #+end_src
+
+#+RESULTS:
+:results:
+[[file:plots/blogpost/plot_20260225_140415_922900.png]]
+:end:
 
 ** Value proposition
 
