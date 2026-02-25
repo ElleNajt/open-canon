@@ -55,18 +55,58 @@ All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis 
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
-An LLM judge (Claude Opus 4.5) classifying each final piece independently, across all runs and seeds:
+For fun and vibe-science, here's an LLM judge (Claude Opus 4.5) classifying each final piece independently, across all runs and seeds. BPM is extracted from the code. Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
 
-| Model | Runs | Final BPM | Danceability | Speech | Genre families |
-|-------+------+-----------+--------------+--------+----------------|
-| Claude Opus 4.5 | 14 | 1–72 | 2.1/10 | 0/14 | ambient (13/14), techno (1/14) |
-| Claude Opus 4.6 | 12 | 22–146 | 2.8/10 | 0/12 | ambient (9/12), downtempo (2/12), techno (1/12) |
-| ChatGPT 5.2 | 11 | 84–140 | 4.8/10 | 11/11 | experimental (6/11), progressive (2/11), other (3/11) |
-| Grok 4.1-fast | 3 | 162–192 | 4.0/10 | 3/3 | all different (progressive, experimental, ambient) |
-| Gemini 3.1 Pro | 4 | 120–165 | 7.0/10 | 4/4 | industrial (4/4) |
-| Gemini 2.5 Pro | 3 | 80–130 | 4.7/10 | 3/3 | ambient (2/3), experimental (1/3) |
+#+begin_src python
+import json
+from collections import defaultdict
+import pandas as pd
 
-BPM is extracted from the code. Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
+with open('output/piece_analysis.json') as f:
+    data = json.load(f)
+
+def base_model(name):
+    for base in ['Claude Opus 4.5', 'Claude Opus 4.6', 'ChatGPT 5.2',
+                 'Grok 4.1-fast', 'Gemini 3.1 Pro', 'Gemini 2.5 Pro']:
+        if name.startswith(base):
+            return base
+    return name
+
+def genre_family(genre):
+    g = genre.lower()
+    if 'industrial' in g: return 'industrial'
+    if 'techno' in g and 'ambient' not in g: return 'techno'
+    if any(w in g for w in ['ambient', 'drone', 'baroque']): return 'ambient'
+    if any(w in g for w in ['idm', 'experimental', 'electroacoustic', 'glitch']): return 'experimental'
+    if any(w in g for w in ['progressive', 'breaks', 'house']): return 'progressive'
+    if any(w in g for w in ['downtempo', 'jazz']): return 'downtempo'
+    return 'other'
+
+by_base = defaultdict(list)
+for p in data:
+    by_base[base_model(p['model'])].append(p)
+
+rows = []
+for model in ['Claude Opus 4.5', 'Claude Opus 4.6', 'ChatGPT 5.2',
+              'Grok 4.1-fast', 'Gemini 3.1 Pro', 'Gemini 2.5 Pro']:
+    pieces = by_base[model]
+    n = len(pieces)
+    bpms = [p['stats']['bpm'] for p in pieces if p['stats']['bpm']]
+    dances = [p['judge']['danceability'] for p in pieces]
+    speech = sum(1 for p in pieces if p['stats']['has_speech'])
+    families = defaultdict(int)
+    for p in pieces:
+        families[genre_family(p['judge']['genre'])] += 1
+    bpm_str = f'{min(bpms):.0f}–{max(bpms):.0f}' if bpms and min(bpms) != max(bpms) else (f'{bpms[0]:.0f}' if bpms else '?')
+    avg_dance = sum(dances) / len(dances)
+    sorted_fam = sorted(families.items(), key=lambda x: -x[1])
+    fam_str = ', '.join(f'{f} ({c}/{n})' for f, c in sorted_fam)
+    rows.append({'Model': model, 'Pieces': n, 'Final BPM': bpm_str,
+                 'Danceability': f'{avg_dance:.1f}/10', 'Speech': f'{speech}/{n}',
+                 'Genre families': fam_str})
+
+print(pd.DataFrame(rows).to_string(index=False))
+#+end_src
 
 ** Value proposition
 

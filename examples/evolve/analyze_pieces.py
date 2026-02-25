@@ -154,6 +154,31 @@ SEED_RUNS = {
         ("goldberg_gpt52_run3_4aa890b0", "gpt"),
         ("goldberg_gpt52_run4_4aa890b0", "gpt"),
     ],
+    # Quiz pieces (4 seeds × 4 frontier models)
+    "Claude Opus 4.5 (quiz)": [
+        ("quiz4_drum_84f7f2ef", "claude"),
+        ("quiz4_scale_84f7f2ef", "claude"),
+        ("quiz4_note_84f7f2ef", "claude"),
+        ("quiz4_chord_84f7f2ef", "claude"),
+    ],
+    "ChatGPT 5.2 (quiz)": [
+        ("quiz4_drum_84f7f2ef", "gpt"),
+        ("quiz4_scale_84f7f2ef", "gpt"),
+        ("quiz4_note_84f7f2ef", "gpt"),
+        ("quiz4_chord_84f7f2ef", "gpt"),
+    ],
+    "Gemini 3.1 Pro (quiz)": [
+        ("quiz4_drum_84f7f2ef", "gemini"),
+        ("quiz4_scale_84f7f2ef", "gemini"),
+        ("quiz4_note_84f7f2ef", "gemini"),
+        ("quiz4_chord_84f7f2ef", "gemini"),
+    ],
+    "Grok 4.1-fast (quiz)": [
+        ("quiz4_drum_84f7f2ef", "grok"),
+        ("quiz4_scale_84f7f2ef", "grok"),
+        ("quiz4_note_84f7f2ef", "grok"),
+        ("quiz4_chord_84f7f2ef", "grok"),
+    ],
 }
 
 
