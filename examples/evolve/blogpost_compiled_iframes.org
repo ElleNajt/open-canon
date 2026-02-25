@@ -149,6 +149,98 @@ for model in ['Claude Opus 4.5', 'Claude Opus 4.6', 'ChatGPT 5.2',
 print(pd.DataFrame(rows).to_string(index=False))
 #+end_src
 
+#+begin_src python :results output graphics file :file plots/bpm_timeseries.png
+import json, re
+import matplotlib.pyplot as plt
+from pathlib import Path
+
+OUTPUT_DIR = Path('output')
+
+MODELS = {
+    'Claude Opus 4.5': [
+        ('goldberg_imbue_fb0bde27', 'claude'),
+        ('goldberg_imbue_v2_ada2a552', 'claude'),
+        ('goldberg_imbue_v3_ada2a552', 'claude'),
+        ('goldberg_imbue_r4_ada2a552', 'claude'),
+        ('goldberg_imbue_r5_ada2a552', 'claude'),
+    ],
+    'Claude Opus 4.6': [
+        ('goldberg_imbue_opus46_84f7f2ef', 'claude46'),
+        ('goldberg_imbue_opus46_v2_84f7f2ef', 'claude46'),
+        ('goldberg_imbue_opus46_v3_84f7f2ef', 'claude46'),
+    ],
+    'ChatGPT 5.2': [
+        ('goldberg_imbue_84f7f2ef', 'gpt'),
+        ('goldberg_imbue_v2_84f7f2ef', 'gpt'),
+        ('goldberg_imbue_v3_84f7f2ef', 'gpt'),
+        ('goldberg_imbue_v4_84f7f2ef', 'gpt'),
+    ],
+    'Grok 4.1-fast': [
+        ('goldberg_imbue_grok_redo_84f7f2ef', 'grok'),
+        ('goldberg_imbue_grok_redo_v2_84f7f2ef', 'grok'),
+        ('goldberg_imbue_grok_redo_v3_84f7f2ef', 'grok'),
+    ],
+    'Gemini 3.1 Pro': [
+        ('goldberg_imbue_gemini31_84f7f2ef', 'gemini'),
+        ('goldberg_imbue_gemini31_v2_84f7f2ef', 'gemini'),
+        ('goldberg_imbue_gemini31_v3_84f7f2ef', 'gemini'),
+        ('goldberg_imbue_gemini31_v4_04bd7c44', 'gemini'),
+    ],
+    'Gemini 2.5 Pro': [
+        ('goldberg_imbue_gemini_redo_84f7f2ef', 'gemini'),
+        ('goldberg_imbue_gemini_redo_v2_84f7f2ef', 'gemini'),
+        ('goldberg_imbue_gemini_redo_v3_84f7f2ef', 'gemini'),
+    ],
+}
+
+COLORS = {
+    'Claude Opus 4.5': '#6B4C9A',
+    'Claude Opus 4.6': '#9B79C9',
+    'ChatGPT 5.2': '#2D8B5E',
+    'Grok 4.1-fast': '#D4442A',
+    'Gemini 3.1 Pro': '#1A73E8',
+    'Gemini 2.5 Pro': '#7BAAF7',
+}
+
+def extract_bpm(code):
+    m = re.search(r'setcps\(([^)]+)\)', code)
+    if not m:
+        return None
+    try:
+        return round(eval(m.group(1)) * 240, 1)
+    except:
+        return None
+
+fig, ax = plt.subplots(figsize=(10, 5))
+
+for model, runs in MODELS.items():
+    color = COLORS[model]
+    for i, (exp, subdir) in enumerate(runs):
+        d = OUTPUT_DIR / exp / subdir
+        if not d.is_dir():
+            continue
+        steps, bpms = [], []
+        for f in sorted(d.glob('step_*.js'), key=lambda f: int(f.stem.split('_')[1])):
+            step = int(f.stem.split('_')[1])
+            if step > 20:
+                break
+            bpm = extract_bpm(f.read_text())
+            if bpm is not None:
+                steps.append(step)
+                bpms.append(bpm)
+        label = model if i == 0 else None
+        ax.plot(steps, bpms, color=color, alpha=0.5, linewidth=1.5, label=label)
+
+ax.set_xlabel('Evolution step')
+ax.set_ylabel('BPM')
+ax.set_title('BPM over evolution (all runs, Goldberg seed)')
+ax.legend(loc='upper left', fontsize=8)
+ax.axhline(y=72, color='gray', linestyle='--', alpha=0.3, linewidth=1)
+ax.set_xlim(0, 20)
+plt.tight_layout()
+plt.savefig('plots/bpm_timeseries.png', dpi=150)
+#+end_src
+
 ** Value proposition
 
 Model personality is both an aesthetic and a function, and the aesthetic vibes seem to be correlated across mediums. Notably it’s a surprise to no one that Claude Opus 4.5 generates ambient music (see [[https://www.astralcodexten.com/p/the-claude-bliss-attractor][bliss attractors]]), or that Grok creates maximalist music (see [[https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states][the Grok responses in Arya's attractor experiment here]]), or that GPT seems especially angsty (see [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's model self-portraits]], see also a 4o run below).
