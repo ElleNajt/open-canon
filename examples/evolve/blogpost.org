@@ -7,7 +7,7 @@
 
 * Notes before reading:
 
-- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Take the blind test while you're still unbiased! (If you want you can read and listen to the main body of the post first, this uses different samples.) (I got 12/16 on the four model test on music I had never heard.)
+- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Take the blind test while you're still unbiased! (If you want you can read and listen to the main body of the post first, this uses different samples.) (I got 13/14 correct on Opus 4.5 vs Opus 4.6, I got 12/16 on the four model test, getting the same model consistently confused with others.)
 
 - Strudel seems to render better on Chrome than Firefox. 
 
