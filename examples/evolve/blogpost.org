@@ -7,6 +7,8 @@
 
 * Notes before reading:
 
+- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Take the blind test while you're still unbiased! (If you want you can read and listen to the main body of the post first, this uses different samples.)
+
 - Strudel seems to render better on Chrome than Firefox. 
 
 - Some of the music is *intense*, especially the music from Grok. If you're using headphones, keep the volume low at first. 
@@ -185,7 +187,7 @@ Opus 4.6 is darker and more discordant, though still leans towards contrapunctal
 
 **** Double clicking on that model diff
 
-Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare across 3 runs each. Can you tell them apart? [[file:blind_test.html][Try the blind test.]]
+Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare across 3 runs each, for 3 seeds ( a drum loop, a c major arpeggio, and a single note ). Can you tell them apart? [[file:blind_test.html][Try the blind test.]] My measured take is that there is a vibe difference but it's pretty subtle. Still I managed to score 
 
 *Seed: drum loop* (~$: s("bd sn bd sn")~)
 
@@ -466,3 +468,37 @@ This project is built on [[https://strudel.cc][Strudel]], a live coding environm
 
 - [[https://sara-fish.github.io/llm-musical-self-expression/][an experiment on frontier LLMs generating classical music]]
 - Josie Kins's llm self-portraits: https://x.com/Josikinz/status/1908655061594734637
+
+* Guessing game: which model made this?
+
+[[file:blind_test.html][Play the guessing game first!]] Then come back here to explore the pieces.
+
+Each model was given the same seed and prompt and iterated independently for 20 steps. These are the step 20 outputs.
+
+** Drum loop seed
+
+{{{strudel(quiz4_drum_84f7f2ef,claude,20,Claude Opus 4.5)}}}
+{{{strudel(quiz4_drum_84f7f2ef,gpt,20,ChatGPT 5.2)}}}
+{{{strudel(quiz4_drum_84f7f2ef,gemini,20,Gemini 3.1 Pro)}}}
+{{{strudel(quiz4_drum_84f7f2ef,grok,20,Grok 4.1)}}}
+
+** C major arpeggio seed
+
+{{{strudel(quiz4_scale_84f7f2ef,claude,20,Claude Opus 4.5)}}}
+{{{strudel(quiz4_scale_84f7f2ef,gpt,20,ChatGPT 5.2)}}}
+{{{strudel(quiz4_scale_84f7f2ef,gemini,20,Gemini 3.1 Pro)}}}
+{{{strudel(quiz4_scale_84f7f2ef,grok,20,Grok 4.1)}}}
+
+** Single note seed
+
+{{{strudel(quiz4_note_84f7f2ef,claude,20,Claude Opus 4.5)}}}
+{{{strudel(quiz4_note_84f7f2ef,gpt,20,ChatGPT 5.2)}}}
+{{{strudel(quiz4_note_84f7f2ef,gemini,20,Gemini 3.1 Pro)}}}
+{{{strudel(quiz4_note_84f7f2ef,grok,20,Grok 4.1)}}}
+
+** Chord progression seed
+
+{{{strudel(quiz4_chord_84f7f2ef,claude,20,Claude Opus 4.5)}}}
+{{{strudel(quiz4_chord_84f7f2ef,gpt,20,ChatGPT 5.2)}}}
+{{{strudel(quiz4_chord_84f7f2ef,gemini,20,Gemini 3.1 Pro)}}}
+{{{strudel(quiz4_chord_84f7f2ef,grok,20,Grok 4.1)}}}
