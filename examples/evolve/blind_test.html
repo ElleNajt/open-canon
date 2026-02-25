@@ -144,6 +144,7 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div class="iframe-area" id="training-iframe-area" style="display:none;">
   <iframe src="about:blank" allow="autoplay"></iframe>
 </div>
+<button class="play-btn" onclick="stopAll()" style="margin:12px 0; border-color:#a44; color:#a44;">Stop music</button>
 <div class="radio-group">
   <div class="group-label">Name (optional)</div>
   <input type="text" id="ab-name" placeholder="Anonymous" style="background:#0d0d1a; border:1px solid #444; border-radius:6px; padding:8px 12px; color:#ccc; width:100%; max-width:300px; font-size:0.95em;">
@@ -379,6 +380,11 @@ function blankIframe(areaId) {
 function getRadio(name) {
   const el = document.querySelector(`input[name="${name}"]:checked`);
   return el ? el.value : null;
+}
+
+function stopAll() {
+  document.querySelectorAll('.iframe-area iframe').forEach(f => { f.src = 'about:blank'; });
+  document.querySelectorAll('.play-btn').forEach(b => b.classList.remove('playing'));
 }
 
 function switchGame(which) {
