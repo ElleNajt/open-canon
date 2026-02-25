@@ -48,10 +48,18 @@ AB_EXPERIMENTS = [
 
 AB_STEP = 25
 
-TRAINING_STEPS = [5, 10, 15, 20, 25, 30]
+TRAINING_STEPS = [20, 30]
 TRAINING_RUNS = {
-    "4.5": ("goldberg_imbue_fb0bde27", "claude"),
-    "4.6": ("goldberg_imbue_opus46_84f7f2ef", "claude46"),
+    "4.5": [
+        ("goldberg_imbue_fb0bde27", "claude", "Run 1"),
+        ("goldberg_imbue_v2_ada2a552", "claude", "Run 2"),
+        ("goldberg_imbue_v3_ada2a552", "claude", "Run 3"),
+    ],
+    "4.6": [
+        ("goldberg_imbue_opus46_84f7f2ef", "claude46", "Run 1"),
+        ("goldberg_imbue_opus46_v2_84f7f2ef", "claude46", "Run 2"),
+        ("goldberg_imbue_opus46_v3_84f7f2ef", "claude46", "Run 3"),
+    ],
 }
 
 # Google Apps Script web app URL for logging results
@@ -102,15 +110,18 @@ def build_ab_trials():
 
 def build_training():
     result = {}
-    for label, (exp, model) in TRAINING_RUNS.items():
-        steps = []
-        for step in TRAINING_STEPS:
-            f = OUTPUT_DIR / exp / model / f"step_{step:02d}.js"
-            if not f.exists():
-                print(f"MISSING training: {f}")
-                continue
-            steps.append({"step": step, "url": js_to_embed_url(f)})
-        result[label] = steps
+    for label, runs in TRAINING_RUNS.items():
+        samples = []
+        for exp, model, run_name in runs:
+            for step in TRAINING_STEPS:
+                f = OUTPUT_DIR / exp / model / f"step_{step:02d}.js"
+                if not f.exists():
+                    print(f"MISSING training: {f}")
+                    continue
+                samples.append(
+                    {"step": step, "run": run_name, "url": js_to_embed_url(f)}
+                )
+        result[label] = samples
     return result
 
 
@@ -509,7 +520,7 @@ function initTraining() {
     steps.forEach(s => {
       const btn = document.createElement('button');
       btn.className = 'play-btn';
-      btn.textContent = 'Step ' + s.step;
+      btn.textContent = (s.run ? s.run + ' ' : '') + 'Step ' + s.step;
       btn.onclick = () => {
         document.querySelectorAll('#game-ab .play-btn').forEach(b => b.classList.remove('playing'));
         btn.classList.add('playing');
