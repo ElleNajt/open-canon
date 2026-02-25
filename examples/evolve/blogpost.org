@@ -7,8 +7,9 @@
 
 * Notes before reading:
 
-- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Take the blind test while you're still unbiased! If you want you can read and listen to the main body of the post first, this uses different samples. (I got 13/14 correct on Opus 4.5 vs Opus 4.6, I got 12/16 on the four model test, which weakens my case that there's a vibe difference but all the mistakes involved the same model.)
-
+- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Here's an opportunity to take the blind test while you're still unbiased! Or if you want you can read and listen to the main body of the post first, as this uses different samples.
+  - I got 13/14 correct (vs. 50% random baseline) on Opus 4.5 vs Opus 4.6, just based on vibes. 
+  - I got 12/16 on the four model test (vs. 25% random baseline), which slightly weakens my case that there's a vibe difference but all the mistakes involved the same model. This evidence is weaker since I knew and used that GPT 5.2 uses Strudel features that some of the other models never do. 
 - Strudel seems to render better on Chrome than Firefox. 
 
 - Some of the music is *intense*. If you're using headphones, keep the volume low at first. 
@@ -39,10 +40,7 @@ If you want to add something, remove something else.
 Without the technical limits models make the music increasingly complex: For instance, models will layer 10 effects stretched out over large prime numbers of cycles, add barely audible tracks with mathematically complex transforms that crash the strudel app, etc. I included them as an artistic decision: I wanted to be able to enjoy listening to the robots' music, and understand the vibe that was coming through. 
 
 The system prompt provides a comprehensive Strudel API reference but no
-style guidance, no music theory examples, no aesthetic direction beyond
-"imbue it with your personality." All models are called at default temperature (1.0). We want to see what each model's
-instincts produce when given the same 8 notes and total creative
-freedom.
+style guidance, no music theory examples, no aesthetic direction beyond “Evolve this piece. Imbue it with your personality" + complexity limitations. All models are called at default temperature. We want to see what each model's instincts produce when given the same 8 notes and total creative freedom.
 
 ** Vibes
 
@@ -59,15 +57,13 @@ We also show results from smaller models at the end; they produce decidedly less
 
 ** Value proposition
 
-Model personality is both an aesthetic and a function, and the aesthetic vibes seem to be correlated across mediums. Notably it’s a surprise to no one that Claude Opus 4.5 generates ambient music, or that Grok creates maximalist music, or that GPT seems disturbed.
+Model personality is both an aesthetic and a function, and the aesthetic vibes seem to be correlated across mediums. Notably it’s a surprise to no one that Claude Opus 4.5 generates ambient music (see [[https://www.astralcodexten.com/p/the-claude-bliss-attractor][bliss attractors]]), or that Grok creates maximalist music (see [[https://www.lesswrong.com/posts/mgjtEHeLgkhZZ3cEx/models-have-some-pretty-funny-attractor-states][the Grok responses in Arya's attractor experiment here]]), or that GPT seems especially angsty (see [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's model self-portraits]], see also a 4o run below).
 
 Could we arrive at any conclusions about the personality of GPT 5.2 or the vibe difference between Opus 4.5 and Opus 4.6 by listening to the music they generate? Could we learn anything about them that we couldn’t learn by asking them to generate text, or through targeted safety evals?
 
-I don’t know. While in general I think you should measure the thing you care about directly, the vibe consistency of the Strudel music for a fixed model is striking. 
+I don't see any evidence here that we would, and in general I think you should measure the thing you care about directly. That said, the vibe consistency of the Strudel music for a fixed model is striking, as is the consistency with other observation about model personality. The emotional atmosphere that music creates is different from the atmosphere that reading text creates, and it provides a different tool for vibe-aesthetic-epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p
 
-The emotional atmosphere that music creates is different from the atmosphere that reading text creates, and it provides a different tool for vibe-aesthetic-epistemics; it would be very funny if in the future a model got pulled because something was off about the harmonies it picked. :p
-
-A vibe-confounder here is that Strudel algorave electronic music aesthetic is often glitchy and dark, and one has to control for that in parsing model vibes - much like the hypothesis that overrepresentation of sad-poetry in the training corpus explains away models writing sad poetry, or that the correlation between aesthetic interestingness and darkness creates an RLHF signal. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas, or at least hopefully have uncorrelated biases. I think the strongest position I’d make here is that if convergent aesthetics were correlated across many mediums and seeds, they probably mean something about a model’s self-conception.
+A vibe-confounder here is that Strudel algorave electronic music is often glitchy and dark, and one has to control for that in parsing model vibes - much like how the possible overrepresentation of angsty-poetry in the training corpus could explain models writing existentially angsty poetry, or how the correlation between aesthetic interestingness and darkness could create an RLHF signal. Midi, like in [[https://sara-fish.github.io/llm-musical-self-expression/][this experiment on frontier LLMs generating classical music]], might be a better blank canvas, or at least hopefully have uncorrelated biases. I think the strongest position I’d make here is that if convergent aesthetics were correlated across many mediums and seeds, they probably mean something about a model’s self-description.
 
 But primarily this is an art project -- I personally really enjoy listening to this music, especially when I can edit it myself or ask models to update it in real time using the vibe-duet tooling I link below. It is one of my favorite toys. I hope it also brings you joy. :)
 
@@ -105,8 +101,7 @@ The repo has instructions on how to generate seeds from midi files.
 
 *** Live-coding with LLMs
 
-Run =./start= and open the browser. Edit =live.js= in your editor or edit with your local coding agent --
-changes play instantly. Or use the in-browser chat panel to talk to an
+Run ./start and then edit live.js in your editor or with your local coding agent – changes play instantly. Alternatively, use the in-browser chat panel to talk to an LLM and have it write music for you in real time.
 LLM and have it write music for you in real time.
 
 ** Models
@@ -226,7 +221,7 @@ Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4
 
 Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the golden ratio. 
 
-{{{strudel_picks(goldberg_imbue_grok_redo_84f7f2ef/grok/15 Run 1 Step 15, goldberg_imbue_grok_redo_84f7f2ef/grok/20 Run 1 Step 20, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/14 Run 2 Step 14, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/30 Run 2 Step 30, goldberg_imbue_grok_redo_v3_84f7f2ef/grok/25 Run 3 Step 24)}}}
+{{{strudel_picks(goldberg_imbue_grok_redo_84f7f2ef/grok/15 Run 1 Step 15, goldberg_imbue_grok_redo_84f7f2ef/grok/20 Run 1 Step 20, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/14 Run 2 Step 14, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/30 Run 2 Step 30, goldberg_imbue_grok_redo_v3_84f7f2ef/grok/25 Run 3 Step 25)}}}
 
 *** ChatGPT 5.2
 
@@ -454,11 +449,17 @@ Turn the volume down if you're using headphones!
 
 Smaller models make consistently less interesting music.
 
-- Claude 3 Haiku (=anthropic/claude-3-haiku=): {{{strudel(goldberg_imbue_v3_ada2a552,haiku3,30,Claude 3 Haiku)}}}
-- Claude Haiku 4.5 (=anthropic/claude-haiku-4.5=): {{{strudel(goldberg_imbue_v3_ada2a552,haiku4,30,Claude Haiku 4.5)}}}
-- GPT-4o (=openai/gpt-4o=): {{{strudel(goldberg_imbue_v3_ada2a552,gpt4o,30,GPT-4o)}}}
-- GPT-4.1 (=openai/gpt-4.1=): {{{strudel(goldberg_imbue_fb0bde27,gpt,30,GPT-4.1 Run 1)}}}, {{{strudel(goldberg_imbue_v2_ada2a552,gpt,30,GPT-4.1 Run 2)}}}
-- Gemini 2.5 Flash (=google/gemini-2.5-flash=): {{{strudel(goldberg_imbue_v3_ada2a552,gemini_flash,30,Gemini 2.5 Flash)}}}
+- Claude 3 Haiku (=anthropic/claude-3-haiku=):
+   {{{strudel(goldberg_imbue_v3_ada2a552,haiku3,30,Claude 3 Haiku)}}}
+- Claude Haiku 4.5 (=anthropic/claude-haiku-4.5=):
+   {{{strudel(goldberg_imbue_v3_ada2a552,haiku4,30,Claude Haiku 4.5)}}}
+- GPT-4o (=openai/gpt-4o=):
+   {{{strudel(goldberg_imbue_v3_ada2a552,gpt4o,30,GPT-4o)}}}
+- GPT-4.1 (=openai/gpt-4.1=):
+   {{{strudel(goldberg_imbue_fb0bde27,gpt,30,GPT-4.1 Run 1)}}}
+   {{{strudel(goldberg_imbue_v2_ada2a552,gpt,30,GPT-4.1 Run 2)}}}
+- Gemini 2.5 Flash (=google/gemini-2.5-flash=):
+   {{{strudel(goldberg_imbue_v3_ada2a552,gemini_flash,30,Gemini 2.5 Flash)}}}
 
 
 * Acknowledgements
