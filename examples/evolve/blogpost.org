@@ -5,9 +5,10 @@
 #+OPTIONS: H:5 toc:t
 #+OPTIONS: ^:nil
 
-* Notes before reading:
+* Notes before reading
 
-- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Here's an opportunity to take the blind test while you're still unbiased! Or if you want you can read and listen to the main body of the post first, as this uses different samples.
+- Before you read anything else - here's an opportunity to take the blind test while you're still unbiased: *[[file:blind_test.html][can you tell which AI made which music?]]*!
+  - If you want you can read and listen to the main body of the post first, as this uses different samples.
   - I got 13/14 correct (vs. 50% random baseline) on Opus 4.5 vs Opus 4.6, just based on vibes. 
   - I got 12/16 on the four model test (vs. 25% random baseline), which slightly weakens my case that there's a vibe difference but all the mistakes involved the same model. This evidence is weaker since I knew and used that GPT 5.2 uses Strudel features that some of the other models never do. 
 - Strudel seems to render better on Chrome than Firefox. 
@@ -349,36 +350,6 @@ Opus 4.6 is darker and more discordant, though still leans towards contrapunctal
 
 Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare across 3 runs each, for 3 seeds ( a drum loop, a c major arpeggio, and a single note ). Can you tell them apart? [[file:blind_test.html][Try the blind test,]] which uses different samples from the below. I scored 13/14 on the Opus4.5/Opus4.6 A/B test.
 
-*Seed: drum loop* (~$: s("bd sn bd sn")~)
-
-*Opus 4.5 Run 1:* {{{strudel(diff_drums_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 1)}}}
-*Opus 4.5 Run 2:* {{{strudel(diff_drums_v4_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 2)}}}
-*Opus 4.5 Run 3:* {{{strudel(diff_drums_v5_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 3)}}}
-
-*Opus 4.6 Run 1:* {{{strudel(diff_drums_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 1)}}}
-*Opus 4.6 Run 2:* {{{strudel(diff_drums_v4_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 2)}}}
-*Opus 4.6 Run 3:* {{{strudel(diff_drums_v5_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 3)}}}
-
-*Seed: C major arpeggio* (~$: note("c4 e4 g4 c5 g4 e4").sound("triangle")~)
-
-*Opus 4.5 Run 1:* {{{strudel(diff_major_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 1)}}}
-*Opus 4.5 Run 2:* {{{strudel(diff_major_v4_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 2)}}}
-*Opus 4.5 Run 3:* {{{strudel(diff_major_v5_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 3)}}}
-
-*Opus 4.6 Run 1:* {{{strudel(diff_major_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 1)}}}
-*Opus 4.6 Run 2:* {{{strudel(diff_major_v4_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 2)}}}
-*Opus 4.6 Run 3:* {{{strudel(diff_major_v5_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 3)}}}
-
-*Seed: single note* (~$: note("e3").sound("sawtooth")~)
-
-*Opus 4.5 Run 1:* {{{strudel(diff_note_v1_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 1)}}}
-*Opus 4.5 Run 2:* {{{strudel(diff_note_v2_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 2)}}}
-*Opus 4.5 Run 3:* {{{strudel(diff_note_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 3)}}}
-
-*Opus 4.6 Run 1:* {{{strudel(diff_note_v1_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 1)}}}
-*Opus 4.6 Run 2:* {{{strudel(diff_note_v2_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 2)}}}
-*Opus 4.6 Run 3:* {{{strudel(diff_note_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 3)}}}
-
 *** Grok
 
 Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the golden ratio. 
@@ -439,6 +410,7 @@ Click any step button to open a player at the bottom of the page. Clicking a dif
 
 
 ** Claude Opus 4.5 (=claude-opus-4-5-20251101=)
+*** Goldberg
 
 *Run 1:* {{{strudel(goldberg_imbue_fb0bde27,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,Opus 4.5 Run 1)}}}
 
@@ -450,7 +422,32 @@ Click any step button to open a player at the bottom of the page. Clicking a dif
 
 *Run 5:* {{{strudel(goldberg_imbue_r5_ada2a552,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,Opus 4.5 Run 5)}}}
 
+*** Drum loop seed
+
+*Run 1:* {{{strudel(diff_drums_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Drum Run 1)}}}
+
+*Run 2:* {{{strudel(diff_drums_v4_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Drum Run 2)}}}
+
+*Run 3:* {{{strudel(diff_drums_v5_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Drum Run 3)}}}
+
+*** C major arpeggio seed
+
+*Run 1:* {{{strudel(diff_major_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Major Run 1)}}}
+
+*Run 2:* {{{strudel(diff_major_v4_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Major Run 2)}}}
+
+*Run 3:* {{{strudel(diff_major_v5_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Major Run 3)}}}
+
+*** Single note seed
+
+*Run 1:* {{{strudel(diff_note_v1_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Note Run 1)}}}
+
+*Run 2:* {{{strudel(diff_note_v2_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Note Run 2)}}}
+
+*Run 3:* {{{strudel(diff_note_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Note Run 3)}}}
+
 ** Claude Opus 4.6 (=claude-opus-4-6=)
+*** Goldberg
 
 *Run 1:* {{{strudel(goldberg_imbue_opus46_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Run 1)}}}
 
@@ -458,65 +455,29 @@ Click any step button to open a player at the bottom of the page. Clicking a dif
 
 *Run 3:* {{{strudel(goldberg_imbue_opus46_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Run 3)}}}
 
-** Opus 4.5 vs 4.6: drum loop seed
+*** Drum loop seed
 
-*** Run 1
+*Run 1:* {{{strudel(diff_drums_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Drum Run 1)}}}
 
-*Opus 4.5:* {{{strudel(diff_drums_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Drum Run 1)}}}
+*Run 2:* {{{strudel(diff_drums_v4_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Drum Run 2)}}}
 
-*Opus 4.6:* {{{strudel(diff_drums_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Drum Run 1)}}}
+*Run 3:* {{{strudel(diff_drums_v5_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Drum Run 3)}}}
 
-*** Run 2
+*** C major arpeggio seed
 
-*Opus 4.5:* {{{strudel(diff_drums_v4_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Drum Run 2)}}}
+*Run 1:* {{{strudel(diff_major_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Major Run 1)}}}
 
-*Opus 4.6:* {{{strudel(diff_drums_v4_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Drum Run 2)}}}
+*Run 2:* {{{strudel(diff_major_v4_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Major Run 2)}}}
 
-*** Run 3
+*Run 3:* {{{strudel(diff_major_v5_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Major Run 3)}}}
 
-*Opus 4.5:* {{{strudel(diff_drums_v5_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Drum Run 3)}}}
+*** Single note seed
 
-*Opus 4.6:* {{{strudel(diff_drums_v5_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Drum Run 3)}}}
+*Run 1:* {{{strudel(diff_note_v1_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Note Run 1)}}}
 
-** Opus 4.5 vs 4.6: C major arpeggio seed
+*Run 2:* {{{strudel(diff_note_v2_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Note Run 2)}}}
 
-*** Run 1
-
-*Opus 4.5:* {{{strudel(diff_major_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Major Run 1)}}}
-
-*Opus 4.6:* {{{strudel(diff_major_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Major Run 1)}}}
-
-*** Run 2
-
-*Opus 4.5:* {{{strudel(diff_major_v4_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Major Run 2)}}}
-
-*Opus 4.6:* {{{strudel(diff_major_v4_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Major Run 2)}}}
-
-*** Run 3
-
-*Opus 4.5:* {{{strudel(diff_major_v5_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Major Run 3)}}}
-
-*Opus 4.6:* {{{strudel(diff_major_v5_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Major Run 3)}}}
-
-** Opus 4.5 vs 4.6: single note seed
-
-*** Run 1
-
-*Opus 4.5:* {{{strudel(diff_note_v1_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Note Run 1)}}}
-
-*Opus 4.6:* {{{strudel(diff_note_v1_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Note Run 1)}}}
-
-*** Run 2
-
-*Opus 4.5:* {{{strudel(diff_note_v2_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Note Run 2)}}}
-
-*Opus 4.6:* {{{strudel(diff_note_v2_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Note Run 2)}}}
-
-*** Run 3
-
-*Opus 4.5:* {{{strudel(diff_note_v3_84f7f2ef,claude,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.5 Note Run 3)}}}
-
-*Opus 4.6:* {{{strudel(diff_note_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Note Run 3)}}}
+*Run 3:* {{{strudel(diff_note_v3_84f7f2ef,claude46,0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,Opus 4.6 Note Run 3)}}}
 
 ** ChatGPT 5.2 (=openai/gpt-5.2=)
 
