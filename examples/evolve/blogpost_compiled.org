@@ -51,22 +51,22 @@ We discover that, subjectively speaking:
 - Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track)
 - ChatGPT 5.2 creates music that is unsettling but compelling.
 
-An LLM judge (Claude Opus 4.5) classifying each final piece independently:
-
-| Model | Runs | Final BPM | Danceability | Speech | Genre labels |
-|-------+------+-----------+--------------+--------+--------------|
-| Claude Opus 4.5 | 5 | 1–72 | 1.4/10 | 0/5 | ambient/drone (5/5) |
-| Claude Opus 4.6 | 3 | 66–72 | 1.3/10 | 0/3 | ambient baroque (3/3) |
-| ChatGPT 5.2 | 4 | 84–126 | 4.2/10 | 4/4 | all different (electroacoustic, glitch, experimental) |
-| Grok 4.1-fast | 3 | 162–192 | 4.3/10 | 3/3 | all different (progressive IDM, experimental, ambient) |
-| Gemini 3.1 Pro | 4 | 120–165 | 7.0/10 | 4/4 | industrial techno (4/4) |
-| Gemini 2.5 Pro | 3 | 80–130 | 4.7/10 | 3/3 | divergent (dark ambient, IDM, downtempo) |
-
-BPM is extracted from the code. All runs start from the same Bach ground bass seed at 72 BPM. Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
-
 All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
+
+An LLM judge (Claude Opus 4.5) classifying each final Goldborg variation:
+
+| Model           | Runs | Final BPM | Danceability | Speech | Genre labels                                           |
+|-----------------+------+-----------+--------------+--------+--------------------------------------------------------|
+| Claude Opus 4.5 |    5 | 1–72      | 1.4/10       | 0/5    | ambient/drone (5/5)                                    |
+| Claude Opus 4.6 |    3 | 66–72     | 1.3/10       | 0/3    | ambient baroque (3/3)                                  |
+| ChatGPT 5.2     |    4 | 84–126    | 4.2/10       | 4/4    | all different (electroacoustic, glitch, experimental)  |
+| Grok 4.1-fast   |    3 | 162–192   | 4.3/10       | 3/3    | all different (progressive IDM, experimental, ambient) |
+| Gemini 3.1 Pro  |    4 | 120–165   | 7.0/10       | 4/4    | industrial techno (4/4)                                |
+| Gemini 2.5 Pro  |    3 | 80–130    | 4.7/10       | 3/3    | divergent (dark ambient, IDM, downtempo)               |
+
+BPM is extracted from the code.  Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
 
 ** Value proposition
 

@@ -51,7 +51,11 @@ We discover that, subjectively speaking:
 - Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track)
 - ChatGPT 5.2 creates music that is unsettling but compelling.
 
-An LLM judge (Claude Opus 4.5) classifying each final piece independently:
+All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
+
+We also show results from smaller models at the end; they produce decidedly less interesting music. 
+
+An LLM judge (Claude Opus 4.5) classifying each final Goldborg variation:
 
 | Model           | Runs | Final BPM | Danceability | Speech | Genre labels                                           |
 |-----------------+------+-----------+--------------+--------+--------------------------------------------------------|
@@ -63,10 +67,6 @@ An LLM judge (Claude Opus 4.5) classifying each final piece independently:
 | Gemini 2.5 Pro  |    3 | 80–130    | 4.7/10       | 3/3    | divergent (dark ambient, IDM, downtempo)               |
 
 BPM is extracted from the code.  Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
-
-All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
-
-We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
 ** Value proposition
 
