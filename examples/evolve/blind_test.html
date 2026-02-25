@@ -77,6 +77,7 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div class="container">
 <h1>Blind Tests: AI Music Edition</h1>
 <p style="text-align:center; color:#888;">From <a href="https://ellenajt.github.io/blog/goldborg-variations.html" style="color:#7b9eee;">The Goldborg Variations</a></p>
+<p style="text-align:center; font-size:0.8em; color:#666;">Your results are anonymously logged for research. No personal data is collected.</p>
 
 <div class="tab-bar">
   <div class="tab active" onclick="switchGame('quiz')">Which Model?</div>
@@ -393,28 +394,25 @@ function showPhase(gamePrefix, phaseId) {
 }
 
 // --- Result logging ---
-const LOG_URL = 'https://script.google.com/macros/s/AKfycbygecXBMOzeW_R_XQNJA2cz5nU_2PsUkDwvWFML45JDitKBLXvoyAYmZQJ0pYwqnjf0/exec';
+const LOG_URL = 'https://script.google.com/macros/s/AKfycbwl8bxLSZtryRagvVxAmisyr4GInexZolZst0APa3KVZUIM77Kf2WpgIw-f51yJWf-3/exec';
 
-function logResults(payload) {
+function logTrial(game, trialNum, trialData) {
   if (!LOG_URL) return;
-  const ts = new Date().toISOString();
-  const shared = {
-    timestamp: ts,
-    game: payload.game,
-    name: payload.name || '',
-    first_time: payload.first_time,
-    exposure: payload.exposure,
-    score: payload.score,
-    total: payload.total,
-  };
-  payload.rows.forEach((row, i) => {
-    fetch(LOG_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ ...shared, trial_number: i + 1, ...row }),
-    }).catch(() => {});
-  });
+  const retakeRadio = game === 'quiz' ? 'quiz-retake' : 'ab-retake';
+  const exposureRadio = game === 'quiz' ? 'quiz-exposure' : 'ab-exposure';
+  fetch(LOG_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: { 'Content-Type': 'text/plain' },
+    body: JSON.stringify({
+      timestamp: new Date().toISOString(),
+      game,
+      first_time: getRadio(retakeRadio),
+      exposure: getRadio(exposureRadio),
+      trial_number: trialNum,
+      ...trialData,
+    }),
+  }).catch(() => {});
 }
 
 // --- Radio readiness checks ---
@@ -459,7 +457,9 @@ function quizShowTrial() {
 
 function quizVote(guess) {
   const t = quizTrials[quizCurrent];
-  quizAnswers.push({ seed: t.seed, model: t.model, guess, correct: guess === t.model });
+  const correct = guess === t.model;
+  quizAnswers.push({ seed: t.seed, model: t.model, guess, correct });
+  logTrial('quiz', quizCurrent + 1, { seed: t.seed, correct_answer: t.model, guess, correct });
   document.querySelectorAll('#quiz-votes .vote-btn').forEach(b => { b.disabled = true; });
   blankIframe('quiz-iframe-area');
   quizCurrent++;
@@ -510,15 +510,6 @@ function quizShowResults() {
 
   const { html: cmHtml, matrix } = buildConfusionMatrix(quizAnswers);
   document.getElementById('quiz-confusion').innerHTML = cmHtml;
-
-  logResults({
-    game: 'quiz',
-    first_time: getRadio('quiz-retake'),
-    exposure: getRadio('quiz-exposure'),
-    score: n,
-    total: quizAnswers.length,
-    rows: quizAnswers.map(a => ({ seed: a.seed, correct_answer: a.model, guess: a.guess, correct: a.correct })),
-  });
 
   const reveal = document.getElementById('quiz-reveal');
   reveal.innerHTML = '';
@@ -587,7 +578,9 @@ function abShowTrial() {
 function abVote(which) {
   const t = abTrials[abCurrent];
   const correct = (which === 'a') === t.a_is_45;
+  const correctAnswer = t.a_is_45 ? 'A' : 'B';
   abAnswers.push({ seed: t.seed, guessed: which, correct, a_is_45: t.a_is_45 });
+  logTrial('ab', abCurrent + 1, { seed: t.seed, correct_answer: correctAnswer, guess: which.toUpperCase(), correct });
   document.getElementById('ab-vote-a').disabled = true;
   document.getElementById('ab-vote-b').disabled = true;
   blankIframe('ab-iframe-a');
@@ -603,16 +596,6 @@ function abShowResults() {
   document.getElementById('ab-score').innerHTML =
     `You got <span class="num">${n}</span> out of <span class="num">${abAnswers.length}</span> correct.` +
     `<br><span style="font-size:0.6em;color:#888">Chance = 50%</span>`;
-
-  logResults({
-    game: 'ab',
-    first_time: getRadio('ab-retake'),
-    exposure: getRadio('ab-exposure'),
-    score: n,
-    total: abAnswers.length,
-    rows: abAnswers.map(a => ({ seed: a.seed, correct_answer: a.a_is_45 ? 'A' : 'B', guess: a.guessed.toUpperCase(), correct: a.correct })),
-  });
-
   const reveal = document.getElementById('ab-reveal');
   reveal.innerHTML = '';
   abAnswers.forEach(a => {
