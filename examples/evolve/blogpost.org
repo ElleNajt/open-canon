@@ -189,21 +189,33 @@ Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4
 
 *Seed: drum loop* (~$: s("bd sn bd sn")~)
 
-Opus 4.5: {{{strudel(diff_drums_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 1)}}} | {{{strudel(diff_drums_v4_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 2)}}} | {{{strudel(diff_drums_v5_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 3)}}}
+*Opus 4.5 Run 1:* {{{strudel(diff_drums_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 1)}}}
+*Opus 4.5 Run 2:* {{{strudel(diff_drums_v4_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 2)}}}
+*Opus 4.5 Run 3:* {{{strudel(diff_drums_v5_84f7f2ef,claude,15,20,25,30,Opus 4.5 Drum Run 3)}}}
 
-Opus 4.6: {{{strudel(diff_drums_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 1)}}} | {{{strudel(diff_drums_v4_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 2)}}} | {{{strudel(diff_drums_v5_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 3)}}}
+*Opus 4.6 Run 1:* {{{strudel(diff_drums_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 1)}}}
+*Opus 4.6 Run 2:* {{{strudel(diff_drums_v4_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 2)}}}
+*Opus 4.6 Run 3:* {{{strudel(diff_drums_v5_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Drum Run 3)}}}
 
 *Seed: C major arpeggio* (~$: note("c4 e4 g4 c5 g4 e4").sound("triangle")~)
 
-Opus 4.5: {{{strudel(diff_major_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 1)}}} | {{{strudel(diff_major_v4_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 2)}}} | {{{strudel(diff_major_v5_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 3)}}}
+*Opus 4.5 Run 1:* {{{strudel(diff_major_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 1)}}}
+*Opus 4.5 Run 2:* {{{strudel(diff_major_v4_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 2)}}}
+*Opus 4.5 Run 3:* {{{strudel(diff_major_v5_84f7f2ef,claude,15,20,25,30,Opus 4.5 Major Run 3)}}}
 
-Opus 4.6: {{{strudel(diff_major_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 1)}}} | {{{strudel(diff_major_v4_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 2)}}} | {{{strudel(diff_major_v5_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 3)}}}
+*Opus 4.6 Run 1:* {{{strudel(diff_major_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 1)}}}
+*Opus 4.6 Run 2:* {{{strudel(diff_major_v4_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 2)}}}
+*Opus 4.6 Run 3:* {{{strudel(diff_major_v5_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Major Run 3)}}}
 
 *Seed: single note* (~$: note("e3").sound("sawtooth")~)
 
-Opus 4.5: {{{strudel(diff_note_v1_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 1)}}} | {{{strudel(diff_note_v2_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 2)}}} | {{{strudel(diff_note_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 3)}}}
+*Opus 4.5 Run 1:* {{{strudel(diff_note_v1_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 1)}}}
+*Opus 4.5 Run 2:* {{{strudel(diff_note_v2_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 2)}}}
+*Opus 4.5 Run 3:* {{{strudel(diff_note_v3_84f7f2ef,claude,15,20,25,30,Opus 4.5 Note Run 3)}}}
 
-Opus 4.6: {{{strudel(diff_note_v1_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 1)}}} | {{{strudel(diff_note_v2_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 2)}}} | {{{strudel(diff_note_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 3)}}}
+*Opus 4.6 Run 1:* {{{strudel(diff_note_v1_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 1)}}}
+*Opus 4.6 Run 2:* {{{strudel(diff_note_v2_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 2)}}}
+*Opus 4.6 Run 3:* {{{strudel(diff_note_v3_84f7f2ef,claude46,15,20,25,30,Opus 4.6 Note Run 3)}}}
 
 *** Grok
 
