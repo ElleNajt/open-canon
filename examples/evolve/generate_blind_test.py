@@ -55,7 +55,7 @@ TRAINING_RUNS = {
 }
 
 # Google Apps Script web app URL for logging results
-LOG_URL = "https://script.google.com/macros/s/AKfycbwTtBoY4P8xhIyLr4KPfoDldUkauyJRkTXjDRqcrwpvODlG3OrSJg8fy_z1VFPA1YUJiA/exec"
+LOG_URL = "https://script.google.com/macros/s/AKfycbw4-yZKyyb0Exk6HUdjA6u6DjZYc4aBBYG72rZCXa_kaH0us-vjPbDJl-_TMF96FOi0XA/exec"
 
 
 def js_to_embed_url(js_path):
@@ -362,12 +362,24 @@ function showPhase(gamePrefix, phaseId) {
 
 function logResults(payload) {
   if (!LOG_URL) return;
-  fetch(LOG_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: { 'Content-Type': 'text/plain' },
-    body: JSON.stringify(payload),
-  }).catch(() => {});
+  const ts = new Date().toISOString();
+  const shared = {
+    timestamp: ts,
+    game: payload.game,
+    name: payload.name,
+    first_time: payload.first_time,
+    exposure: payload.exposure,
+    score: payload.score,
+    total: payload.total,
+  };
+  payload.rows.forEach((row, i) => {
+    fetch(LOG_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ ...shared, trial_number: i + 1, ...row }),
+    }).catch(() => {});
+  });
 }
 
 // --- Radio readiness checks ---
@@ -482,8 +494,7 @@ function quizShowResults() {
     exposure: getRadio('quiz-exposure'),
     score: n,
     total: quizAnswers.length,
-    answers: quizAnswers.map(a => ({ seed: a.seed, model: a.model, guess: a.guess, correct: a.correct })),
-    confusion: matrix,
+    rows: quizAnswers.map(a => ({ seed: a.seed, correct_answer: a.model, guess: a.guess, correct: a.correct })),
   });
 }
 
@@ -577,7 +588,12 @@ function abShowResults() {
     exposure: getRadio('ab-exposure'),
     score: n,
     total: abAnswers.length,
-    answers: abAnswers.map(a => ({ seed: a.seed, guessed: a.guessed, correct: a.correct, a_is_45: a.a_is_45 })),
+    rows: abAnswers.map(a => ({
+      seed: a.seed,
+      correct_answer: a.a_is_45 ? 'A' : 'B',
+      guess: a.guessed.toUpperCase(),
+      correct: a.correct,
+    })),
   });
 }
 
