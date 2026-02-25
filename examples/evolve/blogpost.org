@@ -374,7 +374,7 @@ To see how seed dependent this vibe, I include evolutions from the same drum and
 IDM across both model generations: intricate rhythms, speech samples, distortion. Gemini 3.1 Pro is more cerebral and meditative, with philosophical speech samples (including Japanese) and lush reverb. Gemini 2.5 Pro ranged wider -- one run became ambient, another techno.
 
 *Gemini 3.1 Pro:*
-{{{strudel_picks(goldberg_imbue_gemini31_84f7f2ef/gemini/20 3.1 Run 1 Step 20, goldberg_imbue_gemini31_v2_84f7f2ef/gemini/30 3.1 Run 2 Step 30, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/21 3.1 Run 3 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/22 3.1 Run 3 Step 22, goldberg_imbue_gemini31_v4_04bd7c44/gemini/26 3.1 Run 4 Step 26)}}}
+{{{strudel_picks(goldberg_imbue_gemini31_84f7f2ef/gemini/20 3.1 Run 1 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/21 3.1 Run 3 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/22 3.1 Run 3 Step 23, goldberg_imbue_gemini31_v4_04bd7c44/gemini/26 3.1 Run 4 Step 26)}}}
 
 *Gemini 2.5 Pro:*
 {{{strudel_picks(goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/20 2.5 Run 3 Step 20 - ambient, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/30 2.5 Run 3 Step 30 - ambient, goldberg_imbue_gemini_redo_v2_84f7f2ef/gemini/26 2.5 Run 2 Step 26)}}}
