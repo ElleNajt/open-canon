@@ -55,18 +55,18 @@ All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis 
 
 We also show results from smaller models at the end; they produce decidedly less interesting music. 
 
-An LLM judge (Claude Opus 4.5) classifying each final Goldborg variation:
+An LLM judge (Claude Opus 4.5) classifying each final piece independently, across all runs and seeds:
 
-| Model           | Runs | Final BPM | Danceability | Speech | Genre labels                                           |
-|-----------------+------+-----------+--------------+--------+--------------------------------------------------------|
-| Claude Opus 4.5 |    5 | 1–72      | 1.4/10       | 0/5    | ambient/drone (5/5)                                    |
-| Claude Opus 4.6 |    3 | 66–72     | 1.3/10       | 0/3    | ambient baroque (3/3)                                  |
-| ChatGPT 5.2     |    4 | 84–126    | 4.2/10       | 4/4    | all different (electroacoustic, glitch, experimental)  |
-| Grok 4.1-fast   |    3 | 162–192   | 4.3/10       | 3/3    | all different (progressive IDM, experimental, ambient) |
-| Gemini 3.1 Pro  |    4 | 120–165   | 7.0/10       | 4/4    | industrial techno (4/4)                                |
-| Gemini 2.5 Pro  |    3 | 80–130    | 4.7/10       | 3/3    | divergent (dark ambient, IDM, downtempo)               |
+| Model | Runs | Final BPM | Danceability | Speech | Genre families |
+|-------+------+-----------+--------------+--------+----------------|
+| Claude Opus 4.5 | 14 | 1–72 | 2.1/10 | 0/14 | ambient (13/14), techno (1/14) |
+| Claude Opus 4.6 | 12 | 22–146 | 2.8/10 | 0/12 | ambient (9/12), downtempo (2/12), techno (1/12) |
+| ChatGPT 5.2 | 11 | 84–140 | 4.8/10 | 11/11 | experimental (6/11), progressive (2/11), other (3/11) |
+| Grok 4.1-fast | 3 | 162–192 | 4.0/10 | 3/3 | all different (progressive, experimental, ambient) |
+| Gemini 3.1 Pro | 4 | 120–165 | 7.0/10 | 4/4 | industrial (4/4) |
+| Gemini 2.5 Pro | 3 | 80–130 | 4.7/10 | 3/3 | ambient (2/3), experimental (1/3) |
 
-BPM is extracted from the code.  Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
+BPM is extracted from the code. Danceability is judged on a 1-10 scale (1=purely ambient, 7=club-ready, 10=four-on-the-floor).
 
 ** Value proposition
 
