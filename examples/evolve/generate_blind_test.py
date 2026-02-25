@@ -204,7 +204,10 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div class="container">
 <h1>Blind Tests: AI Music Edition</h1>
 <p style="text-align:center; color:#888;">From <a href="https://ellenajt.github.io/blog/goldborg-variations.html" style="color:#7b9eee;">The Goldborg Variations</a></p>
-<p style="text-align:center; font-size:0.8em; color:#666;">Your results are anonymously logged for research. No personal data is collected.</p>
+<p style="text-align:center; font-size:0.8em; color:#666;">Your results are anonymously logged for research.</p>
+<div style="text-align:center; margin: 8px 0;">
+  <label style="font-size:0.85em; color:#888;">Name (optional): <input type="text" id="participant-name" style="background:#0d0d1a; border:1px solid #444; border-radius:4px; color:#ccc; padding:4px 8px; width:150px;" placeholder=""></label>
+</div>
 
 <div class="tab-bar">
   <div class="tab active" onclick="switchGame('quiz')">Which Model?</div>
@@ -382,6 +385,7 @@ function logTrial(game, trialNum, trialData) {
     body: JSON.stringify({
       timestamp: new Date().toISOString(),
       game,
+      name: document.getElementById('participant-name').value.trim(),
       first_time: getRadio(retakeRadio),
       exposure: getRadio(exposureRadio),
       trial_number: trialNum,
