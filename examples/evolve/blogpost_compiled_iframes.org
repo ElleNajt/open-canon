@@ -48,13 +48,13 @@
 
 * Notes before reading:
 
-- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Take the blind test while you're still unbiased! (If you want you can read and listen to the main body of the post first, this uses different samples.)
+- Before you read anything else: *[[file:blind_test.html][can you tell which AI made which music?]]* Take the blind test while you're still unbiased! (If you want you can read and listen to the main body of the post first, this uses different samples.) (I got 12/16 on it, on music I had never heard.)
 
 - Strudel seems to render better on Chrome than Firefox. 
 
-- Some of the music is *intense*, especially the music from Grok. If you're using headphones, keep the volume low at first. 
+- Some of the music is *intense*. If you're using headphones, keep the volume low at first. 
 
-- This is an art project. Just jump around and listen to music, read the words if you're inclined to, and play with [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]] if you're inspired to.
+- This is an art project. Play the game or jump around and listen to music, read the words if you're inclined to, and play with [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]] if you're inspired to.
 
 
 
@@ -81,7 +81,7 @@ Without the technical limits models make the music increasingly complex: For ins
 
 The system prompt provides a comprehensive Strudel API reference but no
 style guidance, no music theory examples, no aesthetic direction beyond
-"imbue it with your personality." We want to see what each model's
+"imbue it with your personality." All models are called at default temperature (1.0). We want to see what each model's
 instincts produce when given the same 8 notes and total creative
 freedom.
 
