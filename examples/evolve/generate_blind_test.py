@@ -48,7 +48,7 @@ AB_EXPERIMENTS = [
 
 AB_STEP = 25
 
-LOG_URL = "https://script.google.com/macros/s/AKfycbwl8bxLSZtryRagvVxAmisyr4GInexZolZst0APa3KVZUIM77Kf2WpgIw-f51yJWf-3/exec"
+LOG_URL = "https://script.google.com/macros/s/AKfycbxYYn9jVfyQN0RPzIj4FN-vXjUwXcdVULG03XDiMgK2z2sx_YW6R06-rT5CowK0uDJ3/exec"
 
 TRAINING_STEPS = [20, 30]
 TRAINING_RUNS = {
