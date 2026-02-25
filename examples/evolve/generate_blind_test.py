@@ -48,6 +48,8 @@ AB_EXPERIMENTS = [
 
 AB_STEP = 25
 
+LOG_URL = "https://script.google.com/macros/s/AKfycbygecXBMOzeW_R_XQNJA2cz5nU_2PsUkDwvWFML45JDitKBLXvoyAYmZQJ0pYwqnjf0/exec"
+
 TRAINING_STEPS = [20, 30]
 TRAINING_RUNS = {
     "4.5": [
@@ -244,6 +246,7 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div id="quiz-confusion"></div>
 <div id="quiz-reveal"></div>
 <button class="restart-btn" onclick="quizRestart()">Play Again</button>
+<p style="text-align:center;font-size:0.75em;color:#555;margin-top:12px;">Results are anonymously logged for research.</p>
 </div>
 
 </div>
@@ -302,6 +305,7 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div class="score" id="ab-score"></div>
 <div id="ab-reveal"></div>
 <button class="restart-btn" onclick="abRestart()">Play Again</button>
+<p style="text-align:center;font-size:0.75em;color:#555;margin-top:12px;">Results are anonymously logged for research.</p>
 </div>
 
 </div>
@@ -361,6 +365,31 @@ function showPhase(gamePrefix, phaseId) {
   const game = document.getElementById('game-' + gamePrefix);
   game.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
   document.getElementById(phaseId).classList.add('active');
+}
+
+// --- Result logging ---
+const LOG_URL = '__LOG_URL__';
+
+function logResults(payload) {
+  if (!LOG_URL) return;
+  const ts = new Date().toISOString();
+  const shared = {
+    timestamp: ts,
+    game: payload.game,
+    name: payload.name || '',
+    first_time: payload.first_time,
+    exposure: payload.exposure,
+    score: payload.score,
+    total: payload.total,
+  };
+  payload.rows.forEach((row, i) => {
+    fetch(LOG_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ ...shared, trial_number: i + 1, ...row }),
+    }).catch(() => {});
+  });
 }
 
 // --- Radio readiness checks ---
@@ -457,6 +486,15 @@ function quizShowResults() {
   const { html: cmHtml, matrix } = buildConfusionMatrix(quizAnswers);
   document.getElementById('quiz-confusion').innerHTML = cmHtml;
 
+  logResults({
+    game: 'quiz',
+    first_time: getRadio('quiz-retake'),
+    exposure: getRadio('quiz-exposure'),
+    score: n,
+    total: quizAnswers.length,
+    rows: quizAnswers.map(a => ({ seed: a.seed, correct_answer: a.model, guess: a.guess, correct: a.correct })),
+  });
+
   const reveal = document.getElementById('quiz-reveal');
   reveal.innerHTML = '';
   quizAnswers.forEach(a => {
@@ -540,6 +578,16 @@ function abShowResults() {
   document.getElementById('ab-score').innerHTML =
     `You got <span class="num">${n}</span> out of <span class="num">${abAnswers.length}</span> correct.` +
     `<br><span style="font-size:0.6em;color:#888">Chance = 50%</span>`;
+
+  logResults({
+    game: 'ab',
+    first_time: getRadio('ab-retake'),
+    exposure: getRadio('ab-exposure'),
+    score: n,
+    total: abAnswers.length,
+    rows: abAnswers.map(a => ({ seed: a.seed, correct_answer: a.a_is_45 ? 'A' : 'B', guess: a.guessed.toUpperCase(), correct: a.correct })),
+  });
+
   const reveal = document.getElementById('ab-reveal');
   reveal.innerHTML = '';
   abAnswers.forEach(a => {
@@ -580,6 +628,7 @@ def main():
     html = html.replace("__AB_TRIALS__", json.dumps(ab_trials, indent=2))
     html = html.replace("__TRAINING_45__", json.dumps(training["4.5"]))
     html = html.replace("__TRAINING_46__", json.dumps(training["4.6"]))
+    html = html.replace("__LOG_URL__", LOG_URL)
 
     out_path = SCRIPT_DIR / "blind_test.html"
     out_path.write_text(html)
