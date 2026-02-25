@@ -62,9 +62,6 @@ TRAINING_RUNS = {
     ],
 }
 
-# Google Apps Script web app URL for logging results
-LOG_URL = "https://script.google.com/macros/s/AKfycbw4-yZKyyb0Exk6HUdjA6u6DjZYc4aBBYG72rZCXa_kaH0us-vjPbDJl-_TMF96FOi0XA/exec"
-
 
 def js_to_embed_url(js_path):
     code = js_path.read_text()
@@ -198,7 +195,7 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 .confusion-matrix .diag { background: rgba(68, 170, 136, 0.25); }
 .confusion-matrix .off-diag { background: rgba(170, 68, 68, 0.15); }
 .confusion-matrix .zero { color: #555; }
-.log-note { text-align: center; font-size: 0.75em; color: #555; margin-top: 16px; }
+
 </style>
 </head>
 <body>
@@ -217,10 +214,6 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div class="phase active" id="quiz-intro">
 <p>Listen to a piece of AI-generated music and guess which model composed it. All models start from the same seed and iterate independently.</p>
 <p style="color:#7b9eee;">The models: Claude Opus 4.5, Gemini 3.1 Pro, ChatGPT 5.2, and Grok 4.1</p>
-<div class="radio-group">
-  <div class="group-label">Name (optional)</div>
-  <input type="text" id="quiz-name" placeholder="Anonymous" style="background:#0d0d1a; border:1px solid #444; border-radius:6px; padding:8px 12px; color:#ccc; width:100%; max-width:300px; font-size:0.95em;">
-</div>
 <div class="radio-group">
   <div class="group-label">Have you taken this quiz before?</div>
   <label><input type="radio" name="quiz-retake" value="first" onchange="checkQuizReady()"> This is my first time taking this quiz</label>
@@ -250,7 +243,6 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <div class="score" id="quiz-score"></div>
 <div id="quiz-confusion"></div>
 <div id="quiz-reveal"></div>
-<p class="log-note">Results are anonymously logged for research.</p>
 <button class="restart-btn" onclick="quizRestart()">Play Again</button>
 </div>
 
@@ -273,10 +265,6 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
   <iframe src="about:blank" allow="autoplay"></iframe>
 </div>
 <button class="play-btn" onclick="stopAll()" style="margin:12px 0; border-color:#a44; color:#a44;">Stop music</button>
-<div class="radio-group">
-  <div class="group-label">Name (optional)</div>
-  <input type="text" id="ab-name" placeholder="Anonymous" style="background:#0d0d1a; border:1px solid #444; border-radius:6px; padding:8px 12px; color:#ccc; width:100%; max-width:300px; font-size:0.95em;">
-</div>
 <div class="radio-group">
   <div class="group-label">Have you taken this test before?</div>
   <label><input type="radio" name="ab-retake" value="first" onchange="checkAbReady()"> This is my first time taking this test</label>
@@ -313,7 +301,6 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <h2>Results</h2>
 <div class="score" id="ab-score"></div>
 <div id="ab-reveal"></div>
-<p class="log-note">Results are anonymously logged for research.</p>
 <button class="restart-btn" onclick="abRestart()">Play Again</button>
 </div>
 
@@ -328,7 +315,6 @@ const QUIZ_RAW = __QUIZ_TRIALS__;
 const AB_RAW = __AB_TRIALS__;
 const TRAINING_45 = __TRAINING_45__;
 const TRAINING_46 = __TRAINING_46__;
-const LOG_URL = '__LOG_URL__';
 
 // --- Shared ---
 function shuffle(arr) {
@@ -375,28 +361,6 @@ function showPhase(gamePrefix, phaseId) {
   const game = document.getElementById('game-' + gamePrefix);
   game.querySelectorAll('.phase').forEach(p => p.classList.remove('active'));
   document.getElementById(phaseId).classList.add('active');
-}
-
-function logResults(payload) {
-  if (!LOG_URL) return;
-  const ts = new Date().toISOString();
-  const shared = {
-    timestamp: ts,
-    game: payload.game,
-    name: payload.name,
-    first_time: payload.first_time,
-    exposure: payload.exposure,
-    score: payload.score,
-    total: payload.total,
-  };
-  payload.rows.forEach((row, i) => {
-    fetch(LOG_URL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ ...shared, trial_number: i + 1, ...row }),
-    }).catch(() => {});
-  });
 }
 
 // --- Radio readiness checks ---
@@ -503,16 +467,6 @@ function quizShowResults() {
     div.style.borderColor = a.correct ? '#4a8' : '#a44';
     reveal.appendChild(div);
   });
-
-  logResults({
-    game: 'quiz',
-    name: document.getElementById('quiz-name').value || 'Anonymous',
-    first_time: getRadio('quiz-retake') === 'first',
-    exposure: getRadio('quiz-exposure'),
-    score: n,
-    total: quizAnswers.length,
-    rows: quizAnswers.map(a => ({ seed: a.seed, correct_answer: a.model, guess: a.guess, correct: a.correct })),
-  });
 }
 
 function quizRestart() { showPhase('quiz', 'quiz-intro'); }
@@ -597,21 +551,6 @@ function abShowResults() {
     div.style.borderColor = a.correct ? '#4a8' : '#a44';
     reveal.appendChild(div);
   });
-
-  logResults({
-    game: 'ab',
-    name: document.getElementById('ab-name').value || 'Anonymous',
-    first_time: getRadio('ab-retake') === 'first',
-    exposure: getRadio('ab-exposure'),
-    score: n,
-    total: abAnswers.length,
-    rows: abAnswers.map(a => ({
-      seed: a.seed,
-      correct_answer: a.a_is_45 ? 'A' : 'B',
-      guess: a.guessed.toUpperCase(),
-      correct: a.correct,
-    })),
-  });
 }
 
 function abRestart() { showPhase('ab', 'ab-training'); }
@@ -641,7 +580,6 @@ def main():
     html = html.replace("__AB_TRIALS__", json.dumps(ab_trials, indent=2))
     html = html.replace("__TRAINING_45__", json.dumps(training["4.5"]))
     html = html.replace("__TRAINING_46__", json.dumps(training["4.6"]))
-    html = html.replace("__LOG_URL__", LOG_URL)
 
     out_path = SCRIPT_DIR / "blind_test.html"
     out_path.write_text(html)
