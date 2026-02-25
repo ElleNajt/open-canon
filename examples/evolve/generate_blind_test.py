@@ -55,7 +55,7 @@ TRAINING_RUNS = {
 }
 
 # Google Apps Script web app URL for logging results
-LOG_URL = "https://script.google.com/macros/s/AKfycbyzM02ojymHZNbpIs3bN9dDrn6_-dz7D75kS0rmw4ifYHjXCWBgbStZMkZBtuG45bAmHQ/exec"
+LOG_URL = "https://script.google.com/macros/s/AKfycbwTtBoY4P8xhIyLr4KPfoDldUkauyJRkTXjDRqcrwpvODlG3OrSJg8fy_z1VFPA1YUJiA/exec"
 
 
 def js_to_embed_url(js_path):
@@ -207,6 +207,10 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 <p>Listen to a piece of AI-generated music and guess which model composed it. All models start from the same seed and iterate independently.</p>
 <p style="color:#7b9eee;">The models: Claude Opus 4.5, Gemini 3.1 Pro, ChatGPT 5.2, and Grok 4.1</p>
 <div class="radio-group">
+  <div class="group-label">Name (optional)</div>
+  <input type="text" id="quiz-name" placeholder="Anonymous" style="background:#0d0d1a; border:1px solid #444; border-radius:6px; padding:8px 12px; color:#ccc; width:100%; max-width:300px; font-size:0.95em;">
+</div>
+<div class="radio-group">
   <div class="group-label">Have you taken this quiz before?</div>
   <label><input type="radio" name="quiz-retake" value="first" onchange="checkQuizReady()"> This is my first time taking this quiz</label>
   <label><input type="radio" name="quiz-retake" value="retake" onchange="checkQuizReady()"> I've taken this quiz before</label>
@@ -256,6 +260,10 @@ p { margin: 8px 0; line-height: 1.5; color: #bbb; }
 </div>
 <div class="iframe-area" id="training-iframe-area" style="display:none;">
   <iframe src="about:blank" allow="autoplay"></iframe>
+</div>
+<div class="radio-group">
+  <div class="group-label">Name (optional)</div>
+  <input type="text" id="ab-name" placeholder="Anonymous" style="background:#0d0d1a; border:1px solid #444; border-radius:6px; padding:8px 12px; color:#ccc; width:100%; max-width:300px; font-size:0.95em;">
 </div>
 <div class="radio-group">
   <div class="group-label">Have you taken this test before?</div>
@@ -469,11 +477,12 @@ function quizShowResults() {
 
   logResults({
     game: 'quiz',
+    name: document.getElementById('quiz-name').value || 'Anonymous',
     first_time: getRadio('quiz-retake') === 'first',
     exposure: getRadio('quiz-exposure'),
     score: n,
     total: quizAnswers.length,
-    answers: quizAnswers.map(a => ({ seed: a.seed, model: a.model, guess: a.guess })),
+    answers: quizAnswers.map(a => ({ seed: a.seed, model: a.model, guess: a.guess, correct: a.correct })),
     confusion: matrix,
   });
 }
@@ -563,11 +572,12 @@ function abShowResults() {
 
   logResults({
     game: 'ab',
+    name: document.getElementById('ab-name').value || 'Anonymous',
     first_time: getRadio('ab-retake') === 'first',
     exposure: getRadio('ab-exposure'),
     score: n,
     total: abAnswers.length,
-    answers: abAnswers.map(a => ({ seed: a.seed, guessed: a.guessed, correct: a.correct })),
+    answers: abAnswers.map(a => ({ seed: a.seed, guessed: a.guessed, correct: a.correct, a_is_45: a.a_is_45 })),
   });
 }
 
