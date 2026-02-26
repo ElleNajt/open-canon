@@ -42,6 +42,23 @@ What `./start` does:
 2. Starts a FastAPI server (serves frontend + WebSocket + API + shabda TTS)
 3. Opens the browser on localhost
 
+## Deployment
+
+Deploy to Google Cloud Run via `server/deploy.sh`. Reads config from `deployment_config.json` (gitignored):
+
+```json
+{
+  "project": "your-gcp-project",
+  "region": "us-central1",
+  "service": "service-name",
+  "image": "gcr.io/your-project/image-name",
+  "site_url": "https://your-cloud-run-url/",
+  "service_account": "runner@your-project.iam.gserviceaccount.com"
+}
+```
+
+The script builds the Strudel frontend, packages static files + shabda, builds the container via Cloud Build, and deploys to Cloud Run.
+
 **The file to edit:** `live.js`
 
 Changes sync bi-directionally:

@@ -2,6 +2,7 @@ strudel/
 config/local.json
 .DS_Store
 .env
+deployment_config.json
 server/static/
 server/.venv/
 server/.env/

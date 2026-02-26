@@ -1,16 +1,24 @@
 #!/bin/bash
 # Deploy to Cloud Run
-# Requires: gcloud CLI authenticated, Strudel cloned at ../strudel
+# Requires: gcloud CLI authenticated, deployment_config.json in project root
 
 set -e
 
 cd "$(dirname "$0")/.."
 
-PROJECT="vibe-duet"
-REGION="us-central1"
-SERVICE="vibe-duet"
-IMAGE="gcr.io/$PROJECT/collab-server"
-SITE_URL="https://YOUR_CLOUD_RUN_URL/"
+CONFIG="deployment_config.json"
+if [ ! -f "$CONFIG" ]; then
+    echo "Error: $CONFIG not found."
+    echo "Create it with: project, region, service, image, site_url, service_account"
+    exit 1
+fi
+
+PROJECT=$(python3 -c "import json; print(json.load(open('$CONFIG'))['project'])")
+REGION=$(python3 -c "import json; print(json.load(open('$CONFIG'))['region'])")
+SERVICE=$(python3 -c "import json; print(json.load(open('$CONFIG'))['service'])")
+IMAGE=$(python3 -c "import json; print(json.load(open('$CONFIG'))['image'])")
+SITE_URL=$(python3 -c "import json; print(json.load(open('$CONFIG'))['site_url'])")
+SERVICE_ACCOUNT=$(python3 -c "import json; print(json.load(open('$CONFIG'))['service_account'])")
 
 echo "==> Building Strudel..."
 cd strudel/website
@@ -42,6 +50,6 @@ gcloud run deploy $SERVICE \
     --set-env-vars=USE_FIRESTORE=1 \
     --min-instances=0 \
     --max-instances=1 \
-    --service-account=YOUR_SERVICE_ACCOUNT
+    --service-account=$SERVICE_ACCOUNT
 
 echo "==> Done! Service URL: $SITE_URL"
