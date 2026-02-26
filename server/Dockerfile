@@ -12,6 +12,7 @@ COPY shabda/ /app/shabda/
 RUN pip install --no-cache-dir /app/shabda/
 
 COPY main.py .
+COPY models.json .
 COPY static/ static/
 
 CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]

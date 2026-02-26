@@ -25,6 +25,9 @@ cd ../../server
 rm -rf shabda
 cp -r ../shabda shabda
 
+echo "==> Copying models config..."
+cp ../models.json models.json
+
 echo "==> Building container..."
 gcloud builds submit --tag $IMAGE --project $PROJECT
 
