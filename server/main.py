@@ -20,7 +20,7 @@ import anthropic
 import httpx
 from fastapi import FastAPI, Request, WebSocket, WebSocketDisconnect
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, JSONResponse
+from fastapi.responses import FileResponse, JSONResponse, PlainTextResponse
 from starlette.middleware.wsgi import WSGIMiddleware
 
 if os.environ.get("USE_FIRESTORE"):
@@ -1131,7 +1131,7 @@ async def websocket_endpoint(ws: WebSocket):
 @app.get("/live.js")
 async def get_live():
     """For Strudel to poll."""
-    return current_code
+    return PlainTextResponse(current_code, media_type="text/javascript")
 
 
 @app.post("/clear-queue")
