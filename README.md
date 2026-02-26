@@ -158,6 +158,8 @@ server/deploy.sh
 
 Builds Strudel, copies static files into the server, and deploys to Cloud Run. Requires a GCP project with Cloud Run and Cloud Build enabled. Set `ANTHROPIC_API_KEY` as a Cloud Run secret.
 
+When this lives on cloud run, you can share links with your friends and collaborate on music together in real time. :) 
+
 ## Credits
 
 Built on [Strudel](https://strudel.cc) by the [uzu collective](https://codeberg.org/uzu/strudel) — a browser-based live coding environment that ports TidalCycles to JavaScript.
