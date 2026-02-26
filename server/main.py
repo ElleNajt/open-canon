@@ -62,6 +62,10 @@ ANTHROPIC_MODELS = {
 _models_config_path = os.path.join(
     os.path.dirname(os.path.abspath(__file__)), "..", "models.json"
 )
+if not os.path.isfile(_models_config_path):
+    _models_config_path = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)), "models.json"
+    )
 
 
 def _build_model_entry(name: str) -> dict:
