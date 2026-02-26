@@ -1352,7 +1352,10 @@ def _get_loudness(mp3_path: str) -> str:
 
 
 def _transcribe_chunk(mp3_path: str) -> str:
-    """Transcribe an mp3 chunk using Google Cloud Speech-to-Text."""
+    """Transcribe an mp3 chunk using Google Cloud Speech-to-Text.
+
+    Returns empty string if Speech API is unavailable.
+    """
     from google.cloud import speech
 
     client = speech.SpeechClient()
@@ -1375,10 +1378,13 @@ def _analyze_chunks(chunks: list[Path]) -> list[dict]:
     results = []
     for chunk in chunks:
         loudness = _get_loudness(str(chunk))
-        words = _transcribe_chunk(str(chunk))
         entry = {"file": chunk.name, "loudness": loudness}
-        if words:
-            entry["words"] = words
+        try:
+            words = _transcribe_chunk(str(chunk))
+            if words:
+                entry["words"] = words
+        except Exception as e:
+            print(f"Transcription skipped for {chunk.name}: {e}")
         results.append(entry)
     return results
 
@@ -1386,6 +1392,16 @@ def _analyze_chunks(chunks: list[Path]) -> list[dict]:
 @app.post("/youtube-sample")
 async def youtube_sample(request: Request):
     """Download audio from a YouTube URL, chunk into 3s segments."""
+    try:
+        return await _youtube_sample_impl(request)
+    except Exception as e:
+        print(f"YouTube sample error: {e}")
+        return JSONResponse(
+            {"error": f"Server error: {e}"}, status_code=500
+        )
+
+
+async def _youtube_sample_impl(request: Request):
     body = await request.json()
     url = (body.get("url") or "").strip()
 
