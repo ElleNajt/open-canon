@@ -12,3 +12,4 @@ termcolor
 requests
 gunicorn
 typer[all]
+librosa

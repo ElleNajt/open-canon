@@ -723,6 +723,10 @@ async def process_item(item: dict):
                         chunk_descs = []
                         for i, c in enumerate(chunks_meta):
                             parts = [f":{i}={c['loudness']}"]
+                            if c.get("key"):
+                                parts.append(c["key"])
+                            if c.get("pitches"):
+                                parts.append(f'[{c["pitches"]}]')
                             if c.get("words"):
                                 parts.append(f'"{c["words"]}"')
                             chunk_descs.append(" ".join(parts))
@@ -1351,6 +1355,56 @@ def _get_loudness(mp3_path: str) -> str:
     return "unknown"
 
 
+NOTE_NAMES = ["C", "Cs", "D", "Eb", "E", "F", "Fs", "G", "Ab", "A", "Bb", "B"]
+KEY_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Fs", "G", "Ab", "A", "Bb", "B"]
+
+
+def _get_pitch_info(mp3_path: str) -> dict:
+    """Detect dominant pitches and estimated key from an mp3 chunk using librosa."""
+    import librosa
+    import numpy as np
+
+    y, sr = librosa.load(mp3_path, sr=22050)
+
+    # Chroma for key estimation
+    chroma = librosa.feature.chroma_stft(y=y, sr=sr)
+    chroma_avg = chroma.mean(axis=1)  # 12 pitch classes
+
+    # Key estimation via Krumhansl-Schmuckler profiles
+    major_profile = np.array([6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88])
+    minor_profile = np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17])
+
+    best_corr = -2
+    best_key = "C"
+    best_mode = "major"
+    for shift in range(12):
+        shifted = np.roll(chroma_avg, -shift)
+        for profile, mode in [(major_profile, "major"), (minor_profile, "minor")]:
+            corr = np.corrcoef(shifted, profile)[0, 1]
+            if corr > best_corr:
+                best_corr = corr
+                best_key = KEY_NAMES[shift]
+                best_mode = mode
+
+    # Pitch detection via pyin for dominant notes
+    f0, voiced_flag, _ = librosa.pyin(y, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'), sr=sr)
+    pitched = f0[voiced_flag]
+
+    pitches = []
+    if len(pitched) > 0:
+        # Convert Hz to MIDI to note names, count occurrences
+        midi_notes = np.round(librosa.hz_to_midi(pitched)).astype(int)
+        unique, counts = np.unique(midi_notes, return_counts=True)
+        # Top 3 most common notes
+        top_idx = np.argsort(-counts)[:3]
+        pitches = [librosa.midi_to_note(int(unique[i])) for i in top_idx]
+
+    result = {"key": f"{best_key} {best_mode}"}
+    if pitches:
+        result["pitches"] = " ".join(pitches)
+    return result
+
+
 def _transcribe_chunk(mp3_path: str) -> str:
     """Transcribe an mp3 chunk using Google Cloud Speech-to-Text.
 
@@ -1374,11 +1428,16 @@ def _transcribe_chunk(mp3_path: str) -> str:
 
 
 def _analyze_chunks(chunks: list[Path]) -> list[dict]:
-    """Analyze loudness and transcribe each chunk."""
+    """Analyze loudness, pitch, and transcribe each chunk."""
     results = []
     for chunk in chunks:
         loudness = _get_loudness(str(chunk))
         entry = {"file": chunk.name, "loudness": loudness}
+        try:
+            pitch_info = _get_pitch_info(str(chunk))
+            entry.update(pitch_info)
+        except Exception as e:
+            print(f"Pitch analysis skipped for {chunk.name}: {e}")
         try:
             words = _transcribe_chunk(str(chunk))
             if words:
