@@ -1164,6 +1164,28 @@ async def get_status():
     }
 
 
+@app.get("/debug")
+async def debug_endpoint():
+    """Debug endpoint showing current code and recent model interactions."""
+    return {
+        "current_code_length": len(current_code),
+        "current_code_first_200": current_code[:200],
+        "current_code_starts_with_quote": current_code[0] if current_code else "",
+        "models_config": list(AVAILABLE_MODELS.keys()),
+        "default_model": DEFAULT_MODEL,
+        "history_length": len(history),
+        "last_3_entries": [
+            {
+                "name": e.get("name"),
+                "prompt": e.get("prompt", "")[:100],
+                "code_first_100": e.get("code", "")[:100],
+                "code_length": len(e.get("code", "")),
+            }
+            for e in history[-3:]
+        ],
+    }
+
+
 @app.post("/clear-all")
 async def clear_all_endpoint():
     """Clear queue and repeating prompts."""
