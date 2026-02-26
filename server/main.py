@@ -199,7 +199,7 @@ def load_state():
             doc = db.collection("state").document("current").get()
             if doc.exists:
                 data = doc.to_dict()
-                current_code = data.get("code", current_code)
+                current_code = strip_markdown_fences(data.get("code", current_code))
                 history = data.get("history", [])
                 print(f"Loaded state: {len(history)} history entries")
         except Exception as e:
