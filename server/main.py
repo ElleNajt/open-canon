@@ -48,6 +48,7 @@ ANTHROPIC_MODELS = {
     "claude-haiku": "claude-haiku-4-5-20251001",
     "claude-sonnet": "claude-sonnet-4-20250514",
     "claude-opus-4.5": "claude-opus-4-5-20251101",
+    "claude-opus-4.6": "claude-opus-4-6",
 }
 
 # Load models config from models.json if it exists
@@ -552,10 +553,38 @@ def record_request(ip: str = None):
 
 
 def strip_markdown_fences(code: str) -> str:
-    """Strip markdown fences if present."""
+    """Strip markdown fences and accidental string wrappers from model output."""
+    # Strip markdown fences: ```javascript\n...\n```
     if code.startswith("```"):
         lines = code.split("\n")
-        return "\n".join(lines[1:-1] if lines[-1] == "```" else lines[1:])
+        code = "\n".join(lines[1:-1] if lines[-1] == "```" else lines[1:])
+
+    # Strip variable assignment wrappers: const code = `...`; or let x = "...";
+    import re
+
+    m = re.match(
+        r'^(?:const|let|var)\s+\w+\s*=\s*(`[\s\S]*`|"[\s\S]*"|\'[\s\S]*\')\s*;?\s*$',
+        code,
+    )
+    if m:
+        inner = m.group(1)
+        code = inner[1:-1]  # strip the quotes/backticks
+
+    # Strip bare template literal wrapper: `...entire code...`
+    if code.startswith("`") and code.endswith("`") and code.count("`") == 2:
+        code = code[1:-1]
+
+    # Strip bare double-quote wrapper (entire response is one JSON string)
+    if code.startswith('"') and code.endswith('"') and "$:" in code:
+        import json as _json
+        parsed = _json.loads(code)
+        if isinstance(parsed, str):
+            code = parsed
+
+    # Strip bare single-quote wrapper
+    if code.startswith("'") and code.endswith("'") and "$:" in code:
+        code = code[1:-1]
+
     return code
 
 
