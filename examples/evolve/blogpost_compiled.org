@@ -1,4 +1,4 @@
-#+TITLE: The Goldborg Variations: Musical Attractor States of LLMs
+#+TITLE: The Goldborg Variations: The Algorave Attractor States of LLMs
 #+GDOC_ID: 1MqPVjhmvn1wz0BYXkNABoZJgROKdpAgHcqG1h9btY3c
 #+DATE: 2026-02-17
 #+PROPERTY: header-args:python :results output drawer :python "./.venv/bin/python3" :async t :session evolve_blogpost :exports results
@@ -7,15 +7,15 @@
 
 * Notes before reading
 
-- Before you read anything else - here's an opportunity to take the blind test while you're still unbiased: *[[file:blind_test.html][can you tell which AI made which music?]]*!
-  - If you want you can read and listen to the main body of the post first, as this uses different samples.
-  - I got 13/14 correct (vs. 50% random baseline) on Opus 4.5 vs Opus 4.6, just based on vibes. 
-  - I got 12/16 on the four model test (vs. 25% random baseline), which slightly weakens my case that there's a vibe difference but all the mistakes involved the same model. This evidence is weaker since I knew and used that GPT 5.2 uses Strudel features that some of the other models never do. 
-- Strudel seems to render better on Chrome than Firefox. 
-
-- Some of the music is intense. If you’re using headphones, keep the volume low at first. Try to use good headphones or speakers, the music is layered and gets badly distorted on small speakers. 
+ - Strudel seems to render better on Chrome than Firefox. 
+ - Before you read anything else - here's an opportunity to take the blind test while you're still unbiased: *[[file:blind_test.html][can you tell which AI made which music?]]*!
+   - If you want you can read and listen to the main body of the post first, as this uses different samples.
+   - I got 13/14 correct (vs. 50% random baseline) on Opus 4.5 vs Opus 4.6, just based on vibes. 
+   - I got 12/16 on the four model test (vs. 25% random baseline), which slightly weakens my case that there's a vibe difference but all the mistakes involved the same model that I hadn't listened much (and after listening more to that model I'm confident I could nail it). This evidence is also weakened since I knew and used that GPT 5.2 uses Strudel features that some of the other models never do.
+     
+ - Some of the music is intense. If you’re using headphones, keep the volume low at first. Try to use good headphones or speakers, the music is layered and synthy and gets badly distorted on small speakers. 
   
-- This is an art project. Play the game or jump around and listen to music, read the words if you're inclined to, and play with [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]] if you're inspired to.
+ - This is an art project. Play the game or jump around and listen to music, read the words if you're inclined to, and play with [[https://github.com/ElleNajt/vibe-duet][vibe-duet on GitHub]] if you're inspired to.
 
 - Click the links to be taken to Strudel, where you can play the pieces. Alternatively, the listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.
 
@@ -49,7 +49,7 @@ We discover that, subjectively speaking:
 
 - Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more interesting and discordant.
 - Grok 4.1-fast writes hardcore maximalist electronic music
-- Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track)
+- Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track). 3.1 is a lot more high BPM maximalist.
 - ChatGPT 5.2 creates music that is unsettling but compelling.
 
 All frontier models except Claude Opus 4.5 and 4.6 use text to speech synthesis in interesting ways, with GPT 5.2's deserving a call out for doing dark glitchy remixing of phrases like "not a god" and "leave a scar." Are you okay, buddy? 
