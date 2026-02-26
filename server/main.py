@@ -10,6 +10,8 @@ import asyncio
 import base64
 import json
 import os
+import re
+import shutil
 import subprocess
 import tempfile
 import time
@@ -581,6 +583,7 @@ def strip_markdown_fences(code: str) -> str:
     # Strip bare double-quote wrapper (entire response is one JSON string)
     if code.startswith('"') and code.endswith('"') and "$:" in code:
         import json as _json
+
         parsed = _json.loads(code)
         if isinstance(parsed, str):
             code = parsed
@@ -708,12 +711,26 @@ async def process_item(item: dict):
         mic_banks = mic_samples_json()
         mic_banks_filtered = {k: v for k, v in mic_banks.items() if k != "_base"}
         if mic_banks_filtered:
-            bank_list = ", ".join(
-                f"{name} ({len(files)} file{'s' if len(files) > 1 else ''})"
-                for name, files in mic_banks_filtered.items()
-            )
+            bank_parts = []
+            for bname, files in mic_banks_filtered.items():
+                desc = f"{bname} ({len(files)} file{'s' if len(files) > 1 else ''})"
+                info_json = MIC_SAMPLES_DIR / bname / "info.json"
+                if info_json.exists():
+                    meta = json.loads(info_json.read_text())
+                    desc += f' — YouTube: "{meta.get("title", "")}"'
+                    chunks_meta = meta.get("chunks", [])
+                    if chunks_meta:
+                        chunk_descs = []
+                        for i, c in enumerate(chunks_meta):
+                            parts = [f":{i}={c['loudness']}"]
+                            if c.get("words"):
+                                parts.append(f'"{c["words"]}"')
+                            chunk_descs.append(" ".join(parts))
+                        desc += " | " + ", ".join(chunk_descs)
+                bank_parts.append(desc)
+            bank_list = "\n  ".join(bank_parts)
             mic_info = (
-                f"\n\nAvailable mic recordings: {bank_list}"
+                f"\n\nAvailable samples: {bank_list}"
                 f"\nLoad with: samples('/mic-samples/strudel.json')"
                 f'\nPlay by name: s("my_voice"), s("recording:0"), etc.'
             )
@@ -1206,27 +1223,39 @@ def mic_samples_json(request_url: str = "") -> dict:
     """Build strudel.json-style index of mic recordings.
 
     Groups files by base name so each recording name becomes a sample bank.
-    e.g. my_voice.webm -> s("my_voice"), recording.webm + recording_1.webm -> s("recording:0"), s("recording:1")
+    Also scans subdirectories — each subdir becomes its own bank.
     """
-    files = sorted(
-        f
-        for f in MIC_SAMPLES_DIR.iterdir()
-        if f.suffix in (".wav", ".webm", ".ogg", ".mp3")
-    )
-    if not files:
-        return {}
+    audio_exts = (".wav", ".webm", ".ogg", ".mp3")
     banks = {}
+
+    # Top-level files grouped by base name
+    files = sorted(
+        f for f in MIC_SAMPLES_DIR.iterdir()
+        if f.is_file() and f.suffix in audio_exts
+    )
     for f in files:
         stem = f.stem
-        # Strip trailing _N suffix to group variants under the base name
         base = (
             stem.rsplit("_", 1)[0]
             if "_" in stem and stem.rsplit("_", 1)[1].isdigit()
             else stem
         )
         banks.setdefault(base, []).append(f.name)
-    result = {"_base": "/mic-samples/", **banks}
-    return result
+
+    # Subdirectories: each becomes a bank, files are dir/filename
+    for d in sorted(MIC_SAMPLES_DIR.iterdir()):
+        if not d.is_dir():
+            continue
+        subfiles = sorted(
+            f for f in d.iterdir()
+            if f.is_file() and f.suffix in audio_exts
+        )
+        if subfiles:
+            banks[d.name] = [f"{d.name}/{f.name}" for f in subfiles]
+
+    if not banks:
+        return {}
+    return {"_base": "/mic-samples/", **banks}
 
 
 @app.get("/mic-samples/strudel.json")
@@ -1234,10 +1263,10 @@ async def mic_samples_index():
     return mic_samples_json()
 
 
-@app.get("/mic-samples/{filename}")
-async def mic_sample_file(filename: str):
-    """Serve an individual mic sample."""
-    filepath = (MIC_SAMPLES_DIR / filename).resolve()
+@app.get("/mic-samples/{filepath:path}")
+async def mic_sample_file(filepath: str):
+    """Serve an individual mic sample (supports subdirs)."""
+    filepath = (MIC_SAMPLES_DIR / filepath).resolve()
     if not filepath.is_relative_to(MIC_SAMPLES_DIR.resolve()):
         return JSONResponse({"error": "not found"}, status_code=404)
     if not filepath.exists() or not filepath.is_file():
@@ -1291,6 +1320,161 @@ async def upload_sample(request: Request):
     print(f"Saved mic sample: {filepath} ({filepath.stat().st_size} bytes)")
 
     return {"status": "ok", "filename": filename, "bank": "mic"}
+
+
+# --- YouTube sample import ---
+
+_YT_URL_RE = re.compile(
+    r"^https?://(www\.)?(youtube\.com/watch\?v=|youtu\.be/|youtube\.com/shorts/)"
+)
+
+
+def _get_loudness(mp3_path: str) -> str:
+    """Get RMS loudness category from an mp3 chunk via ffmpeg."""
+    cmd = [
+        "ffmpeg", "-i", mp3_path, "-af",
+        "volumedetect", "-f", "null", "-",
+    ]
+    proc = subprocess.run(cmd, capture_output=True, timeout=10)
+    stderr = proc.stderr.decode(errors="replace")
+    for line in stderr.split("\n"):
+        if "mean_volume" in line:
+            # e.g. "mean_volume: -23.4 dB"
+            parts = line.split("mean_volume:")[1].strip().split()
+            db = float(parts[0])
+            if db > -15:
+                return "loud"
+            elif db > -25:
+                return "medium"
+            else:
+                return "quiet"
+    return "unknown"
+
+
+def _transcribe_chunk(mp3_path: str) -> str:
+    """Transcribe an mp3 chunk using Google Cloud Speech-to-Text."""
+    from google.cloud import speech
+
+    client = speech.SpeechClient()
+    audio = speech.RecognitionAudio(content=Path(mp3_path).read_bytes())
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.MP3,
+        language_code="en-US",
+    )
+    response = client.recognize(config=config, audio=audio)
+    words = " ".join(
+        result.alternatives[0].transcript
+        for result in response.results
+        if result.alternatives
+    ).strip()
+    return words
+
+
+def _analyze_chunks(chunks: list[Path]) -> list[dict]:
+    """Analyze loudness and transcribe each chunk."""
+    results = []
+    for chunk in chunks:
+        loudness = _get_loudness(str(chunk))
+        words = _transcribe_chunk(str(chunk))
+        entry = {"file": chunk.name, "loudness": loudness}
+        if words:
+            entry["words"] = words
+        results.append(entry)
+    return results
+
+
+@app.post("/youtube-sample")
+async def youtube_sample(request: Request):
+    """Download audio from a YouTube URL, chunk into 3s segments."""
+    body = await request.json()
+    url = (body.get("url") or "").strip()
+
+    if not url or not _YT_URL_RE.match(url):
+        return JSONResponse(
+            {"error": "Invalid YouTube URL"}, status_code=400
+        )
+
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Get video title
+        title_cmd = ["yt-dlp", "--no-playlist", "--print", "title", url]
+        title_proc = subprocess.run(title_cmd, capture_output=True, timeout=30)
+        if title_proc.returncode == 0:
+            raw_title = title_proc.stdout.decode(errors="replace").strip()
+        else:
+            raw_title = "youtube"
+
+        safe_name = (
+            "".join(c for c in raw_title if c.isalnum() or c in "-_ ").strip()
+            .replace(" ", "_")
+            .lower()
+        ) or "youtube"
+        # Truncate long titles
+        safe_name = safe_name[:40]
+
+        # Download first 30s of audio
+        out_template = os.path.join(tmpdir, "audio.%(ext)s")
+        cmd = [
+            "yt-dlp",
+            "--no-playlist",
+            "-x",
+            "--audio-format", "mp3",
+            "--audio-quality", "5",
+            "--download-sections", "*0:00-0:30",
+            "-o", out_template,
+            url,
+        ]
+        proc = subprocess.run(cmd, capture_output=True, timeout=60)
+        if proc.returncode != 0:
+            err = proc.stderr.decode(errors="replace")[:200]
+            print(f"yt-dlp failed: {err}")
+            return JSONResponse(
+                {"error": f"Download failed: {err}"}, status_code=500
+            )
+
+        mp3s = [f for f in os.listdir(tmpdir) if f.endswith(".mp3")]
+        if not mp3s:
+            return JSONResponse(
+                {"error": "No audio file produced"}, status_code=500
+            )
+
+        src = os.path.join(tmpdir, mp3s[0])
+
+        # Create subdirectory for this sample bank
+        bank_dir = MIC_SAMPLES_DIR / safe_name
+        bank_dir.mkdir(exist_ok=True)
+
+        # Chunk into 3-second segments with ffmpeg
+        chunk_pattern = os.path.join(str(bank_dir), f"{safe_name}_%03d.mp3")
+        chunk_cmd = [
+            "ffmpeg", "-y", "-i", src,
+            "-f", "segment",
+            "-segment_time", "3",
+            "-c", "copy",
+            chunk_pattern,
+        ]
+        chunk_proc = subprocess.run(chunk_cmd, capture_output=True, timeout=30)
+        if chunk_proc.returncode != 0:
+            err = chunk_proc.stderr.decode(errors="replace")[:200]
+            print(f"ffmpeg chunking failed: {err}")
+            return JSONResponse(
+                {"error": f"Chunking failed: {err}"}, status_code=500
+            )
+
+        chunks = sorted(f for f in bank_dir.iterdir() if f.suffix == ".mp3")
+        print(f"YouTube sample '{safe_name}': {len(chunks)} chunks in {bank_dir}")
+
+        # Analyze chunks: loudness + transcription
+        chunk_meta = _analyze_chunks(chunks)
+
+        # Save metadata
+        meta = {
+            "title": raw_title,
+            "url": url,
+            "chunks": chunk_meta,
+        }
+        (bank_dir / "info.json").write_text(json.dumps(meta, indent=2))
+
+    return {"status": "ok", "bank": safe_name, "chunks": len(chunks)}
 
 
 # Mount shabda Flask app at /shabda (optional)

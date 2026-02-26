@@ -2,6 +2,7 @@ anthropic
 fastapi
 uvicorn[standard]
 google-cloud-firestore
+google-cloud-speech
 google-cloud-texttospeech
 flask[async]
 freesound-api

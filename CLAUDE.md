@@ -159,6 +159,19 @@ $: samples('shabda/speech:hello?pitch=-2'), samples('shabda/speech:world?pitch=3
 - Default voice: en-GB female
 - Other voices: `samples('shabda/speech/en-US/m:hello')` (US English, male)
 
+### YouTube Samples
+
+Import audio from YouTube via the ▶ button in the CollabPanel. Downloads the first 30s, splits into 3-second chunks stored in `mic_samples/<video_name>/`. Each chunk is analyzed for loudness and transcribed for speech content.
+
+```javascript
+$: samples('/mic-samples/strudel.json')
+  , s("video_name:0")       // first 3s chunk
+  , s("video_name:3")       // fourth chunk
+  , s("video_name").chop(4) // chop a chunk further
+```
+
+The sample bank name is derived from the YouTube video title. Use `:N` to select chunks. Chunk metadata (loudness, words) is included in the model context automatically.
+
 ## Effects
 
 ```javascript
