@@ -156,9 +156,24 @@ Requires `ANTHROPIC_API_KEY` and `OPENROUTER_API_KEY`.
 server/deploy.sh
 ```
 
-Builds Strudel, copies static files into the server, and deploys to Cloud Run. Requires a GCP project with Cloud Run and Cloud Build enabled. Set `ANTHROPIC_API_KEY` as a Cloud Run secret.
+Builds Strudel, copies static files into the server, and deploys to Cloud Run. Config lives in `deployment_config.json` (gitignored).
 
-When this lives on cloud run, you can share links with your friends and collaborate on music together in real time. :) 
+### GCP Setup
+
+**APIs to enable:**
+- Cloud Run, Cloud Build, Firestore, Secret Manager, Container Registry
+- Cloud Text-to-Speech (for shabda TTS)
+- Cloud Speech-to-Text (for YouTube sample transcription)
+
+**Service account** (used by Cloud Run):
+- `roles/datastore.user` — Firestore read/write
+- `roles/secretmanager.secretAccessor` on the `anthropic-api-key` secret
+
+**Cloud Run config:**
+- Secret: `ANTHROPIC_API_KEY` from Secret Manager
+- Env var: `USE_FIRESTORE=1`
+
+When this lives on Cloud Run, you can share links with your friends and collaborate on music together in real time. :)
 
 ## Credits
 

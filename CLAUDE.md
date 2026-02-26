@@ -59,6 +59,29 @@ Deploy to Google Cloud Run via `server/deploy.sh`. Reads config from `deployment
 
 The script builds the Strudel frontend, packages static files + shabda, builds the container via Cloud Build, and deploys to Cloud Run.
 
+### GCP APIs Required
+
+- `run.googleapis.com` — Cloud Run
+- `cloudbuild.googleapis.com` — Cloud Build (container builds)
+- `firestore.googleapis.com` — Firestore (state persistence)
+- `secretmanager.googleapis.com` — Secret Manager (API keys)
+- `texttospeech.googleapis.com` — shabda TTS
+- `speech.googleapis.com` — YouTube sample transcription
+- `storage.googleapis.com` — GCS sample hosting
+- `containerregistry.googleapis.com` — Container Registry
+
+### Service Account Permissions
+
+The Cloud Run service account needs:
+- `roles/datastore.user` — read/write Firestore
+- `roles/secretmanager.secretAccessor` on the `anthropic-api-key` secret
+- Speech-to-Text and Text-to-Speech are auto-authorized for same-project service accounts
+
+### Cloud Run Environment
+
+- Secret: `ANTHROPIC_API_KEY` from Secret Manager (`anthropic-api-key:latest`)
+- Env var: `USE_FIRESTORE=1`
+
 **The file to edit:** `live.js`
 
 Changes sync bi-directionally:
