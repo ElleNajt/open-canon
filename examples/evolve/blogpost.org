@@ -168,12 +168,21 @@ MODELS = {
 }
 
 COLORS = {
-    'Claude Opus 4.5': '#E07B3C',
-    'Claude Opus 4.6': '#F0A870',
+    'Claude Opus 4.5': '#C05020',
+    'Claude Opus 4.6': '#F5B040',
     'ChatGPT 5.2': '#2D8B5E',
     'Grok 4.1-fast': '#E01029',
-    'Gemini 3.1 Pro': '#4285F4',
-    'Gemini 2.5 Pro': '#7BAAF7',
+    'Gemini 3.1 Pro': '#1A53D0',
+    'Gemini 2.5 Pro': '#90C0F0',
+}
+
+LINESTYLES = {
+    'Claude Opus 4.5': '--',
+    'Claude Opus 4.6': '-',
+    'ChatGPT 5.2': '-',
+    'Grok 4.1-fast': '-',
+    'Gemini 3.1 Pro': '-',
+    'Gemini 2.5 Pro': '--',
 }
 
 def extract_bpm(code):
@@ -189,6 +198,7 @@ fig, ax = plt.subplots(figsize=(10, 5))
 
 for model, runs in MODELS.items():
     color = COLORS[model]
+    ls = LINESTYLES[model]
     for i, (exp, subdir) in enumerate(runs):
         d = OUTPUT_DIR / exp / subdir
         if not d.is_dir():
@@ -203,11 +213,11 @@ for model, runs in MODELS.items():
                 steps.append(step)
                 bpms.append(bpm)
         label = model if i == 0 else None
-        ax.plot(steps, bpms, color=color, alpha=0.5, linewidth=1.5, label=label)
+        ax.plot(steps, bpms, color=color, linestyle=ls, alpha=0.5, linewidth=1.5, label=label)
 
 ax.set_xlabel('Evolution step')
 ax.set_ylabel('BPM')
-ax.set_title('BPM over evolution (all runs, Goldberg seed)')
+ax.set_title('BPM over evolution (Goldberg seed, all runs)')
 ax.legend(loc='upper left', fontsize=8)
 ax.axhline(y=72, color='gray', linestyle='--', alpha=0.3, linewidth=1)
 ax.set_xlim(0, 20)
