@@ -51,6 +51,7 @@ The in-browser panel (right side) supports:
 - **Image upload**: Attach an image for visual inspiration (Claude sees it)
 - **Webcam**: Toggle live webcam feed — each prompt includes a frame so Claude can see you / your environment
 - **Screen share**: Toggle screen capture — sends a screenshot with each prompt
+- **YouTube import**: Import audio from YouTube — downloads, chunks, and analyzes for loudness, key, and pitches
 - **Mic recording**: Record audio from your mic and save it as a sample. Use in code: `samples('/mic-samples/strudel.json'), s("mic:0")`
 - **Repeating prompts**: Set a prompt to run every N seconds (5-300s), with or without webcam/screen. Useful for continuous evolution.
 - **History**: Click any previous version to load it. Shows who made each change and what they asked for.

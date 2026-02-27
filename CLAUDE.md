@@ -201,7 +201,7 @@ $: samples('shabda/speech:hello?pitch=-2'), samples('shabda/speech:world?pitch=3
 
 ### YouTube Samples
 
-Import audio from YouTube via the ▶ button in the CollabPanel. Downloads the first 30s, splits into 3-second chunks stored in `mic_samples/<video_name>/`. Each chunk is analyzed for loudness and transcribed for speech content.
+Import audio from YouTube via the ▶ button in the CollabPanel. Downloads the first 30s, splits into 3-second chunks stored in `mic_samples/<video_name>/`. Each chunk is analyzed for loudness, transcribed for speech content, and analyzed for musical key and dominant pitches (via librosa).
 
 ```javascript
 $: samples('/mic-samples/strudel.json')
@@ -210,7 +210,16 @@ $: samples('/mic-samples/strudel.json')
   , s("video_name").chop(4) // chop a chunk further
 ```
 
-The sample bank name is derived from the YouTube video title. Use `:N` to select chunks. Chunk metadata (loudness, words) is included in the model context automatically.
+The sample bank name is derived from the YouTube video title. Use `:N` to select chunks. Chunk metadata (loudness, key, pitches, words) is included in the model context automatically, formatted as `:0=medium Ab major [G♯2 C♯2 F♯2]`.
+
+### Sample Management
+
+List and delete sample banks on the server:
+
+```
+GET  /mic-samples-manage/ls       # list all sample banks
+POST /mic-samples-manage/delete   # body: {"name": "bank_name"}
+```
 
 ## Effects
 
