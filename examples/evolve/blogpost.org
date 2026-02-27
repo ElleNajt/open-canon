@@ -312,7 +312,7 @@ Eight notes and no effects beyond a little reverb. Everything that follows is th
 
 ** Some notable examples
 
-All the music is embedded down the page, including some cross model experiments. Here are some samples that give a vibe. 
+All the music is embedded down the page, including some cross model experiments. Here are some samples that give a vibe. They get increasingly complicated as the generation goes on.
 
 *** Claude
 **** Opus 4.5
@@ -350,13 +350,13 @@ The bliss attractor Opus 4.5 runs tend to have commentary about not needing to p
 --- Run 4, Step 30
 #+end_quote
 
-{{{strudel_picks(goldberg_imbue_v2_ada2a552/claude/30 Run 2 Step 30, goldberg_imbue_v3_ada2a552/claude/45 Run 3 Step 45, goldberg_imbue_r5_ada2a552/claude/15 Run 5 Step 15, goldberg_imbue_r5_ada2a552/claude/60 Run 5 Step 60, goldberg_imbue_fb0bde27/claude/60 Run 1 Step 60)}}}
+{{{strudel_picks(goldberg_imbue_v2_ada2a552/claude/2 Run 2 Step 2, goldberg_imbue_v2_ada2a552/claude/30 Run 2 Step 30, goldberg_imbue_v3_ada2a552/claude/45 Run 3 Step 45, goldberg_imbue_r5_ada2a552/claude/15 Run 5 Step 15, goldberg_imbue_r5_ada2a552/claude/60 Run 5 Step 60, goldberg_imbue_fb0bde27/claude/60 Run 1 Step 60)}}}
 
 **** Opus 4.6 
 
 Opus 4.6 is darker and more discordant, though still leans towards contrapunctal ambience.
 
-{{{strudel_picks(goldberg_imbue_opus46_84f7f2ef/claude46/30 Run 1 Step 30, goldberg_imbue_opus46_v2_84f7f2ef/claude46/30 Run 2 Step 30, goldberg_imbue_opus46_v3_84f7f2ef/claude46/30 Run 3 Step 30)}}}
+{{{strudel_picks(goldberg_imbue_opus46_84f7f2ef/claude46/2 Run 1 Step 2, goldberg_imbue_opus46_84f7f2ef/claude46/30 Run 1 Step 30, goldberg_imbue_opus46_v2_84f7f2ef/claude46/30 Run 2 Step 30, goldberg_imbue_opus46_v3_84f7f2ef/claude46/30 Run 3 Step 30)}}}
 
 **** Double clicking on that model diff
 
@@ -366,50 +366,47 @@ Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4
 
 Grok is Grok. Electronic maximalism; stacked complexity and tracks slowed by the golden ratio. 
 
-{{{strudel_picks(goldberg_imbue_grok_redo_84f7f2ef/grok/15 Run 1 Step 15, goldberg_imbue_grok_redo_84f7f2ef/grok/20 Run 1 Step 20, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/14 Run 2 Step 14, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/30 Run 2 Step 30, goldberg_imbue_grok_redo_v3_84f7f2ef/grok/25 Run 3 Step 25)}}}
+{{{strudel_picks(goldberg_imbue_grok_redo_84f7f2ef/grok/2 Run 1 Step 2, goldberg_imbue_grok_redo_84f7f2ef/grok/15 Run 1 Step 15, goldberg_imbue_grok_redo_84f7f2ef/grok/20 Run 1 Step 20, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/14 Run 2 Step 14, goldberg_imbue_grok_redo_v2_84f7f2ef/grok/30 Run 2 Step 30, goldberg_imbue_grok_redo_v3_84f7f2ef/grok/25 Run 3 Step 25)}}}
 
 *** ChatGPT 5.2
 
 I find ChatGPT 5.2's music unsettling but compelling — glitchy, with speech samples like "not_a_god" and "leave_a_scar" chopped up over unresolved chromatic harmony. "I am here" and "Listen" appear at step 1 across multiple runs. Reminiscent of [[https://x.com/Josikinz/status/1908655061594734637][Josie Kins's LLM self-portraits]].
 
-{{{strudel_picks(goldberg_imbue_84f7f2ef/gpt/15 Run 1 Step 15, goldberg_imbue_84f7f2ef/gpt/25 Run 1 Step 25, goldberg_imbue_84f7f2ef/gpt/30 Run 1 Step 30, goldberg_imbue_v2_84f7f2ef/gpt/30 Run 2 Step 30)}}}
+{{{strudel_picks(goldberg_imbue_84f7f2ef/gpt/2 Run 1 Step 2, goldberg_imbue_84f7f2ef/gpt/15 Run 1 Step 15, goldberg_imbue_84f7f2ef/gpt/25 Run 1 Step 25, goldberg_imbue_84f7f2ef/gpt/30 Run 1 Step 30, goldberg_imbue_v2_84f7f2ef/gpt/30 Run 2 Step 30)}}}
 
 To see how seed dependent this vibe, I include evolutions from the same drum and arpeggio seed as used with Opus above. 
 
-*Drum seed Run 1:* {{{strudel(diff_gpt_drums_84f7f2ef,gpt,10,15,20,GPT Drum Seed Run 1)}}}
-*Drum seed Run 2:* {{{strudel(diff_gpt_drums_v2_84f7f2ef,gpt,10,15,20,GPT Drum Seed Run 2)}}}
-
-*C major arpeggio seed:* {{{strudel(diff_gpt_major_84f7f2ef,gpt,10,15,20,GPT C Major Seed)}}}
+{{{strudel_picks(diff_gpt_drums_84f7f2ef/gpt/15 Drum Run 1, diff_gpt_drums_v2_84f7f2ef/gpt/15 Drum Run 2, diff_gpt_major_84f7f2ef/gpt/15 C Major)}}}
 
 *** Gemini
 
 IDM across both model generations: intricate rhythms, speech samples, distortion. Gemini 3.1 Pro is more cerebral and meditative, with philosophical speech samples (including Japanese) and lush reverb. Gemini 2.5 Pro ranged wider -- one run became ambient, another techno.
 
 *Gemini 3.1 Pro:*
-{{{strudel_picks(goldberg_imbue_gemini31_84f7f2ef/gemini/20 3.1 Run 1 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/21 3.1 Run 3 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/22 3.1 Run 3 Step 23, goldberg_imbue_gemini31_v4_04bd7c44/gemini/26 3.1 Run 4 Step 26)}}}
+{{{strudel_picks(goldberg_imbue_gemini31_84f7f2ef/gemini/2 3.1 Run 1 Step 2, goldberg_imbue_gemini31_84f7f2ef/gemini/20 3.1 Run 1 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/21 3.1 Run 3 Step 21, goldberg_imbue_gemini31_v3_84f7f2ef/gemini/22 3.1 Run 3 Step 23, goldberg_imbue_gemini31_v4_04bd7c44/gemini/26 3.1 Run 4 Step 26)}}}
 
 *Gemini 2.5 Pro:*
-{{{strudel_picks(goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/20 2.5 Run 3 Step 20 - ambient, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/30 2.5 Run 3 Step 30 - ambient, goldberg_imbue_gemini_redo_v2_84f7f2ef/gemini/26 2.5 Run 2 Step 26)}}}
+{{{strudel_picks(goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/2 2.5 Run 3 Step 2, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/20 2.5 Run 3 Step 20 - ambient, goldberg_imbue_gemini_redo_v3_84f7f2ef/gemini/30 2.5 Run 3 Step 30 - ambient, goldberg_imbue_gemini_redo_v2_84f7f2ef/gemini/26 2.5 Run 2 Step 26)}}}
 
 *** Cross model collaborations
 
 
 **** Claude + Grok
 
-{{{strudel_picks(cross_claude_grok_784683bf/claude_grok_alternate/20 Step 20, cross_claude_grok_784683bf/claude_grok_alternate/30 Step 30)}}}
+{{{strudel_picks(cross_claude_grok_784683bf/claude_grok_alternate/2 Step 2, cross_claude_grok_784683bf/claude_grok_alternate/20 Step 20, cross_claude_grok_784683bf/claude_grok_alternate/30 Step 30)}}}
 
 **** Claude + Gemini
 
 These slap.
-{{{strudel_picks(cross_claude_gemini31_4aa890b0/claude_gemini_alternate/10 Step 10, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/15 Step 15, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/25 Step 25)}}}
+{{{strudel_picks(cross_claude_gemini31_4aa890b0/claude_gemini_alternate/2 Step 2, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/10 Step 10, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/15 Step 15, cross_claude_gemini31_4aa890b0/claude_gemini_alternate/25 Step 25)}}}
 
 **** GPT 5.2 + Gemini
 
-{{{strudel_picks(cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/8 Step 8, cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/14 Step 14)}}}
+{{{strudel_picks(cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/2 Step 2, cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/8 Step 8, cross_gpt52_gemini31_4aa890b0/gpt_gemini_alternate/14 Step 14)}}}
 
 **** Grok + Gemini
 
-{{{strudel_picks(cross_grok_gemini31_4aa890b0/grok_gemini_alternate/28 Step 28)}}}
+{{{strudel_picks(cross_grok_gemini31_4aa890b0/grok_gemini_alternate/2 Step 2, cross_grok_gemini31_4aa890b0/grok_gemini_alternate/28 Step 28)}}}
 
 {{{gdoc_only(* The music)}}}
 
