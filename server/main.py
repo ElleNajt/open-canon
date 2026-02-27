@@ -1329,9 +1329,32 @@ async def mic_samples_delete(request: Request):
     return {"status": "ok", "deleted": name}
 
 
+def _transcribe_full(mp3_path: str) -> str:
+    """Transcribe a full mp3 file to get a name for it. Returns empty string on failure."""
+    from google.cloud import speech
+
+    client = speech.SpeechClient()
+    audio = speech.RecognitionAudio(content=Path(mp3_path).read_bytes())
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.MP3,
+        language_code="en-US",
+    )
+    response = client.recognize(config=config, audio=audio)
+    words = " ".join(
+        result.alternatives[0].transcript
+        for result in response.results
+        if result.alternatives
+    ).strip()
+    return words
+
+
 @app.post("/upload-sample")
 async def upload_sample(request: Request):
-    """Receive a recorded audio sample from the browser."""
+    """Receive a recorded audio sample from the browser.
+
+    Converts to mp3, transcribes for a bank name, chunks into 3s segments,
+    and runs full analysis (loudness, key, pitch, per-chunk transcription).
+    """
     body = await request.json()
     audio_b64 = body.get("audio")
     name = body.get("name", "recording")
@@ -1340,7 +1363,6 @@ async def upload_sample(request: Request):
     if not audio_b64:
         return JSONResponse({"error": "no audio data"}, status_code=400)
 
-    # Determine extension from mime
     ext_map = {
         "audio/webm": ".webm",
         "audio/ogg": ".ogg",
@@ -1349,25 +1371,81 @@ async def upload_sample(request: Request):
     }
     ext = ext_map.get(mime, ".webm")
 
-    # Sanitize name
-    safe_name = (
-        "".join(c for c in name if c.isalnum() or c in "-_").strip() or "recording"
-    )
+    with tempfile.TemporaryDirectory() as tmpdir:
+        # Save raw upload
+        raw_path = os.path.join(tmpdir, f"upload{ext}")
+        Path(raw_path).write_bytes(base64.b64decode(audio_b64))
 
-    # Find next available filename
-    existing = list(MIC_SAMPLES_DIR.glob(f"{safe_name}*{ext}"))
-    if existing:
-        idx = len(existing)
-        filename = f"{safe_name}_{idx}{ext}"
-    else:
-        filename = f"{safe_name}{ext}"
+        # Convert to mp3 if needed
+        if ext == ".mp3":
+            mp3_path = raw_path
+        else:
+            mp3_path = os.path.join(tmpdir, "upload.mp3")
+            conv = subprocess.run(
+                ["ffmpeg", "-y", "-i", raw_path, "-q:a", "5", mp3_path],
+                capture_output=True, timeout=30,
+            )
+            if conv.returncode != 0:
+                return JSONResponse({"error": "Audio conversion failed"}, status_code=500)
 
-    filepath = MIC_SAMPLES_DIR / filename
-    filepath.write_bytes(base64.b64decode(audio_b64))
+        # Transcribe full audio to get bank name
+        transcript = ""
+        try:
+            transcript = _transcribe_full(mp3_path)
+        except Exception as e:
+            print(f"Full transcription failed: {e}")
 
-    print(f"Saved mic sample: {filepath} ({filepath.stat().st_size} bytes)")
+        if transcript:
+            safe_name = (
+                "".join(c for c in transcript if c.isalnum() or c in "-_ ").strip()
+                .replace(" ", "_")
+                .lower()
+            ) or ""
+        if not transcript or not safe_name:
+            safe_name = (
+                "".join(c for c in name if c.isalnum() or c in "-_").strip() or "recording"
+            )
+        safe_name = safe_name[:40]
 
-    return {"status": "ok", "filename": filename, "bank": "mic"}
+        # Deduplicate bank name
+        bank_dir = MIC_SAMPLES_DIR / safe_name
+        if bank_dir.exists():
+            i = 2
+            while (MIC_SAMPLES_DIR / f"{safe_name}_{i}").exists():
+                i += 1
+            safe_name = f"{safe_name}_{i}"
+            bank_dir = MIC_SAMPLES_DIR / safe_name
+        bank_dir.mkdir()
+
+        # Chunk into 3s segments
+        chunk_pattern = os.path.join(str(bank_dir), f"{safe_name}_%03d.mp3")
+        chunk_cmd = [
+            "ffmpeg", "-y", "-i", mp3_path,
+            "-f", "segment",
+            "-segment_time", "3",
+            "-c:a", "libmp3lame", "-q:a", "5",
+            chunk_pattern,
+        ]
+        chunk_proc = subprocess.run(chunk_cmd, capture_output=True, timeout=30)
+        if chunk_proc.returncode != 0:
+            err = chunk_proc.stderr.decode(errors="replace")[:200]
+            print(f"ffmpeg chunking failed: {err}")
+            return JSONResponse({"error": f"Chunking failed: {err}"}, status_code=500)
+
+        chunks = sorted(f for f in bank_dir.iterdir() if f.suffix == ".mp3")
+        print(f"Mic sample '{safe_name}': {len(chunks)} chunks in {bank_dir}")
+
+        # Analyze chunks
+        chunk_meta = _analyze_chunks(chunks)
+
+        # Save metadata
+        meta = {
+            "title": transcript or name,
+            "chunks": chunk_meta,
+        }
+        (bank_dir / "info.json").write_text(json.dumps(meta, indent=2))
+
+    return {"status": "ok", "bank": safe_name, "chunks": len(chunks)}
 
 
 # --- YouTube sample import ---
