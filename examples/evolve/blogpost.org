@@ -227,7 +227,7 @@ plt.show()
 
 #+RESULTS:
 :results:
-[[file:plots/blogpost/plot_20260225_140415_922900.png]]
+[[file:plots/blogpost/plot_20260226_215809_3123170.png]]
 :end:
 
 ** Value proposition
