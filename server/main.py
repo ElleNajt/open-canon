@@ -1285,6 +1285,50 @@ async def mic_sample_file(filepath: str):
     return FileResponse(filepath, media_type=media_type)
 
 
+@app.get("/mic-samples-manage/ls")
+async def mic_samples_ls():
+    """List all sample banks and top-level files in mic_samples/."""
+    items = []
+    for entry in sorted(MIC_SAMPLES_DIR.iterdir()):
+        if entry.name.startswith("."):
+            continue
+        if entry.is_dir():
+            files = [f.name for f in sorted(entry.iterdir()) if f.is_file()]
+            info_path = entry / "info.json"
+            title = None
+            if info_path.exists():
+                meta = json.loads(info_path.read_text())
+                title = meta.get("title")
+            items.append({"name": entry.name, "type": "dir", "files": len(files), "title": title})
+        elif entry.is_file():
+            items.append({"name": entry.name, "type": "file", "size": entry.stat().st_size})
+    return items
+
+
+@app.post("/mic-samples-manage/delete")
+async def mic_samples_delete(request: Request):
+    """Delete a sample bank (directory) or file from mic_samples/."""
+    body = await request.json()
+    name = body.get("name", "")
+
+    if not name or "/" in name or "\\" in name or name in (".", ".."):
+        return JSONResponse({"error": "Invalid name"}, status_code=400)
+
+    target = (MIC_SAMPLES_DIR / name).resolve()
+    if not target.is_relative_to(MIC_SAMPLES_DIR.resolve()):
+        return JSONResponse({"error": "Invalid path"}, status_code=400)
+
+    if not target.exists():
+        return JSONResponse({"error": "Not found"}, status_code=404)
+
+    if target.is_dir():
+        shutil.rmtree(target)
+    else:
+        target.unlink()
+
+    return {"status": "ok", "deleted": name}
+
+
 @app.post("/upload-sample")
 async def upload_sample(request: Request):
     """Receive a recorded audio sample from the browser."""
