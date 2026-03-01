@@ -201,7 +201,7 @@ $: samples('shabda/speech:hello?pitch=-2'), samples('shabda/speech:world?pitch=3
 
 ### YouTube Samples
 
-Import audio from YouTube via the ▶ button in the CollabPanel. Downloads the first 30s, splits into 3-second chunks stored in `mic_samples/<video_name>/`. Each chunk is analyzed for loudness, transcribed for speech content, and analyzed for musical key and dominant pitches (via librosa).
+Import audio from YouTube via the ▶ button in the CollabPanel. Downloads the first N seconds (configured by `youtube_duration_seconds` in `models.json`, default 30s), splits into 3-second chunks stored in `mic_samples/<video_name>/`. Each chunk is analyzed for loudness, transcribed for speech content, and analyzed for musical key and dominant pitches (via librosa).
 
 ```javascript
 $: samples('/mic-samples/strudel.json')
