@@ -97,6 +97,8 @@ else:
     DEFAULT_MODEL = "claude-sonnet"
     print(f"No models.json found, defaults: {list(AVAILABLE_MODELS.keys())}")
 
+YOUTUBE_DURATION_SECONDS = _config.get("youtube_duration_seconds", 30) if os.path.isfile(_models_config_path) else 30
+
 # Path to live.js on disk (for editor sync)
 LIVE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "live.js")
 
@@ -1593,7 +1595,7 @@ async def _youtube_sample_impl(request: Request):
 
     with tempfile.TemporaryDirectory() as tmpdir:
         # Get video title
-        title_cmd = ["yt-dlp", "--no-playlist", "--print", "title", url]
+        title_cmd = ["yt-dlp", "--no-playlist", "--js-runtimes", "node", "--print", "title", url]
         title_proc = subprocess.run(title_cmd, capture_output=True, timeout=30)
         if title_proc.returncode == 0:
             raw_title = title_proc.stdout.decode(errors="replace").strip()
@@ -1608,19 +1610,22 @@ async def _youtube_sample_impl(request: Request):
         # Truncate long titles
         safe_name = safe_name[:40]
 
-        # Download first 30s of audio
+        # Download first N seconds of audio
+        mins, secs = divmod(YOUTUBE_DURATION_SECONDS, 60)
+        end_ts = f"{mins}:{secs:02d}"
         out_template = os.path.join(tmpdir, "audio.%(ext)s")
         cmd = [
             "yt-dlp",
             "--no-playlist",
+            "--js-runtimes", "node",
             "-x",
             "--audio-format", "mp3",
             "--audio-quality", "5",
-            "--download-sections", "*0:00-0:30",
+            "--download-sections", f"*0:00-{end_ts}",
             "-o", out_template,
             url,
         ]
-        proc = subprocess.run(cmd, capture_output=True, timeout=60)
+        proc = subprocess.run(cmd, capture_output=True, timeout=max(60, YOUTUBE_DURATION_SECONDS * 2))
         if proc.returncode != 0:
             err = proc.stderr.decode(errors="replace")[:200]
             print(f"yt-dlp failed: {err}")
@@ -1649,7 +1654,7 @@ async def _youtube_sample_impl(request: Request):
             "-c", "copy",
             chunk_pattern,
         ]
-        chunk_proc = subprocess.run(chunk_cmd, capture_output=True, timeout=30)
+        chunk_proc = subprocess.run(chunk_cmd, capture_output=True, timeout=60)
         if chunk_proc.returncode != 0:
             err = chunk_proc.stderr.decode(errors="replace")[:200]
             print(f"ffmpeg chunking failed: {err}")
