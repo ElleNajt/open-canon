@@ -360,7 +360,7 @@ Opus 4.6 is darker and more discordant, though still leans towards contrapunctal
 
 **** Double clicking on that model diff
 
-Is the vibe difference consistent across seeds? Here we give both Opus 4.5 and 4.6 the same seed and prompt and compare across 3 runs each, for 3 seeds ( a drum loop, a c major arpeggio, and a single note ). Can you tell them apart? [[file:blind_test.html][Try the blind test,]] which uses different samples from the below. I scored 13/14 on the Opus4.5/Opus4.6 A/B test.
+Is the vibe difference consistent across seeds? Can you tell them apart? [[file:blind_test.html][Try the blind test,]] which uses different samples from the music section below. I scored 13/14 on the Opus4.5/Opus4.6 A/B test.
 
 *** Grok
 

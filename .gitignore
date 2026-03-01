@@ -10,6 +10,7 @@ samples/
 speech_samples/
 server/mic_samples/
 __pycache__/
+node_modules/
 examples/evolve/output/*
 !examples/evolve/output/goldberg_imbue_fb0bde27/
 !examples/evolve/output/goldberg_imbue_v2_ada2a552/
