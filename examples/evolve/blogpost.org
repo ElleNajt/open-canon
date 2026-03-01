@@ -47,9 +47,9 @@ style guidance, no music theory examples, no aesthetic direction beyond “Evolv
 
 ** Vibes
 
-We discover that, subjectively speaking:
+My subjective takes are:
 
-- Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more interesting and discordant.
+- Claude Opus 4.5 and Opus 4.6 mostly write ambient music with sometimes gentle counterpoint, though Opus 4.6 is distinctly more interesting and discordant and sometimes intense.
 - Grok 4.1-fast writes hardcore maximalist electronic music
 - Gemini 2.5 Pro and Gemini 3.1 Pro write IDM across both model generations (2.5 Pro also had a nice ambient track). 3.1 is a lot more high BPM maximalist.
 - ChatGPT 5.2 creates music that is unsettling but compelling.
