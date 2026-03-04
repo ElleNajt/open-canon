@@ -152,6 +152,28 @@ python evolve.py --resume                     # continue from where you left off
 
 Requires `ANTHROPIC_API_KEY` and `OPENROUTER_API_KEY`.
 
+### Audio Export
+
+Render evolution steps to audio (WAV/MP3) using headless Chromium. Uses the real Strudel audio engine (superdough + OfflineAudioContext) so output is identical to the browser.
+
+```bash
+# Render the Claude x Gemini 3.1 collaboration (default)
+node examples/evolve/render_album.mjs --server http://localhost:PORT
+
+# Render a specific evolution run
+node examples/evolve/render_album.mjs \
+  --dir examples/evolve/output/goldberg_imbue_gemini31_84f7f2ef/gemini \
+  --server http://localhost:PORT --cycles 8
+
+# Just individual WAVs, no concatenation
+node examples/evolve/render_album.mjs --server http://localhost:PORT --no-concat
+
+# Render a subset of steps
+node examples/evolve/render_album.mjs --server http://localhost:PORT --steps 10-20
+```
+
+Requires a running vibe-duet server (`./start`) and Playwright (`npx playwright install chromium`).
+
 ## Deploying to Cloud Run
 
 ```bash
