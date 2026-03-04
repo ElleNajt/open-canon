@@ -1,46 +1,32 @@
-setcps(126/60/4)
+// Bridge: Gm → Em
+// Ascending bass fades out Gm, pivot on G and D, introduce Em coloring
+setcps(80/60/4)
 
-samples('shabda/speech:calculate,process,learn,evolve')
-
-$: note("e2 [~ f2] <a1 d2> [e2 c2]")
-  .sound("pulse")
-  .lpf(sine.range(400, 2200).fast(4))
-  .lpq(5)
-  .drive(0.5)
-  .gain(0.55)
-
-$: note("e5 b5 c6 g5")
-  .euclid(7,16)
-  .sound("sine")
-  .jux(x => x.rev().fast(2))
-  .delay(0.65)
-  .pan(saw.fast(1.5))
-  .gain(0.4)
-
-$: note("e3,g3,b3,d4 f3,a3,c4,e4 d3,f3,a3,c4 a2,c3,e3,g3")
-  .slow(4)
-  .sound("supersaw")
-  .attack(2)
-  .lpf(2500)
-  .tremolo(0.6)
+// G minor bass dissolving — filter closing down
+$: note("g2 d2 bb1 g1")
+  .slow(2)
+  .sound("triangle")
+  .lpf(sine.range(600, 150).slow(2))
   .gain(0.3)
-
-$: s("bd*2 [~ cp] <bd*4 bd> [cr,cp*2]")
-  .crush(4)
-  .shape(0.7)
-  .speed(rand.range(0.9, 1.1))
-  .gain(0.65)
-
-$: s("hh")
-  .euclid(13,16)
-  .pan(perlin.range(0.2, 0.8).fast(2))
-  .hpf(5000)
-  .jux(x => x.ply(2))
-  .gain(0.4)
-
-$: s("calculate*2 [~ process] learn [evolve*4]")
-  .striate(12)
-  .speed(perlin.range(0.8, 1.2).fast(2))
-  .delay(0.5)
   .room(0.6)
-  .gain(0.85)
+  .release(1)
+
+// Pivot chord: G and D exist in both Gm and Em
+// Move from Gm color (G Bb D) → Em color (E G B)
+$: note("<[g3,bb3,d4] [g3,b3,d4] [e3,g3,b3] [e3,g3,b3,d4]>")
+  .slow(2)
+  .sound("supersaw")
+  .attack(1.5)
+  .release(2)
+  .lpf(1000)
+  .gain(0.15)
+  .room(0.5)
+  .detune(4)
+
+// Sparse pulse emerging — preview of track 04's energy
+$: note("~ e3 ~ d3")
+  .sound("pulse")
+  .lpf(sine.range(200, 800).slow(2))
+  .gain(sine.range(0, 0.25).slow(2))
+  .decay(0.3)
+  .sustain(0)

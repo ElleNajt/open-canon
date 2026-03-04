@@ -1,59 +1,43 @@
-samples('shabda/speech/fr-FR/m:souviens_toi,oubli')
+setcps(105/60/4)
+samples('shabda/speech/fr-FR/m:spectre,machine,reve,abime')
 
-setcps(85/60/4)
-
-// Relentless Euclidean bass matching a new tragic, driving progression
-$: note("<eb2 g2 c2 d2>")
-  .slow(2)
-  .sound("sawtooth")
-  .euclid(5, 8)
-  .lpf(sine.range(400, 1500).slow(4))
-  .lpq(4)
-  .gain(0.45)
-  .distort(0.4)
-  .juxBy(0.4, x => x.octave(1).delay(0.25))
-
-// Drums emerge - urgent, precise, propelling the piece forward
-$: stack(
-  s("bd*2").euclid(3, 8).gain(0.8),
-  s("~ sn").room(0.4),
-  s("hh*16").gain(sine.range(0.06, 0.25).fast(4)),
-  s("~ ~ cb ~").gain(0.3)
-)
-
-// Vast, swelling chord shifts - emotional and definitive
-$: note("<[eb3,g3,bb3,d4] [g3,bb3,d4,f4] [c3,eb3,g3,d4] [d3,fs3,a3,c4]>")
-  .slow(2)
+$: note("c1(5,8) <eb1*3 [~ g1]> <c1(3,8,2) d1> <ab0 f1>")
   .sound("supersaw")
-  .lpf(saw.range(400, 2500).slow(4))
-  .lpq(2)
-  .attack(0.2)
-  .decay(0.8)
-  .sustain(0.7)
-  .release(1.5)
-  .gain(0.22)
-  .room(0.6)
-  .pan(0.5)
+  .lpf(saw.range(150, 3000).fast(8))
+  .lpq(6)
+  .shape(0.85)
+  .gain(0.35)
 
-// The lead shatters from sparse calls into a fast, cascading sequence
-$: note("<[eb4 d5 bb4 g4]*4 [f5 d5 bb4 g4]*4 [g4 eb5 c5 g4]*4 [d5 a4 fs4 d4]*4>")
-  .slow(2)
+$: note("c4(3,8) [eb4, g4]*2 <b4, d5>(3,8) c5")
   .sound("triangle")
-  .fm(2)
-  .fmh(2.5)
-  .gain(0.12)
-  .room(0.5)
-  .delay(0.6)
-  .delaytime(0.25)
-  .delayfeedback(0.6)
-  .pan(saw.range(0.2, 0.8).fast(2))
+  .jux(x => x.add(7).rev())
+  .bpf(sine.range(500, 3500).slow(4))
+  .delay(0.7)
+  .gain(0.25)
 
-// Fragmented memories rushing back - intense rhythmic granular slicing
-$: s("souviens_toi oubli*2")
-  .speed("<1 1.25 0.85 1.1>")
-  .slow(2)
-  .striate(8)
-  .jux(x => x.rev().speed(1.5).pan(0.8))
-  .gain(0.55)
-  .room(0.7)
-  .lpf(3000)
+$: s("[bd(5,16,1), ~ cp(1,16), sn(3,16,2)?, hh(11,16)]")
+  .crush(3)
+  .room(0.4)
+  .speed(rand.range(0.9, 1.1))
+  .gain(0.45)
+
+$: s("machine(5,8) spectre <reve*2 abime> <machine ~>")
+  .chop(8)
+  .speed(perlin.range(0.6, 1.4).slow(4))
+  .delay(0.5)
+  .pan(sine.slow(2))
+  .gain(0.6)
+
+$: note("<c5 eb5> [g5, c6] <eb5 f5> <c5 b4>")
+  .sound("sine")
+  .fm(perlin.range(1, 5).slow(8))
+  .echo(3, 0.333, 0.4)
+  .room(0.8)
+  .gain(0.15)
+
+$: s("rim(7,16) <lt(5,16) mt(3,8)>")
+  .speed(rand.range(1.5, 3.5))
+  .pan(perlin)
+  .degradeBy(0.3)
+  .delay(0.6)
+  .gain(0.25)
