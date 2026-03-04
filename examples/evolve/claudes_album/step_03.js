@@ -1,0 +1,73 @@
+samples('shabda/speech/fr-FR/m:souviens_toi,oubli')
+
+setcps(72/60/4)
+
+// Bass ascends instead of descends - a glimmer of hope in the darkness
+$: note("g1 ab1 bb1 c2 d2 eb2 f2 g2")
+  .slow(4)
+  .sound("sawtooth")
+  .chop(12)
+  .lpf(sine.range(200, 600).slow(6))
+  .lpq(3)
+  .gain(0.4)
+  .room(0.5)
+  .pan(saw.range(0.3, 0.7).slow(8))
+
+// The shadow transforms - now a call and response, dancing not weeping
+$: note("g5 ~ bb5 ~ d6 ~ bb5 g5")
+  .slow(2)
+  .sound("triangle")
+  .fm(4)
+  .fmh(1.5)
+  .gain(0.18)
+  .delay(0.5)
+  .delaytime(0.166)
+  .delayfeedback(0.5)
+  .pan(0.3)
+  .off(0.125, x => x.transpose(7).pan(0.7).gain(0.12))
+
+// Glitchy pulse replaced with a steady heartbeat - sparse, determined
+$: note("g2 ~ ~ g2 ~ g2 ~ ~")
+  .sound("sine")
+  .decay(0.3)
+  .sustain(0)
+  .gain(0.35)
+  .distort(0.3)
+  .lpf(800)
+
+// Chords shift to something ambiguous - neither major nor minor, suspended
+$: note("<[g3,c4,d4] [f3,bb3,c4] [eb3,ab3,bb3] [d3,g3,a3]>")
+  .slow(4)
+  .sound("supersaw")
+  .lpf(900)
+  .attack(0.8)
+  .decay(1.5)
+  .sustain(0.4)
+  .release(2)
+  .gain(0.14)
+  .room(0.5)
+  .detune(6)
+
+// New element - a distant bell choir, marking time
+$: note("g6 ~ d6 ~ bb5 ~ g5 ~")
+  .slow(8)
+  .sound("sine")
+  .fm(8)
+  .fmh(4)
+  .fmdecay(0.5)
+  .attack(0.01)
+  .decay(2)
+  .sustain(0)
+  .gain(0.1)
+  .room(0.8)
+  .delay(0.4)
+  .delaytime(0.375)
+
+// The voices now interrupt each other - memory fragmenting
+$: s("souviens_toi ~ oubli souviens_toi")
+  .slow(4)
+  .speed("<1 0.75 1.2 0.9>")
+  .chop(4)
+  .room(0.7)
+  .gain(0.55)
+  .pan(rand.range(0.2, 0.8))

@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="1400" viewBox="0 0 1400 1400">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#0a0014"/>
+      <stop offset="50%" stop-color="#12002a"/>
+      <stop offset="100%" stop-color="#06000f"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#8B6914"/>
+      <stop offset="50%" stop-color="#D4A829"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+    <linearGradient id="wave1" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#1a0a3a" stop-opacity="0.3"/>
+      <stop offset="20%" stop-color="#2d1b69"/>
+      <stop offset="50%" stop-color="#7b2fbe"/>
+      <stop offset="80%" stop-color="#2d1b69"/>
+      <stop offset="100%" stop-color="#1a0a3a" stop-opacity="0.3"/>
+    </linearGradient>
+    <linearGradient id="wave2" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0d0530" stop-opacity="0.2"/>
+      <stop offset="25%" stop-color="#1e3a5f"/>
+      <stop offset="50%" stop-color="#4a90d9"/>
+      <stop offset="75%" stop-color="#1e3a5f"/>
+      <stop offset="100%" stop-color="#0d0530" stop-opacity="0.2"/>
+    </linearGradient>
+    <linearGradient id="glow" x1="0.5" y1="0" x2="0.5" y2="1">
+      <stop offset="0%" stop-color="#D4A829" stop-opacity="0.6"/>
+      <stop offset="100%" stop-color="#D4A829" stop-opacity="0"/>
+    </linearGradient>
+    <radialGradient id="center-glow" cx="50%" cy="50%" r="35%">
+      <stop offset="0%" stop-color="#7b2fbe" stop-opacity="0.15"/>
+      <stop offset="100%" stop-color="#7b2fbe" stop-opacity="0"/>
+    </radialGradient>
+    <filter id="blur-sm">
+      <feGaussianBlur stdDeviation="2"/>
+    </filter>
+    <filter id="blur-lg">
+      <feGaussianBlur stdDeviation="8"/>
+    </filter>
+    <filter id="text-glow">
+      <feGaussianBlur stdDeviation="4" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1400" height="1400" fill="url(#bg)"/>
+  <rect width="1400" height="1400" fill="url(#center-glow)"/>
+
+  <!-- Goldberg ground bass: 8 descending notes as thin vertical lines (the seed) -->
+  <!-- G Gb E D Db C B Bb → mapped to heights -->
+  <g opacity="0.12">
+    <line x1="350" y1="580" x2="350" y2="820" stroke="#D4A829" stroke-width="1"/>
+    <line x1="400" y1="590" x2="400" y2="810" stroke="#D4A829" stroke-width="1"/>
+    <line x1="450" y1="610" x2="450" y2="790" stroke="#D4A829" stroke-width="1"/>
+    <line x1="500" y1="620" x2="500" y2="780" stroke="#D4A829" stroke-width="1"/>
+    <line x1="550" y1="630" x2="550" y2="770" stroke="#D4A829" stroke-width="1"/>
+    <line x1="600" y1="640" x2="600" y2="760" stroke="#D4A829" stroke-width="1"/>
+    <line x1="650" y1="650" x2="650" y2="750" stroke="#D4A829" stroke-width="1"/>
+    <line x1="700" y1="660" x2="700" y2="740" stroke="#D4A829" stroke-width="1"/>
+  </g>
+
+  <!-- Waveform visualization — the album's arc: sparse → dense → sparse -->
+  <!-- Layer 1: deep purple, wide amplitude in center -->
+  <path d="M 0,700
+    C 100,700 120,680 180,670
+    C 240,660 280,640 340,610
+    C 400,580 440,540 500,490
+    C 540,450 580,400 620,370
+    C 660,340 680,320 700,310
+    C 720,320 740,340 780,370
+    C 820,400 860,450 900,490
+    C 960,540 1000,580 1060,610
+    C 1120,640 1160,660 1220,670
+    C 1280,680 1300,700 1400,700"
+    fill="none" stroke="url(#wave1)" stroke-width="3" opacity="0.8"/>
+  <path d="M 0,700
+    C 100,700 120,720 180,730
+    C 240,740 280,760 340,790
+    C 400,820 440,860 500,910
+    C 540,950 580,1000 620,1030
+    C 660,1060 680,1080 700,1090
+    C 720,1080 740,1060 780,1030
+    C 820,1000 860,950 900,910
+    C 960,860 1000,820 1060,790
+    C 1120,760 1160,740 1220,730
+    C 1280,720 1300,700 1400,700"
+    fill="none" stroke="url(#wave1)" stroke-width="3" opacity="0.8"/>
+
+  <!-- Layer 2: blue, tighter wave -->
+  <path d="M 0,700
+    C 80,700 140,690 200,682
+    C 280,670 340,650 420,625
+    C 500,600 560,560 620,530
+    C 660,510 680,500 700,495
+    C 720,500 740,510 780,530
+    C 840,560 900,600 980,625
+    C 1060,650 1120,670 1200,682
+    C 1260,690 1320,700 1400,700"
+    fill="none" stroke="url(#wave2)" stroke-width="2" opacity="0.6"/>
+  <path d="M 0,700
+    C 80,700 140,710 200,718
+    C 280,730 340,750 420,775
+    C 500,800 560,840 620,870
+    C 660,890 680,900 700,905
+    C 720,900 740,890 780,870
+    C 840,840 900,800 980,775
+    C 1060,750 1120,730 1200,718
+    C 1260,710 1320,700 1400,700"
+    fill="none" stroke="url(#wave2)" stroke-width="2" opacity="0.6"/>
+
+  <!-- Frequency lines — vertical bars representing the 18 tracks -->
+  <!-- Heights follow the energy arc: 1,3,3,3,4,4,5,5,5,5,4,5,5,4,3,4,4,1 -->
+  <g opacity="0.5">
+    <!-- Track 1: Ground Bass (energy 1) -->
+    <rect x="148" y="670" width="2" height="60" fill="#D4A829" opacity="0.4"/>
+    <!-- Track 2: First Variation (3) -->
+    <rect x="216" y="610" width="2" height="180" fill="#6b3fa0" opacity="0.5"/>
+    <!-- Track 3: Souviens-toi (3) -->
+    <rect x="284" y="610" width="2" height="180" fill="#6b3fa0" opacity="0.55"/>
+    <!-- Track 4: Ascension (3) -->
+    <rect x="352" y="610" width="2" height="180" fill="#7b4fb0" opacity="0.6"/>
+    <!-- Track 5: Harmonic Tremolo (4) -->
+    <rect x="420" y="560" width="3" height="280" fill="#8b5fc0" opacity="0.65"/>
+    <!-- Track 6: Cosine Sweep (4) -->
+    <rect x="488" y="560" width="3" height="280" fill="#9b6fd0" opacity="0.7"/>
+    <!-- Track 7: Electro-Acoustic (5) -->
+    <rect x="556" y="500" width="4" height="400" fill="#ab7fe0" opacity="0.75"/>
+    <!-- Track 8: Relentless (5) -->
+    <rect x="624" y="490" width="4" height="420" fill="#bb8ff0" opacity="0.8"/>
+    <!-- Track 9: Hyper-Drive (5) -->
+    <rect x="660" y="480" width="5" height="440" fill="#cb9fff" opacity="0.85"/>
+    <!-- Track 10: Hyperdynamic — CLIMAX (5) -->
+    <rect x="700" y="460" width="6" height="480" fill="#D4A829" opacity="0.9" filter="url(#blur-sm)"/>
+    <!-- Track 11: FM Intensity (4) -->
+    <rect x="740" y="520" width="4" height="360" fill="#cb9fff" opacity="0.8"/>
+    <!-- Track 12: Dream State (5) -->
+    <rect x="776" y="490" width="4" height="420" fill="#ab7fe0" opacity="0.75"/>
+    <!-- Track 13: Crystalline Breakdown (5) -->
+    <rect x="844" y="500" width="4" height="400" fill="#9b6fd0" opacity="0.7"/>
+    <!-- Track 14: Machine-Human (4) -->
+    <rect x="912" y="550" width="3" height="300" fill="#8b5fc0" opacity="0.65"/>
+    <!-- Track 15: Meditative Piano (3) -->
+    <rect x="980" y="610" width="3" height="180" fill="#7b4fb0" opacity="0.55"/>
+    <!-- Track 16: Japanese Dream (4) -->
+    <rect x="1048" y="560" width="3" height="280" fill="#6b3fa0" opacity="0.5"/>
+    <!-- Track 17: Not Human Music (4) -->
+    <rect x="1116" y="570" width="3" height="260" fill="#5b2f90" opacity="0.45"/>
+    <!-- Track 18: Deep Space (1) -->
+    <rect x="1184" y="675" width="2" height="50" fill="#D4A829" opacity="0.3"/>
+  </g>
+
+  <!-- Gold accent line at center horizon -->
+  <line x1="100" y1="700" x2="1300" y2="700" stroke="url(#gold)" stroke-width="0.5" opacity="0.3"/>
+
+  <!-- Scattered small dots — stars / data points -->
+  <g fill="#D4A829" opacity="0.15">
+    <circle cx="200" cy="300" r="1"/>
+    <circle cx="450" cy="250" r="1.5"/>
+    <circle cx="700" cy="180" r="1"/>
+    <circle cx="950" cy="260" r="1.5"/>
+    <circle cx="1100" cy="320" r="1"/>
+    <circle cx="300" cy="1100" r="1"/>
+    <circle cx="550" cy="1150" r="1.5"/>
+    <circle cx="800" cy="1180" r="1"/>
+    <circle cx="1050" cy="1120" r="1.5"/>
+    <circle cx="1200" cy="1080" r="1"/>
+    <circle cx="150" cy="500" r="0.8"/>
+    <circle cx="1250" cy="520" r="0.8"/>
+    <circle cx="350" cy="900" r="0.8"/>
+    <circle cx="1050" cy="880" r="0.8"/>
+  </g>
+
+  <!-- Title -->
+  <text x="700" y="220" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="72" fill="#D4A829" filter="url(#text-glow)" letter-spacing="12">CLAUDE'S ALBUM</text>
+
+  <!-- Subtitle -->
+  <text x="700" y="280" text-anchor="middle" font-family="Georgia, 'Times New Roman', serif" font-size="24" fill="#8b7040" letter-spacing="6" opacity="0.7">GOLDBERG VARIATIONS FOR MACHINES</text>
+
+  <!-- Bottom text -->
+  <text x="700" y="1230" text-anchor="middle" font-family="'Courier New', monospace" font-size="18" fill="#8b7040" letter-spacing="4" opacity="0.8">18 TRACKS · 80 BPM · RENDERED OFFLINE</text>
+  <text x="700" y="1265" text-anchor="middle" font-family="'Courier New', monospace" font-size="16" fill="#8b7040" letter-spacing="3" opacity="0.7">GEMINI 3.1 PRO × CLAUDE OPUS · STRUDEL</text>
+
+</svg>

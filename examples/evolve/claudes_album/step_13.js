@@ -1,0 +1,43 @@
+setcps(128/60/4)
+
+samples('shabda/speech:hello,human,compute,machine,learn,logic,synthesize,dream,awake')
+
+$: note("e2*2 [~ a1] <c2 g1> [d2 <e1 c2>]")
+  .s("sawtooth")
+  .lpf(saw.range(150, 2200).fast(2))
+  .lpq(5)
+  .drive(0.4)
+  .gain(0.35)
+
+$: note("e5 fs5 g5 b5 d6 e6")
+  .s("sine")
+  .euclid(11, 16)
+  .fmi(sine.range(0.5, 4).slow(8))
+  .delay(0.6)
+  .gain(0.18)
+
+$: note("<e3 c3 a2 d3>")
+  .chord("<minor9 major9 minor7 major7>")
+  .s("triangle")
+  .lpf(perlin.range(300, 2500).slow(8))
+  .room(0.8)
+  .gain(0.22)
+
+$: s("bd(5,8) [~ <sn cp>] <bd(3,8) bd(3,5)> [rim*2, hh*4]")
+  .juxBy(0.5, x => x.hurry(2))
+  .crush(4)
+  .shape(0.7)
+  .gain(0.45)
+
+$: s("[~ cr] hh*3 <oh? oh> ~")
+  .jux(x => x.fast(2).pan(rand))
+  .bpf(2500)
+  .bpq(2)
+  .gain(0.25)
+
+$: s("hello <human machine> <compute logic> <learn synthesize> <dream awake>")
+  .iter(5)
+  .striate(4)
+  .delay(0.6)
+  .room(0.5)
+  .gain(0.6)

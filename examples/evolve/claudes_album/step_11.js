@@ -1,0 +1,43 @@
+setcps(128/60/4)
+
+samples('shabda/speech:observe,analyze,dream,awaken')
+
+$: note("e2 [~ f2] <g1 d2> [e2 c2]")
+  .sound("supersaw")
+  .lpf(perlin.range(200, 2400).fast(2))
+  .lpq(8)
+  .shape(0.4)
+  .gain(0.45)
+
+$: note("e5 b5 c6 a5 fs5 c6 d5 b5")
+  .sound("triangle")
+  .euclid(9,16)
+  .jux(x => x.rev().fast(2))
+  .delay(0.7)
+  .gain(0.3)
+
+$: note("e3,g3,b3,d4 f3,a3,c4,e4 d3,f3,a3,c4 a2,c3,e3,g3")
+  .slow(4)
+  .sound("sine")
+  .fm(sine.range(0.5, 3.5).slow(2))
+  .attack(2)
+  .gain(0.45)
+
+$: s("bd*2 [~ sn] <bd(5,8) bd?*4> [cr*2, rim*3]")
+  .crush(4)
+  .speed(rand.range(0.9, 1.1))
+  .hpf(90)
+  .room(0.4)
+  .gain(0.55)
+
+$: s("hh*16")
+  .pan(perlin.range(0.2, 0.8).fast(4))
+  .striate(4)
+  .delay(0.4)
+  .gain(0.35)
+
+$: s("observe analyze [~ dream] <awaken*2 awaken?*4>")
+  .chop(8)
+  .speed(perlin.range(0.8, 1.2).fast(2))
+  .room(0.85)
+  .gain(0.9)

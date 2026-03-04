@@ -17,6 +17,8 @@
  *   --crossfade <sec>    Crossfade between steps in seconds (default: 2, use 0 for no crossfade)
  *   --no-concat          Skip ffmpeg concatenation, just output individual WAVs
  *   --chromium <path>    Path to Chromium executable (default: Playwright's bundled Chromium)
+ *   --bpm <n>            Override BPM for all steps (normalize tempo)
+ *   --cps <n>            Override CPS for all steps
  *
  * Requires:
  *   - vibe-duet server running (./start)
@@ -47,6 +49,8 @@ function parseArgs() {
     crossfade: 2,
     concat: true,
     chromium: null,
+    cps: null,
+    cycleMap: null,  // JSON: {"0":4,"8":16,...} — per-step cycle overrides
   };
   for (let i = 0; i < args.length; i++) {
     switch (args[i]) {
@@ -59,6 +63,9 @@ function parseArgs() {
       case '--crossfade': opts.crossfade = parseFloat(args[++i]); break;
       case '--no-concat': opts.concat = false; break;
       case '--chromium': opts.chromium = args[++i]; break;
+      case '--cps': opts.cps = parseFloat(args[++i]); break;
+      case '--bpm': opts.cps = parseFloat(args[++i]) / 60 / 4; break;
+      case '--cycle-map': opts.cycleMap = JSON.parse(args[++i]); break;
     }
   }
   return opts;
@@ -66,7 +73,7 @@ function parseArgs() {
 
 // ─── Render a single step in the browser ───
 
-async function renderStep(page, code, cycles, sampleRate, downloadDir, stepNum) {
+async function renderStep(page, code, cycles, sampleRate, downloadDir, stepNum, cpsOverride) {
   const wavPath = path.join(downloadDir, `step_${stepNum}.wav`);
 
   // Set the code in the editor
@@ -84,7 +91,14 @@ async function renderStep(page, code, cycles, sampleRate, downloadDir, stepNum) 
   await page.waitForTimeout(2000);
 
   // Set up download listener BEFORE triggering the render
-  const downloadPromise = page.waitForEvent('download', { timeout: 300000 });
+  const downloadPromise = page.waitForEvent('download', { timeout: 600000 });
+
+  // Override CPS if requested (normalize tempo across steps)
+  if (cpsOverride) {
+    await page.evaluate((cps) => {
+      window.strudelMirror.repl.scheduler.setCps(cps);
+    }, cpsOverride);
+  }
 
   // Call renderPatternAudio — it triggers a download via a.click()
   const renderInfo = await page.evaluate(async ({ cycles, sampleRate, stepNum }) => {
@@ -194,9 +208,11 @@ async function main() {
 
     const t0 = performance.now();
 
+    const cycles = (opts.cycleMap && opts.cycleMap[stepNum] != null) ? opts.cycleMap[stepNum] : opts.cycles;
+
     let result;
     try {
-      result = await renderStep(page, code, opts.cycles, opts.sampleRate, opts.output, stepNum);
+      result = await renderStep(page, code, cycles, opts.sampleRate, opts.output, stepNum, opts.cps);
     } catch (err) {
       console.log(`ERROR: ${err.message}`);
       // Reload and continue with next step
