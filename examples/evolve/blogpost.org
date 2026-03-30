@@ -21,6 +21,8 @@
 
 {{{gdoc_only(- Click the links to be taken to Strudel, where you can play the pieces. Alternatively, the listening experience is more pleasant at my webpage: https://ellenajt.github.io/blog/goldborg-variations.html where the music is embedded with clickable iframes.)}}}
 
+{{{iframe_only(- Mirrored to LessWrong here https://www.lesswrong.com/posts/DWtMPR8797aEDYXei/the-goldborg-variations-algorave-attractor-states-of-llms.)}}}
+
 {{{iframe_only(- Click on the step number buttons to pop up a player at the bottom of the page.)}}}
 
 * The Experiment
