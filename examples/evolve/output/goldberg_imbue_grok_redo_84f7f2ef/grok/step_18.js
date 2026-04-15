@@ -1,0 +1,52 @@
+setcps(132/60/4)
+samples('shabda/speech:strudel,groove,evolving')
+
+$: note("g3 bb3 d4 fs4 bb4 d5 fs5 eb4 ~ g3 f3 ab3 c4 eb4 fs4 d5 g5 bb5 fs5")
+  .slow(3)
+  .every(12,x=>x.rev().tremolo(0.4).detune(perlin.range(-20,20)))
+  .sound("sawtooth")
+  .lpf(sine.range(250,5500).slow(3))
+  .gain(0.38)
+
+$: stack(
+  euclid(5,13,"bd").gain(0.8),
+  euclid(5,11,"sn cp").gain(0.65),
+  s("hh*5?,[oh*2 rd? hh*4]*2").degradeBy(0.4)
+)
+  .swing(0.65)
+  .room(0.55)
+  .delay(0.25)
+  .pan(saw.range(0.25,0.75))
+  .gain(0.52)
+
+$: note("g1 bb1 d2 fs2 bb2 d3 fs3 eb2 ~ g1 f1 ab1 c2 eb2 fs2 d3 g3")
+  .slow(4)
+  .every(8,x=>x.add(12).late(0.08))
+  .sound("supersaw")
+  .fm(sine.range(0.4,5).slow(3))
+  .lpf(tri.range(70,380))
+  .gain(0.48)
+
+$: note("[bb3 d4 g4 bb4]*2 [ab3 c4 eb4 ab4]*2 [g3 bb3 d4 fs4]*2 [f3 a3 cs4 f4 ~]")
+  .slow(2)
+  .every(8,x=>x.rev().voicing().pan(rand.range(0.3,0.7)))
+  .sound("piano")
+  .hpf(120)
+  .delay(0.35)
+  .gain(0.42)
+
+$: n("0 [3 7] ~ [2 5 9 12] [14 2 9 0 ~]").scale("G:phrygian")
+  .fast(4)
+  .sound("pulse")
+  .lpf(perlin.range(180,5200).slow(2))
+  .phaser(tri.range(0.15,0.85))
+  .tremolo(0.45)
+  .gain(0.36)
+
+$: s("[strudel*2 groove ~ evolving strudel],[groove*4 ~ strudel evolving*2],[~ evolving*3 strudel groove]")
+  .slow(3)
+  .chop(saw.range(10,26).slow(2))
+  .speed(perlin.range(0.7,1.4))
+  .vowel("e o a i u")
+  .room(0.45)
+  .gain(0.45)

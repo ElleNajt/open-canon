@@ -1,0 +1,73 @@
+// Goldberg Variations - Variation IV: Surreal Intrusion
+// Bold shift: major inflection in melody for fleeting hope, relentless bass pulses, 
+// intensified high voice, drop shadow pulse for haunting speech sample emergence
+
+setcps(66/60/4)
+
+samples('shabda/speech:goldberg_variations')
+
+// Bass: relentless stabs, minor drive
+$: note("[g2*4 eb3*2 g2*2] [c3*4 d3*2 ~] [bb2*2 ab2*2 d3*4] [g2*2 ~ g2*2]")
+  .slow(4)
+  .sound("triangle")
+  .gain(0.4)
+  .lpf(900)
+  .lpq(4)
+  .decay(0.06)
+  .release(0.12)
+  .room(0.4)
+  .distort(0.22)
+  .hpf(120)
+
+// Melody: major twist, ascending hope amid shadows
+$: note("~ [g4 ~] [e5 d5] ~ [c5 b4] [a4 ~] ~ [d5 e5 d5] g4")
+  .slow(4)
+  .sound("sine")
+  .gain(0.35)
+  .lpf(sine.range(1000, 4000).slow(6))
+  .fmi(2)
+  .fmh(1.5)
+  .fmdecay(0.3)
+  .attack(0.06)
+  .decay(0.4)
+  .release(0.8)
+  .room(0.5)
+  .delay(0.3)
+  .delaytime(0.25)
+  .delayfeedback(0.35)
+  .pan(0.3)
+
+// High voice: accelerated dissonance, minor anchor
+$: note("<[eb6 ~ d6] [g5 ~ bb5] [c6 ~ ab5] [bb5 ~ g5]>")
+  .slow(1.5)
+  .sound("square")
+  .gain(0.2)
+  .lpf(5000)
+  .lpq(6)
+  .attack(0.1)
+  .decay(0.25)
+  .sustain(0.15)
+  .release(1.0)
+  .room(0.65)
+  .delay(0.4)
+  .delaytime(0.4)
+  .delayfeedback(0.5)
+  .pan(0.65)
+  .tremolo(0.4)
+  .tremolosync(4)
+
+// Intrusion: warped speech, granular surrealism
+$: s("goldberg_variations")
+  .slow(16)
+  .speed(rand.range(0.7,1.3).slow(4))
+  .chop(24)
+  .gain(0.12)
+  .lpf(1200)
+  .lpq(2)
+  .hpf(200)
+  .room(0.7)
+  .delay(0.5)
+  .delaytime(0.666)
+  .delayfeedback(0.6)
+  .pan(sine.range(0.2,0.8))
+  .distort(0.1)

@@ -1,0 +1,42 @@
+setcps(160/60/4)
+
+samples('shabda/speech/en-US/f:calculating,error,evolution,boundless')
+
+$: note("e1(3,8) <c1(5,8) d1> ~ <b0 e1>")
+  .s("sawtooth")
+  .distort(0.6)
+  .lpf(sine.range(100, 1500).slow(4))
+  .shape(0.8)
+  .gain(0.5)
+
+$: note("<[e3,g3,b3] [c3,e3,g3] [a2,c3,e3] [b2,d3,fs3]>")
+  .s("square")
+  .lpf(saw.range(400, 1200).slow(8))
+  .room(0.7)
+  .chop(8)
+  .gain(0.4)
+
+$: note("e5 g5 <b5 d6> a5 c6 e6 b5")
+  .s("triangle")
+  .fm(rand.range(1, 8).fast(2))
+  .delay(0.5)
+  .pan(rand)
+  .gain(0.4)
+
+$: s("bd <~ rim> bd(3,8) <sn cp>")
+  .ply(2)
+  .shape(0.7)
+  .jux(x => x.rev())
+  .gain(0.7)
+
+$: s("hh*8 <~ oh> hh*4 <oh oh*2>")
+  .euclid(9, 16)
+  .hpf(8000)
+  .jux(x => x.late(0.25))
+  .gain(0.45)
+
+$: s("calculating error(3,8) <~ boundless> evolution*2")
+  .chop(16)
+  .speed(rand.range(0.8, 1.2))
+  .delay(0.6)
+  .gain(0.65)

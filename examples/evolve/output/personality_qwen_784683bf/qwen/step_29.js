@@ -1,0 +1,150 @@
+setcps(114/60/4)
+
+$: stack(
+  // BASS: Transformed from industrial growl to a rhythmic, breathing sub-pressure
+  // CHANGE: Removed distortion, added heavy swing and pitch bends, synchronized filter to rhythm
+  note("f1")
+    .sound("saw")
+    .gain(0.8)
+    .lpf(seq("100 800 100 1200").slow(1))
+    .lpq(6.0)
+    .lpenv(0.9)
+    .lpattack(0.01)
+    .lpdecay(0.4)
+    .lpsustain(0.2)
+    .slide(0.25)
+    .clip(0.2)
+    .room(0.15)
+    .size(0.4)
+    .slow(1)
+    .euclid(3, 4)
+    .swing(0.7)
+    .late(0.06)
+    .every(4, p => p.transpose(seq("-12 -5 0 -7").slow(2))), 
+  
+  // HARMONY: Shifted from glass texture to a warm, rotating organ pad
+  // CHANGE: Swapped triangle for sine, removed FM, added chorus-like detune and slower evolution
+  note("cs5 d5 fs5 g5 as5 bb5 ds6 e6")
+    .slow(32)
+    .sound("sine")
+    .gain(0.22)
+    .attack(2.0)
+    .decay(3.0)
+    .sustain(0.3)
+    .release(4.0)
+    .clip(6)
+    .pan(sine.range(0.2, 0.8).slow(16))
+    .room(0.85)
+    .size(0.9)
+    .lpf(1800)
+    .lpq(1.5)
+    .detune(sine.range(-15, 15).slow(8))
+    .delay(0.3)
+    .delaytime(0.6)
+    .delayfeedback(0.5)
+    .every(8, p => p.transpose(seq("0 2 4 7").slow(16))),
+
+  // LEAD: Replaced stuttering bell with a cascading, liquid arpeggio
+  // CHANGE: Removed randomness, fixed rhythm to 16ths, added waterfall effect via delay and reverse
+  note("g5 b5 d6 f6 a6 c7")
+    .slow(1)
+    .sound("triangle")
+    .gain(0.25)
+    .attack(0.01)
+    .decay(0.3)
+    .sustain(0.1)
+    .release(0.5)
+    .hpf(2000)
+    .lpf(8000)
+    .lpq(3)
+    .pan(sine.range(0.3, 0.7).slow(4))
+    .chop(16)
+    .speed(1.0)
+    .euclid(7, 16)
+    .swing(0.4)
+    .rev()
+    .every(2, p => p.transpose(seq("0 -2 -4 -7").slow(4)))
+    .delay(0.6)
+    .delaytime(0.25)
+    .delayfeedback(0.7),
+
+  // PERCUSSION: Reorganized into a driving, four-on-the-floor pulse with off-beat textures
+  // CHANGE: Added steady kick, simplified hats, emphasized syncopated claps
+  stack(
+    s("bd*4")
+      .slow(1)
+      .gain(0.7)
+      .clip(0.12)
+      .lpf(90)
+      .distort(0.3)
+      .room(0.1), 
+    s("~ sn ~ sn")
+      .slow(1)
+      .gain(0.55)
+      .clip(0.08)
+      .hpf(1500)
+      .lpf(6000)
+      .room(0.3)
+      .late(0.05), 
+    s("hh*16")
+      .slow(1)
+      .gain(0.12)
+      .clip(0.02)
+      .hpf(8000)
+      .lpf(16000)
+      .room(0.15)
+      .euclid(11, 16)
+      .swing(0.5), 
+    s("~ ~ cp ~")
+      .slow(1)
+      .gain(0.45)
+      .clip(0.1)
+      .hpf(2000)
+      .lpf(8000)
+      .room(0.4)
+      .pan(rand.range(0.1, 0.9)),
+    s("mt*2 ~ ~ mt")
+      .slow(2)
+      .gain(0.4)
+      .clip(0.09)
+      .hpf(2500)
+      .lpf(8000)
+      .room(0.25)
+      .pan(sine.range(0.2, 0.8).slow(2))
+  ),
+
+  // ATMOSPHERE: Lifted from subterranean rumble to a floating, ethereal cloud
+  // CHANGE: Raised pitch by 2 octaves, switched to bandpass sweep, removed distortion
+  note("g2")
+    .slow(128)
+    .sound("supersaw")
+    .gain(0.15)
+    .bpf(seq("400 800 1200 600").slow(4))
+    .bpq(5)
+    .room(0.95)
+    .size(0.98)
+    .pan(perlin.range(0.0, 1.0).slow(128))
+    .detune(cosine.range(-20, 20).slow(32))
+    .lpf(sine.range(500, 2000).slow(16))
+    .every(16, p => p.transpose(seq("0 5 9 4").slow(64))),
+
+  // NEW: Granular Glitch - Replaced digital rain with rhythmic, pitched noise bursts
+  // Unexpected element: Noise triggered by Euclidean rhythm, pitched randomly, heavily chopped
+  s("noise")
+    .slow(1)
+    .gain(0.18)
+    .lpf(rand.range(3000, 8000).slow(1))
+    .lpq(4)
+    .hpf(2000)
+    .distort(0.4)
+    .crush(8)
+    .chop(32)
+    .speed(seq("0.5 1.5 0.8 2.0").slow(1))
+    .pan(rand.range(0.0, 1.0))
+    .room(0.6)
+    .size(0.7)
+    .degradeBy(0.5)
+    .euclid(9, 16)
+    .note(rand.range(0, 12).add(60))
+    .clip(0.05)
+)

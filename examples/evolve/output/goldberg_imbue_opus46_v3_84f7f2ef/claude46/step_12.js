@@ -1,0 +1,47 @@
+setcps(66/60/4)
+
+$: note("g3 fs3 e3 d3 b2 c3 d3 g2")
+  .slow(4)
+  .sound("triangle")
+  .gain(0.14)
+  .lpf(sine.range(320, 2800).slow(11))
+  .shape(0.48)
+  .off(0.125, x => x.add(12).gain(0.06).lpf(520))
+
+$: note("g4 fs4 e4 d4 b3 c4 d4 g3")
+  .slow(4)
+  .sound("sine")
+  .gain(0.09)
+  .delay(0.5).delaytime(0.375).delayfeedback(0.54)
+  .every(5, x => x.add(7).rev())
+
+$: note("<[g5 b5 d6] [d5 fs5 a5] [g5 a5 c6] [e5 fs5 b5] [d5 b4 g5] [c5 e5 a5] [fs5 a5 d6] [g5 d5 b5]>")
+  .slow(8)
+  .sound("sine")
+  .fmi(sine.range(0.3, 22).slow(14))
+  .fmh(perlin.range(1.0, 3.8).slow(11))
+  .attack(2.8).release(7)
+  .gain(0.06)
+
+$: note("[g3 b3 d4] [fs3 a3 <d4 cs4>] [e3 g3 b3] [d3 fs3 <a3 bb3>] [b2 d3 <g3 fs3>] [c3 e3 <g3 a3>] [d3 fs3 a3] [g2 b2 d3]")
+  .slow(8)
+  .sound("piano")
+  .gain(0.12)
+  .room(0.85).size(0.94)
+  .velocity(perlin.range(0.15, 0.85))
+
+$: note("<d5 [~ b4] [~ c5] [a4 ~] g4 [~ e5] [fs5 ~] [~ d5]>")
+  .slow(8)
+  .sound("sawtooth")
+  .gain(0.06)
+  .lpf(perlin.range(220, 1800).slow(16))
+  .juxBy(0.6, x => x.add(7).slow(2))
+
+$: stack(
+    s("[~ ~ ~ bd ~ ~ sn:3 ~] [~ bd ~ ~ sn:3 ~ ~ bd] [~ ~ bd ~ ~ sn:3 ~ ~]")
+      .gain(0.08).shape(0.42).room(0.35),
+    s("[hh:2 ~ hh:2 ~ hh:2 ~ hh:2 ~]")
+      .gain(0.06).pan(perlin.range(0.15, 0.85))
+  )
+  .slow(4)
+  .often(x => x.speed(perlin.range(0.6, 1.3)))

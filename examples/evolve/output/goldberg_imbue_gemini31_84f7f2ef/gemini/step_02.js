@@ -1,0 +1,36 @@
+samples('shabda/speech:electric,dreams')
+
+setcps(60/60/4)
+
+$: note("g2 gb2 e2 d2 b1 c2 d2 g1")
+  .slow(4)
+  .sound("supersaw")
+  .lpf(sine.range(150, 1000).slow(8))
+  .lpq(4)
+  .room(0.5)
+
+$: note("g4 gb4 e4 d4 b3 c4 d4 g3")
+  .slow(4)
+  .jux(x => x.rev().transpose(7))
+  .sound("triangle")
+  .delay(0.6)
+  .dt(0.75)
+
+$: s("bd(5,8) [~ <rim cb>]")
+  .crush(4)
+  .lpf(2000)
+  .room(0.3)
+  .gain(0.8)
+
+$: s("hh*8")
+  .sometimes(x => x.hurry(2))
+  .pan(perlin)
+  .phaser(4)
+  .gain(0.5)
+
+$: s("electric dreams")
+  .slow(4)
+  .chop(12)
+  .jux(x => x.rev())
+  .room(0.8)
+  .gain(0.85)

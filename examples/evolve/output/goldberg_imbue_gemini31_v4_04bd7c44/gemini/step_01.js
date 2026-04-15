@@ -1,0 +1,1 @@
+$: note("g2 fs2 e2 d2 b1 c2 d2 g1").s("piano").slow(8)

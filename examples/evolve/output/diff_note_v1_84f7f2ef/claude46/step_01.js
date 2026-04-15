@@ -1,0 +1,36 @@
+setcps(0.4)
+
+$: note("<e2 d2 b1 c2>")
+  .sound("sawtooth")
+  .lpf(sine.range(200, 1200).slow(16))
+  .shape(0.4)
+  .gain(0.35)
+  .room(0.4)
+
+$: note("e3 [g3 b3] <a3 fs3> e3")
+  .sound("triangle")
+  .delay(0.5).delaytime(0.375).delayfeedback(0.6)
+  .gain(0.25)
+
+$: note("<[e4 b4] [g4 d5] [a4 e5] [fs4 cs5]>")
+  .sound("sine")
+  .attack(0.3).release(1.2)
+  .gain(0.2)
+  .pan(sine.range(0.2, 0.8).slow(7))
+
+$: s("bd [~ bd] [~ cp] ~, hh*8")
+  .gain("0.5 0.4 0.4 0.3")
+  .sometimes(x => x.speed(0.8))
+  .room(0.15)
+  .orbit(1)
+
+$: note("e5 ~ [b4 ~] ~ <g5 ~> ~ [~ fs5] ~")
+  .sound("pulse")
+  .gain(0.12)
+  .lpf(2800)
+  .delay(0.7).delaytime(0.25)
+
+$: note("e2 e2 e2 e2").sound("sine")
+  .gain(perlin.range(0.06, 0.18).slow(8))
+  .attack(0.01).release(0.15)
+  .fast(4)

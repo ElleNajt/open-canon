@@ -1,0 +1,78 @@
+samples('shabda/speech/en-GB/f:drifting,breathe')
+samples('shabda/speech/de-DE/m:achtung,fokus,energie')
+setcps(135/60/4)
+
+$: stack(
+  stack(
+    s("bd [~ bd] ~ bd ~ sn bd [sn ~]").gain(0.95).shape(0.4),
+    euclid(11, 16, "hh").gain(0.6).pan(0.4).room(0.2),
+    s("~ [cr, ht] ~ lt rim/2 ~ [cb cp] ~").crush(4).early(0.05).gain(0.6).pan(0.6),
+    s("oh*8").degradeBy(0.4).gain(0.5).hpf(8000).jux(x => x.pan(0.8))
+  )
+    .gain(0.95)
+    .drive(0.6)
+    .compressor("0.1:4:0.3:0.01:0.1")
+    .hpf(30),
+
+  note("eb1 [~ eb1] fs1 [~ db2] eb1 ~ b0 bb0")
+    .sound("sawtooth")
+    .lpf(sine.range(150, 1800).fast(2))
+    .lpq(8)
+    .shape(0.7)
+    .drive(0.4)
+    .attack(0.01)
+    .decay(0.15)
+    .sustain(0.2)
+    .release(0.1)
+    .gain(0.8)
+    .pan(0.5)
+    .jux(x => x.add(12).late(0.02).pan(0.6).gain(0.65).lpf(1200)),
+
+  note("~ <[eb3 fs3 bb3 db4] [b2 eb3 fs3 b3]>")
+    .sound("square")
+    .voicing()
+    .attack(0.05)
+    .decay(0.4)
+    .sustain(0.2)
+    .release(0.8)
+    .crush(6)
+    .lpf(sine.range(300, 1500).slow(4))
+    .lpq(6)
+    .room(0.8)
+    .size(0.8)
+    .delay(0.6)
+    .dt("1/6")
+    .dfb(0.75)
+    .gain(0.65)
+    .pan(0.3),
+
+  n("0 3 7 10 12 10 7 3")
+    .scale("Eb:minor")
+    .fast(2)
+    .sound("sine")
+    .fm(4)
+    .fmh(2.5)
+    .fmenv(0.8)
+    .fmdecay(0.1)
+    .attack(0.01)
+    .decay(0.2)
+    .release(0.2)
+    .gain(0.7)
+    .room(0.5)
+    .delay(0.4)
+    .dt("1/4")
+    .dfb(0.5)
+    .off("1/16", x => x.octave(1).gain(0.6).pan(0.8))
+    .pan(saw.range(0.2, 0.8).slow(3)),
+
+  s("achtung*4 [~ fokus] achtung [drifting ~]")
+    .striate(16)
+    .speed(saw.range(0.4, 1.6).fast(4))
+    .lpf(3000)
+    .lpq(5)
+    .gain(0.8)
+    .room(0.7)
+    .pan(0.5)
+    .jux(x => x.rev().speed(-0.9).pan(0.2).gain(0.6))
+    .sometimesBy(0.3, x => x.crush(3).shape(0.8).delay(0.6).dt("1/8").dfb(0.6))
+)

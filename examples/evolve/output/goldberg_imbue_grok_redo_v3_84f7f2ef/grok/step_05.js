@@ -1,0 +1,8 @@
+setcps(86/60/4)
+samples('shabda/speech:AI,evolve,personality,strudel,creative,live_code')
+$: note("g2 bb2 d3 fs3 g2 d3 bb2 ~").slow(1.4).sound("sine").hpf(55).pan(sine.range(0.4,0.6).slow(12)).gain(0.42)
+$: note("g3<bb3 d4> e3 fs3 d3 b2").slow(1.4).sound("triangle").attack(0.01).decay(0.28).gain(0.5)
+$: note("g3 g3 e3 d3 b2 c3 g2 fs2").slow(1.4).sound("supersaw").release(1.3).lpf(sine.range(600,2400).slow(4)).gain(0.32)
+$: note("~ b3 d4 e4 fs4 , g4 b4 d5 fs5 , e5 d5 b4 g4 , fs4 e4 d4 b3").slow(1.5).sound("piano").detune(rand.range(-20,20)).jux(rev).gain(0.48)
+$: s("bd [hh*3 cp?] , [bd ~ rim cp] , [hh bd*2 ~] , [cp hh bd]").gain(0.2).hpf(180).pan(rand.range(0.2,0.8)).room(0.7).swing(0.12)
+$: s("strudel? [AI live_code evolve]? [personality creative ~]").slow(3.8).speed(perlin.range(0.8,1.2)).chop(rand.range(4,10)).degradeBy(0.15).gain(0.22)

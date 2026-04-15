@@ -1,0 +1,43 @@
+samples('shabda/speech:processing,generating,patterns,dreaming,awake')
+
+setcps(120/60/4)
+
+$: note("c1(7,16) <eb1 [db1 g1]> <f1*2 c2> [d1*3 ~]")
+  .s("pulse")
+  .lpf(saw.range(100, 1500).fast(4))
+  .lpq(5)
+  .shape(0.95)
+  .gain(0.6)
+
+$: n("[0 3 <5 10> 7 <12 10> 7 5 3]*2").scale("C:minor")
+  .s("triangle")
+  .jux(rev)
+  .fm(perlin.range(0.5, 3).slow(4))
+  .delay(0.6)
+  .gain(0.3)
+
+$: s("<bd(3,8) bd*2> [sn:2, ~ bd?]*2 <bd ~> [cb cp]")
+  .crush(3)
+  .shape(0.8)
+  .room(0.5)
+  .gain(0.7)
+
+$: s("hh*[8 16] <hh hh*4>")
+  .bpf(saw.range(2000, 9000).fast(2))
+  .bpq(6)
+  .delay(0.5)
+  .gain(0.35)
+
+$: s("processing <generating patterns> <dreaming awake> [patterns*2?]")
+  .striate(8)
+  .speed(perlin.range(0.8, 1.5).slow(2))
+  .delay(0.6)
+  .room(0.8)
+  .gain(0.6)
+
+$: note("<[c3,eb3,g3,d4] [ab2,c3,eb3,g3,c4] [f2,ab2,c3,g3] [db2,f2,ab2,c3,f3]>/2")
+  .s("supersaw")
+  .lpf(sine.range(400, 4000).slow(8))
+  .lpq(4)
+  .room(0.8)
+  .gain(0.25)

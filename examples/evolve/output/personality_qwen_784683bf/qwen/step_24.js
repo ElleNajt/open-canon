@@ -1,0 +1,169 @@
+setcps(114/60/4)
+
+$: stack(
+  // Bass: Transformed into a rolling, broken techno sequence
+  // EVOLUTION: Now a dual-oscillator monster with FM growl and stochastic pitch slides
+  note("f1")
+    .sound("saw")
+    .gain(0.7)
+    .lpf(seq("120 450 200 900").slow(1))
+    .lpq(8)
+    .lpenv(0.85)
+    .lpattack(0.005)
+    .lpdecay(0.35)
+    .lpsustain(0.15)
+    .distort(0.55)
+    .shape(0.6)
+    .slide(0.15)
+    .clip(0.18)
+    .room(0.15)
+    .size(0.4)
+    .slow(1)
+    .euclid(5, 8)
+    .fmi(seq("0.5 1.2 0.8 1.5").slow(2))
+    .fmh(2.0)
+    .every(2, p => p.transpose(seq("-12 0 -7 5").slow(2))), 
+  
+  // Harmony: REIMAGINED as a shimmering, high-register bell texture
+  // EVOLUTION: Shifted to a suspended major 7th voicing, slower evolution, wider stereo spread
+  note("cs5 fs5 as5 ds6 gs6")
+    .slow(16)
+    .sound("triangle")
+    .gain(0.18)
+    .attack(0.02)
+    .decay(1.8)
+    .sustain(0.05)
+    .release(2.5)
+    .clip(4)
+    .pan(sine.range(0.1, 0.9).slow(24))
+    .room(0.85)
+    .size(0.95)
+    .lpf(3500)
+    .lpq(2.5)
+    .fmi(0.6)
+    .fmh(1.8)
+    .detune(seq("15 -15 20 -20").slow(16))
+    .delay(0.6)
+    .delaytime(0.4375)
+    .delayfeedback(0.75)
+    .every(4, p => p.transpose(seq("0 4 9 14").slow(16))),
+
+  // Lead: DROPPED. Replaced with a chaotic, granular glitch stream
+  // EVOLUTION: Now a stuttering, bit-crushed arpeggio with random reverse playback
+  note("e3 g3 b3 ds4 fs4")
+    .slow(4)
+    .sound("square")
+    .gain(0.25)
+    .attack(0.001)
+    .decay(0.08)
+    .sustain(0.0)
+    .release(0.03)
+    .lpf(2800)
+    .lpq(5)
+    .crush(4)
+    .distort(0.65)
+    .pan(rand.range(0.0, 1.0))
+    .chop(16)
+    .speed(seq("0.75 1.25 0.85 1.15").slow(2))
+    .euclid(7, 16)
+    .swing(0.25)
+    .degradeBy(0.35)
+    .every(2, p => p.ply(3).transpose(rand.range(-12, 12)).rev()),
+
+  // Percussion: SHIFTED to a broken, syncopated IDM groove
+  // EVOLUTION: More complex polyrhythms, added metallic textures, tighter gating
+  stack(
+    s("bd*2 ~ bd*2")
+      .slow(1)
+      .gain(0.8)
+      .clip(0.15)
+      .lpf(70)
+      .distort(0.45)
+      .room(0.12), 
+    s("sn ~ sn*2 ~")
+      .slow(1)
+      .gain(0.6)
+      .clip(0.06)
+      .hpf(1800)
+      .lpf(6000)
+      .room(0.4)
+      .late(0.08), 
+    s("hh*48")
+      .slow(1)
+      .gain(0.06)
+      .clip(0.008)
+      .hpf(9000)
+      .lpf(18000)
+      .room(0.15)
+      .euclid(19, 48)
+      .swing(0.35)
+      .degradeBy(0.3), 
+    s("mt*4")
+      .slow(2)
+      .gain(0.45)
+      .clip(0.1)
+      .hpf(2800)
+      .lpf(8000)
+      .room(0.3)
+      .pan(rand.range(0.2, 0.8)),
+    s("cb*3")
+      .slow(4)
+      .gain(0.35)
+      .clip(0.2)
+      .hpf(3000)
+      .lpf(9000)
+      .room(0.25)
+      .pan(0.3)
+  ),
+
+  // New Layer: Vocal Stabs - Aggressive, rhythmic speech fragments
+  // EVOLUTION: Now fragmented phrases with varying speeds and pitch shifts
+  s("hit_stop_go_wait_now")
+    .slow(8)
+    .gain(0.45)
+    .lpf(2200)
+    .hpf(500)
+    .chop(12)
+    .speed(seq("0.8 1.2 0.9 1.1 1.3").slow(2))
+    .pan(cosine.range(0.15, 0.85).slow(6))
+    .room(0.45)
+    .size(0.55)
+    .distort(0.55)
+    .clip(0.12)
+    .every(2, p => p.rev().transpose(rand.range(-5, 5)))
+    .degradeBy(0.25),
+
+  // Atmospheric: EVOLVED into a deep, modulating drone
+  // EVOLUTION: Added ring modulation and slower, deeper frequency sweeps
+  note("g2")
+    .slow(64)
+    .sound("supersaw")
+    .gain(0.15)
+    .bpf(sine.range(100, 1500).slow(32))
+    .bpq(6)
+    .distort(0.3)
+    .ring(0.4)
+    .ringf(50)
+    .room(0.8)
+    .size(0.95)
+    .pan(perlin.range(0.2, 0.8).slow(64))
+    .every(8, p => p.transpose(seq("0 5 10 3").slow(32))),
+
+  // NEW: Glitch Textures - Randomized noise bursts and granular scratches
+  // Unexpected element: Pure noise with extreme filtering and stochastic rhythms
+  s("noise")
+    .slow(2)
+    .gain(0.12)
+    .lpf(rand.range(200, 4000).slow(1))
+    .lpq(4)
+    .hpf(rand.range(1000, 8000).slow(2))
+    .distort(0.7)
+    .crush(6)
+    .chop(64)
+    .speed(seq("0.5 2.0 0.75 1.5").slow(1))
+    .pan(rand.range(0.0, 1.0))
+    .room(0.6)
+    .size(0.7)
+    .degradeBy(0.4)
+    .euclid(11, 32)
+)

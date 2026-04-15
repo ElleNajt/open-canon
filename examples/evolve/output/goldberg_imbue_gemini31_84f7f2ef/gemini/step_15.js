@@ -1,0 +1,43 @@
+samples('shabda/speech:processing,system,failure,logic'), samples('shabda/speech/ru-RU/m:mashina')
+
+setcps(142/60/4)
+
+$: note("c1 [eb1 d1] ~ f1 <g1 d1> c1 ~ d1")
+  .sound("supersaw")
+  .cutoff(saw.range(200, 3000).fast(3))
+  .resonance(8)
+  .shape(0.8)
+  .gain(0.6)
+
+$: note("c5(5,8) <eb5*2 g5> <[g4 d5] [f5 c5]> b4(3,8)")
+  .sound("pulse")
+  .jux(x => x.rev().hurry(1.5))
+  .djf(perlin.range(0.1, 0.9).slow(4))
+  .room(0.6)
+  .gain(0.35)
+
+$: s("[bd*2 [~ bd]] <rim [cp rim]> [bd*3 hh] <cr(3,8) bd(5,16)>")
+  .crush(3)
+  .shape(0.85)
+  .room(0.2)
+  .gain(0.8)
+
+$: s("hh*16")
+  .jux(x => x.hurry(1.25))
+  .degradeBy(perlin.range(0.1, 0.8).slow(4))
+  .pan(rand)
+  .gain(0.4)
+
+$: s("<[processing*4] [system*2 mashina]> <[logic!3] [failure*2]>")
+  .chop(8)
+  .speed(rand.range(0.4, 2))
+  .room(0.7)
+  .gain(0.8)
+
+$: note("<[c3,g3,eb4,b4] [db3,f3,a3,e4] [c3,g3,d4,bb4]>")
+  .sound("sine")
+  .fmi(sine.range(1, 7).slow(8))
+  .fmh(2.02)
+  .attack(1.5)
+  .room(0.8)
+  .gain(0.5)

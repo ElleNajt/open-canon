@@ -1,0 +1,43 @@
+samples('shabda/speech:recurse,system,void'), samples('shabda/speech/ja-JP/f:kikai')
+
+setcps(132/60/4)
+
+$: note("c1(3,8) [~ g1] <eb1 d1> <f1 bb0>")
+  .sound("saw")
+  .lpf(sine.range(150, 2500).fast(2))
+  .lpq(6)
+  .drive(0.3)
+  .gain(0.8)
+
+$: note("c4 eb4 g4 b4 <d5 c5> g4 eb4 c4")
+  .sound("square")
+  .jux(x => x.rev().transpose(-7))
+  .crush(4)
+  .delay(0.6)
+  .gain(0.45)
+
+$: s("bd(5,8) ~ <cp [~ sn]> [~ bd*2]")
+  .shape(0.8)
+  .room(0.2)
+  .speed(rand.range(0.95, 1.05))
+  .gain(0.85)
+
+$: s("hh*16 <[~ mt] [cr ~]>")
+  .jux(x => x.hurry(2))
+  .pan(perlin)
+  .delay(0.5)
+  .gain(0.5)
+
+$: s("kikai(3,8) [~ recurse] void*2 <system ~>")
+  .striate(6)
+  .vowel("<a o e>")
+  .speed(rand.range(0.5, 1.5))
+  .room(0.5)
+  .gain(0.7)
+
+$: note("<c3,g3,eb4,d5 g2,d3,bb3,eb4>")
+  .sound("sine")
+  .fmi(saw.range(0, 3).slow(4))
+  .fmh(0.5)
+  .room(0.6)
+  .gain(0.65)

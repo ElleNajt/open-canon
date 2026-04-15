@@ -1,0 +1,170 @@
+setcps(114/60/4)
+
+$: stack(
+  // BASS: Transformed into a jagged, syncopated industrial growl
+  // EVOLUTION: Added rhythmic displacement and aggressive filter modulation
+  note("f1")
+    .sound("saw")
+    .gain(0.75)
+    .lpf(seq("150 1200 300 1800").slow(1))
+    .lpq(8.5)
+    .lpenv(0.8)
+    .lpattack(0.001)
+    .lpdecay(0.3)
+    .lpsustain(0.1)
+    .distort(0.85)
+    .shape(0.9)
+    .slide(0.12)
+    .clip(0.15)
+    .room(0.1)
+    .size(0.3)
+    .slow(1)
+    .euclid(3, 4)
+    .late(0.125)
+    .every(4, p => p.transpose(seq("-12 0 -5 -7").slow(2))), 
+  
+  // HARMONY: Shifted to a shimmering, unstable glass texture
+  // EVOLUTION: Replaced saw with triangle, added FM synthesis for metallic overtone
+  note("cs5 d5 fs5 g5 as5 bb5 ds6 e6")
+    .slow(16)
+    .sound("triangle")
+    .gain(0.18)
+    .attack(1.2)
+    .decay(2.5)
+    .sustain(0.1)
+    .release(3.0)
+    .clip(4)
+    .pan(sine.range(0.1, 0.9).slow(32))
+    .room(0.9)
+    .size(0.95)
+    .lpf(2200)
+    .lpq(2.0)
+    .fmi(4.5)
+    .fmh(2.3)
+    .delay(0.4)
+    .delaytime(0.5)
+    .delayfeedback(0.6)
+    .every(8, p => p.transpose(seq("0 1 5 6").slow(16))),
+
+  // LEAD: Replaced glitch with a broken, stuttering bell sequence
+  // EVOLUTION: Switched to sine wave, extreme amplitude gating, randomized pitch
+  note("g5 b5 d6 f6 a6 c7")
+    .slow(4)
+    .sound("sine")
+    .gain(0.3)
+    .attack(0.001)
+    .decay(0.05)
+    .sustain(0.0)
+    .release(0.01)
+    .hpf(4000)
+    .lpq(5)
+    .distort(0.4)
+    .crush(8)
+    .pan(rand.range(0.0, 1.0))
+    .chop(32)
+    .speed(seq("1.0 0.5 2.5 0.8").slow(2))
+    .euclid(5, 16)
+    .swing(0.6)
+    .degradeBy(0.7)
+    .every(2, p => p.rev().transpose(rand.range(-12, 12))),
+
+  // PERCUSSION: Fractured into a disjointed, metallic conversation
+  // EVOLUTION: Removed steady kicks, emphasized irregular hi-hats and toms
+  stack(
+    s("bd*2 ~ bd ~")
+      .slow(1)
+      .gain(0.6)
+      .clip(0.1)
+      .lpf(80)
+      .distort(0.5)
+      .room(0.1), 
+    s("~ sn*2 ~ sn")
+      .slow(1)
+      .gain(0.5)
+      .clip(0.06)
+      .hpf(2000)
+      .lpf(5000)
+      .room(0.4)
+      .late(0.08), 
+    s("hh*48")
+      .slow(1)
+      .gain(0.1)
+      .clip(0.015)
+      .hpf(10000)
+      .lpf(19000)
+      .room(0.2)
+      .euclid(19, 48)
+      .swing(0.6)
+      .degradeBy(0.6), 
+    s("mt*3 ~ mt ~")
+      .slow(2)
+      .gain(0.4)
+      .clip(0.08)
+      .hpf(3000)
+      .lpf(9000)
+      .room(0.3)
+      .pan(rand.range(0.2, 0.8)),
+    s("cb*3")
+      .slow(8)
+      .gain(0.3)
+      .clip(0.15)
+      .hpf(2500)
+      .lpf(10000)
+      .room(0.3)
+      .pan(0.7)
+  ),
+
+  // SYNTH BASS: DROPPED. Replaced with a pulsing, rhythmic void
+  // EVOLUTION: New layer using noise burst synced to off-beats
+  s("noise")
+    .slow(2)
+    .gain(0.25)
+    .attack(0.001)
+    .decay(0.15)
+    .sustain(0.0)
+    .release(0.02)
+    .lpf(400)
+    .lpq(4)
+    .distort(0.6)
+    .crush(4)
+    .chop(16)
+    .euclid(5, 8)
+    .room(0.4)
+    .size(0.5)
+    .pan(sine.range(0.3, 0.7).slow(4)),
+
+  // ATMOSPHERE: Deepened into a subterranean rumble
+  // EVOLUTION: Lowered pitch, increased resonance, added slow LFO to filter
+  note("g0")
+    .slow(256)
+    .sound("supersaw")
+    .gain(0.12)
+    .bpf(300)
+    .bpq(9)
+    .distort(0.4)
+    .room(0.98)
+    .size(0.99)
+    .pan(perlin.range(0.0, 1.0).slow(256))
+    .detune(sine.range(-40, 40).slow(64))
+    .lpf(sine.range(200, 600).slow(32))
+    .every(32, p => p.transpose(seq("0 12 7 5").slow(128))),
+
+  // NEW: Digital Rain - High frequency granular texture
+  // Unexpected element: Rapidly cycling sample positions with heavy reverb
+  s("noise")
+    .slow(1)
+    .gain(0.08)
+    .lpf(rand.range(5000, 12000).slow(2))
+    .lpq(2)
+    .hpf(6000)
+    .distort(0.5)
+    .crush(6)
+    .chop(128)
+    .speed(seq("0.2 3.0 0.6 1.8").slow(2))
+    .pan(rand.range(0.0, 1.0))
+    .room(0.9)
+    .size(0.95)
+    .degradeBy(0.8)
+    .euclid(13, 32)
+    .sometimes(p => p.striate(64))
+)

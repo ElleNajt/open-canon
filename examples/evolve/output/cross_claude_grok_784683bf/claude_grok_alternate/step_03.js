@@ -1,0 +1,66 @@
+// Goldberg Variations - Variation III: Melancholic Transformation
+// Bold shift: minor mode reharmonization, fragmented bass into trembling pulses, 
+// ethereal high voice replaces harmony layer, darker emotional character
+
+setcps(66/60/4)
+
+// Bass transformed: broken into anxious repeated fragments, minor inflection
+$: note("[g2 g2 g2] [eb3 ~] [c3 c3] [d3 ~] [bb2 ab2] ~ [d3 d3 d3] [g2 ~]")
+  .slow(4)
+  .sound("triangle")
+  .gain(0.38)
+  .lpf(800)
+  .lpq(3)
+  .decay(0.08)
+  .release(0.15)
+  .room(0.35)
+  .distort(0.15)
+
+// Canon reimagined: stretched, searching melody in minor, syncopated entry
+$: note("~ [g4 ~] [eb5 d5] ~ [c5 bb4] [ab4 ~] ~ [d5 eb5 d5] g4")
+  .slow(4)
+  .sound("sine")
+  .gain(0.32)
+  .lpf(sine.range(1200, 3500).slow(8))
+  .fmi(1.5)
+  .fmh(2)
+  .fmdecay(0.4)
+  .attack(0.08)
+  .decay(0.5)
+  .release(0.7)
+  .room(0.45)
+  .delay(0.25)
+  .delaytime(0.333)
+  .delayfeedback(0.4)
+  .pan(0.35)
+
+// New voice: high crystalline whispers, ghost notes of the original
+$: note("<[d6 ~ eb6] [~ g5 ~] [bb5 ~ c6] [~ ab5 ~]>")
+  .slow(2)
+  .sound("square")
+  .gain(0.18)
+  .lpf(4500)
+  .lpq(5)
+  .attack(0.12)
+  .decay(0.3)
+  .sustain(0.1)
+  .release(1.2)
+  .room(0.6)
+  .delay(0.35)
+  .delaytime(0.5)
+  .delayfeedback(0.55)
+  .pan(0.7)
+  .tremolo(0.3)
+  .tremolosync(3)
+
+// Shadow pulse: subliminal heartbeat beneath it all
+$: note("g1")
+  .slow(1)
+  .sound("sine")
+  .gain(0.22)
+  .lpf(200)
+  .attack(0.01)
+  .decay(0.15)
+  .release(0.3)
+  .room(0.5)
+  .shape(0.2)

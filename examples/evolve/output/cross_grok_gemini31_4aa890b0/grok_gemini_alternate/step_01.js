@@ -1,0 +1,35 @@
+setcps(72/60/4)
+
+$: stack(
+  note("g3 gb3 e3 d3 b2 c3 d3 g2")
+    .slow(2)
+    .sound("pulse")
+    .chop(16)
+    .speed(rand.range(0.8,1.2))
+    .crush(10)
+    .distort(0.15)
+    .lpf(350)
+    .lpq(6)
+    .gain(0.35)
+    .room(0.1)
+  ,
+  s("bd").euclid(5,16).gain(0.55)
+  ,
+  s("sn").euclid(3,16).late(0.03).gain(0.4).room(0.2)
+  ,
+  s("hh*16").degradeBy(0.4).hpf(6000).gain(0.15)
+  ,
+  chord("<G:minor Eb:major Cm:min D:min>").voicing()
+    .slow(4)
+    .sound("supersaw")
+    .lpf(sine.range(500,2500).slow(6))
+    .lpq(2.5)
+    .attack(0.4)
+    .decay(0.6)
+    .sustain(0.6)
+    .release(1.2)
+    .gain(0.4)
+    .room(0.45)
+    .delay(0.25)
+    .delayfeedback(0.35)
+)

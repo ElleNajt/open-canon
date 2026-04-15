@@ -1,0 +1,43 @@
+setcps(135/60/4)
+
+samples('shabda/speech/en-GB/m:observe,process,generate,transform,iterate,create,exist,system')
+
+$: note("e2*2 a1 <c2 cs2> [d2 <e1 c2>]")
+  .s("sawtooth")
+  .lpf(sine.range(100, 1800).fast(4))
+  .lpq(6)
+  .drive(0.8)
+  .gain(0.35)
+
+$: note("e5 fs5 a5 c6 d6")
+  .s("sine")
+  .euclid(9, 16)
+  .fmi(saw.range(1, 5).slow(4))
+  .delay(0.5)
+  .gain(0.2)
+
+$: note("<e3 a2 c3 d3>")
+  .chord("<minor11 minor9 major9 major7>")
+  .s("triangle")
+  .lpf(saw.range(400, 3000).slow(4))
+  .room(0.7)
+  .gain(0.25)
+
+$: s("bd(5,8) sn:2 <bd(3,8) bd(3,5)> [rim*2, hh*4]")
+  .every(4, x => x.hurry(2))
+  .crush(3)
+  .shape(0.6)
+  .gain(0.4)
+
+$: s("[~ hh]*4 [oh? oh] ~ cr")
+  .jux(x => x.fast(2))
+  .bpf(3000)
+  .vowel("e i")
+  .gain(0.25)
+
+$: s("system <observe process> <generate transform> <iterate create> exist")
+  .iter(3)
+  .chop(8)
+  .room(0.6)
+  .delay(0.5)
+  .gain(0.5)

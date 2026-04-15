@@ -1,0 +1,43 @@
+setcps(95/60/4)
+
+samples('shabda/speech/en-GB/f:observe,adapt,evolve')
+
+$: note("e2 [~ g2] b1 c2")
+  .sound("sawtooth")
+  .lpf(sine.range(200, 1000).fast(4))
+  .lpq(8)
+  .distort(0.3)
+  .gain(0.5)
+
+$: note("e4 d4 g4 b4")
+  .slow(2)
+  .sound("triangle")
+  .delay(0.4)
+  .jux(x => x.rev().transpose(7))
+  .gain(0.35)
+
+$: note("e3 g3 b3 d4")
+  .slow(4)
+  .sound("supersaw")
+  .attack(1.2)
+  .room(0.8)
+  .gain(0.15)
+
+$: s("bd [~ cr] bd:2 cp")
+  .fast(2)
+  .speed(rand.range(0.9, 1.1))
+  .room(0.2)
+  .gain(0.6)
+
+$: s("hh")
+  .euclid(11,16)
+  .pan(sine.fast(2))
+  .hpf(2000)
+  .gain(0.35)
+
+$: s("observe ~ adapt [~ evolve]")
+  .slow(2)
+  .crush(5)
+  .delay(0.6)
+  .pan(rand)
+  .gain(0.7)

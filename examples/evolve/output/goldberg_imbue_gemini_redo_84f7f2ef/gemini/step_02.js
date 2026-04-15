@@ -1,0 +1,45 @@
+// Goldberg Variations - Ground Bass (BWV 988)
+// Evolved techno interpretation
+
+samples('shabda/speech:goldberg,variation,bach')
+setcps(80/60/4)
+
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
+  .slow(2)
+  .s("sawtooth")
+  .gain(0.6)
+  .shape(0.3)
+  .lpf(1000)
+
+$: note("g4 b4 d5 c5")
+  .s("triangle")
+  .gain(0.25)
+  .room(0.4)
+  .pan(sine.range(0.2, 0.8).slow(8))
+  .lpf(sine.range(800, 2000).slow(16))
+
+$: s("bd bd bd bd")
+  .gain(0.9)
+  .shape(0.2)
+  .cut(1)
+
+$: s("~ [hh*2,sn] hh [hh*2,cp]")
+  .gain(0.6)
+  .hpf(1000)
+  .crush(6)
+  .delay(0.3)
+  .dfb(0.4)
+
+$: n(perlin.range(-5, 5))
+  .slow(4)
+  .scale("g:minor")
+  .s("sine")
+  .gain(0.3)
+  .room(0.5)
+
+$: s("goldberg variation ~ bach")
+  .slow(8)
+  .gain(0.7)
+  .begin(perlin.range(0, 0.4))
+  .end(perlin.range(0.5, 1))
+  .speed(perlin.range(-1, 1))

@@ -1,0 +1,33 @@
+setcps(120/60/4)
+
+samples('shabda/speech:strudel_is_awesome')
+
+$: note("c4 d4 e4 g4 c5 b4 a4 g4")
+  .s("strudel_is_awesome")
+  .chop(16)
+  .slow(4)
+  .room(0.5)
+  .size(0.8)
+  .delay(0.4)
+  .dt(0.25)
+  .dfb(0.6)
+  .jux(x => x.rev())
+
+$: s("bd(<3 5>,8) [~ sn] bd [~ <sn cp>]")
+  .compressor("0.2:4:0.1:0.01:0.1")
+  .room(0.2)
+  .gain(1.2)
+
+$: s("hh*16")
+  .gain(sine.range(0.3, 0.8).fast(4))
+  .pan(sine.range(0.2, 0.8).fast(2))
+  .crush(8)
+  .every(4, x => x.rev())
+
+$: note("<c2 c2 c2 d2> <e2 c2 f2 g2>")
+  .s("saw")
+  .lpf(sine.range(200, 2000).fast(2))
+  .lpq(20)
+  .distort(0.2)
+  .room(0.3)
+  .gain(0.8)

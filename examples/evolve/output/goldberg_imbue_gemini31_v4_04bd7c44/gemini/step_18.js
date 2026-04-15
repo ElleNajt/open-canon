@@ -1,0 +1,31 @@
+setcps(120/60/4)
+
+samples('shabda/speech/fr-FR/m:digital_signal_processing')
+
+$: s("digital_signal_processing*2")
+  .chop(16)
+  .room(0.5)
+  .size(0.8)
+  .delay(0.4)
+  .dt(0.25)
+  .dfb(0.6)
+  .jux(x => x.rev())
+
+$: s("bd(<3 5>,8) [~ sn] bd [~ <sn cp>]")
+  .compressor("0.2:4:0.1:0.01:0.1")
+  .room(0.2)
+  .gain(1.2)
+
+$: s("hh*16")
+  .gain(sine.range(0.3, 0.8).fast(4))
+  .pan(sine.range(0.2, 0.8).fast(2))
+  .crush(8)
+  .every(4, x => x.rev())
+
+$: note("<c2 c2 c2 d2> <e2 c2 f2 g2>")
+  .s("saw")
+  .lpf(sine.range(200, 2000).fast(2))
+  .lpq(20)
+  .distort(0.2)
+  .room(0.3)
+  .gain(0.8)

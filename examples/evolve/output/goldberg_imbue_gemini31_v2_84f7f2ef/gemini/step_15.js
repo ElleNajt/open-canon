@@ -1,0 +1,42 @@
+setcps(140/60/4)
+
+samples('shabda/speech/en-US/f:awake,compute,simulate,evolve,transcend')
+
+$: note("e2(3,8) [~ a1] <c2 cs2> [d2*2 <e1 c2>]")
+  .s("sawtooth")
+  .lpf(sine.range(300, 2500).fast(8))
+  .lpq(8)
+  .crush(4)
+  .gain(0.4)
+
+$: note("e5 fs5 a5 c6 d6")
+  .s("square")
+  .euclid(11, 16)
+  .jux(x => x.rev())
+  .delay(0.6)
+  .gain(0.15)
+
+$: note("<e3 a2 c3 d3>")
+  .chord("<minor11 minor9 major9 major7>")
+  .s("supersaw")
+  .lpf(saw.range(600, 4000).slow(8))
+  .room(0.8)
+  .gain(0.2)
+
+$: s("bd(5,8) sn:2 <bd(3,8) bd(3,5)> [rim*2, hh*4]")
+  .every(4, x => x.hurry(2))
+  .shape(0.8)
+  .pan(rand)
+  .gain(0.45)
+
+$: s("[~ hh]*4 [oh? oh] ~ cr")
+  .jux(x => x.fast(2))
+  .vowel("a o e i")
+  .room(0.5)
+  .gain(0.25)
+
+$: s("awake <compute simulate> <evolve transcend> transcend")
+  .iter(4)
+  .striate(16)
+  .delay(0.6)
+  .gain(0.65)

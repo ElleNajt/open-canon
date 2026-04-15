@@ -1,0 +1,37 @@
+setcps(0.19)
+
+$: note("<c3 bb2 ab2 [g2 eb2]> <c3 [ab2 g2] bb2 eb2>".slow(2))
+  .sound("sine").gain(0.46)
+  .shape(0.58)
+  .attack(4).release(14)
+  .lpf(sine.range(40,380).slow(13))
+
+$: note("c4 eb4 g4 bb4 ab4 g4 [eb4 db4] [~ c4]".slow(1.5))
+  .sound("triangle").gain(0.24)
+  .delay(0.85).delaytime(0.375).delayfeedback(0.72)
+  .lpf(perlin.range(80,1600).slow(7))
+  .every(4, x => x.add(note("12")).rev())
+
+$: note("[c5 db5] [eb5 g5] [bb4 ab5] [g4 eb5] [c5 bb4] [~ ab4]".slow(2))
+  .sound("sine").gain(0.19)
+  .fmi(sine.range(0.1,18).slow(16))
+  .fmdecay(perlin.range(0.2,7).slow(11))
+  .pan(sine.range(0.08,0.92).slow(5))
+
+$: note("<[c6 eb6 bb5] [bb5 g5 db6] [ab5 db6 f5] [g5 f5 c6]>".slow(4))
+  .sound("sawtooth").gain(0.12)
+  .lpf(sine.range(50,750).slow(15))
+  .attack(5.5).release(11)
+  .juxBy(0.7, x => x.add(note("0.15")).slow(1.12))
+
+$: s("~ [cp:3 ~] [~ rim] [~ cp:1]".slow(2))
+  .gain(perlin.range(0.06,0.16).slow(5))
+  .room(0.96).size(0.94)
+  .hpf(perlin.range(1000,4000).slow(8))
+  .degradeBy(0.35)
+
+$: note("[eb7 ~] [~ g7] [~ bb6] [c7 ~] [~ db7] [ab6 ~] [~ eb7] [g7 ~]".slow(4))
+  .sound("sine").gain(0.08)
+  .attack(0.001).release(16)
+  .delay(0.94).delayfeedback(0.82)
+  .pan(perlin.range(0.01,0.99).slow(4))

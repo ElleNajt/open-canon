@@ -1,0 +1,130 @@
+// Goldberg Variations - Variation XVII: Fractured Cathedral
+// The ascent shatters into prismatic shards;
+// a broken hymn reassembles in alien geometry;
+// triumph dissolves into sacred uncertainty
+
+setcps(58/60/4)
+
+samples('shabda/speech:cathedral')
+samples('shabda/speech:shatter')
+samples('shabda/speech:prayer')
+samples('shabda/speech:ghost')
+
+// Bass: descending phrygian counterpoint, questioning the triumph
+$: note("e1 f1 d1 c1 b0 a0 g0 e0")
+  .slow(8)
+  .sound("triangle")
+  .gain(0.38)
+  .lpf(cosine.range(80, 400).slow(7))
+  .lpq(6)
+  .attack(0.05)
+  .decay(0.5)
+  .sustain(0.6)
+  .release(2.2)
+  .room(0.8)
+  .size(0.9)
+  .pan(0.5)
+  .shape(0.3)
+  .fmi(0.8)
+  .fmh(0.5)
+
+// Shattered bells: irregular clusters, glass memory of gamelan
+$: note("<[e7,b6] ~ [f7,c7,a6] ~> <~ [d7,g6] ~ [e7,b6,fs6]>")
+  .slow(3)
+  .sound("sine")
+  .gain(0.12)
+  .fmi(9)
+  .fmh(7/4)
+  .fmenv(0.95)
+  .fmdecay(0.08)
+  .attack(0.0005)
+  .decay(2.5)
+  .sustain(0.02)
+  .release(4)
+  .room(0.95)
+  .size(0.95)
+  .pan(rand.range(0.1, 0.9))
+  .hpf(800)
+  .delay(0.85)
+  .delaytime(0.666)
+  .delayfeedback(0.7)
+
+// Hymn fragment: modal ambiguity, half-remembered melody
+$: note("e4 ~ f4 g4 ~ a4 b4 ~ c5 ~ b4 a4 g4 ~ f4 e4 ~")
+  .slow(6)
+  .sound("sawtooth")
+  .gain(0.09)
+  .attack(0.4)
+  .decay(0.8)
+  .sustain(0.3)
+  .release(3)
+  .room(0.85)
+  .size(0.88)
+  .pan(perlin.range(0.25, 0.75).slow(11))
+  .lpf(1800)
+  .lpq(3)
+  .detune(8)
+  .phaser(0.15)
+  .phaserdepth(0.6)
+
+// Ritual percussion: sparse, ceremonial, breath-like
+$: stack(
+    s("bd ~ ~ bd ~ bd ~ ~").gain(0.28).lpf(100).room(0.6),
+    s("~ rim ~ ~ rim ~ ~ rim").gain(0.14).pan(0.3).delay(0.5).delaytime(0.333),
+    s("~ ~ oh ~ ~ ~ hh ~").gain(0.08).hpf(3000).pan(0.7).speed(0.9)
+  )
+  .slow(1.5)
+  .sometimesBy(0.4, x => x.rev())
+  .juxBy(0.3, x => x.late(0.0625))
+
+// Drone: phrygian cluster, organ-like sustain with beating frequencies
+$: note("[e2,f2,b2,c3]")
+  .slow(12)
+  .sound("square")
+  .gain(0.07)
+  .lpf(perlin.range(300, 1200).slow(14))
+  .lpq(2)
+  .hpf(60)
+  .detune(sine.range(0, 15).slow(9))
+  .attack(6)
+  .decay(5)
+  .sustain(0.95)
+  .release(8)
+  .room(0.99)
+  .size(0.97)
+  .pan(0.5)
+  .tremolo(0.08)
+  .tremolosync(0.025)
+
+// NEW: Ghostly choir - spectral voices emerging from static
+$: stack(
+    s("ghost,prayer").speed(0.7).gain(0.11).vowel("o*4 a*2 u*2"),
+    s("cathedral").speed(0.5).gain(0.08).pan(0.6)
+  )
+  .slow(5)
+  .chop(32)
+  .rev()
+  .lpf(900)
+  .hpf(180)
+  .room(0.97)
+  .delay(0.9)
+  .delaytime(0.75)
+  .delayfeedback(0.72)
+  .degradeBy(0.45)
+  .jux(x => x.speed(1.3))
+
+// NEW: Metallic prayer wheel - pitched percussion spiral
+$: n("0 3 7 10 12 15 19 22").scale("E:phrygian")
+  .slow(4)
+  .sound("triangle")
+  .gain(0.1)
+  .fmi(12)
+  .fmh(5/3)
+  .attack(0.001)
+  .decay(0.6)
+  .sustain(0.05)
+  .release(1.5)
+  .pan(sine.range(0.2, 0.8).fast(2))
+  .hpf(600)
+  .room(0.75)
+  .iter(8)

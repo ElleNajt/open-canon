@@ -1,0 +1,22 @@
+$: note("<c4 e4 g4 c5 g4 e4 b4 g4>")
+  .sound("triangle")
+  .lpf(sine.range(400, 2200).slow(7))
+  .gain(0.4)
+  .room(0.3)
+  .delay(0.2)
+
+$: note("c3 ~ g2 ~")
+  .sound("sawtooth")
+  .lpf(600)
+  .gain(0.25)
+  .slow(2)
+
+$: s("hh*8")
+  .gain(sine.range(0.08, 0.18).fast(2))
+  .pan(rand)
+
+$: note("<e5 g5 ~ b5> <~ c6 ~ ~>")
+  .sound("sine")
+  .gain(0.15)
+  .delay(0.4)
+  .slow(3)

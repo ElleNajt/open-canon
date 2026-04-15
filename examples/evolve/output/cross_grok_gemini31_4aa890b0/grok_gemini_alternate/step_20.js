@@ -1,0 +1,81 @@
+samples('shabda/speech/en-GB/f:drifting,breathe')
+samples('shabda/speech/fr-FR/m:lumiere,infini')
+setcps(112/60/4)
+
+$: stack(
+  stack(
+    euclid(5,8,"bd"),
+    s("~ [rim mt] ~ cp"),
+    s("[hh*12, oh*4]").degradeBy(0.2).pan(sine.range(0.2,0.8).fast(2))
+  )
+    .gain(0.75)
+    .shape(0.3)
+    .crush(5)
+    .lpf(5500)
+    .drive(0.2)
+    .swing(0.15),
+
+  note("g1 d2 bb1 f1 g1 ~ [a1 f1] d2")
+    .sound("saw")
+    .lpf(saw.range(150, 1800).fast(8))
+    .lpq(6)
+    .attack(0.01)
+    .decay(0.2)
+    .sustain(0.15)
+    .release(0.1)
+    .gain(0.85)
+    .drive(0.4)
+    .pan(0.5),
+
+  note("g5 ~ [d6 a5] ~ c6 bb5 ~ [a5 f5] ~ g5 ~ ~")
+    .sound("sine")
+    .fmi(4.5)
+    .fmh(1.41)
+    .attack(0.01)
+    .decay(0.3)
+    .sustain(0.1)
+    .release(0.5)
+    .gain(0.65)
+    .delay(0.6)
+    .dt("3/16")
+    .dfb(0.6)
+    .room(0.8)
+    .size(0.8)
+    .jux(x => x.transpose(7).pan(0.85).early(0.05)),
+
+  note("[g3 bb3 d4 f4] [c3 eb3 g3 c4] [eb3 g3 bb3 d4] [d3 f3 a3 c4]")
+    .slow(4)
+    .sound("supersaw")
+    .lpf(sine.range(300, 2200).slow(4))
+    .lpq(3)
+    .attack(1.5)
+    .decay(1)
+    .sustain(0.8)
+    .release(2)
+    .room(0.95)
+    .size(0.9)
+    .gain(0.42)
+    .tremolo(0.6)
+    .tremolosync(0.25)
+    .phaser(0.3)
+    .phaserdepth(0.7),
+
+  s("drifting*3 breathe")
+    .chop(8)
+    .speed(rand.range(0.5, 1.2).slow(2))
+    .jux(x => x.rev().speed(1.5).pan(0.8))
+    .room(0.6)
+    .size(0.7)
+    .gain(0.7)
+    .lpf(4000),
+
+  s("[lumiere*4, infini*2]")
+    .slow(3)
+    .striate(16)
+    .speed(-0.8)
+    .delay(0.5)
+    .dt("3/8")
+    .dfb(0.4)
+    .gain(0.75)
+    .pan(0.2)
+)

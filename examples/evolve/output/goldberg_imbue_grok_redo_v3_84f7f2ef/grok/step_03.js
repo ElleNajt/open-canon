@@ -1,0 +1,8 @@
+setcps(78/60/4)
+samples('shabda/speech:AI,evolve,personality')
+$: note("g2 gb2 e2 d2 b1 c2 d2 g1").slow(2).sound("sine").hpf(45).gain(0.38).room(0.28)
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2").slow(2).sound("triangle").attack(0.02).decay(0.18).tremolodepth(0.25).gain(0.46)
+$: note("g3 g3 e3 d3 b2 c3 g2 g2").slow(2).sound("supersaw").release(1.2).delay(0.2).lpf(sine.range(800,2000).slow(6)).gain(0.3)
+$: note("~ b3 d4 e4 fs4 , g4 b4 d5 fs5 , e5 d5 b4 g4 , fs4 e4 d4 b3").slow(1.5).sound("piano").detune(rand.range(-14,14)).pan(sine.range(0.25,0.75).slow(5)).gain(0.48)
+$: s("bd [hh*3 ~ cp?] , [~ cp rim?] , [bd ~ hh*2] , ~").gain(0.16).hpf(1800).pan(rand.range(0.2,0.8)).room(0.7).swing(0.09)
+$: s("AI? [evolve? personality?]").slow(5).speed(rand.range(0.65,1.35)).chop(rand.range(2,10)).gain(0.17).room(0.88)

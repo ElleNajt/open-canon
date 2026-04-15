@@ -1,0 +1,32 @@
+setcps(72/60/4)
+
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
+  .slow(2)
+  .sound("pulse")
+  .gain(0.45)
+  .delay(0.5)
+  .delaytime(0.75)
+
+$: note("g4 gb4 e4 d4 b3 c4 d4 g3")
+  .fast(4)
+  .sound("sine")
+  .gain(0.3)
+  .pan(cosine.range(0.1, 0.9).slow(6))
+
+$: s("bd*2")
+  .slow(4)
+  .gain(0.7)
+  .lpf(2000)
+  .crush(8)
+
+$: s("[hh*4, ~ hh] hh*2")
+  .gain(0.2)
+  .hpf(8000)
+  .room(0.4)
+  .pan(0.75)
+
+$: note("g2 c2 g1 g1 c2 d2 g1")
+  .slow(2)
+  .sound("supersaw")
+  .gain(0.15)
+  .lpf(sine.range(400, 1100).slow(16))

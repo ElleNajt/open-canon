@@ -1,0 +1,90 @@
+samples('shabda/speech/en-GB/f:drifting,breathe')
+samples('shabda/speech/de-DE/m:achtung,fokus,energie')
+setcps(128/60/4)
+
+$: stack(
+  stack(
+    s("bd bd ~ [bd ~ bd]").gain(0.95),
+    s("~ [sn cp]").late(0.02).room(0.4).gain(0.85),
+    s("hh*8, oh*8").gain(0.6).pan(sine.range(0.3,0.7).fast(2)).jux(x => x.rev()),
+    euclid(4,16,"lt").gain(0.65).room(0.5).pan(0.3),
+    euclid(6,16,"cb").gain(0.7).delay(0.4).dt("1/4").dfb(0.4).pan(0.7)
+  )
+    .gain(0.8)
+    .drive(0.15)
+    .hpf(35)
+    .compressor("0.3:4:0.5:0.01:0.1"),
+
+  note("f1 ~ ab1 [c2 eb2] f2 [bb1 db2]")
+    .sound("sawtooth")
+    .lpf(tri.range(150,1200).slow(2))
+    .lpq(6)
+    .attack(0.005)
+    .decay(0.08)
+    .sustain(0.3)
+    .release(0.15)
+    .shape(0.3)
+    .gain(0.9)
+    .pan(0.4)
+    .jux(x => x.add(12).early(0.1).pan(0.7).gain(0.75)),
+
+  note("[f3 ab3 c4 eb4] [bb2 db3 f3 ab3] [eb3 g3 bb3 db4] [c3 eb3 g3 bb3]")
+    .sound("pulse")
+    .slow(2)
+    .attack(0.15)
+    .decay(0.6)
+    .sustain(0.5)
+    .release(1.2)
+    .gain(0.55)
+    .room(0.85)
+    .size(0.75)
+    .fmi(3)
+    .lpf(cosine.range(400,2500).slow(4))
+    .lpq(4)
+    .phaser(0.8).phaserdepth(0.6)
+    .pan(0.55),
+
+  note("ab4 c5 eb5 f5 [bb4 db5] eb5 [g5 f5]")
+    .sound("triangle")
+    .fast(4)
+    .fmenv(0.5)
+    .fmh(1.4)
+    .attack(0.01)
+    .decay(0.1)
+    .sustain(0.2)
+    .release(0.4)
+    .gain(0.7)
+    .crush(6)
+    .delay(0.45)
+    .dt("1/8")
+    .dfb(0.5)
+    .lpf(2200)
+    .lpq(3)
+    .pan(0.45)
+    .jux(x => x.add(12).rev().pan(0.6)),
+
+  s("piano")
+    .note("f4 [ab4 bb4] c5 [eb5 db5] [c5 ab4 f4]")
+    .slow(1)
+    .attack(0.02)
+    .decay(0.3)
+    .sustain(0.4)
+    .release(0.8)
+    .gain(0.75)
+    .ring(0.3)
+    .ringf(350)
+    .room(0.7)
+    .pan(saw.range(0.4,0.7).slow(8)),
+
+  s("[breathe energie] [drifting ~ fokus]")
+    .chop(32)
+    .striate(8)
+    .speed(sine.range(0.7,1.3).slow(2))
+    .lpf(saw.range(800,5000).slow(2))
+    .gain(0.7)
+    .room(0.6)
+    .delay(0.3)
+    .dt("1/4")
+    .dfb(0.4)
+    .jux(x => x.speed(-1).pan(0.9).gain(0.6))
+)

@@ -1,0 +1,35 @@
+// Goldberg Variations - Ground Bass (BWV 988)
+// The 8-note descending bass that underlies all 30 variations
+
+setcps(72/60/4)
+
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2")
+  .slow(2)
+  .s("sawtooth")
+  .gain(0.6)
+  .lpf(sine.range(400, 1500).slow(4))
+  .vowel("a e o u")
+
+$: note("g3 c3 g3 d3")
+  .slow(4)
+  .chord("major7")
+  .s("supersaw")
+  .gain(0.3)
+  .cutoff(1200)
+  .room(0.3)
+
+$: s("[bd, cp] [hh*2, sn] [bd, hh] [hh*2, cp]")
+  .gain(0.5)
+  .hpf(100)
+  .crush(8)
+  .shape(0.2)
+  .swing(0.1)
+
+$: n(perlin.range(0, 10))
+  .slow(2)
+  .scale("g:major")
+  .s("square")
+  .octave(2)
+  .gain(0.25)
+  .delay(0.4)
+  .dt(1/3)

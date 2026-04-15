@@ -1,0 +1,6 @@
+setcps(72/60/4)
+$: note("g2 gb2 e2 d2 b1 c2 d2 g1").slow(2).sound("sine").hpf(35).gain(0.35).room(0.2)
+$: note("g3 gb3 e3 d3 b2 c3 d3 g2").slow(2).sound("triangle").attack(0.03).decay(0.25).gain(0.5).room(0.15)
+$: note("g3 g3 e3 d3 b2 c3 g2 g2").slow(2).sound("supersaw").attack(0.6).release(1.2).gain(0.25).room(0.45)
+$: note("~ b3 d4 e4 fs4 , g4 b4 d5 fs5 , e5 d5 b4 g4 , fs4 e4 d4 b3").slow(2).sound("piano").gain(0.42).pan(sine.range(0.25,0.75).slow(8)).room(0.3)
+$: s("[hh*2 ~] , cp? , [rim ~ hh] , ~").gain(0.1).hpf(4000).pan(rand).room(0.7).degradeBy(0.2)

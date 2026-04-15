@@ -1,0 +1,33 @@
+$: note("<c4 eb4 g4 bb4 ~ ab4 f4 db4>/4")
+  .sound("triangle")
+  .lpf(sine.range(280, 4800).slow(11))
+  .gain(sine.range(0.14, 0.26).slow(7))
+  .room(0.78)
+
+$: note("c2 ~ ~ g2 ~ <eb2 f2 ab2>/3")
+  .sound("sawtooth")
+  .lpf(sine.range(60, 1600).slow(8))
+  .gain(0.15)
+  .slow(3)
+
+$: s("hh ~ hh*2 ~ <hh [hh hh]> ~ hh ~")
+  .gain(sine.range(0.07, 0.16).slow(8))
+  .pan(sine.range(0.2, 0.8).slow(11))
+  .delay(0.52)
+
+$: note("<e5 ~ bb5 eb6 ~ ab5 f5 ~ b5>/6")
+  .sound("sine")
+  .delay(0.68)
+  .delayfeedback(0.65)
+  .gain(sine.range(0.09, 0.17).slow(9))
+
+$: note("~ <g4 bb4 d5> ~ <d5 bb4 f4>")
+  .sound("pulse")
+  .lpf(sine.range(180, 3800).slow(9))
+  .gain(sine.range(0.1, 0.18).slow(6))
+
+$: note("<g3 bb3 ~ eb4 c4 ~ f3 ab3>/7")
+  .sound("sine")
+  .gain(sine.range(0.09, 0.16).slow(8))
+  .delay(0.58)
+  .room(0.75)

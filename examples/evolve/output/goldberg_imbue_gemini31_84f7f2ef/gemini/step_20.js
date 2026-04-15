@@ -1,0 +1,43 @@
+samples('shabda/speech:system,dreaming,process,logic')
+
+setcps(140/60/4)
+
+$: note("c2 [~ bb1] <d2*3 f2> [c2 f2] ~ c2*2 g1 [~ bb1]")
+  .sound("pulse")
+  .cutoff(sine.range(200, 2500).fast(4))
+  .resonance(4)
+  .shape(0.8)
+  .gain(0.7)
+
+$: n("0 2 4 5 <8 10> 7*2").euclid(11, 16).scale("C:minor")
+  .sound("sine")
+  .jux(x => x.rev().transpose(12))
+  .delay(0.6)
+  .room(0.8)
+  .gain(0.45)
+
+$: s("bd(5,8) <cp [~ cp]> bd <[~ rim*3] sn:2>")
+  .chop(4)
+  .drive(0.7)
+  .djf(perlin.range(0.2, 0.7).fast(2))
+  .gain(0.85)
+
+$: s("hh*16")
+  .jux(x => x.hurry(1.5))
+  .djf(0.8)
+  .pan(sine.range(0.3, 0.7).fast(4))
+  .gain(0.5)
+
+$: s("<system!3 dreaming> <logic(3,8) [~ process]>")
+  .chop(16)
+  .speed(sine.range(0.7, 1.3).fast(4))
+  .delay(0.6)
+  .room(0.7)
+  .gain(0.65)
+
+$: note("<[c3,eb3,g3,bb3] [f2,ab2,c3,eb3]>/2")
+  .sound("square")
+  .lpf(sine.range(300, 2500).slow(8))
+  .tremolo(0.5)
+  .room(0.8)
+  .gain(0.35)

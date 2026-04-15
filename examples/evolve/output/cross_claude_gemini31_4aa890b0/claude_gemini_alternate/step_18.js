@@ -1,0 +1,72 @@
+samples('shabda/speech/fr-FR/m:souviens_toi,oubli,reviens')
+
+setcps(70/60/4)
+
+$: note("<[eb1 ~ eb2 eb1] [db1 db2 ~ db1] [cb1 ~ cb2 cb1] [bb0 ~ d1 bb1]>")
+  .sound("sawtooth")
+  .drive(0.8)
+  .distort(0.4)
+  .lpf(saw.range(150, 2000).slow(4))
+  .lpq(6)
+  .attack(0.01)
+  .decay(0.3)
+  .sustain(0.1)
+  .release(0.5)
+  .gain(0.7)
+  .jux(x => x.octave(1).delay(0.4).dt(0.25).delayfeedback(0.4))
+
+$: stack(
+  s("bd(5,8)").shape(0.8).lpf(1000).gain(0.85),
+  s("~ rim [~ rim:2] ~").room(0.5).gain(0.65).pan(0.6),
+  s("hh(7,16)").velocity(perlin.range(0.3, 0.7).fast(8)).pan(sine.range(0.2, 0.8)).hpf(5000).gain(0.35),
+  s("~ cb").room(0.8).pan(0.3).gain(0.4).speed(1.2)
+)
+
+$: stack(
+  s("souviens_toi*2").chop(8).speed(perlin.range(0.8, 1.2).slow(4)).gain(0.6).pan(saw.range(0,1).slow(3)).delay(0.6).dt(0.75).delayfeedback(0.6).room(0.8),
+  s("~ oubli").slow(2).speed(0.6).room(0.9).size(0.95).gain(0.6).pan(0.2)
+)
+
+$: note("<[eb3,gb3,bb3,db4] [db3,f3,ab3,cb4] [cb3,eb3,gb3,bb3] [bb2,d3,f3,ab3]>")
+  .sound("pulse")
+  .lpf(sine.range(300, 2500).slow(4))
+  .lpq(5)
+  .attack(0.05)
+  .decay(0.6)
+  .sustain(0.2)
+  .release(1.5)
+  .tremolo(0.5)
+  .tremolosync(4)
+  .room(0.85)
+  .size(0.85)
+  .gain(0.35)
+  .pan(perlin.range(0.3, 0.7).slow(5))
+  .ply(2)
+
+$: n("0 [~ 2] 4 [~ 7] 6 [4 ~] <9 2> 7").scale("Eb:minor")
+  .sound("triangle")
+  .octave(4)
+  .fmi(3)
+  .fmenv(2)
+  .attack(0.01)
+  .decay(0.2)
+  .sustain(0)
+  .release(0.5)
+  .room(0.7)
+  .delay(0.5)
+  .dt(0.333)
+  .delayfeedback(0.6)
+  .gain(0.3)
+  .pan(cosine.range(0.1, 0.9).slow(3))
+  .juxBy(0.4, x => x.add("<3 4 5>").rev())
+
+$: s("sine*3").note("bb5 <gb5 eb5> f5")
+  .slow(2)
+  .room(1)
+  .size(0.9)
+  .delay(0.8)
+  .dt(1.5)
+  .delayfeedback(0.7)
+  .gain(0.15)
+  .pan(0.5)
+  .sometimesBy(0.5, x => x.octave(1).gain(0.1))

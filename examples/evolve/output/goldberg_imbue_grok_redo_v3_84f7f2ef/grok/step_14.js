@@ -1,0 +1,8 @@
+setcps(0.5)
+samples('shabda/speech:AI,evolve,personality,strudel,creative,live_code,generative,adapt,morph')
+$: note("bb1 g1 [fs2 d2] [eb3 a2] [bb2 g2 d3]").slow(2.4).sound("sine").hpf(sine.range(40,110).slow(12)).detune(rand.range(-15,20)).gain(0.62)
+$: note("d4 [bb3 fs4] [c5 a4] [g3 bb3 d4] [eb3 fs3]").slow(1.85).sound("triangle").phaser(sine.range(0.28,0.56).slow(5.5)).lpf(sine.range(220,3100).slow(7.2)).gain(0.66)
+$: note("bb3 g3 a3 [c4 e4 g4] [d4 b4 g4]").slow(1.35).sound("supersaw").fmi(sine.range(0.25,0.75).slow(5.2)).lpf(perlin.range(300,3900).slow(5)).gain(0.46)
+$: note("[b4 fs4 a4] [d5 fs5 g4 b4] [d5 e5 b4 g4] [bb3 d4 e4 fs4]").slow(1.55).sound("piano").detune(sine.range(-28,30).slow(6.5)).jux(rev).gain(0.54)
+$: s("[bd ~ cp] [hh*3 rim] bd [cp hh]").euclid(5,16).gain(0.4).hpf(140).pan(saw.range(0.1,0.9).slow(4)).room(0.5)
+$: s("[AI strudel*2] [personality evolve] [creative adapt] [generative morph] [live_code strudel]").slow(3.5).speed(perlin.range(0.75,1.35)).sometimesBy(0.28,rev).vowel("i a e o u").gain(0.45)

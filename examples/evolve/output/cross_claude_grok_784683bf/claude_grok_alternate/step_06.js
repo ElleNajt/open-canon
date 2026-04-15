@@ -1,0 +1,86 @@
+// Goldberg Variations - Variation VI: Tentative Resolution
+// Ghosts fade, fragments knit into hesitant hope — bass ascends with purpose,
+// melody flows unbroken, pizzicato quickens to a sprightly chase,
+// pads brighten to gold, new subterranean pulse urges forward
+
+setcps(54/60/4)
+
+samples('shabda/speech:goldberg_variations')
+
+// Bass: purposeful climb, rhythmic resolve
+$: note("[g1 ~ ~ ~] [~ d2 ~ ~] [~ b1 ~ g2] [d3 ~ ~ ~]")
+  .slow(4)
+  .sound("sine")
+  .gain(0.38)
+  .lpf(450)
+  .attack(0.01)
+  .decay(0.7)
+  .sustain(0.2)
+  .release(1.3)
+  .room(0.75)
+  .size(0.85)
+  .detune(sine.range(-12, 12).slow(6))
+  .pan(0.4)
+
+// Melody: liberated flow, rising arc unbroken
+$: note("<d4 fs4 a4 b4 d5> <fs5 e5 c5 b4 g4> <a4 g4 fs4 e4 d4> <b4 a4 fs4 d4>")
+  .slow(8)
+  .sound("triangle")
+  .gain(0.32)
+  .lpf(sine.range(900, 2800).slow(4))
+  .fmi(1.2)
+  .fmh(1.5)
+  .fmdecay(0.4)
+  .attack(0.06)
+  .decay(0.25)
+  .release(1.1)
+  .room(0.65)
+  .delay(0.4)
+  .delaytime(0.25)
+  .delayfeedback(0.45)
+  .pan(cosine.range(0.3, 0.7).slow(4))
+  .jux(rev)
+
+// Pizzicato: nimble chase, major-key dance
+$: note("<[d5 fs5 a5] [b4 d5 fs5]> <[g4 b4 d5] [e4 g4 b4]>")
+  .slow(1)
+  .sound("pluck")
+  .gain(0.25)
+  .lpf(3800)
+  .attack(0.001)
+  .decay(0.12)
+  .sustain(0)
+  .release(0.3)
+  .room(0.55)
+  .pan(rand.range(0.25, 0.75))
+  .velocity(rand.range(0.7, 1))
+  .every(3, fast(2))
+
+// High voice: gilded swell, embracing warmth
+$: note("<[d5 a5 d6] [c5 g5 c6] [b4 fs5 b5] [g4 d5 g5]>")
+  .slow(8)
+  .sound("supersaw")
+  .gain(0.15)
+  .lpf(2200)
+  .lpq(3)
+  .attack(0.6)
+  .decay(0.4)
+  .sustain(0.7)
+  .release(2.2)
+  .room(0.85)
+  .size(0.75)
+  .pan(0.65)
+  .phaser(0.25)
+  .phaserdepth(0.4)
+
+// NEW: subterranean pulse — heartbeat of renewal
+$: s("cb")
+  .euclid(5, 16)
+  .slow(2)
+  .gain(0.09)
+  .hpf(120)
+  .lpf(600)
+  .room(0.9)
+  .size(0.95)
+  .pan(perlin.range(0.35, 0.65))
+  .degradeBy(0.2)

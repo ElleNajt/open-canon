@@ -1,0 +1,8 @@
+setcps(0.615)
+samples('shabda/speech:AI,evolve,personality,strudel,creative,live_code,generative,adapt,morph')
+$: note("ab2 [a2 g2 fs2 eb2] [bb2 f2 d2] [g3 a3 bb3 c4]").slow(perlin.range(2.1,3.3)).sound("sine").hpf(sine.range(70,160).slow(10)).detune(rand.range(-12,22).slow(8)).gain(0.7)
+$: note("d5 [c5 bb4 ab4 g4] [fs5 eb5 g5 bb5] [a5 d5 c5 eb5]").slow(perlin.range(1.8,2.4)).sound("triangle").vowel("a e i o u".slow(4)).lpf(saw.range(120,4200).slow(10)).gain(0.65)
+$: note("bb4 [ab4 g4 fs4 e4] [c5 eb5 g5 ab5] [d5 fs5 b5]").slow(perlin.range(1.7,2.2)).sound("pulse").fmi(saw.range(0.4,1.2).slow(5)).lpf(perlin.range(200,4800).slow(7.5)).gain(0.62)
+$: note("[fs5 bb5 a5] [d6 f6 ab6] [b5 d6 e6] [g5 b5 fs6] [d5 fs5 a4]").slow(perlin.range(1.9,2.4)).sound("piano").detune(rand.range(-25,45).slow(10)).jux(rev).gain(0.68)
+$: s("[bd [hh*3 cp]] [sn*2 bd oh] [cp rim ht]").euclid(3,13).gain(0.55).hpf(160).swing(0.1).compressor("-22:4:0.4:0.005:0.2")
+$: s("~ AI [strudel evolve] [personality creative] [live_code generative] [adapt morph]").slow(perlin.range(2.5,3.8)).speed(perlin.range(0.7,1.4).slow(2.5)).chop(rand.range(7,16).slow(4)).every(5, rev).gain(0.6)

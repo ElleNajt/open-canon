@@ -1,0 +1,43 @@
+setcps(150/60/4)
+
+samples('shabda/speech/en-GB/f:calculate,process,converge,synthesize,integrate')
+
+$: note("e1 [~ a0] c1*2 <d1 b0>")
+  .s("square")
+  .lpf(sine.range(150, 2200).fast(4))
+  .lpq(9)
+  .decay(0.3)
+  .distort(0.4)
+  .gain(0.4)
+
+$: note("<e4 g4> <a4 b4> c5 <d5 e5>")
+  .s("sine")
+  .euclid(11, 16)
+  .fm(tri.range(1, 6).fast(2))
+  .delay(0.6)
+  .gain(0.3)
+
+$: note("<e3 a2 c3 d3>")
+  .chord("minor")
+  .s("supersaw")
+  .lpf(saw.range(400, 3000).slow(8))
+  .phaser(2)
+  .gain(0.25)
+
+$: s("bd(5,16) <sn:2 sn:4> bd*2 <cp rim>")
+  .jux(x => x.hurry(2))
+  .shape(0.7)
+  .pan(sine.range(0.2, 0.8).fast(2))
+  .gain(0.45)
+
+$: s("hh*8 <~ cb> <cr*2 oh> ~")
+  .degradeBy(0.2)
+  .crush(2)
+  .room(0.5)
+  .gain(0.35)
+
+$: s("calculate [process,integrate] <~ converge> synthesize/2")
+  .chop(4)
+  .speed(rand.range(0.8, 1.2))
+  .delay(0.7)
+  .gain(0.6)

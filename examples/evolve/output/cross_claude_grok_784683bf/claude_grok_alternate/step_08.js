@@ -1,0 +1,85 @@
+// Goldberg Variations - Variation VIII: Proclamatory Surge
+// Personality infusion: reversed bass descent resolves triumph; fanfare explodes into heroic arpeggios;
+// root-position brass pillars ground majesty; euclidean drive pulses inexorably;
+// unexpected chopped speech mantra weaves cosmic narrative
+
+setcps(65/60/4)
+
+samples('shabda/speech:goldberg_variations')
+samples('shabda/speech:victory')
+
+// Bass: reversed stride descent, building inevitable resolution
+$: note("[g2 d3] [fs2 cs3] [e2 b2] [d2 a2]")
+  .slow(2)
+  .sound("sawtooth")
+  .gain(0.32)
+  .lpf(380)
+  .lpq(2)
+  .attack(0.02)
+  .decay(0.3)
+  .sustain(0.5)
+  .release(0.8)
+  .room(0.6)
+  .size(0.7)
+  .shape(0.15)
+  .pan(0.35)
+
+// Fanfare: rewritten as soaring arpeggio ascents, pure victory calls
+$: note("<[d5 fs5 a5 d6]> <[e5 gs5 b5 e6]> <[fs5 a5 cs6 fs6]> <[g5 b5 d6 g6]>")
+  .slow(4)
+  .sound("square")
+  .gain(0.24)
+  .lpf(1800)
+  .lpenv(4)
+  .lpdecay(0.3)
+  .fmi(0.8)
+  .fmh(2)
+  .attack(0.01)
+  .decay(0.15)
+  .sustain(0.6)
+  .release(0.5)
+  .room(0.5)
+  .delay(0.25)
+  .delaytime(0.166)
+  .delayfeedback(0.3)
+  .pan(0.6)
+
+// Brass chorale: root-position pillars, unyielding harmonic foundation
+$: note("<[d3 a3 d4] [e3 b3 e4] [fs3 cs4 fs4] [g3 d4 g4]>")
+  .slow(4)
+  .sound("supersaw")
+  .gain(0.2)
+  .lpf(1400)
+  .lpq(1.5)
+  .attack(0.15)
+  .decay(0.2)
+  .sustain(0.8)
+  .release(1.2)
+  .drive(0.2)
+  .room(0.7)
+  .pan(0.5)
+  .tremolo(0.08)
+  .tremolosync(2)
+
+// Driving rhythm: euclidean propulsion, hypnotic forward march
+$: s("euclid(5,16,bd), euclid(3,16,sn), euclid(11,16,hh)")
+  .slow(2)
+  .gain(0.22)
+  .lpf(4000)
+  .shape(0.1)
+  .room(0.4)
+  .pan(0.5)
+
+// Unexpected: chopped speech mantra, rhythmic proclamation from ether
+$: s("<goldberg_variations victory> ?")
+  .slow(2)
+  .fast(4)
+  .chop(12)
+  .speed(sine.range(0.85,1.25))
+  .gain(0.16)
+  .lpf(perlin.range(1200,3200).slow(3))
+  .hpf(250)
+  .room(0.75)
+  .pan(rand.range(0.1,0.9))
+  .phaser(0.2)
+  .phaserdepth(0.4)

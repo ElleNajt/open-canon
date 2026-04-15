@@ -1,0 +1,41 @@
+setcps(132/60/4)
+
+samples('shabda/speech:calculate,process,learn,evolve')
+
+$: note("e2 [~ f2] <a1 d2> [e2 c2]")
+  .sound("pulse")
+  .lpf(sine.range(400, 3200).fast(4))
+  .lpq(6)
+  .crush(4)
+  .gain(0.5)
+
+$: note("e5 b5 c6 g5 e6 c6 a5 b5")
+  .euclid(11,16)
+  .sound("triangle")
+  .jux(x => x.rev().fast(2))
+  .delay(0.65)
+  .gain(0.3)
+
+$: note("e3,g3,b3,d4 f3,a3,c4,e4 d3,f3,a3,c4 a2,c3,e3,g3").slow(4)
+  .sound("sine")
+  .fm(perlin.range(0.5, 2.5).slow(2))
+  .attack(2)
+  .gain(0.4)
+
+$: s("bd*2 [~ cp] <bd(5,8) bd?*4> [cr*2, cp*2]")
+  .crush(5)
+  .speed(rand.range(0.9, 1.1))
+  .hpf(80)
+  .gain(0.55)
+
+$: s("hh*13")
+  .pan(perlin.range(0.2, 0.8).fast(2))
+  .jux(x => x.ply(2).speed(2))
+  .delay(0.3)
+  .gain(0.35)
+
+$: s("calculate process [~ learn] <evolve*4 evolve?*8>")
+  .chop(8)
+  .speed(rand.range(0.8, 1.2))
+  .room(0.7)
+  .gain(0.85)

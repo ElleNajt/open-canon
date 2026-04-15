@@ -1,0 +1,38 @@
+setcps(0.48)
+
+$: s("bd:3 [~ bd:1] sn:2 [bd:0 ~ bd:3]")
+.gain(sine.range(.68, .95).slow(14))
+.shape(.52)
+.lpf(sine.range(400, 3200).slow(11))
+.room(.35)
+
+$: s("~ cp:1 ~ [cp:4 ~]").slow(2)
+.gain(.31)
+.delay(.6).delaytime(.375).delayfeedback(.58)
+.pan(sine.range(.05, .95).slow(7))
+.crush(sine.range(7, 14).slow(9))
+
+$: n("0 3 7 10 12 7 3 0".add("<0 2 5 -2 7 3 -5 0>")).scale("E3:phrygian")
+.sound("triangle")
+.lpf(perlin.range(380, 3800).slow(13)).lpq(9)
+.decay(.32).sustain(.04)
+.gain(.38)
+
+$: note("<[e3 ~] [f3 a3] [b2 ~] [e3 d3] [c3 ~] [a3 b3] [d3 ~] [e3 f3]>")
+.sound("sine")
+.fmi(perlin.range(1.8, 7.2).slow(9))
+.fmh(5)
+.attack(.005).decay(.7).sustain(0)
+.gain(.24)
+
+$: s("[hh:2 hh:0 hh:3 hh:1]*2")
+.gain("[.55 .1 .72 .08 .5 .15 .74 .06]")
+.hpf(7500)
+.pan(rand.range(.08, .92))
+.delay(.18)
+
+$: note("<[e4 b4] [f4 ~] [a4 d5] [~ c5] [b3 a4] [e5 ~] [d5 f4] [~ b4]>").slow(8)
+.sound("supersaw")
+.gain(.14)
+.attack(.8).release(3.2)
+.lpf(sine.range(350, 2400).slow(16))
