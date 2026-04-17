@@ -145,6 +145,9 @@ MODELS = {
         ('goldberg_imbue_opus46_v2_84f7f2ef', 'claude46'),
         ('goldberg_imbue_opus46_v3_84f7f2ef', 'claude46'),
     ],
+    'Claude Opus 4.7': [
+        ('goldberg_1a2ed805', 'claude47'),
+    ],
     'ChatGPT 5.2': [
         ('goldberg_imbue_84f7f2ef', 'gpt'),
         ('goldberg_imbue_v2_84f7f2ef', 'gpt'),
@@ -172,6 +175,7 @@ MODELS = {
 COLORS = {
     'Claude Opus 4.5': '#C05020',
     'Claude Opus 4.6': '#F5B040',
+    'Claude Opus 4.7': '#8B45A6',
     'ChatGPT 5.2': '#2D8B5E',
     'Grok 4.1-fast': '#E01029',
     'Gemini 3.1 Pro': '#1A53D0',
@@ -181,6 +185,7 @@ COLORS = {
 LINESTYLES = {
     'Claude Opus 4.5': '--',
     'Claude Opus 4.6': '-',
+    'Claude Opus 4.7': '-',
     'ChatGPT 5.2': '-',
     'Grok 4.1-fast': '-',
     'Gemini 3.1 Pro': '-',
@@ -287,6 +292,7 @@ We use the following frontier models.
 
 - =claude-opus-4-5-20251101= (Anthropic API)
 - =claude-opus-4-6= (Anthropic API)
+- =claude-opus-4-7= (Anthropic API)
 - =openai/gpt-5.2= (OpenRouter)
 - =google/gemini-3.1-pro-preview= (OpenRouter)
 - =google/gemini-2.5-pro= (OpenRouter)
