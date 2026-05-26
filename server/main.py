@@ -97,8 +97,6 @@ else:
     DEFAULT_MODEL = "claude-sonnet"
     print(f"No models.json found, defaults: {list(AVAILABLE_MODELS.keys())}")
 
-YOUTUBE_DURATION_SECONDS = _config.get("youtube_duration_seconds", 30) if os.path.isfile(_models_config_path) else 30
-
 # Path to live.js on disk (for editor sync)
 LIVE_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "live.js")
 
@@ -719,7 +717,8 @@ async def process_item(item: dict):
                 info_json = MIC_SAMPLES_DIR / bname / "info.json"
                 if info_json.exists():
                     meta = json.loads(info_json.read_text())
-                    desc += f' — YouTube: "{meta.get("title", "")}"'
+                    if meta.get("title"):
+                        desc += f' — "{meta.get("title")}"'
                     chunks_meta = meta.get("chunks", [])
                     if chunks_meta:
                         chunk_descs = []
@@ -1350,6 +1349,112 @@ def _transcribe_full(mp3_path: str) -> str:
     return words
 
 
+def _get_loudness(mp3_path: str) -> str:
+    """Get RMS loudness category from an mp3 chunk via ffmpeg."""
+    cmd = [
+        "ffmpeg", "-i", mp3_path, "-af",
+        "volumedetect", "-f", "null", "-",
+    ]
+    proc = subprocess.run(cmd, capture_output=True, timeout=10)
+    stderr = proc.stderr.decode(errors="replace")
+    for line in stderr.split("\n"):
+        if "mean_volume" in line:
+            parts = line.split("mean_volume:")[1].strip().split()
+            db = float(parts[0])
+            if db > -15:
+                return "loud"
+            elif db > -25:
+                return "medium"
+            else:
+                return "quiet"
+    return "unknown"
+
+
+NOTE_NAMES = ["C", "Cs", "D", "Eb", "E", "F", "Fs", "G", "Ab", "A", "Bb", "B"]
+KEY_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Fs", "G", "Ab", "A", "Bb", "B"]
+
+
+def _get_pitch_info(mp3_path: str) -> dict:
+    """Detect dominant pitches and estimated key from an mp3 chunk using librosa."""
+    import librosa
+    import numpy as np
+
+    y, sr = librosa.load(mp3_path, sr=22050)
+
+    chroma = librosa.feature.chroma_stft(y=y, sr=sr)
+    chroma_avg = chroma.mean(axis=1)
+
+    major_profile = np.array([6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88])
+    minor_profile = np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17])
+
+    best_corr = -2
+    best_key = "C"
+    best_mode = "major"
+    for shift in range(12):
+        shifted = np.roll(chroma_avg, -shift)
+        for profile, mode in [(major_profile, "major"), (minor_profile, "minor")]:
+            corr = np.corrcoef(shifted, profile)[0, 1]
+            if corr > best_corr:
+                best_corr = corr
+                best_key = KEY_NAMES[shift]
+                best_mode = mode
+
+    f0, voiced_flag, _ = librosa.pyin(y, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'), sr=sr)
+    pitched = f0[voiced_flag]
+
+    pitches = []
+    if len(pitched) > 0:
+        midi_notes = np.round(librosa.hz_to_midi(pitched)).astype(int)
+        unique, counts = np.unique(midi_notes, return_counts=True)
+        top_idx = np.argsort(-counts)[:3]
+        pitches = [librosa.midi_to_note(int(unique[i])) for i in top_idx]
+
+    result = {"key": f"{best_key} {best_mode}"}
+    if pitches:
+        result["pitches"] = " ".join(pitches)
+    return result
+
+
+def _transcribe_chunk(mp3_path: str) -> str:
+    """Transcribe an mp3 chunk using Google Cloud Speech-to-Text."""
+    from google.cloud import speech
+
+    client = speech.SpeechClient()
+    audio = speech.RecognitionAudio(content=Path(mp3_path).read_bytes())
+    config = speech.RecognitionConfig(
+        encoding=speech.RecognitionConfig.AudioEncoding.MP3,
+        language_code="en-US",
+    )
+    response = client.recognize(config=config, audio=audio)
+    words = " ".join(
+        result.alternatives[0].transcript
+        for result in response.results
+        if result.alternatives
+    ).strip()
+    return words
+
+
+def _analyze_chunks(chunks: list[Path]) -> list[dict]:
+    """Analyze loudness, pitch, and transcribe each chunk."""
+    results = []
+    for chunk in chunks:
+        loudness = _get_loudness(str(chunk))
+        entry = {"file": chunk.name, "loudness": loudness}
+        try:
+            pitch_info = _get_pitch_info(str(chunk))
+            entry.update(pitch_info)
+        except Exception as e:
+            print(f"Pitch analysis skipped for {chunk.name}: {e}")
+        try:
+            words = _transcribe_chunk(str(chunk))
+            if words:
+                entry["words"] = words
+        except Exception as e:
+            print(f"Transcription skipped for {chunk.name}: {e}")
+        results.append(entry)
+    return results
+
+
 @app.post("/upload-sample")
 async def upload_sample(request: Request):
     """Receive a recorded audio sample from the browser.
@@ -1390,23 +1495,24 @@ async def upload_sample(request: Request):
             if conv.returncode != 0:
                 return JSONResponse({"error": "Audio conversion failed"}, status_code=500)
 
-        # Transcribe full audio to get bank name
-        transcript = ""
-        try:
-            transcript = _transcribe_full(mp3_path)
-        except Exception as e:
-            print(f"Full transcription failed: {e}")
-
-        if transcript:
-            safe_name = (
-                "".join(c for c in transcript if c.isalnum() or c in "-_ ").strip()
-                .replace(" ", "_")
-                .lower()
-            ) or ""
-        if not transcript or not safe_name:
-            safe_name = (
-                "".join(c for c in name if c.isalnum() or c in "-_").strip() or "recording"
-            )
+        # Use uploaded filename if meaningful, otherwise transcribe
+        safe_name = ""
+        name_clean = "".join(c for c in name if c.isalnum() or c in "-_ ").strip().replace(" ", "_").lower()
+        if name_clean and name_clean not in ("recording", "upload"):
+            safe_name = name_clean
+        else:
+            try:
+                transcript = _transcribe_full(mp3_path)
+                if transcript:
+                    safe_name = (
+                        "".join(c for c in transcript if c.isalnum() or c in "-_ ").strip()
+                        .replace(" ", "_")
+                        .lower()
+                    )
+            except Exception as e:
+                print(f"Full transcription failed: {e}")
+        if not safe_name:
+            safe_name = name_clean or "recording"
         safe_name = safe_name[:40]
 
         # Deduplicate bank name
@@ -1450,233 +1556,15 @@ async def upload_sample(request: Request):
     return {"status": "ok", "bank": safe_name, "chunks": len(chunks)}
 
 
-# --- YouTube sample import ---
-
-_YT_URL_RE = re.compile(
-    r"^https?://(www\.)?(youtube\.com/watch\?v=|youtu\.be/|youtube\.com/shorts/)"
-)
-
-
-def _get_loudness(mp3_path: str) -> str:
-    """Get RMS loudness category from an mp3 chunk via ffmpeg."""
-    cmd = [
-        "ffmpeg", "-i", mp3_path, "-af",
-        "volumedetect", "-f", "null", "-",
-    ]
-    proc = subprocess.run(cmd, capture_output=True, timeout=10)
-    stderr = proc.stderr.decode(errors="replace")
-    for line in stderr.split("\n"):
-        if "mean_volume" in line:
-            # e.g. "mean_volume: -23.4 dB"
-            parts = line.split("mean_volume:")[1].strip().split()
-            db = float(parts[0])
-            if db > -15:
-                return "loud"
-            elif db > -25:
-                return "medium"
-            else:
-                return "quiet"
-    return "unknown"
-
-
-NOTE_NAMES = ["C", "Cs", "D", "Eb", "E", "F", "Fs", "G", "Ab", "A", "Bb", "B"]
-KEY_NAMES = ["C", "Db", "D", "Eb", "E", "F", "Fs", "G", "Ab", "A", "Bb", "B"]
-
-
-def _get_pitch_info(mp3_path: str) -> dict:
-    """Detect dominant pitches and estimated key from an mp3 chunk using librosa."""
-    import librosa
-    import numpy as np
-
-    y, sr = librosa.load(mp3_path, sr=22050)
-
-    # Chroma for key estimation
-    chroma = librosa.feature.chroma_stft(y=y, sr=sr)
-    chroma_avg = chroma.mean(axis=1)  # 12 pitch classes
-
-    # Key estimation via Krumhansl-Schmuckler profiles
-    major_profile = np.array([6.35, 2.23, 3.48, 2.33, 4.38, 4.09, 2.52, 5.19, 2.39, 3.66, 2.29, 2.88])
-    minor_profile = np.array([6.33, 2.68, 3.52, 5.38, 2.60, 3.53, 2.54, 4.75, 3.98, 2.69, 3.34, 3.17])
-
-    best_corr = -2
-    best_key = "C"
-    best_mode = "major"
-    for shift in range(12):
-        shifted = np.roll(chroma_avg, -shift)
-        for profile, mode in [(major_profile, "major"), (minor_profile, "minor")]:
-            corr = np.corrcoef(shifted, profile)[0, 1]
-            if corr > best_corr:
-                best_corr = corr
-                best_key = KEY_NAMES[shift]
-                best_mode = mode
-
-    # Pitch detection via pyin for dominant notes
-    f0, voiced_flag, _ = librosa.pyin(y, fmin=librosa.note_to_hz('C2'), fmax=librosa.note_to_hz('C7'), sr=sr)
-    pitched = f0[voiced_flag]
-
-    pitches = []
-    if len(pitched) > 0:
-        # Convert Hz to MIDI to note names, count occurrences
-        midi_notes = np.round(librosa.hz_to_midi(pitched)).astype(int)
-        unique, counts = np.unique(midi_notes, return_counts=True)
-        # Top 3 most common notes
-        top_idx = np.argsort(-counts)[:3]
-        pitches = [librosa.midi_to_note(int(unique[i])) for i in top_idx]
-
-    result = {"key": f"{best_key} {best_mode}"}
-    if pitches:
-        result["pitches"] = " ".join(pitches)
-    return result
-
-
-def _transcribe_chunk(mp3_path: str) -> str:
-    """Transcribe an mp3 chunk using Google Cloud Speech-to-Text.
-
-    Returns empty string if Speech API is unavailable.
-    """
-    from google.cloud import speech
-
-    client = speech.SpeechClient()
-    audio = speech.RecognitionAudio(content=Path(mp3_path).read_bytes())
-    config = speech.RecognitionConfig(
-        encoding=speech.RecognitionConfig.AudioEncoding.MP3,
-        language_code="en-US",
+@app.get("/source")
+async def source_code():
+    """AGPL compliance: provide source code links."""
+    return PlainTextResponse(
+        "vibe-duet is free software licensed under the GNU Affero General Public License v3.\n\n"
+        "Source code:\n"
+        "  Application:  https://github.com/ElleNajt/vibe-duet\n"
+        "  Strudel fork: https://codeberg.org/ElleNajt/strudel\n"
     )
-    response = client.recognize(config=config, audio=audio)
-    words = " ".join(
-        result.alternatives[0].transcript
-        for result in response.results
-        if result.alternatives
-    ).strip()
-    return words
-
-
-def _analyze_chunks(chunks: list[Path]) -> list[dict]:
-    """Analyze loudness, pitch, and transcribe each chunk."""
-    results = []
-    for chunk in chunks:
-        loudness = _get_loudness(str(chunk))
-        entry = {"file": chunk.name, "loudness": loudness}
-        try:
-            pitch_info = _get_pitch_info(str(chunk))
-            entry.update(pitch_info)
-        except Exception as e:
-            print(f"Pitch analysis skipped for {chunk.name}: {e}")
-        try:
-            words = _transcribe_chunk(str(chunk))
-            if words:
-                entry["words"] = words
-        except Exception as e:
-            print(f"Transcription skipped for {chunk.name}: {e}")
-        results.append(entry)
-    return results
-
-
-@app.post("/youtube-sample")
-async def youtube_sample(request: Request):
-    """Download audio from a YouTube URL, chunk into 3s segments."""
-    try:
-        return await _youtube_sample_impl(request)
-    except Exception as e:
-        print(f"YouTube sample error: {e}")
-        return JSONResponse(
-            {"error": f"Server error: {e}"}, status_code=500
-        )
-
-
-async def _youtube_sample_impl(request: Request):
-    body = await request.json()
-    url = (body.get("url") or "").strip()
-
-    if not url or not _YT_URL_RE.match(url):
-        return JSONResponse(
-            {"error": "Invalid YouTube URL"}, status_code=400
-        )
-
-    with tempfile.TemporaryDirectory() as tmpdir:
-        # Get video title
-        title_cmd = ["yt-dlp", "--no-playlist", "--js-runtimes", "node", "--print", "title", url]
-        title_proc = subprocess.run(title_cmd, capture_output=True, timeout=30)
-        if title_proc.returncode == 0:
-            raw_title = title_proc.stdout.decode(errors="replace").strip()
-        else:
-            raw_title = "youtube"
-
-        safe_name = (
-            "".join(c for c in raw_title if c.isalnum() or c in "-_ ").strip()
-            .replace(" ", "_")
-            .lower()
-        ) or "youtube"
-        # Truncate long titles
-        safe_name = safe_name[:40]
-
-        # Download first N seconds of audio
-        mins, secs = divmod(YOUTUBE_DURATION_SECONDS, 60)
-        end_ts = f"{mins}:{secs:02d}"
-        out_template = os.path.join(tmpdir, "audio.%(ext)s")
-        cmd = [
-            "yt-dlp",
-            "--no-playlist",
-            "--js-runtimes", "node",
-            "-x",
-            "--audio-format", "mp3",
-            "--audio-quality", "5",
-            "--download-sections", f"*0:00-{end_ts}",
-            "-o", out_template,
-            url,
-        ]
-        proc = subprocess.run(cmd, capture_output=True, timeout=max(60, YOUTUBE_DURATION_SECONDS * 2))
-        if proc.returncode != 0:
-            err = proc.stderr.decode(errors="replace")[:200]
-            print(f"yt-dlp failed: {err}")
-            return JSONResponse(
-                {"error": f"Download failed: {err}"}, status_code=500
-            )
-
-        mp3s = [f for f in os.listdir(tmpdir) if f.endswith(".mp3")]
-        if not mp3s:
-            return JSONResponse(
-                {"error": "No audio file produced"}, status_code=500
-            )
-
-        src = os.path.join(tmpdir, mp3s[0])
-
-        # Create subdirectory for this sample bank
-        bank_dir = MIC_SAMPLES_DIR / safe_name
-        bank_dir.mkdir(exist_ok=True)
-
-        # Chunk into 3-second segments with ffmpeg
-        chunk_pattern = os.path.join(str(bank_dir), f"{safe_name}_%03d.mp3")
-        chunk_cmd = [
-            "ffmpeg", "-y", "-i", src,
-            "-f", "segment",
-            "-segment_time", "3",
-            "-c", "copy",
-            chunk_pattern,
-        ]
-        chunk_proc = subprocess.run(chunk_cmd, capture_output=True, timeout=60)
-        if chunk_proc.returncode != 0:
-            err = chunk_proc.stderr.decode(errors="replace")[:200]
-            print(f"ffmpeg chunking failed: {err}")
-            return JSONResponse(
-                {"error": f"Chunking failed: {err}"}, status_code=500
-            )
-
-        chunks = sorted(f for f in bank_dir.iterdir() if f.suffix == ".mp3")
-        print(f"YouTube sample '{safe_name}': {len(chunks)} chunks in {bank_dir}")
-
-        # Analyze chunks: loudness + transcription
-        chunk_meta = _analyze_chunks(chunks)
-
-        # Save metadata
-        meta = {
-            "title": raw_title,
-            "url": url,
-            "chunks": chunk_meta,
-        }
-        (bank_dir / "info.json").write_text(json.dumps(meta, indent=2))
-
-    return {"status": "ok", "bank": safe_name, "chunks": len(chunks)}
 
 
 # Mount shabda Flask app at /shabda (optional)

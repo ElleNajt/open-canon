@@ -66,7 +66,6 @@ The script builds the Strudel frontend, packages static files + shabda, builds t
 - `firestore.googleapis.com` — Firestore (state persistence)
 - `secretmanager.googleapis.com` — Secret Manager (API keys)
 - `texttospeech.googleapis.com` — shabda TTS
-- `speech.googleapis.com` — YouTube sample transcription
 - `storage.googleapis.com` — GCS sample hosting
 - `containerregistry.googleapis.com` — Container Registry
 
@@ -198,19 +197,6 @@ $: samples('shabda/speech:hello?pitch=-2'), samples('shabda/speech:world?pitch=3
 - `pitch` shifts in semitones (-20 to +20)
 - Default voice: en-GB female
 - Other voices: `samples('shabda/speech/en-US/m:hello')` (US English, male)
-
-### YouTube Samples
-
-Import audio from YouTube via the ▶ button in the CollabPanel. Downloads the first N seconds (configured by `youtube_duration_seconds` in `models.json`, default 30s), splits into 3-second chunks stored in `mic_samples/<video_name>/`. Each chunk is analyzed for loudness, transcribed for speech content, and analyzed for musical key and dominant pitches (via librosa).
-
-```javascript
-$: samples('/mic-samples/strudel.json')
-  , s("video_name:0")       // first 3s chunk
-  , s("video_name:3")       // fourth chunk
-  , s("video_name").chop(4) // chop a chunk further
-```
-
-The sample bank name is derived from the YouTube video title. Use `:N` to select chunks. Chunk metadata (loudness, key, pitches, words) is included in the model context automatically, formatted as `:0=medium Ab major [G♯2 C♯2 F♯2]`.
 
 ### Sample Management
 
